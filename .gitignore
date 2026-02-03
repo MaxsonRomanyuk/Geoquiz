@@ -1,0 +1,33 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+appsettings.Development.json
+
+# Android
+.gradle/
+build/
+*.apk
+*.ap_
+*.keystore
+local.properties
+
+# IDE
+.vscode/
+.idea/
+*.iml
+.DS_Store
+
+# БД и конфиги
+*.db
+*.sqlite
+*.mdf
+ConnectionStrings.config
+appsettings.local.json
+
+# Логи и временные файлы
+*.log
+tmp/
+temp/
