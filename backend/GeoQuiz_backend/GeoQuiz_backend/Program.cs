@@ -1,6 +1,8 @@
+using GeoQuiz_backend.Application.Services;
 using GeoQuiz_backend.Infrastructure.Data;
 using GeoQuiz_backend.Infrastructure.Mongo;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +22,33 @@ builder.Services.AddCors(options =>
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "¬ведите: Bearer {ваш JWT токен}"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 // MySQL
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -33,6 +61,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Mongo
 builder.Services.AddSingleton<MongoContext>();
 builder.Services.AddScoped<MongoSeeder>();
+
+// Auth
+builder.Services.AddScoped<AuthService>();
 
 var app = builder.Build();
 
