@@ -68,6 +68,10 @@ builder.Services.AddScoped<MongoSeeder>();
 
 // Auth
 builder.Services.AddScoped<AuthService>();
+
+// Game
+builder.Services.AddScoped<GameService>();
+
 // Achievement
 builder.Services.AddScoped<IAchievementService, AchievementService>();
 
