@@ -1,3 +1,10 @@
+# Visual Studio
+.vs/
+*.vsidx
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 # .NET
 bin/
 obj/

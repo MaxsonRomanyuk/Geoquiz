@@ -7,7 +7,21 @@ android {
     compileSdk {
         version = release(36)
     }
-
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/INDEX.LIST",
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE*",
+                "META-INF/NOTICE*",
+                "META-INF/AL2.0",
+                "META-INF/LGPL2.1",
+                "META-INF/*.properties",
+                "META-INF/*.kotlin_module",
+                "META-INF/io.netty.versions.properties"
+            )
+        }
+    }
     defaultConfig {
         applicationId = "com.example.geoquiz_frontend"
         minSdk = 26
@@ -35,6 +49,8 @@ android {
 }
 
 dependencies {
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
