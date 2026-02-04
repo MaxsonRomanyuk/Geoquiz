@@ -1,0 +1,19 @@
+﻿using GeoQuiz_backend.Domain.Enums;
+
+namespace GeoQuiz_backend.Domain.Entities
+{
+    public class QuestionSet
+    {
+        public Guid Id { get; set; }
+
+        public Guid PvPMatchId { get; set; }
+        public PvPMatch PvPMatch { get; set; } = null!;
+
+        public GameMode Mode { get; set; }
+        public AppLanguage Language { get; set; }
+        public List<string> QuestionIds { get; set; } = new();
+        public int Seed { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+    }
+}
