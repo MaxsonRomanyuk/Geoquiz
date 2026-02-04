@@ -1,8 +1,12 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Application.Services;
 using GeoQuiz_backend.Infrastructure.Data;
 using GeoQuiz_backend.Infrastructure.Mongo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,7 +68,35 @@ builder.Services.AddScoped<MongoSeeder>();
 
 // Auth
 builder.Services.AddScoped<AuthService>();
+// Achievement
+builder.Services.AddScoped<IAchievementService, AchievementService>();
 
+
+
+
+
+
+var jwtSettings = builder.Configuration.GetSection("Jwt");
+var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
