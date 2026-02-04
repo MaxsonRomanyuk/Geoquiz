@@ -1,10 +1,20 @@
 # Visual Studio
 .vs/
-*.vsidx
+*.vsdir
+*.sln.docstates
 *.suo
 *.user
 *.userosscache
-*.sln.docstates
+*.cache
+*.VC.db
+*.opendb
+*.db-shm
+*.db-wal
+*.[Cc]ache
+*.opensdf
+*.sdf
+*.VC.VC.opendb
+
 # .NET
 bin/
 obj/
