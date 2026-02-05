@@ -84,7 +84,10 @@ namespace GeoQuiz_backend.Application.Services
             stats.TotalCorrectAnswers += r.CorrectAnswers;
 
             if (r.CorrectAnswers >= 8)
+            {
                 stats.CurrentWinStreak++;
+                stats.TotalGamesWon++;
+            }
             else
                 stats.CurrentWinStreak = 0;
 
