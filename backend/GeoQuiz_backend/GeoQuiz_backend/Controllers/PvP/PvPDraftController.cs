@@ -15,10 +15,12 @@ namespace GeoQuiz_backend.Controllers.PvP
     public class PvPDraftController : ControllerBase
     {
         private readonly IDraftService _draftService;
+        private readonly IQuestionSetService _questionSetService;
 
-        public PvPDraftController(IDraftService draftService)
+        public PvPDraftController(IDraftService draftService, IQuestionSetService questionSetService)
         {
             _draftService = draftService;
+            _questionSetService = questionSetService;
         }
 
         [HttpGet("{matchId}")]
@@ -40,7 +42,7 @@ namespace GeoQuiz_backend.Controllers.PvP
         }
 
         [HttpPost("{matchId}/ban")]
-        public async Task<IActionResult> BanMode(Guid matchId, [FromQuery] GameMode mode)
+        public async Task<IActionResult> BanMode(Guid matchId, [FromQuery] GameMode mode, [FromQuery] AppLanguage lang)
         {
             var userId = Guid.Parse(
                 User.FindFirstValue(ClaimTypes.NameIdentifier)
@@ -48,6 +50,11 @@ namespace GeoQuiz_backend.Controllers.PvP
             );
 
             var draft = await _draftService.BanModeAsync(matchId, userId, mode);
+
+            if (draft.PvPMatch.Status == PvPMatchStatus.Ready)
+            {
+                await _questionSetService.CreateForMatchAsync(matchId, lang);
+            }
 
             var dto = new ModeDraftDto
             {

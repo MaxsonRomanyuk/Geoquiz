@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace GeoQuiz_backend.Controllers
+namespace GeoQuiz_backend.Controllers.SoloGame
 {
     [ApiController]
     [Route("api/game")]

@@ -81,6 +81,8 @@ builder.Services.AddScoped<IAchievementService, AchievementService>();
 //PVP
 builder.Services.AddSingleton<MatchmakingQueue>();
 builder.Services.AddScoped<MatchmakingService>();
+builder.Services.AddScoped<IDraftService, DraftService>();
+builder.Services.AddScoped<IQuestionSetService, QuestionSetService>();
 
 
 

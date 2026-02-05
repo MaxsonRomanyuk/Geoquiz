@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GeoQuiz_backend.Controllers
+namespace GeoQuiz_backend.Controllers.SoloGame
 {
     [ApiController]
     [Route("api/content")]
