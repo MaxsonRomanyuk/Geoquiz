@@ -83,6 +83,8 @@ builder.Services.AddSingleton<MatchmakingQueue>();
 builder.Services.AddScoped<MatchmakingService>();
 builder.Services.AddScoped<IDraftService, DraftService>();
 builder.Services.AddScoped<IQuestionSetService, QuestionSetService>();
+builder.Services.AddScoped<IPvPGameSessionService, PvPGameSessionService>();
+builder.Services.AddScoped<IPvPResultService, PvPResultService>();
 
 
 

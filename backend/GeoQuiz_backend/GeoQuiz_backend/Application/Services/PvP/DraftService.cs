@@ -64,8 +64,12 @@ namespace GeoQuiz_backend.Application.Services.PvP
             if (!draft.AvailableModes.Contains(bannedMode))
                 throw new Exception("Mode is already banned or invalid");
 
-            draft.AvailableModes.Remove(bannedMode);
-            draft.BannedModes.Add(bannedMode);
+            draft.AvailableModes = draft.AvailableModes
+                .Where(m => m != bannedMode)
+                .ToList();
+            draft.BannedModes = draft.BannedModes
+                .Append(bannedMode)
+                .ToList();
             draft.Step++;
 
             if (draft.AvailableModes.Count == 1)

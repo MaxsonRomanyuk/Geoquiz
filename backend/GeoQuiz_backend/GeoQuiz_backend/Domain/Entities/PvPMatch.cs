@@ -19,6 +19,8 @@ namespace GeoQuiz_backend.Domain.Entities
         public ModeDraft? Draft { get; set; }
         public QuestionSet? QuestionSet { get; set; }
 
+        public ICollection<PvPAnswer> Answers { get; set; } = new List<PvPAnswer>();
+
         public Guid? WinnerId { get; set; }
         public User? Winner { get; set; }
 

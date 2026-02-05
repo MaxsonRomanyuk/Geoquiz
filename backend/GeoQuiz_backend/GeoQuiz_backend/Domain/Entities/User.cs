@@ -14,6 +14,8 @@
         public ICollection<GameSession> GameSessions { get; set; }
             = new List<GameSession>();
 
+        public ICollection<PvPAnswer> PvPAnswers { get; set; } = new List<PvPAnswer>();
+
         public ICollection<UserAchievement> UserAchievements { get; set; }
             = new List<UserAchievement>();
 

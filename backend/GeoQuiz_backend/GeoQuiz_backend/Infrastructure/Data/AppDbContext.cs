@@ -19,6 +19,7 @@ namespace GeoQuiz_backend.Infrastructure.Data
         public DbSet<PvPMatch> PvPMatches => Set<PvPMatch>();
         public DbSet<ModeDraft> ModeDrafts => Set<ModeDraft>();
         public DbSet<QuestionSet> QuestionSets => Set<QuestionSet>();
+        public DbSet<PvPAnswer> PvPAnswers => Set<PvPAnswer>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,6 +32,7 @@ namespace GeoQuiz_backend.Infrastructure.Data
             modelBuilder.Entity<PvPMatch>().ToTable("pvpmatches");
             modelBuilder.Entity<ModeDraft>().ToTable("modedraft");
             modelBuilder.Entity<QuestionSet>().ToTable("questionset");
+            modelBuilder.Entity<PvPAnswer>().ToTable("pvpanswers");
 
             modelBuilder.Entity<User>(entity =>
             {
@@ -177,6 +179,8 @@ namespace GeoQuiz_backend.Infrastructure.Data
                     .WithOne(q => q.PvPMatch)
                     .HasForeignKey<QuestionSet>(q => q.PvPMatchId)
                     .OnDelete(DeleteBehavior.Cascade);
+
+
             });
 
             modelBuilder.Entity<Subscription>(entity =>
@@ -229,6 +233,30 @@ namespace GeoQuiz_backend.Infrastructure.Data
                 entity.Property(e => e.CreatedAt).IsRequired();
             });
 
+            modelBuilder.Entity<PvPAnswer>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.QuestionId)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.AnsweredAt)
+                    .IsRequired();
+
+                entity.Property(e => e.ScoreGained)
+                    .IsRequired();
+
+                entity.HasOne(e => e.Match)
+                    .WithMany(m => m.Answers)
+                    .HasForeignKey(e => e.MatchId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.User)
+                    .WithMany(u => u.PvPAnswers)
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
             base.OnModelCreating(modelBuilder);
         }
     }
