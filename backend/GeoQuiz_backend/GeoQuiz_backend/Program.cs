@@ -1,12 +1,13 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Application.Services;
+using GeoQuiz_backend.Application.Services.PvP;
 using GeoQuiz_backend.Infrastructure.Data;
 using GeoQuiz_backend.Infrastructure.Mongo;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,17 +66,21 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Mongo
 builder.Services.AddSingleton<MongoContext>();
 builder.Services.AddScoped<MongoSeeder>();
-
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 // Auth
 builder.Services.AddScoped<AuthService>();
 
 // Game
 builder.Services.AddScoped<GameService>();
 
+
 // Achievement
 builder.Services.AddScoped<IAchievementService, AchievementService>();
 
-
+//PVP
+builder.Services.AddSingleton<MatchmakingQueue>();
+builder.Services.AddScoped<MatchmakingService>();
 
 
 

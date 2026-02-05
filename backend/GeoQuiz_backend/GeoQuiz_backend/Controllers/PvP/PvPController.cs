@@ -1,29 +1,29 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GeoQuiz_backend.Controllers
+namespace GeoQuiz_backend.Controllers.PvP
 {
-    public class ContentController : Controller
+    public class PvPController : Controller
     {
-        // GET: ContentController
+        // GET: PvPController
         public ActionResult Index()
         {
             return View();
         }
 
-        // GET: ContentController/Details/5
+        // GET: PvPController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: ContentController/Create
+        // GET: PvPController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: ContentController/Create
+        // POST: PvPController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
@@ -38,13 +38,13 @@ namespace GeoQuiz_backend.Controllers
             }
         }
 
-        // GET: ContentController/Edit/5
+        // GET: PvPController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: ContentController/Edit/5
+        // POST: PvPController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -59,13 +59,13 @@ namespace GeoQuiz_backend.Controllers
             }
         }
 
-        // GET: ContentController/Delete/5
+        // GET: PvPController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: ContentController/Delete/5
+        // POST: PvPController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

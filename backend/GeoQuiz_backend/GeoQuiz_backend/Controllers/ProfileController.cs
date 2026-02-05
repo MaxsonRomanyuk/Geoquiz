@@ -50,7 +50,7 @@ namespace GeoQuiz_backend.Controllers
                         u.Stats.CurrentWinStreak,
                         u.Stats.MaxWinStreak,
                         u.Stats.DailyLoginStreak,
-                        Level = u.Stats.Level,
+                        u.Stats.Level,
                         u.Stats.Experience
                     },
                     Geography = new
