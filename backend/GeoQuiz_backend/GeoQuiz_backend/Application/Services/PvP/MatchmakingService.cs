@@ -8,11 +8,13 @@ namespace GeoQuiz_backend.Application.Services.PvP
     {
         private readonly MatchmakingQueue _queue;
         private readonly AppDbContext _db;
+        private readonly IDraftService _draftService;
 
-        public MatchmakingService(MatchmakingQueue queue, AppDbContext db)
+        public MatchmakingService(MatchmakingQueue queue, AppDbContext db, IDraftService draftService)
         {
             _queue = queue;
             _db = db;
+            _draftService = draftService;
         }
 
         public async Task<PvPMatch?> JoinQueueAsync(Guid userId)
@@ -33,6 +35,8 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
             _db.PvPMatches.Add(match);
             await _db.SaveChangesAsync();
+
+            await _draftService.CreateDraftAsync(match);
 
             return match;
         }

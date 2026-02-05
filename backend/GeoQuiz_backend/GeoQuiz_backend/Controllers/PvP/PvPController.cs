@@ -1,83 +1,43 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using GeoQuiz_backend.Application.Services.PvP;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace GeoQuiz_backend.Controllers.PvP
 {
-    public class PvPController : Controller
+    [Authorize]
+    [ApiController]
+    [Route("api/pvp")]
+    public class PvPController : ControllerBase
     {
-        // GET: PvPController
-        public ActionResult Index()
+        private readonly MatchmakingService _matchmaking;
+
+        public PvPController(MatchmakingService matchmaking)
         {
-            return View();
+            _matchmaking = matchmaking;
         }
 
-        // GET: PvPController/Details/5
-        public ActionResult Details(int id)
+        [HttpPost("join")]
+        public async Task<IActionResult> JoinQueue()
         {
-            return View();
-        }
+            var userId = Guid.Parse(
+                User.FindFirstValue(ClaimTypes.NameIdentifier)
+                ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub)!
+            );
 
-        // GET: PvPController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+            var match = await _matchmaking.JoinQueueAsync(userId);
 
-        // POST: PvPController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
+            if (match == null)
+                return Ok(new { status = "waiting" });
+
+            return Ok(new
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: PvPController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: PvPController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: PvPController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: PvPController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+                status = "matched",
+                matchId = match.Id,
+                opponent = match.Player1Id == userId ? match.Player2Id : match.Player1Id
+            });
         }
     }
 }
