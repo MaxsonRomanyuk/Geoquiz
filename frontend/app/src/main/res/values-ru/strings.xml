@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Map Mastermind</string>
+
+
+    <string name="welcome_to_app">Добро пожаловать в</string>
+    <string name="geography_quiz">Географическая викторина</string>
+    <string name="login_with">Вход через</string>
+    <string name="facebook">FACEBOOK</string>
+    <string name="google">GOOGLE</string>
+    <string name="or">ИЛИ</string>
+    <string name="play_as_guest">ИГРАТЬ КАК ГОСТЬ</string>
+    <string name="login">Вход</string>
+    <string name="register">Регистрация</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="login_with_social">Войти через социальные сети</string>
+    <string name="confirm_password">Подтвердите пароль</string>
+    <string name="name">Имя</string>
+    <string name="already_have_account">Уже есть аккаунт? Войти</string>
+    <string name="dont_have_account">Нет аккаунта? Зарегистрироваться</string>
+    <string name="error_user_not_found">Нет такого пользователя</string>
+    <string name="error_email_taken">Email уже занят</string>
+</resources>

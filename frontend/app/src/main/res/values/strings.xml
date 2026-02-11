@@ -1,3 +1,24 @@
 <resources>
-    <string name="app_name">GeoQuiz_frontend</string>
+    <string name="app_name">Map Mastermind</string>
+
+
+    <string name="welcome_to_app">Welcome to</string>
+    <string name="geography_quiz">Geography Quiz</string>
+    <string name="login_with">Login with</string>
+    <string name="facebook">FACEBOOK</string>
+    <string name="google">GOOGLE</string>
+    <string name="or">OR</string>
+    <string name="play_as_guest">PLAY AS GUEST</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="login_with_social">Login with social networks</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="name">Name</string>
+    <string name="already_have_account">Already have an account? Login</string>
+    <string name="dont_have_account">Don\'t have an account? Register</string>
+    <string name="error_user_not_found">User not found</string>
+    <string name="error_email_taken">Email is already taken</string>
 </resources>

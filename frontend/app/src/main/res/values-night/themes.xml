@@ -1,7 +1,21 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.GeoQuiz_frontend" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">#63B3ED</item>
+        <item name="colorSecondary">#4FD1C7</item>
+        <item name="colorAccent">#7D9CFF</item>
+
+        <item name="colorOnBackground">#0F1419</item>
+        <item name="colorSurface">#1A202C</item>
+        <item name="colorOutline">#2D3748</item>
+
+        <item name="colorTertiary">#F7FAFC</item>
+        <item name="colorTertiaryContainer">#E2E8F0</item>
+        <item name="colorTertiaryFixed">#718096</item>
+
+
+        <item name="colorButtonNormal">#68D391</item>
+        <item name="colorError">#F6AD55</item>
+        <item name="colorErrorContainer">#FEB2B2</item>
     </style>
 </resources>

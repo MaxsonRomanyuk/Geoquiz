@@ -13,14 +13,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GeoQuiz_frontend">
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".UI.Auth.LoginActivity"
+            android:exported="true"
+            tools:ignore="Instantiatable">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".UI.Auth.MainActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>
