@@ -2,6 +2,7 @@ package com.example.geoquiz_frontend;
 
 import com.example.geoquiz_frontend.DTOs.AuthResponse;
 import com.example.geoquiz_frontend.DTOs.LoginRequest;
+import com.example.geoquiz_frontend.DTOs.ProfileResponse;
 import com.example.geoquiz_frontend.DTOs.RegisterRequest;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface ApiService {
     Call<Void> register(@Body RegisterRequest request);
     @POST("api/auth/login")
     Call<AuthResponse> login(@Body LoginRequest request);
+    @GET("api/profile/me")
+    Call<ProfileResponse> getProfile();
 }

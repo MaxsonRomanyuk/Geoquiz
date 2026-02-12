@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UI.Auth.MainActivity"
+            android:name=".UI.Home.MainActivity"
             android:exported="false"/>
     </application>
 

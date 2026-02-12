@@ -76,6 +76,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
             stats.TotalGamesPlayed++;
             stats.PvPGamesPlayed++;
+            AddExperience(stats, self.Score);
 
             if (winnerId == user.Id)
             {
@@ -118,6 +119,20 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 IsOnline = true,
                 PlayedAt = DateTime.UtcNow
             };
+        }
+        private static void AddExperience(UserStats stats, int gainedXp)
+        {
+            stats.Experience += gainedXp;
+
+            if (stats.Experience >= GetXpToNextLevel(stats.Level))
+            {
+                stats.Experience -= GetXpToNextLevel(stats.Level);
+                stats.Level++;
+            }
+        }
+        private static int GetXpToNextLevel(int level)
+        {
+            return level * 100;
         }
         private PlayerPvPStatsDto Map(GameSession s) => new()
         {

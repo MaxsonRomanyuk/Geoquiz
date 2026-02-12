@@ -53,8 +53,8 @@ public class PreferencesHelper {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_AUTH_TOKEN, token);
 
-
-        editor.putLong(KEY_TOKEN_EXPIRY, System.currentTimeMillis());
+        long expiresAt = System.currentTimeMillis() + 86400000;
+        editor.putLong(KEY_TOKEN_EXPIRY, expiresAt);
         editor.apply();
     }
 
@@ -65,9 +65,10 @@ public class PreferencesHelper {
         String token = getAuthToken();
         if (token == null) return false;
 
-        long expiryTime = sharedPreferences.getLong(KEY_TOKEN_EXPIRY, 0);
-        long tokenAge = System.currentTimeMillis() - expiryTime;
-        return tokenAge < 86400000;
+        long expiresAt = sharedPreferences.getLong(KEY_TOKEN_EXPIRY, 0);
+        long now = System.currentTimeMillis();
+
+        return now < expiresAt;
 
         //return true;
     }

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<!--Login-->
     <string name="app_name">Map Mastermind</string>
-
-
     <string name="welcome_to_app">Добро пожаловать в</string>
     <string name="geography_quiz">Географическая викторина</string>
     <string name="login_with">Вход через</string>
@@ -22,4 +21,32 @@
     <string name="dont_have_account">Нет аккаунта? Зарегистрироваться</string>
     <string name="error_user_not_found">Нет такого пользователя</string>
     <string name="error_email_taken">Email уже занят</string>
+<!--Home-->
+    <string name="level_prefix">Уровень</string>
+    <string name="total_points">Всего очков</string>
+    <string name="game_modes">Режимы игры</string>
+    <string name="solo">Соло</string>
+    <string name="duel">1v1 Дуэль</string>
+    <string name="king_of_the_hill">Царь горы</string>
+    <string name="your_stats">Ваша статистика</string>
+    <string name="games_played">Сыграно игр</string>
+    <string name="wins">Побед</string>
+    <string name="accuracy">Точность</string>
+    <string name="best_continent">Лучший континент</string>
+
+    <!-- Continents -->
+    <string name="europe">Европа</string>
+    <string name="asia">Азия</string>
+    <string name="africa">Африка</string>
+    <string name="north_america">Сев. Америка</string>
+    <string name="south_america">Юж. Америка</string>
+    <string name="australia">Австралия</string>
+    <string name="antarctica">Антарктида</string>
+
+    <!-- Bottom Navigation -->
+    <string name="home">Главная</string>
+    <string name="play">Играть</string>
+    <string name="achievements">Достижения</string>
+    <string name="leaderboard">Лидерборд</string>
+    <string name="profile">Профиль</string>
 </resources>

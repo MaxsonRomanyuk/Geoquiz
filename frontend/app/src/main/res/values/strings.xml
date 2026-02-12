@@ -1,7 +1,6 @@
 <resources>
+<!--Login-->
     <string name="app_name">Map Mastermind</string>
-
-
     <string name="welcome_to_app">Welcome to</string>
     <string name="geography_quiz">Geography Quiz</string>
     <string name="login_with">Login with</string>
@@ -21,4 +20,32 @@
     <string name="dont_have_account">Don\'t have an account? Register</string>
     <string name="error_user_not_found">User not found</string>
     <string name="error_email_taken">Email is already taken</string>
+
+    <string name="level_prefix">Level </string>
+    <string name="total_points">Total points</string>
+    <string name="game_modes">Game Modes</string>
+    <string name="solo">Solo</string>
+    <string name="duel">1v1 Duel</string>
+    <string name="king_of_the_hill">King of \n the Hill</string>
+    <string name="your_stats">Your Stats</string>
+    <string name="games_played">Games Played</string>
+    <string name="wins">Wins</string>
+    <string name="accuracy">Accuracy</string>
+    <string name="best_continent">Best Continent</string>
+
+    <!-- Continents -->
+    <string name="europe">Europe</string>
+    <string name="asia">Asia</string>
+    <string name="africa">Africa</string>
+    <string name="north_america">North America</string>
+    <string name="south_america">South America</string>
+    <string name="australia">Australia</string>
+    <string name="antarctica">Antarctica</string>
+
+    <!-- Bottom Navigation -->
+    <string name="home">Home</string>
+    <string name="play">Play</string>
+    <string name="achievements">Achievements</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="profile">Profile</string>
 </resources>

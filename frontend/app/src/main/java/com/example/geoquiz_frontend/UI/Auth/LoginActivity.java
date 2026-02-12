@@ -1,7 +1,6 @@
 package com.example.geoquiz_frontend.UI.Auth;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -23,6 +22,7 @@ import com.example.geoquiz_frontend.DTOs.RegisterRequest;
 import com.example.geoquiz_frontend.Entities.User;
 import com.example.geoquiz_frontend.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
+import com.example.geoquiz_frontend.UI.Home.MainActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.card.MaterialCardView;

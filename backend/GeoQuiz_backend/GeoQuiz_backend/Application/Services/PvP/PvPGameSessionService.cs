@@ -156,9 +156,9 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
         private int CalculateScore(int timeMs)
         {
-            var maxScore = 100;
-            var penalty = timeMs / 100;
-            return Math.Max(10, maxScore - penalty);
+            var maxScore = 10;
+            var penalty = timeMs / 1000;
+            return Math.Max(0, maxScore - penalty);
         }
     }
 }

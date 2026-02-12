@@ -83,6 +83,8 @@ namespace GeoQuiz_backend.Application.Services
             stats.TotalGamesPlayed++;
             stats.TotalCorrectAnswers += r.CorrectAnswers;
 
+            AddExperience(stats, r.Score);
+
             if (r.CorrectAnswers >= 8)
             {
                 stats.CurrentWinStreak++;
@@ -100,6 +102,20 @@ namespace GeoQuiz_backend.Application.Services
                 case GameMode.Outline: stats.OutlinesCorrect += r.CorrectAnswers; break;
                 case GameMode.Language: stats.LanguagesCorrect += r.CorrectAnswers; break;
             }
+        }
+        private static void AddExperience(UserStats stats, int gainedXp)
+        {
+            stats.Experience += gainedXp;
+
+            if (stats.Experience >= GetXpToNextLevel(stats.Level))
+            {
+                stats.Experience -= GetXpToNextLevel(stats.Level);
+                stats.Level++;
+            }
+        }
+        private static int GetXpToNextLevel(int level)
+        {
+            return level * 100;
         }
     }
 }

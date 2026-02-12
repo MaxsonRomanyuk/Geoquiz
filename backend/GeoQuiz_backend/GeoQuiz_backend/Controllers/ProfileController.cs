@@ -36,7 +36,7 @@ namespace GeoQuiz_backend.Controllers
                         u.Id,
                         u.UserName,
                         u.Email,
-                        u.RegisteredAt
+                        RegisteredAt = new DateTimeOffset(u.RegisteredAt.ToUniversalTime())
                     },
                     Stats = new
                     {
@@ -84,8 +84,9 @@ namespace GeoQuiz_backend.Controllers
             if (data == null)
                 return NotFound();
 
-            var achievements = await _db.UserAchievements
+            var achievementsRaw = await _db.UserAchievements
                 .Where(x => x.UserId == userId && x.IsUnlocked)
+                .OrderByDescending(x => x.UnlockedAt)
                 .Select(x => new
                 {
                     x.Achievement.Code,
@@ -94,8 +95,18 @@ namespace GeoQuiz_backend.Controllers
                     x.Progress,
                     x.UnlockedAt
                 })
-                .OrderByDescending(x => x.UnlockedAt)
                 .ToListAsync();
+
+            var achievements = achievementsRaw
+                .Select(x => new
+                {
+                    x.Code,
+                    x.Title,
+                    x.Icon,
+                    x.Progress,
+                    UnlockedAt = new DateTimeOffset(x.UnlockedAt).ToUniversalTime()
+                })
+                .ToList();
 
             return Ok(new
             {
