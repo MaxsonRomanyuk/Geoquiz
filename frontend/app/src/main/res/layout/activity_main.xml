@@ -475,6 +475,7 @@
         android:background="?attr/colorSurface"
         app:itemIconTint="?attr/colorPrimary"
         app:itemTextColor="?attr/colorTertiaryFixed"
+        app:itemBackground="@drawable/bottom_nav_bg"
         app:menu="@menu/bottom_nav_menu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

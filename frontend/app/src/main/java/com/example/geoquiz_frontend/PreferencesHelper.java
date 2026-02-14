@@ -24,6 +24,7 @@ public class PreferencesHelper {
     private static final String KEY_GAMES_PLAYED = "games_played";
     private static final String KEY_GAMES_WIN = "games_win";
     private static final String KEY_WIN_RATE = "games_win_rate";
+    private static final String KEY_WIN_STREAK = "games_win_streak";
     private static final String KEY_BEST_CONTINENT = "best_continent";
     private static final String KEY_EUROPE_CORRECT = "europe_correct";
     private static final String KEY_ASIA_CORRECT = "asia_correct";
@@ -71,6 +72,7 @@ public class PreferencesHelper {
         editor.remove(KEY_USER_LEVEL);
         editor.remove(KEY_CURRENT_XP);
         editor.remove(KEY_DAILY_STREAK);
+        editor.remove(KEY_WIN_STREAK);
 
         editor.remove(KEY_EUROPE_CORRECT);
         editor.remove(KEY_ASIA_CORRECT);
@@ -89,6 +91,7 @@ public class PreferencesHelper {
         editor.putInt(KEY_GAMES_PLAYED, stats.getGamesPlayed());
         editor.putInt(KEY_GAMES_WIN, stats.getWins());
         editor.putFloat(KEY_WIN_RATE, (float) stats.getWinRate());
+        editor.putInt(KEY_WIN_STREAK, stats.getCurrentWinStreak());
         editor.putInt(KEY_EUROPE_CORRECT, geography.getEuropeCorrect());
         editor.putInt(KEY_AFRICA_CORRECT, geography.getAfricaCorrect());
         editor.putInt(KEY_AMERICA_CORRECT, geography.getAmericaCorrect());
@@ -119,6 +122,7 @@ public class PreferencesHelper {
         stats.setLevel(sharedPreferences.getInt(KEY_USER_LEVEL, 1));
         stats.setExperience(sharedPreferences.getInt(KEY_CURRENT_XP, 0));
         stats.setDailyStreak(sharedPreferences.getInt(KEY_DAILY_STREAK, 0));
+        stats.setCurrentWinStreak(sharedPreferences.getInt(KEY_WIN_STREAK, 0));
 
         ProfileResponse.GeographyDto geography = new ProfileResponse.GeographyDto();
         geography.setEuropeCorrect(sharedPreferences.getInt(KEY_EUROPE_CORRECT, 0));

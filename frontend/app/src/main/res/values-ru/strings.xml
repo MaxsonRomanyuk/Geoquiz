@@ -38,10 +38,20 @@
     <string name="europe">Европа</string>
     <string name="asia">Азия</string>
     <string name="africa">Африка</string>
-    <string name="north_america">Сев. Америка</string>
-    <string name="south_america">Юж. Америка</string>
-    <string name="australia">Австралия</string>
-    <string name="antarctica">Антарктида</string>
+    <string name="america">Америка</string>
+    <string name="oceania">Океания</string>
+
+    <!-- Profile Screen -->
+    <string name="win_rate">Процент побед</string>
+    <string name="longest_streak">Лучшая серия</string>
+    <string name="match_history">История матчей</string>
+    <string name="geo_quiz_plus">⭐ GeoQuiz Plus</string>
+    <string name="get">ПОЛУЧИТЬ</string>
+    <string name="remove_ads">Без\nрекламы</string>
+    <string name="offline_packs">Оффлайн\nпаки</string>
+    <string name="bonus_match_history">История\nматчей</string>
+    <string name="bonus_coins">Бонус\nмонеты</string>
+    <string name="correct">верных</string>
 
     <!-- Bottom Navigation -->
     <string name="home">Главная</string>

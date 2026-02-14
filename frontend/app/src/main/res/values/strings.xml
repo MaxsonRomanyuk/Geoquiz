@@ -37,10 +37,20 @@
     <string name="europe">Europe</string>
     <string name="asia">Asia</string>
     <string name="africa">Africa</string>
-    <string name="north_america">North America</string>
-    <string name="south_america">South America</string>
-    <string name="australia">Australia</string>
-    <string name="antarctica">Antarctica</string>
+    <string name="america">America</string>
+    <string name="oceania">Oceania</string>
+
+    <!--Profile Screen-->
+    <string name="win_rate">Win Rate</string>
+    <string name="longest_streak">Longest Streak</string>
+    <string name="match_history">Match History</string>
+    <string name="geo_quiz_plus">⭐ GeoQuiz Plus</string>
+    <string name="get">GET</string>
+    <string name="remove_ads">Remove\nAds</string>
+    <string name="offline_packs">Offline\nPacks</string>
+    <string name="bonus_match_history">Match\nhistory</string>
+    <string name="bonus_coins">Bonus\nCoins</string>
+    <string name="correct">correct</string>
 
     <!-- Bottom Navigation -->
     <string name="home">Home</string>

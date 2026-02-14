@@ -15,9 +15,11 @@ import com.example.geoquiz_frontend.ApiClient;
 import com.example.geoquiz_frontend.ApiService;
 import com.example.geoquiz_frontend.AuthManager;
 import com.example.geoquiz_frontend.DTOs.ProfileResponse;
+import com.example.geoquiz_frontend.Data.UserRepository;
 import com.example.geoquiz_frontend.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.UI.Auth.LoginActivity;
+import com.example.geoquiz_frontend.UI.Profile.ProfileActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import retrofit2.Call;
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private PreferencesHelper preferencesHelper;
     private ApiService apiService;
     private ProfileResponse profileData;
+    private UserRepository userRepository;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +56,15 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        userRepository = UserRepository.getInstance(this);
         apiService = ApiClient.getApiWithAuth(preferencesHelper);
 
         setupClickListeners();
         setupBottomNavigation();
-        loadUserData();
+        observeUserData();
+
+        // Загружаем данные (forceRefresh = false - не грузим, если уже есть)
+        userRepository.loadUserData(false);
     }
 
     private void initViews() {
@@ -122,16 +130,39 @@ public class MainActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_achievements) {
                 // Navigate to achievements
                 return true;
-            } else // Navigate to profile
-                if (itemId == R.id.nav_leaderboard) {
+            } else if (itemId == R.id.nav_leaderboard) {
                 // Navigate to leaderboard
                 return true;
-            } else return itemId == R.id.nav_profile;
+            } else if (itemId == R.id.nav_profile){
+                Intent intent = new Intent(this, ProfileActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                return true;
+            }
+            return false;
         });
 
         bottomNavigationView.setSelectedItemId(R.id.nav_home);
     }
+    private void observeUserData() {
+        userRepository.getUserData().observe(this, profileData -> {
+            if (profileData != null) {
+                updateUI(profileData);
+            }
+        });
 
+        userRepository.getIsLoading().observe(this, isLoading -> {
+            if (isLoading) {
+                showLoadingState();
+            }
+        });
+
+        userRepository.getErrorMessage().observe(this, error -> {
+            if (error != null) {
+                Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     private void loadUserData() {
         showLoadingState();
 

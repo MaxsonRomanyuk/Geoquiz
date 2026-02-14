@@ -25,6 +25,9 @@
         <activity
             android:name=".UI.Home.MainActivity"
             android:exported="false"/>
+        <activity
+            android:name=".UI.Profile.ProfileActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>
