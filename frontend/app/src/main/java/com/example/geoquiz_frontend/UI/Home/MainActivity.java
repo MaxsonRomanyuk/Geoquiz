@@ -141,9 +141,12 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     profileData = response.body();
-                    updateUI();
+                    savePreferencesStats();
+                    updateUI(profileData);
                 } else {
                     Log.e("MainActivity", "Profile load failed: " + response.code());
+                    ProfileResponse preferencesData = preferencesHelper.getCurrentUserStats();
+                    updateUI(preferencesData);
                     redirectToLogin();
                 }
             }
@@ -151,36 +154,70 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ProfileResponse> call, Throwable t) {
                 Log.e("MainActivity", "Network error", t);
+                ProfileResponse preferencesData = preferencesHelper.getCurrentUserStats();
+                updateUI(preferencesData);
 //                redirectToLogin();
             }
         });
     }
-    private void updateUI() {
+    private void savePreferencesStats() {
         if (profileData == null) return;
+        preferencesHelper.setCurrentUserStats(profileData.getUser(), profileData.getStats(), profileData.getGeography());
+    }
+    private void updateUI(ProfileResponse profileData) {
+        if (profileData == null) {
+            Log.e("MainActivity", "profileData is null");
+            return;
+        }
+
+        Log.d("MainActivity", "Updating UI with: " +
+                "user=" + (profileData.getUser() != null) +
+                ", stats=" + (profileData.getStats() != null) +
+                ", geography=" + (profileData.getGeography() != null));
 
         ProfileResponse.UserDto user = profileData.getUser();
         ProfileResponse.StatsDto stats = profileData.getStats();
         ProfileResponse.GeographyDto geography = profileData.getGeography();
 
-        tvUsername.setText(user.getUserName());
-        tvDailyStreak.setText("🔥 " + stats.getDailyStreak());
+        if (user != null) {
+            tvUsername.setText(user.getUserName());
+        } else {
+            tvUsername.setText("Гость");
+        }
 
-        tvLevel.setText(getString(R.string.level_prefix) + " " + stats.getLevel());
+        if (stats != null) {
+            tvDailyStreak.setText("🔥 " + stats.getDailyStreak());
+            tvLevel.setText(getString(R.string.level_prefix) + " " + stats.getLevel());
 
-        int currentXP = stats.getExperience();
-        int nextLevelXP = calculateNextLevelXP(stats.getLevel());
-        tvXP.setText(String.format("%d/%d XP", currentXP, nextLevelXP));
+            int currentXP = stats.getExperience();
+            int nextLevelXP = calculateNextLevelXP(stats.getLevel());
+            tvXP.setText(String.format("%d/%d XP", currentXP, nextLevelXP));
 
-        int progressPercent = (int) ((float) currentXP / nextLevelXP * 100);
-        progressXP.setProgress(progressPercent);
+            int progressPercent = (int) ((float) currentXP / nextLevelXP * 100);
+            progressXP.setProgress(progressPercent);
 
-        int totalScore = calculateTotalScore(stats.getLevel(), currentXP);
-        tvTotalScore.setText(String.format("%,d", totalScore));
+            int totalScore = calculateTotalScore(stats.getLevel(), currentXP);
+            tvTotalScore.setText(String.format("%,d", totalScore));
 
-        tvGamesPlayed.setText(String.valueOf(stats.getGamesPlayed()));
-        tvWins.setText(String.valueOf(stats.getWins()));
-        tvAccuracy.setText(String.format("%.0f%%", stats.getWinRate()));
-        tvBestContinent.setText(geography.getBestContinent());
+            tvGamesPlayed.setText(String.valueOf(stats.getGamesPlayed()));
+            tvWins.setText(String.valueOf(stats.getWins()));
+            tvAccuracy.setText(String.format("%.0f%%", stats.getWinRate()));
+        } else {
+            tvDailyStreak.setText("🔥 0");
+            tvLevel.setText("Уровень 1");
+            tvXP.setText("0/100 XP");
+            progressXP.setProgress(0);
+            tvTotalScore.setText("0");
+            tvGamesPlayed.setText("0");
+            tvWins.setText("0");
+            tvAccuracy.setText("0%");
+        }
+
+        if (geography != null) {
+            tvBestContinent.setText(geography.getBestContinent());
+        } else {
+            tvBestContinent.setText("—");
+        }
     }
     private int calculateNextLevelXP(int currentLevel) {
         return currentLevel * 100;
@@ -201,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
         redirectToLogin();
     }
     private void redirectToLogin() {
+        preferencesHelper.clearCurrentUser();
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
