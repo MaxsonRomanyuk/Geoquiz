@@ -1,7 +1,6 @@
 package com.example.geoquiz_frontend.Entities;
 
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class User {
     private String uid;

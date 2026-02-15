@@ -71,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
     private void setupClickListeners() {
         ivSettings.setOnClickListener(v -> {
-            // startActivity(new Intent(this, SettingsActivity.class));
+            startActivity(new Intent(this, SettingsActivity.class));
         });
 
         btnMatchHistory.setOnClickListener(v -> {
@@ -90,6 +90,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                overridePendingTransition(0, 0);
             } else if (itemId == R.id.nav_play) {
                 // Navigate to play screen
                 return true;

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 
 import com.example.geoquiz_frontend.ApiClient;
@@ -16,6 +17,7 @@ import com.example.geoquiz_frontend.ApiService;
 import com.example.geoquiz_frontend.AuthManager;
 import com.example.geoquiz_frontend.DTOs.ProfileResponse;
 import com.example.geoquiz_frontend.Data.UserRepository;
+import com.example.geoquiz_frontend.LocaleHelper;
 import com.example.geoquiz_frontend.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.UI.Auth.LoginActivity;
@@ -49,10 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
         authManager = new AuthManager(this);
         initViews();
-
         preferencesHelper = new PreferencesHelper(this);
         if (!preferencesHelper.hasValidToken()) {
-            redirectToLogin();
+            handleUnauthorized();
+            //redirectToLogin();
             return;
         }
 
@@ -63,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         setupBottomNavigation();
         observeUserData();
 
-        // Загружаем данные (forceRefresh = false - не грузим, если уже есть)
         userRepository.loadUserData(false);
     }
 
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void setupClickListeners() {
         cardLevel.setOnClickListener(v -> {
-            showLogoutConfirmation(); //temporarily
+//            showLogoutConfirmation(); //temporarily
         });
 
         cardSolo.setOnClickListener(v -> {
@@ -137,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, ProfileActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                overridePendingTransition(0, 0);
                 return true;
             }
             return false;
@@ -163,34 +165,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void loadUserData() {
-        showLoadingState();
 
-        Call<ProfileResponse> call = apiService.getProfile();
-        call.enqueue(new Callback<ProfileResponse>() {
-            @Override
-            public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    profileData = response.body();
-                    savePreferencesStats();
-                    updateUI(profileData);
-                } else {
-                    Log.e("MainActivity", "Profile load failed: " + response.code());
-                    ProfileResponse preferencesData = preferencesHelper.getCurrentUserStats();
-                    updateUI(preferencesData);
-                    redirectToLogin();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ProfileResponse> call, Throwable t) {
-                Log.e("MainActivity", "Network error", t);
-                ProfileResponse preferencesData = preferencesHelper.getCurrentUserStats();
-                updateUI(preferencesData);
-//                redirectToLogin();
-            }
-        });
-    }
     private void savePreferencesStats() {
         if (profileData == null) return;
         preferencesHelper.setCurrentUserStats(profileData.getUser(), profileData.getStats(), profileData.getGeography());
@@ -276,33 +251,19 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    private void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        tvUsername.setText("Ошибка");
-        tvGamesPlayed.setText("0");
-        tvWins.setText("0");
-        tvAccuracy.setText("0%");
-        tvBestContinent.setText("—");
+    private void applyLanguage() {
+        preferencesHelper = new PreferencesHelper(this);
+        String language = preferencesHelper.getLanguage();
+        LocaleHelper.setLocale(this, language);
+
     }
-    private void showLogoutConfirmation() {
-        new AlertDialog.Builder(this)
-                .setTitle("Logout")
-                .setMessage("Are you sure you want to log out?")
-                .setPositiveButton("Logout", (dialog, which) -> logout())
-                .setNegativeButton("Cancel", null)
-                .show();
-    }
-
-    private void logout() {
-        String toastMessage = "You have logged out";
-
-        authManager.logout();
-        Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+    private void applyTheme() {
+        String theme = preferencesHelper.getTheme();
+        if ("dark".equals(theme)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
     @Override
     protected void onResume() {

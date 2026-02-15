@@ -15,7 +15,7 @@ public class AuthManager {
         User guestUser = new User(
                 "uid",
                 "guest@example.com",
-                "Гость"
+                "Guest"
         );
         preferencesHelper.setCurrentUser(guestUser);
     }

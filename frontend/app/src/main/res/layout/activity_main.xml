@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:background="?attr/colorSurface"
+                    android:background="?attr/colorBackgroundFloating"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="6dp"
                     android:layout_marginEnd="12dp"
@@ -96,8 +96,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/tvLevel"
@@ -107,7 +107,7 @@
                             android:text="@string/level_prefix"
                             android:textColor="?attr/colorTertiary"
                             android:textSize="24sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/tvXP"
@@ -115,7 +115,7 @@
                             android:layout_height="wrap_content"
                             android:text="1200/2000 XP"
                             android:textColor="?attr/colorTertiaryFixed"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp" />
                     </LinearLayout>
 
                     <ProgressBar
@@ -125,26 +125,26 @@
                         android:layout_height="8dp"
                         android:layout_marginTop="8dp"
                         android:progress="30"
-                        android:progressTint="?attr/colorPrimary"
-                        android:progressBackgroundTint="?attr/colorOutline"/>
+                        android:progressBackgroundTint="?attr/colorOutline"
+                        android:progressTint="?attr/colorPrimary" />
 
                     <TextView
                         android:id="@+id/tvTotalScore"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
+                        android:fontFamily="sans-serif-black"
                         android:text="3,250"
                         android:textColor="?attr/colorTertiary"
                         android:textSize="32sp"
-                        android:textStyle="bold"
-                        android:fontFamily="sans-serif-black"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/total_points"
                         android:textColor="?attr/colorTertiaryFixed"
-                        android:textSize="12sp"/>
+                        android:textSize="12sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -305,7 +305,6 @@
                 app:layout_constraintTop_toBottomOf="@id/tvStatsTitle"
                 tools:ignore="MissingClass">
 
-                <!-- Games Played -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
                     android:layout_height="100dp"
@@ -345,7 +344,6 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Wins -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
                     android:layout_height="100dp"
@@ -369,7 +367,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="82"
-                            android:textColor="?attr/colorButtonNormal"
+                            android:textColor="?attr/colorSecondary"
                             android:textSize="24sp"
                             android:textStyle="bold"/>
 
@@ -383,7 +381,6 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Accuracy -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
                     android:layout_height="100dp"

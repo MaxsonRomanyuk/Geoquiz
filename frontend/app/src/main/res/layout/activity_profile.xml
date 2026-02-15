@@ -151,11 +151,11 @@
                         android:id="@+id/tvTotalPoints"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
                         android:text="3,250"
-                        android:textColor="?attr/colorPrimary"
+                        android:textColor="?attr/colorTertiary"
                         android:textSize="36sp"
-                        android:textStyle="bold"
-                        android:layout_marginEnd="8dp"/>
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -248,7 +248,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="82"
-                            android:textColor="?attr/colorButtonNormal"
+                            android:textColor="?attr/colorSecondary"
                             android:textSize="32sp"
                             android:textStyle="bold"/>
 
@@ -322,7 +322,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="12"
-                            android:textColor="?attr/colorAccent"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="32sp"
                             android:textStyle="bold"/>
 

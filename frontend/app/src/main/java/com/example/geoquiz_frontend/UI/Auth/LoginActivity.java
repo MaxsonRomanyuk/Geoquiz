@@ -12,6 +12,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.geoquiz_frontend.ApiClient;
 import com.example.geoquiz_frontend.ApiService;
@@ -19,7 +20,9 @@ import com.example.geoquiz_frontend.AuthManager;
 import com.example.geoquiz_frontend.DTOs.AuthResponse;
 import com.example.geoquiz_frontend.DTOs.LoginRequest;
 import com.example.geoquiz_frontend.DTOs.RegisterRequest;
+import com.example.geoquiz_frontend.Data.UserRepository;
 import com.example.geoquiz_frontend.Entities.User;
+import com.example.geoquiz_frontend.LocaleHelper;
 import com.example.geoquiz_frontend.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.UI.Home.MainActivity;
@@ -42,14 +45,19 @@ public class LoginActivity extends AppCompatActivity{
     private boolean isLoginMode = true;
     private AuthManager authManager;
     private PreferencesHelper preferencesHelper;
+    private UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        preferencesHelper = new PreferencesHelper(this);
+        applyLanguage();
+        applyTheme();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         authManager = new AuthManager(this);
-        preferencesHelper = new PreferencesHelper(this);
+
         if (authManager.isLoggedIn()) {
             startMainActivity();
             return;
@@ -212,14 +220,14 @@ public class LoginActivity extends AppCompatActivity{
         }
         saveAuthToken(token);
 
-        ApiService api = ApiClient.getApi();
-
         User user = new User();
         user.setEmail(email);
-        user.setName(email.split("@")[0]); // Временное решение
+        user.setName(email.split("@")[0]); // temp
         user.setPremium(false);
-
         authManager.LoginWithEmail(user);
+
+        userRepository = UserRepository.getInstance(this);
+        userRepository.loadUserData(true);
         startMainActivity();
     }
 
@@ -247,5 +255,19 @@ public class LoginActivity extends AppCompatActivity{
     private void showLoading(boolean show) {
         btnAuth.setEnabled(!show);
         btnAuth.setText(show ? "Загрузка..." : (isLoginMode ? "Вход" : "Регистрация"));
+    }
+    private void applyLanguage() {
+        preferencesHelper = new PreferencesHelper(this);
+        String language = preferencesHelper.getLanguage();
+        LocaleHelper.setLocale(this, language);
+
+    }
+    private void applyTheme() {
+        String theme = preferencesHelper.getTheme();
+        if ("dark".equals(theme)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 }

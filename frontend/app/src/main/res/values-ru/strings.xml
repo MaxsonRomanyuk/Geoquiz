@@ -53,6 +53,21 @@
     <string name="bonus_coins">Бонус\nмонеты</string>
     <string name="correct">верных</string>
 
+    <!-- Settings -->
+    <string name="settings_title">Настройки</string>
+    <string name="basic_settings">Основные</string>
+    <string name="language">Язык</string>
+    <string name="theme">Тема</string>
+    <string name="about_app">О приложении</string>
+    <string name="privacy_policy">Политика конфиденциальности</string>
+    <string name="terms_of_use">Пользовательское соглашение</string>
+    <string name="account">Аккаунт</string>
+    <string name="subscription">Подписка</string>
+    <string name="not_subscribed">Не активна</string>
+    <string name="subscribed">Активна</string>
+    <string name="logout">Выйти из аккаунта</string>
+    <string name="back">Назад</string>
+
     <!-- Bottom Navigation -->
     <string name="home">Главная</string>
     <string name="play">Играть</string>
