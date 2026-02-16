@@ -5,6 +5,8 @@
         <item name="colorSecondary">#4FD1C7</item>
         <item name="colorAccent">#7D9CFF</item>
 
+        <item name="colorOnContainer">#49bfee</item>
+
         <item name="colorOnBackground">#0F1419</item>
         <item name="colorSurface">#1A202C</item>
         <item name="colorOutline">#2D3748</item>

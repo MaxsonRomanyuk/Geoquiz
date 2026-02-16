@@ -76,20 +76,21 @@
                     app:tint="?attr/colorPrimary" />
             </LinearLayout>
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardLevel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="12dp"
-                app:cardBackgroundColor="?attr/colorSurface"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="2dp"
+                app:cardBackgroundColor="@android:color/transparent"
                 app:layout_constraintTop_toBottomOf="@id/topBar">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/card_background_game"
                     android:orientation="vertical"
                     android:padding="20dp">
 
@@ -146,28 +147,29 @@
                         android:textColor="?attr/colorTertiaryFixed"
                         android:textSize="12sp" />
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/tvGameModesTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:layout_marginStart="25dp"
                 android:text="@string/game_modes"
                 android:textColor="?attr/colorTertiary"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@id/cardLevel"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="25dp" />
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="MissingConstraints"/>
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardSolo"
                 android:layout_width="0dp"
                 android:layout_height="105dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="6dp"
                 app:cardBackgroundColor="?attr/colorPrimary"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="2dp"
@@ -177,37 +179,48 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvGameModesTitle">
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:padding="12dp">
+                    android:layout_height="match_parent">
 
-                    <TextView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:text="🧭"
-                        android:textSize="32sp"
-                        android:gravity="center"/>
+                    <ImageView
+                        android:id="@+id/ivSoloMode"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/solo"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="@string/solo" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:text="@string/solo"
-                        android:textColor="?attr/colorOnPrimary"
-                        android:textSize="14sp"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="bottom|center_horizontal"
+                        android:padding="2dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/solo"
+                            android:textColor="?attr/colorOnContainer"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="4"
+                            tools:ignore="PrivateResource" />
+                    </LinearLayout>
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardDuel"
                 android:layout_width="0dp"
                 android:layout_height="105dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
                 app:cardBackgroundColor="?attr/colorSecondary"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="2dp"
@@ -216,38 +229,47 @@
                 app:layout_constraintStart_toEndOf="@+id/cardSolo"
                 app:layout_constraintTop_toTopOf="@+id/cardSolo">
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:padding="12dp">
+                    android:layout_height="match_parent">
 
-                    <TextView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:text="⚔️"
-                        android:textSize="32sp"
-                        android:gravity="center"/>
+                    <ImageView
+                        android:id="@+id/ivDuelMode"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/pvp"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="@string/duel" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/duel"
-                        android:textColor="?attr/colorOnSecondary"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:gravity="center"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="bottom|center_horizontal"
+                        android:orientation="vertical"
+                        android:padding="2dp">
 
-            <androidx.cardview.widget.CardView
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="4"
+                            android:text="@string/duel"
+                            android:textColor="?attr/colorOnContainer"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            tools:ignore="PrivateResource" />
+                    </LinearLayout>
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardKing"
                 android:layout_width="0dp"
                 android:layout_height="105dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="15dp"
                 app:cardBackgroundColor="?attr/colorAccent"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="2dp"
@@ -256,43 +278,54 @@
                 app:layout_constraintStart_toEndOf="@+id/cardDuel"
                 app:layout_constraintTop_toTopOf="@+id/cardSolo">
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:padding="12dp">
+                    android:layout_height="match_parent">
 
-                    <TextView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:text="👑"
-                        android:textSize="32sp"
-                        android:gravity="center"/>
+                    <ImageView
+                        android:id="@+id/ivKingMode"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/king"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="@string/king_of_the_hill" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        android:text="@string/king_of_the_hill"
-                        android:textColor="?attr/colorOnPrimary"
-                        android:textSize="13sp"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="bottom|center_horizontal"
+                        android:padding="2dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/king_of_the_hill"
+                            android:textColor="?attr/colorOnContainer"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:shadowColor="#80000000"
+                            android:shadowDx="2"
+                            android:shadowDy="2"
+                            android:shadowRadius="4"
+                            tools:ignore="PrivateResource" />
+                    </LinearLayout>
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/tvStatsTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:layout_marginStart="25dp"
                 android:text="@string/your_stats"
                 android:textColor="?attr/colorTertiary"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@id/cardSolo"
                 tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="25dp" />
+                app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.gridlayout.widget.GridLayout
                 android:id="@+id/gridStats"
@@ -305,21 +338,21 @@
                 app:layout_constraintTop_toBottomOf="@id/tvStatsTitle"
                 tools:ignore="MissingClass">
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="100dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
-                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="2dp"
                     app:layout_columnWeight="1"
-                    app:layout_rowWeight="1"
-                    tools:ignore="MissingClass">
+                    app:layout_rowWeight="1">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@drawable/card_background_game"
                         android:orientation="vertical"
                         android:gravity="center"
                         android:padding="16dp">
@@ -342,14 +375,14 @@
                             android:textSize="12sp"
                             android:gravity="center"/>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="100dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginBottom="8dp"
-                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="2dp"
                     app:layout_columnWeight="1"
@@ -358,6 +391,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@drawable/card_background_game"
                         android:orientation="vertical"
                         android:gravity="center"
                         android:padding="16dp">
@@ -379,14 +413,14 @@
                             android:textColor="?attr/colorTertiaryFixed"
                             android:textSize="12sp"/>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="100dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="8dp"
-                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="2dp"
                     app:layout_columnWeight="1"
@@ -395,6 +429,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@drawable/card_background_game"
                         android:orientation="vertical"
                         android:gravity="center"
                         android:padding="16dp">
@@ -416,14 +451,14 @@
                             android:textColor="?attr/colorTertiaryFixed"
                             android:textSize="12sp"/>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="100dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="2dp"
                     app:layout_columnWeight="1"
@@ -432,6 +467,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@drawable/card_background_game"
                         android:orientation="vertical"
                         android:gravity="center"
                         android:padding="16dp">
@@ -454,7 +490,7 @@
                             android:textSize="12sp"
                             android:gravity="center"/>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
             </androidx.gridlayout.widget.GridLayout>
 
             <View

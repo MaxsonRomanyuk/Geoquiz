@@ -26,7 +26,7 @@
     <string name="game_modes">Game Modes</string>
     <string name="solo">Solo</string>
     <string name="duel">1v1 Duel</string>
-    <string name="king_of_the_hill">King of \n the Hill</string>
+    <string name="king_of_the_hill">King of the Hill</string>
     <string name="your_stats">Your Stats</string>
     <string name="games_played">Games Played</string>
     <string name="wins">Wins</string>
@@ -66,6 +66,26 @@
     <string name="subscribed">Subscribed</string>
     <string name="logout">Logout</string>
     <string name="back">Back</string>
+
+    <!-- Game Modes Screen -->
+    <string name="choose_game_mode">Choose Game Mode</string>
+    <string name="test_your_knowledge">Test your geography knowledge</string>
+
+    <!-- Mode Names -->
+    <string name="country_capitals">Country Capitals</string>
+    <string name="country_flags">Country Flags</string>
+    <string name="country_outlines">Country Outlines</string>
+    <string name="country_languages">Country Languages</string>
+
+    <!-- Mode Descriptions -->
+    <string name="guess_capitals_desc">Guess the capital cities</string>
+    <string name="guess_flags_desc">Identify countries by flags</string>
+    <string name="guess_outlines_desc">Recognize country shapes</string>
+    <string name="guess_languages_desc">Match official languages</string>
+
+    <!-- Stats -->
+    <string name="your_best_mode">Your best mode</string>
+    <string name="highest_score">Highest score</string>
 
     <!-- Bottom Navigation -->
     <string name="home">Home</string>

@@ -22,8 +22,10 @@ import com.example.geoquiz_frontend.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.UI.Auth.LoginActivity;
 import com.example.geoquiz_frontend.UI.Base.BaseActivity;
+import com.example.geoquiz_frontend.UI.Game.GameModesActivity;
 import com.example.geoquiz_frontend.UI.Profile.ProfileActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.card.MaterialCardView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,7 +36,7 @@ public class MainActivity extends BaseActivity {
     private TextView tvUsername, tvLevel, tvXP, tvTotalScore;
     private TextView tvDailyStreak;
     private TextView tvGamesPlayed, tvWins, tvAccuracy, tvBestContinent;
-    private CardView cardSolo, cardDuel, cardKing, cardLevel;
+    private MaterialCardView cardSolo, cardDuel, cardKing, cardLevel;
     private BottomNavigationView bottomNavigationView;
     private ProgressBar progressXP;
 
@@ -108,7 +110,8 @@ public class MainActivity extends BaseActivity {
         });
 
         cardSolo.setOnClickListener(v -> {
-            // Navigate to solo mode
+            Intent intent = new Intent(this, GameModesActivity.class);
+            startActivity(intent);
         });
 
         cardDuel.setOnClickListener(v -> {

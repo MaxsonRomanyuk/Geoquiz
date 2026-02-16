@@ -67,6 +67,25 @@
     <string name="subscribed">Активна</string>
     <string name="logout">Выйти из аккаунта</string>
     <string name="back">Назад</string>
+    <!-- Game Modes Screen -->
+    <string name="choose_game_mode">Выберите режим</string>
+    <string name="test_your_knowledge">Проверьте свои знания географии</string>
+
+    <!-- Mode Names -->
+    <string name="country_capitals">Столицы стран</string>
+    <string name="country_flags">Флаги стран</string>
+    <string name="country_outlines">Контуры стран</string>
+    <string name="country_languages">Языки стран</string>
+
+    <!-- Mode Descriptions -->
+    <string name="guess_capitals_desc">Угадайте столицы</string>
+    <string name="guess_flags_desc">Определите страны по флагам</string>
+    <string name="guess_outlines_desc">Узнайте страны по очертаниям</string>
+    <string name="guess_languages_desc">Сопоставьте официальные языки</string>
+
+    <!-- Stats -->
+    <string name="your_best_mode">Лучший режим</string>
+    <string name="highest_score">Лучший счёт</string>
 
     <!-- Bottom Navigation -->
     <string name="home">Главная</string>

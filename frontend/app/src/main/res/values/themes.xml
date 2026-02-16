@@ -5,6 +5,8 @@
         <item name="colorSecondary">#38B2AC</item>
         <item name="colorAccent">#4869D6</item>
 
+        <item name="colorOnContainer">#03509b</item>
+
         <item name="colorOnBackground">#F8FAFC</item>
         <item name="colorSurface">#FFFFFF</item>
         <item name="colorOutline">#FFFFFF</item>
@@ -13,6 +15,8 @@
         <item name="colorTertiary">#1A365D</item>
         <item name="colorTertiaryContainer">#4A5568</item>
         <item name="colorTertiaryFixed">#A0AEC0</item>
+
+
 
         <item name="colorButtonNormal">#48BB78</item>
         <item name="colorError">#ED8936</item>
