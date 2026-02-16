@@ -14,12 +14,13 @@ import com.example.geoquiz_frontend.DTOs.ProfileResponse;
 import com.example.geoquiz_frontend.Data.UserRepository;
 import com.example.geoquiz_frontend.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
+import com.example.geoquiz_frontend.UI.Base.BaseActivity;
 import com.example.geoquiz_frontend.UI.Home.MainActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BaseActivity {
     private ImageView ivAvatar;
     private TextView tvUserName, tvLevel, tvXP;
     private ProgressBar progressXP;
@@ -88,9 +89,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             if (itemId == R.id.nav_home) {
                 Intent intent = new Intent(this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
-                overridePendingTransition(0, 0);
             } else if (itemId == R.id.nav_play) {
                 // Navigate to play screen
                 return true;

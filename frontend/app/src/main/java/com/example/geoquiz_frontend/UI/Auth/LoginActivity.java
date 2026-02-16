@@ -25,6 +25,7 @@ import com.example.geoquiz_frontend.Entities.User;
 import com.example.geoquiz_frontend.LocaleHelper;
 import com.example.geoquiz_frontend.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
+import com.example.geoquiz_frontend.UI.Base.BaseActivity;
 import com.example.geoquiz_frontend.UI.Home.MainActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
@@ -34,7 +35,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends BaseActivity {
     private MaterialButtonToggleGroup toggleGroup;
     private MaterialButton btnAuth;
     private TextInputLayout emailLayout, passwordLayout, nameLayout;
@@ -50,8 +51,6 @@ public class LoginActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         preferencesHelper = new PreferencesHelper(this);
-        applyLanguage();
-        applyTheme();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -255,19 +254,5 @@ public class LoginActivity extends AppCompatActivity{
     private void showLoading(boolean show) {
         btnAuth.setEnabled(!show);
         btnAuth.setText(show ? "Загрузка..." : (isLoginMode ? "Вход" : "Регистрация"));
-    }
-    private void applyLanguage() {
-        preferencesHelper = new PreferencesHelper(this);
-        String language = preferencesHelper.getLanguage();
-        LocaleHelper.setLocale(this, language);
-
-    }
-    private void applyTheme() {
-        String theme = preferencesHelper.getTheme();
-        if ("dark".equals(theme)) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
     }
 }

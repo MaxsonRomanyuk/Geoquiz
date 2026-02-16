@@ -7,6 +7,7 @@ import com.example.geoquiz_frontend.DTOs.ProfileResponse;
 import com.example.geoquiz_frontend.Entities.User;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class PreferencesHelper {
@@ -175,7 +176,7 @@ public class PreferencesHelper {
     }
 
     public String getLanguage() {
-        return sharedPreferences.getString(KEY_APP_LANG, "ru");
+        return sharedPreferences.getString(KEY_APP_LANG, Locale.getDefault().getLanguage());
     }
 
     public void setTheme(String theme) {

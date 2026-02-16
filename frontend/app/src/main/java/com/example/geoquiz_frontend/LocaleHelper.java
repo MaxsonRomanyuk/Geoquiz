@@ -7,20 +7,14 @@ import android.content.res.Resources;
 import java.util.Locale;
 
 public class LocaleHelper {
-    public static Context setLocale(Context context, String language) {
-        return updateResources(context, language);
-    }
 
-    private static Context updateResources(Context context, String language) {
+    public static Context setLocale(Context context, String language) {
         Locale locale = new Locale(language);
         Locale.setDefault(locale);
 
-        Resources resources = context.getResources();
-        Configuration configuration = resources.getConfiguration();
+        Configuration config = new Configuration(context.getResources().getConfiguration());
+        config.setLocale(locale);
 
-        configuration.setLocale(locale);
-
-        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
-        return context;
+        return context.createConfigurationContext(config);
     }
 }

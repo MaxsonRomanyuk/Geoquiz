@@ -15,9 +15,10 @@ import com.example.geoquiz_frontend.LocaleHelper;
 import com.example.geoquiz_frontend.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.UI.Auth.LoginActivity;
+import com.example.geoquiz_frontend.UI.Base.BaseActivity;
 import com.google.android.material.card.MaterialCardView;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BaseActivity {
     private PreferencesHelper preferencesHelper;
     private AuthManager authManager;
     private User currentUser;
@@ -71,7 +72,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         btnLogout.setOnClickListener(v -> showLogoutConfirmation());
 
-        btnBack.setOnClickListener(v -> onBackPressed());
+        btnBack.setOnClickListener(v -> backToProfile());
     }
     private void setupCurrentSettings() {
         String currentLanguage = preferencesHelper.getLanguage();
@@ -107,11 +108,11 @@ public class SettingsActivity extends AppCompatActivity {
                     String selectedLanguage = selectedPosition == 0 ? "ru" : "en";
 
                     if (!selectedLanguage.equals(currentLanguage)) {
-                        preferencesHelper.setLanguage(selectedLanguage);
+                        applyLanguage(selectedLanguage);
                         Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
 
                         LocaleHelper.setLocale(this, selectedLanguage);
-                        applyLanguage(selectedLanguage);
+                        //applyLanguage(selectedLanguage);
                     }
                 })
                 .setNegativeButton(negativeButton, null)
@@ -119,11 +120,10 @@ public class SettingsActivity extends AppCompatActivity {
     }
     private void applyLanguage(String language) {
         preferencesHelper.setLanguage(language);
-        recreate();
-//        Intent intent = getIntent();
-//        finish();
-//        startActivity(intent);
-//        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
     private void applyTheme() {
         String theme = preferencesHelper.getTheme();
@@ -1062,6 +1062,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+    private void backToProfile(){
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
         finish();
     }
