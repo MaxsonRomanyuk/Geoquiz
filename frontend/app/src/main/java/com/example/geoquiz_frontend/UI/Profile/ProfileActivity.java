@@ -15,6 +15,7 @@ import com.example.geoquiz_frontend.Data.UserRepository;
 import com.example.geoquiz_frontend.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.UI.Base.BaseActivity;
+import com.example.geoquiz_frontend.UI.Game.GameTypesActivity;
 import com.example.geoquiz_frontend.UI.Home.MainActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
@@ -91,7 +92,8 @@ public class ProfileActivity extends BaseActivity {
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
             } else if (itemId == R.id.nav_play) {
-                // Navigate to play screen
+                Intent intent = new Intent(this, GameTypesActivity.class);
+                startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_achievements) {
                 // Navigate to achievements

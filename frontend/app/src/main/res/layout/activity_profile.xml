@@ -28,6 +28,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorTertiaryFixed"
                 app:cardElevation="4dp"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -138,6 +140,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 app:cardCornerRadius="16dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorTertiaryFixed"
                 app:cardElevation="2dp"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:layout_constraintTop_toBottomOf="@id/cardProfileHeader">
@@ -196,6 +200,8 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     app:cardCornerRadius="16dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorTertiaryFixed"
                     app:cardElevation="2dp"
                     app:cardBackgroundColor="@android:color/transparent"
                     app:layout_columnWeight="1"
@@ -234,6 +240,8 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginBottom="8dp"
                     app:cardCornerRadius="16dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorTertiaryFixed"
                     app:cardElevation="2dp"
                     app:cardBackgroundColor="@android:color/transparent"
                     app:layout_columnWeight="1"
@@ -272,6 +280,8 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="8dp"
                     app:cardCornerRadius="16dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorTertiaryFixed"
                     app:cardElevation="2dp"
                     app:cardBackgroundColor="@android:color/transparent"
                     app:layout_columnWeight="1"
@@ -310,6 +320,8 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     app:cardCornerRadius="16dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorTertiaryFixed"
                     app:cardElevation="2dp"
                     app:cardBackgroundColor="@android:color/transparent"
                     app:layout_columnWeight="1"
@@ -419,6 +431,8 @@
                     android:layout_weight="1"
                     android:layout_marginEnd="4dp"
                     app:cardCornerRadius="12dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorTertiaryFixed"
                     app:cardElevation="2dp"
                     app:cardBackgroundColor="@android:color/transparent">
 
@@ -460,17 +474,18 @@
                     android:layout_width="0dp"
                     android:layout_height="110dp"
                     android:layout_weight="1"
-                    android:layout_marginEnd="4dp"
                     android:layout_marginStart="4dp"
                     app:cardCornerRadius="12dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorTertiaryFixed"
                     app:cardElevation="2dp"
                     app:cardBackgroundColor="@android:color/transparent">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/card_background_game"
                         android:orientation="vertical"
+                        android:background="@drawable/card_background_game"
                         android:gravity="center"
                         android:padding="8dp">
 
@@ -485,7 +500,7 @@
                             android:id="@+id/tvAsiaCorrect"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="31"
+                            android:text="24"
                             android:textColor="?attr/colorPrimary"
                             android:textSize="18sp"
                             android:textStyle="bold"
@@ -507,6 +522,8 @@
                     android:layout_marginEnd="4dp"
                     android:layout_marginStart="4dp"
                     app:cardCornerRadius="12dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorTertiaryFixed"
                     app:cardElevation="2dp"
                     app:cardBackgroundColor="@android:color/transparent">
 
@@ -551,6 +568,8 @@
                     android:layout_marginEnd="4dp"
                     android:layout_marginStart="4dp"
                     app:cardCornerRadius="12dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorTertiaryFixed"
                     app:cardElevation="2dp"
                     app:cardBackgroundColor="@android:color/transparent">
 
@@ -594,6 +613,8 @@
                     android:layout_weight="1"
                     android:layout_marginStart="4dp"
                     app:cardCornerRadius="12dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorTertiaryFixed"
                     app:cardElevation="2dp"
                     app:cardBackgroundColor="@android:color/transparent">
 
@@ -643,7 +664,8 @@
                 app:cardCornerRadius="32dp"
                 app:cardElevation="2dp"
                 app:cardBackgroundColor="@android:color/transparent"
-                app:strokeWidth="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorTertiaryFixed"
                 app:layout_constraintTop_toBottomOf="@id/continentCardsContainer"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -687,6 +709,8 @@
                 app:cardCornerRadius="20dp"
                 app:cardElevation="4dp"
                 app:cardBackgroundColor="?attr/colorPrimary"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorOnSurface"
                 app:layout_constraintTop_toBottomOf="@id/btnMatchHistory">
 
                 <LinearLayout

@@ -4,4 +4,9 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+    <style name="Widget.GeoQuiz.ToggleButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorTertiaryFixed</item>
+        <item name="strokeColor">?attr/colorTertiaryFixed</item>
+    </style>
 </resources>

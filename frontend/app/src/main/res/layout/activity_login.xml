@@ -43,6 +43,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
             app:cardCornerRadius="20dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="?attr/colorOnSurface"
             app:cardElevation="4dp"
             app:cardBackgroundColor="?attr/colorSurface">
 
@@ -67,7 +69,10 @@
                         android:layout_weight="1"
                         android:text="@string/login"
                         android:textSize="14sp"
-                        style="@style/Widget.Material3.Button.OutlinedButton" />
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        app:backgroundTint="@color/toggle_button_bg"
+                        android:textColor="@color/toggle_button_text"
+                        app:strokeColor= "?attr/colorTertiaryFixed" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_register"
@@ -76,7 +81,10 @@
                         android:layout_weight="1"
                         android:text="@string/register"
                         android:textSize="14sp"
-                        style="@style/Widget.Material3.Button.OutlinedButton" />
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        app:backgroundTint="@color/toggle_button_bg"
+                        android:textColor="@color/toggle_button_text"
+                        app:strokeColor= "?attr/colorTertiaryFixed" />
 
                 </com.google.android.material.button.MaterialButtonToggleGroup>
                 <com.google.android.material.textfield.TextInputLayout
@@ -88,7 +96,7 @@
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusTopStart="12dp"
-                    app:boxStrokeColor="?attr/colorOutline"
+                    app:boxStrokeColor="?attr/colorTertiaryFixed"
                     app:startIconDrawable="@drawable/ic_person"
                     android:hint="@string/name"
                     android:visibility="gone">
@@ -113,6 +121,7 @@
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusTopStart="12dp"
+                    app:boxStrokeColor="?attr/colorTertiaryFixed"
                     app:endIconMode="clear_text"
                     app:startIconDrawable="@drawable/ic_email">
 
@@ -137,7 +146,7 @@
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusTopStart="12dp"
-                    app:boxStrokeColor="?attr/colorOutline"
+                    app:boxStrokeColor="?attr/colorTertiaryFixed"
                     app:endIconMode="password_toggle"
                     app:startIconDrawable="@drawable/ic_password">
 

@@ -51,6 +51,8 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
                 app:cardBackgroundColor="?attr/colorSurface"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorTertiaryFixed"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -109,6 +111,8 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
                 app:cardBackgroundColor="?attr/colorSurface"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorTertiaryFixed"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -177,6 +181,8 @@
                 app:cardCornerRadius="14dp"
                 app:cardElevation="3dp"
                 app:cardBackgroundColor="?attr/colorSurface"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorTertiaryFixed"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -226,6 +232,8 @@
                 app:cardCornerRadius="14dp"
                 app:cardElevation="3dp"
                 app:cardBackgroundColor="?attr/colorSurface"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorTertiaryFixed"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -275,6 +283,8 @@
                 app:cardCornerRadius="14dp"
                 app:cardElevation="3dp"
                 app:cardBackgroundColor="?attr/colorSurface"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorTertiaryFixed"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -334,6 +344,8 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
                 app:cardBackgroundColor="?attr/colorAccent"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorTertiaryFixed"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -393,6 +405,8 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
                 app:cardBackgroundColor="?attr/colorAccent"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorTertiaryFixed"
                 android:clickable="true"
                 android:focusable="true">
 

@@ -8,7 +8,9 @@
         <item name="colorOnContainer">#03509b</item>
 
         <item name="colorOnBackground">#F8FAFC</item>
+
         <item name="colorSurface">#FFFFFF</item>
+
         <item name="colorOutline">#FFFFFF</item>
         <item name="colorBackgroundFloating">@drawable/background_gradient_light</item>
 

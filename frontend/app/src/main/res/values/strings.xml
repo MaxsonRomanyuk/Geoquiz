@@ -23,7 +23,7 @@
 
     <string name="level_prefix">Level </string>
     <string name="total_points">Total points</string>
-    <string name="game_modes">Game Modes</string>
+    <string name="game_type">Game Type</string>
     <string name="solo">Solo</string>
     <string name="duel">1v1 Duel</string>
     <string name="king_of_the_hill">King of the Hill</string>
@@ -71,21 +71,36 @@
     <string name="choose_game_mode">Choose Game Mode</string>
     <string name="test_your_knowledge">Test your geography knowledge</string>
 
-    <!-- Mode Names -->
     <string name="country_capitals">Country Capitals</string>
     <string name="country_flags">Country Flags</string>
     <string name="country_outlines">Country Outlines</string>
     <string name="country_languages">Country Languages</string>
 
-    <!-- Mode Descriptions -->
     <string name="guess_capitals_desc">Guess the capital cities</string>
     <string name="guess_flags_desc">Identify countries by flags</string>
     <string name="guess_outlines_desc">Recognize country shapes</string>
     <string name="guess_languages_desc">Match official languages</string>
 
-    <!-- Stats -->
-    <string name="your_best_mode">Your best mode</string>
-    <string name="highest_score">Highest score</string>
+    <!-- Match Type Screen -->
+    <string name="select_match_type">Choose Your Battle</string>
+    <string name="choose_how_to_play">Select game type to start</string>
+
+    <string name="offline_mode">Solo Adventure</string>
+    <string name="offline_description">Explore countries, capitals and flags at your own pace. Perfect for learning!</string>
+    <string name="play_anytime">Play offline</string>
+    <string name="learn_at_pace">Learn at your pace</string>
+    <string name="select_mode">Select Mode</string>
+
+    <string name="pvp_mode">PvP Duel</string>
+    <string name="pvp_description">Battle it out with real players in an intellectual duel. Prove your knowledge!</string>
+    <string name="online_players">Online players</string>
+    <string name="intellectual_duel">Intellectual duel</string>
+    <string name="find_opponent">Find Opponent</string>
+
+    <string name="king_description">Massive battle royale with multiple players. Last one standing wins the crown!</string>
+    <string name="battle_royale">Battle royale</string>
+    <string name="participants">Up to 32 participants</string>
+    <string name="find_lobby">Find Lobby</string>
 
     <!-- Bottom Navigation -->
     <string name="home">Home</string>

@@ -24,7 +24,7 @@
 <!--Home-->
     <string name="level_prefix">Уровень</string>
     <string name="total_points">Всего очков</string>
-    <string name="game_modes">Режимы игры</string>
+    <string name="game_type">Тип игры</string>
     <string name="solo">Соло</string>
     <string name="duel">1v1 Дуэль</string>
     <string name="king_of_the_hill">Царь горы</string>
@@ -71,21 +71,36 @@
     <string name="choose_game_mode">Выберите режим</string>
     <string name="test_your_knowledge">Проверьте свои знания географии</string>
 
-    <!-- Mode Names -->
     <string name="country_capitals">Столицы стран</string>
     <string name="country_flags">Флаги стран</string>
     <string name="country_outlines">Контуры стран</string>
     <string name="country_languages">Языки стран</string>
 
-    <!-- Mode Descriptions -->
     <string name="guess_capitals_desc">Угадайте столицы</string>
     <string name="guess_flags_desc">Определите страны по флагам</string>
     <string name="guess_outlines_desc">Узнайте страны по очертаниям</string>
     <string name="guess_languages_desc">Сопоставьте официальные языки</string>
 
-    <!-- Stats -->
-    <string name="your_best_mode">Лучший режим</string>
-    <string name="highest_score">Лучший счёт</string>
+    <!-- Match Type Screen -->
+    <string name="select_match_type">Выберите битву</string>
+    <string name="choose_how_to_play">Выберите тип матча для старта</string>
+
+    <string name="offline_mode">Соло приключение</string>
+    <string name="offline_description">Исследуйте страны, столицы и флаги в своём темпе. Идеально для обучения!</string>
+    <string name="play_anytime">Играть оффлайн</string>
+    <string name="learn_at_pace">Свой темп</string>
+    <string name="select_mode">Выбрать режим</string>
+
+    <string name="pvp_mode">PvP Дуэль</string>
+    <string name="pvp_description">Сразитесь с реальными игроками в интеллектуальном поединке. Докажите свои знания!</string>
+    <string name="online_players">Игроки онлайн</string>
+    <string name="intellectual_duel">Интеллектуальный поединок</string>
+    <string name="find_opponent">Найти соперника</string>
+
+    <string name="king_description">Массовая королевская битва. Последний выживший получает корону!</string>
+    <string name="battle_royale">Королевская битва</string>
+    <string name="participants">До 32-ух участников</string>
+    <string name="find_lobby">Найти лобби</string>
 
     <!-- Bottom Navigation -->
     <string name="home">Главная</string>

@@ -10,6 +10,7 @@
         <item name="colorOnBackground">#0F1419</item>
         <item name="colorSurface">#1A202C</item>
         <item name="colorOutline">#2D3748</item>
+
         <item name="colorBackgroundFloating">@drawable/background_gradient_dark</item>
 
         <item name="colorTertiary">#F7FAFC</item>
