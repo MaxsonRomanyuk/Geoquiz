@@ -37,6 +37,9 @@
         <activity
             android:name=".UI.Game.GameTypesActivity"
             android:exported="false"/>
+        <activity
+            android:name=".UI.Game.SoloGameActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>

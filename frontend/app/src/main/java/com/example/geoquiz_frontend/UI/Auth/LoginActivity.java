@@ -18,9 +18,12 @@ import com.example.geoquiz_frontend.ApiClient;
 import com.example.geoquiz_frontend.ApiService;
 import com.example.geoquiz_frontend.AuthManager;
 import com.example.geoquiz_frontend.DTOs.AuthResponse;
+import com.example.geoquiz_frontend.DTOs.BootstrapResponse;
 import com.example.geoquiz_frontend.DTOs.LoginRequest;
 import com.example.geoquiz_frontend.DTOs.RegisterRequest;
+import com.example.geoquiz_frontend.Data.GameRepository;
 import com.example.geoquiz_frontend.Data.UserRepository;
+import com.example.geoquiz_frontend.Engine.GameManager;
 import com.example.geoquiz_frontend.Entities.User;
 import com.example.geoquiz_frontend.LocaleHelper;
 import com.example.geoquiz_frontend.PreferencesHelper;
@@ -48,6 +51,9 @@ public class LoginActivity extends BaseActivity {
     private PreferencesHelper preferencesHelper;
     private UserRepository userRepository;
 
+
+    private GameManager gameManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         preferencesHelper = new PreferencesHelper(this);
@@ -55,9 +61,13 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
+
         authManager = new AuthManager(this);
 
         if (authManager.isLoggedIn()) {
+            gameManager = GameManager.getInstance(this);
+            loadData();
             startMainActivity();
             return;
         }
@@ -65,7 +75,17 @@ public class LoginActivity extends BaseActivity {
         setupClickListeners();
 
     }
-
+    private void loadData()
+    {
+        gameManager.loadBootstrapData(new GameRepository.BootstrapCallback() {
+            @Override
+            public void onSuccess(BootstrapResponse data) {
+            }
+            @Override
+            public void onError(String error) {
+            }
+        });
+    }
     private void initViews() {
         toggleGroup = findViewById(R.id.toggleGroup);
         btnAuth = findViewById(R.id.btn_auth);

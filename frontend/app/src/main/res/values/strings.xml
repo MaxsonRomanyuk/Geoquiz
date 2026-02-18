@@ -57,6 +57,10 @@
     <string name="basic_settings">Basic</string>
     <string name="language">Language</string>
     <string name="theme">Theme</string>
+    <string name="update_data">Update Data</string>
+    <string name="available">Available</string>
+    <string name="up_to_date">Up to date</string>
+    <string name="checking">Checking...</string>
     <string name="about_app">About</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="terms_of_use">Terms of Use</string>
@@ -101,6 +105,17 @@
     <string name="battle_royale">Battle royale</string>
     <string name="participants">Up to 32 participants</string>
     <string name="find_lobby">Find Lobby</string>
+
+    <!-- Quiz -->
+    <string name="question">Question</string>
+    <string name="of">of</string>
+    <string name="time_left">Time left: %1$ds</string>
+    <string name="time_up">Time\'s up!</string>
+    <string name="play_audio">Play audio</string>
+    <string name="capital_question">Capital of: %1$s</string>
+    <string name="flag_question">Which country does this flag belong to?</string>
+    <string name="outline_question">Which country does this outline belong to?</string>
+    <string name="end_game">End Game</string>
 
     <!-- Bottom Navigation -->
     <string name="home">Home</string>

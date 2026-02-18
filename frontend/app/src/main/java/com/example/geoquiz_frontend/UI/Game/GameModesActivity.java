@@ -45,34 +45,50 @@ public class GameModesActivity extends BaseActivity {
 
     private void setupClickListeners() {
         cardCapitals.setOnClickListener(v -> {
-            //
+            Intent intent = new Intent(this, SoloGameActivity.class);
+            intent.putExtra("GAME_MODE", 1);
+            startActivity(intent);
         });
 
         btnCapitals.setOnClickListener(v -> {
-            //
+            Intent intent = new Intent(this, SoloGameActivity.class);
+            intent.putExtra("GAME_MODE", 1);
+            startActivity(intent);
         });
         cardFlags.setOnClickListener(v -> {
-            //
+            Intent intent = new Intent(this, SoloGameActivity.class);
+            intent.putExtra("GAME_MODE", 2);
+            startActivity(intent);
         });
 
         btnFlags.setOnClickListener(v -> {
-            //
+            Intent intent = new Intent(this, SoloGameActivity.class);
+            intent.putExtra("GAME_MODE", 2);
+            startActivity(intent);
         });
 
         cardOutlines.setOnClickListener(v -> {
-            //
+            Intent intent = new Intent(this, SoloGameActivity.class);
+            intent.putExtra("GAME_MODE", 3);
+            startActivity(intent);
         });
 
         btnOutlines.setOnClickListener(v -> {
-            //
+            Intent intent = new Intent(this, SoloGameActivity.class);
+            intent.putExtra("GAME_MODE", 3);
+            startActivity(intent);
         });
 
         cardLanguages.setOnClickListener(v -> {
-            //
+            Intent intent = new Intent(this, SoloGameActivity.class);
+            intent.putExtra("GAME_MODE", 4);
+            startActivity(intent);
         });
 
         btnLanguages.setOnClickListener(v -> {
-            //
+            Intent intent = new Intent(this, SoloGameActivity.class);
+            intent.putExtra("GAME_MODE", 4);
+            startActivity(intent);
         });
     }
 

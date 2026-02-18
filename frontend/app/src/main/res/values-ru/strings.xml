@@ -58,6 +58,10 @@
     <string name="basic_settings">Основные</string>
     <string name="language">Язык</string>
     <string name="theme">Тема</string>
+    <string name="update_data">Обновить данные</string>
+    <string name="available">Доступно</string>
+    <string name="up_to_date">Актуально</string>
+    <string name="checking">Проверка...</string>
     <string name="about_app">О приложении</string>
     <string name="privacy_policy">Политика конфиденциальности</string>
     <string name="terms_of_use">Пользовательское соглашение</string>
@@ -101,6 +105,17 @@
     <string name="battle_royale">Королевская битва</string>
     <string name="participants">До 32-ух участников</string>
     <string name="find_lobby">Найти лобби</string>
+
+    <!-- Quiz -->
+    <string name="question">Вопрос</string>
+    <string name="of">из</string>
+    <string name="time_left">Осталось: %1$dс</string>
+    <string name="time_up">Время вышло!</string>
+    <string name="play_audio">Возпроизвести аудио</string>
+    <string name="capital_question">Столица страны: %1$s</string>
+    <string name="flag_question">Какой стране принадлежит этот флаг?</string>
+    <string name="outline_question">Какой стране принадлежит этот контур?</string>
+    <string name="end_game">Завершить игру</string>
 
     <!-- Bottom Navigation -->
     <string name="home">Главная</string>

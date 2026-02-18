@@ -1,8 +1,10 @@
 package com.example.geoquiz_frontend.UI.Profile;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -10,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.geoquiz_frontend.AuthManager;
+import com.example.geoquiz_frontend.DTOs.BootstrapResponse;
+import com.example.geoquiz_frontend.Data.GameRepository;
+import com.example.geoquiz_frontend.Engine.GameManager;
 import com.example.geoquiz_frontend.Entities.User;
 import com.example.geoquiz_frontend.LocaleHelper;
 import com.example.geoquiz_frontend.PreferencesHelper;
@@ -22,9 +27,9 @@ public class SettingsActivity extends BaseActivity {
     private PreferencesHelper preferencesHelper;
     private AuthManager authManager;
     private User currentUser;
-
-    private TextView tvCurrentLanguage, tvCurrentTheme, tvSubscriptionStatus;
-    private MaterialCardView btnLanguage, btnTheme, btnAbout, btnPrivacy, btnTerms, btnSubscription, btnLogout, btnBack;
+    private GameManager gameManager;
+    private TextView tvCurrentLanguage, tvCurrentTheme, tvUpdateStatus, tvSubscriptionStatus;
+    private MaterialCardView btnLanguage, btnTheme, btnData, btnAbout, btnPrivacy, btnTerms, btnSubscription, btnLogout, btnBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +41,7 @@ public class SettingsActivity extends BaseActivity {
         preferencesHelper = new PreferencesHelper(this);
         authManager = new AuthManager(this);
         currentUser = authManager.getCurrentUser();
+        gameManager = GameManager.getInstance(this);
 
         initViews();
         setupClickListeners();
@@ -47,9 +53,11 @@ public class SettingsActivity extends BaseActivity {
         tvCurrentLanguage = findViewById(R.id.tv_current_language);
         tvCurrentTheme = findViewById(R.id.tv_current_theme);
         tvSubscriptionStatus = findViewById(R.id.tv_subscription_status);
+        tvUpdateStatus = findViewById(R.id.tv_update_status);
 
         btnLanguage = findViewById(R.id.btn_language);
         btnTheme = findViewById(R.id.btn_theme);
+        btnData = findViewById(R.id.btn_update_data);
         btnAbout = findViewById(R.id.btn_about);
         btnPrivacy = findViewById(R.id.btn_privacy);
         btnTerms = findViewById(R.id.btn_terms);
@@ -61,6 +69,8 @@ public class SettingsActivity extends BaseActivity {
         btnLanguage.setOnClickListener(v -> showLanguageDialog());
 
         btnTheme.setOnClickListener(v -> showThemeDialog());
+
+        btnData.setOnClickListener(v -> setupDataUpdate());
 
         btnAbout.setOnClickListener(v -> showAboutDialog());
 
@@ -158,6 +168,62 @@ public class SettingsActivity extends BaseActivity {
                 .setNegativeButton(negativeButton, null)
                 .show();
     }
+    private void setupDataUpdate() {
+
+        String currentLanguage = preferencesHelper.getLanguage();
+
+        String title = "ru".equals(currentLanguage) ? "Обновить данные" : "Update Data";
+        String message = "ru".equals(currentLanguage) ?
+                "Это загрузит свежие вопросы с сервера. Продолжить?" :
+                "This will download fresh questions from the server. Continue?";
+
+        String positiveButton = "ru".equals(currentLanguage) ? "Да" : "Yes";
+        String negativeButton = "ru".equals(currentLanguage) ? "Нет" : "No";
+        String loadingMessage = "ru".equals(currentLanguage) ? "Загрузка..." : "Loading...";
+        String successMessage = "ru".equals(currentLanguage) ? "Данные обновлены" : "Data updated";
+        String errorPrefix = "ru".equals(currentLanguage) ? "Ошибка: " : "Error: ";
+        String upToDateMessage = "ru".equals(currentLanguage) ? "У вас последняя версия" : "You have the latest version";
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(positiveButton, (d, which) -> {
+                    ProgressDialog progress = new ProgressDialog(this);
+                    progress.setMessage(loadingMessage);
+                    progress.setCancelable(false);
+                    progress.show();
+
+                    tvUpdateStatus.setText(loadingMessage);
+
+                    gameManager.loadBootstrapData(new GameRepository.BootstrapCallback() {
+                        @Override
+                        public void onSuccess(BootstrapResponse data) {
+                            progress.dismiss();
+                            tvUpdateStatus.setText(successMessage);
+
+                            Toast.makeText(SettingsActivity.this,
+                                    successMessage,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            progress.dismiss();
+                            tvUpdateStatus.setText(upToDateMessage);
+
+                            Toast.makeText(SettingsActivity.this,
+                                    errorPrefix + error,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                })
+                .setNegativeButton(negativeButton, null)
+                .show();
+
+
+    }
+
+
     private void showAboutDialog() {
         String currentLanguage = preferencesHelper.getLanguage();
 

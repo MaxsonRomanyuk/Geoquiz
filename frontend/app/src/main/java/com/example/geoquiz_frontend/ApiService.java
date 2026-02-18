@@ -1,9 +1,12 @@
 package com.example.geoquiz_frontend;
 
 import com.example.geoquiz_frontend.DTOs.AuthResponse;
+import com.example.geoquiz_frontend.DTOs.BootstrapResponse;
+import com.example.geoquiz_frontend.DTOs.FinishGameRequest;
 import com.example.geoquiz_frontend.DTOs.LoginRequest;
 import com.example.geoquiz_frontend.DTOs.ProfileResponse;
 import com.example.geoquiz_frontend.DTOs.RegisterRequest;
+import com.example.geoquiz_frontend.DTOs.SyncGameSessionRequest;
 
 import java.util.List;
 
@@ -20,4 +23,13 @@ public interface ApiService {
     Call<AuthResponse> login(@Body LoginRequest request);
     @GET("api/profile/me")
     Call<ProfileResponse> getProfile();
+
+    @GET("api/content/bootstrap")
+    Call<BootstrapResponse> bootstrap();
+
+    @POST("api/game/finish")
+    Call<Void> finishGame(@Body FinishGameRequest request);
+
+    @POST("api/game/sync")
+    Call<Void> syncGames(@Body List<SyncGameSessionRequest> games);
 }

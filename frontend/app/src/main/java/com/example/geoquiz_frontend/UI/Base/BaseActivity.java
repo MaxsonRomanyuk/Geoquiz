@@ -5,12 +5,10 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-
 import com.example.geoquiz_frontend.LocaleHelper;
 import com.example.geoquiz_frontend.PreferencesHelper;
 
 public abstract class BaseActivity extends AppCompatActivity {
-
     @Override
     protected void attachBaseContext(Context newBase) {
         PreferencesHelper prefs = new PreferencesHelper(newBase);
