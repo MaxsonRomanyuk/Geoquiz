@@ -19,7 +19,7 @@ namespace GeoQuiz_backend.Application.Services
             _achievementService = achievementService;
         }
 
-        public async Task ProcessFinishedGameAsync(Guid userId, FinishGameRequest request, Guid? sessionId = null)
+        public async Task ProcessFinishedGameAsync(Guid userId, FinishGameRequest request, DateTime? playedAt = null, Guid ? sessionId = null )
         {
             var user = await _db.Users
                 .Include(u => u.Stats)
@@ -34,7 +34,7 @@ namespace GeoQuiz_backend.Application.Services
                 CorrectAnswers = request.CorrectAnswers,
                 Score = request.Score,
                 IsOnline = request.IsOnline,
-                PlayedAt = DateTime.UtcNow
+                PlayedAt = playedAt ?? DateTime.UtcNow
             };
 
             _db.GameSessions.Add(session);
@@ -69,10 +69,16 @@ namespace GeoQuiz_backend.Application.Services
                     Mode = game.Mode,
                     TotalQuestions = game.TotalQuestions,
                     CorrectAnswers = game.CorrectAnswers,
+                    EuropeCorrect = game. EuropeCorrect,
+                    AsiaCorrect = game.AsiaCorrect,
+                    AfricaCorrect = game.AfricaCorrect,
+                    AmericaCorrect = game.AmericaCorrect,
+                    OceaniaCorrect = game.OceaniaCorrect,
                     Score = game.Score,
                     IsOnline = false,
                     TimeSpent = game.TimeSpent
                 },
+                game.PlayedAt,
                 game.Id
                 );
             }
@@ -94,7 +100,13 @@ namespace GeoQuiz_backend.Application.Services
                 stats.CurrentWinStreak = 0;
 
             stats.MaxWinStreak = Math.Max(stats.MaxWinStreak, stats.CurrentWinStreak);
-            //по материкиам обновлять статс! 
+
+            stats.EuropeCorrect += r.EuropeCorrect;
+            stats.AsiaCorrect += r.AsiaCorrect;
+            stats.AfricaCorrect += r.AfricaCorrect;
+            stats.AmericaCorrect += r.AmericaCorrect;
+            stats.OceaniaCorrect += r.OceaniaCorrect;
+
             switch (r.Mode)
             {
                 case GameMode.Flag: stats.FlagsCorrect += r.CorrectAnswers; break;

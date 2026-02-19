@@ -11,19 +11,19 @@ import java.util.UUID;
 
 public class GameSession implements Serializable {
     private String id;
-    private GameMode mode;
+    private int mode;
     private Date playedAt;
     private int totalQuestions;
     private int correctAnswers;
     private int score;
-    private int timeSpent; // в секундах
+    private int timeSpent;
     private boolean isOnline;
     private boolean isFinished;
     private boolean isSynced;
     private List<GameQuestion> questions;
     private int currentQuestionIndex;
 
-    public GameSession(GameMode mode, List<GameQuestion> questions) {
+    public GameSession(int mode, List<GameQuestion> questions) {
         this.id = UUID.randomUUID().toString();
         this.mode = mode;
         this.playedAt = new Date();
@@ -41,8 +41,8 @@ public class GameSession implements Serializable {
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
-    public GameMode getMode() { return mode; }
-    public void setMode(GameMode mode) { this.mode = mode; }
+    public int getMode() { return mode; }
+    public void setMode(int mode) { this.mode = mode; }
 
     public Date getPlayedAt() { return playedAt; }
     public void setPlayedAt(Date playedAt) { this.playedAt = playedAt; }

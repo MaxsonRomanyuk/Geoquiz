@@ -8,6 +8,7 @@ import android.util.Log;
 import com.example.geoquiz_frontend.ApiClient;
 import com.example.geoquiz_frontend.ApiService;
 import com.example.geoquiz_frontend.DTOs.BootstrapResponse;
+import com.example.geoquiz_frontend.DTOs.FinishGameRequest;
 import com.example.geoquiz_frontend.DTOs.SyncGameSessionRequest;
 import com.example.geoquiz_frontend.Entities.GameQuestion;
 import com.example.geoquiz_frontend.Entities.GameSession;
@@ -314,7 +315,38 @@ public class GameRepository {
                 ", счет: " + session.getScore());
 
         if (isNetworkAvailable() && preferencesHelper.hasValidToken()) {
-            syncPendingGames();
+            if(pendingGames.size() > 1) syncPendingGames();
+            else {
+                FinishGameRequest fgr = new FinishGameRequest(
+                        pendingGame.getModeValue(),
+                        pendingGame.getTotalQuestions(),
+                        pendingGame.getCorrectAnswers(),
+                        pendingGame.getEuropeCorrect(),
+                        pendingGame.getAsiaCorrect(),
+                        pendingGame.getAfricaCorrect(),
+                        pendingGame.getAmericaCorrect(),
+                        pendingGame.getOceaniaCorrect(),
+                        pendingGame.getScore(),
+                        pendingGame.getTimeSpent(),
+                        pendingGame.isOnline()
+                );
+                apiServiceWithAuth.finishGame(fgr).enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            clearPendingGames();
+                            Log.d(TAG, "Игра сохранена");
+                        } else {
+                            Log.e(TAG, "Ошибка сохранения: " + response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Log.e(TAG, "Ошибка сети при сохранении", t);
+                    }
+                });
+            }
         }
     }
 
@@ -342,6 +374,11 @@ public class GameRepository {
                     game.getModeValue(),
                     game.getTotalQuestions(),
                     game.getCorrectAnswers(),
+                    game.getEuropeCorrect(),
+                    game.getAsiaCorrect(),
+                    game.getAfricaCorrect(),
+                    game.getAmericaCorrect(),
+                    game.getOceaniaCorrect(),
                     game.getScore(),
                     game.getTimeSpent(),
                     game.isOnline(),
@@ -356,8 +393,7 @@ public class GameRepository {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    pendingGames.clear();
-                    savePendingGames();
+                    clearPendingGames();
                     Log.d(TAG, "Игры успешно синхронизированы");
                 } else {
                     Log.e(TAG, "Ошибка синхронизации: " + response.code());
@@ -385,7 +421,24 @@ public class GameRepository {
             }
         });
     }
-
+    private void clearPendingGames() {
+        executorService.execute(() -> {
+            try {
+                pendingGames.clear();
+                File file = new File(context.getFilesDir(), PENDING_GAMES_FILE);
+                if (file.exists()) {
+                    FileOutputStream fos = new FileOutputStream(file);
+                    ObjectOutputStream oos = new ObjectOutputStream(fos);
+                    oos.writeObject(new ArrayList<PendingGame>());
+                    oos.close();
+                } else {
+                    Log.d(TAG, "Файл PENDING_GAMES_FILE не существует");
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Ошибка при очистке файла PENDING_GAMES_FILE", e);
+            }
+        });
+    }
     private List<PendingGame> loadPendingGames() {
         try {
             File file = new File(context.getFilesDir(), PENDING_GAMES_FILE);
