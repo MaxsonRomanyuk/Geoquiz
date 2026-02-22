@@ -27,6 +27,8 @@ import com.example.geoquiz_frontend.UI.Base.BaseActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -64,6 +66,11 @@ public class SoloGameActivity extends BaseActivity {
     private int currentQuestionIndex = 0;
     private int score = 0;
     private int correctAnswers = 0;
+    private int correctEurope = 0;
+    private int correctAsia = 0;
+    private int correctAfrica = 0;
+    private int correctAmerica = 0;
+    private int correctOceania = 0;
     private boolean isGameFinished = false;
 
     @Override
@@ -78,6 +85,9 @@ public class SoloGameActivity extends BaseActivity {
         language = preferencesHelper.getLanguage();
 
         gameMode = getIntent().getIntExtra("GAME_MODE", 1);
+
+
+        currentSession = new GameSession();
 
         initViews();
         setupClickListeners();
@@ -297,11 +307,30 @@ public class SoloGameActivity extends BaseActivity {
             correctAnswers++;
 
             int timePenalty = (int) (timeSpent / 1000);
-            int questionScore = Math.max(0, 10 - timePenalty);
+            int questionScore = Math.max(1, 10 - timePenalty);
             score += questionScore;
 
             if (tvScore != null) {
                 tvScore.setText(String.valueOf(score));
+            }
+
+            int region = question.getRegion();
+            switch (region) {
+                case 1:
+                    correctEurope++;
+                    break;
+                case 2:
+                    correctAsia++;
+                    break;
+                case 3:
+                    correctAfrica++;
+                    break;
+                case 4:
+                    correctAmerica++;
+                    break;
+                default:
+                    correctOceania++;
+                    break;
             }
         }
 
@@ -359,6 +388,9 @@ public class SoloGameActivity extends BaseActivity {
         if (isGameFinished) return;
         isGameFinished = true;
 
+        currentSession = createGameSession();
+        gameManager.saveGameSession(currentSession);
+
         Log.d(TAG, "Ending game. Score: " + score + ", Correct: " + correctAnswers);
 
         if (timer != null) {
@@ -371,16 +403,32 @@ public class SoloGameActivity extends BaseActivity {
         }
 
 
-//        Intent intent = new Intent(this, ResultsActivity.class);
-//        intent.putExtra("SCORE", score);
-//        intent.putExtra("CORRECT", correctAnswers);
-//        intent.putExtra("TOTAL", TOTAL_QUESTIONS);
-//        intent.putExtra("TIME", (int) (TOTAL_TIME_MS - timeLeft));
-//        intent.putExtra("GAME_MODE", gameMode);
-//        startActivity(intent);
-//        finish();
+        Intent intent = new Intent(this, GameResultActivity.class);
+        intent.putExtra("SCORE", score);
+        intent.putExtra("CORRECT", correctAnswers);
+        intent.putExtra("TOTAL", TOTAL_QUESTIONS);
+        intent.putExtra("TIME", (int) (TOTAL_TIME_MS - timeLeft));
+        intent.putExtra("GAME_MODE", gameMode);
+        startActivity(intent);
+        finish();
     }
+    private GameSession createGameSession(){
+        currentSession.setMode(gameMode);
+        currentSession.setPlayedAt(new Date(System.currentTimeMillis()));
+        currentSession.setTotalQuestions(TOTAL_QUESTIONS);
+        currentSession.setCorrectAnswers(correctAnswers);
+        currentSession.setEuropeCorrect(correctEurope);
+        currentSession.setAsiaCorrect(correctAsia);
+        currentSession.setAfricaCorrect(correctAfrica);
+        currentSession.setAmericaCorrect(correctAmerica);
+        currentSession.setOceaniaCorrect(correctOceania);
+        currentSession.setScore(score);
+        currentSession.setTimeSpent((int) (TOTAL_TIME_MS - timeLeft)/1000);
+        currentSession.setOnline(false);
 
+
+        return currentSession;
+    }
     private void showErrorAndFinish() {
         String errorMsg = language.equals("ru") ?
                 "Произошла ошибка" :

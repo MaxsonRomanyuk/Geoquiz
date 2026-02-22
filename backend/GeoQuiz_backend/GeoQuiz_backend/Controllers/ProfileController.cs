@@ -26,7 +26,6 @@ namespace GeoQuiz_backend.Controllers
                 User.FindFirstValue(ClaimTypes.NameIdentifier)
                 ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub)!
             );
-
             var data = await _db.Users
                 .Where(u => u.Id == userId)
                 .Select(u => new
@@ -114,7 +113,7 @@ namespace GeoQuiz_backend.Controllers
                 data.Stats,
                 data.Geography,
                 data.GameModes,
-                data.PvP,
+                Pvp = data.PvP,
                 Achievements = achievements
             });
         }

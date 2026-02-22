@@ -17,10 +17,11 @@ public class GameQuestion implements Serializable {
     private int selectedAnswerIndex = -1;
     private boolean isAnswered = false;
     private boolean isCorrect = false;
+    private int region; // 1 eu, 2 as, 3 af, 4 am ,5 oc
 
     public GameQuestion(String id, String countryId, String questionText,
                         List<String> options, int correctAnswerIndex,
-                        String mediaUrl, int mode) {
+                        String mediaUrl, int mode, int region) {
         this.id = id;
         this.countryId = countryId;
         this.questionText = questionText;
@@ -28,6 +29,7 @@ public class GameQuestion implements Serializable {
         this.correctAnswerIndex = correctAnswerIndex;
         this.mediaUrl = mediaUrl;
         this.mode = mode;
+        this.region = region;
     }
 
     public String getId() { return id; }
@@ -42,7 +44,7 @@ public class GameQuestion implements Serializable {
     public boolean isAnswered() { return isAnswered; }
     public boolean isCorrect() { return isCorrect; }
 
-
+    public int getRegion() {return region; }
 
     public void setTimeSpent(int timeSpent) { this.timeSpent = timeSpent; }
 

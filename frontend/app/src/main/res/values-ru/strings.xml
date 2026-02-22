@@ -117,6 +117,18 @@
     <string name="outline_question">Какой стране принадлежит этот контур?</string>
     <string name="end_game">Завершить игру</string>
 
+    <!--Results-->
+    <string name="results">Результаты</string>
+    <string name="score_format">%1$d/%2$d</string>
+    <string name="correct_answers">Правильных ответов</string>
+    <string name="points_earned">Очков</string>
+    <string name="play_again">Сыграть снова</string>
+    <string name="main_menu">Главное меню</string>
+    <string name="excellent_result">Поздравляем! Вы успешно прошли уровень!\nВы настоящий эксперт в географии!</string>
+    <string name="great_result">Прекрасный результат! Вы показали отличные знания!\nПопробуйте еще раз, чтобы побить свой рекорд!</string>
+    <string name="good_result">Хороший результат! Продолжайте тренироваться!\nС каждым разом у вас получается лучше!</string>
+    <string name="try_again">Не сдавайтесь! Попробуйте еще раз.\nПрактика ведет к совершенству!</string>
+
     <!-- Bottom Navigation -->
     <string name="home">Главная</string>
     <string name="play">Играть</string>

@@ -213,7 +213,7 @@ public class GameRepository {
         return result;
     }
 
-    private GameQuestion createQuestion(BootstrapResponse.QuestionDto q,BootstrapResponse.CountryDto country,int mode,String language) {
+    private GameQuestion createQuestion(BootstrapResponse.QuestionDto q, BootstrapResponse.CountryDto country, int mode, String language) {
         String questionText = "";
         List<String> options = new ArrayList<>();
         String mediaUrl = null;
@@ -222,6 +222,8 @@ public class GameRepository {
                 country.getName().getRu() : country.getName().getEn();
         String capital = language.equals("ru") ?
                 country.getCapital().getRu() : country.getCapital().getEn();
+
+        String region = country.getRegion();
 
         List<BootstrapResponse.CountryDto> otherCountries = getRandomCountries(3, country.getId(), language);
 
@@ -274,6 +276,25 @@ public class GameRepository {
                 break;
         }
 
+        int regionVal = 0;
+        switch (region) {
+            case "Европа":
+                regionVal = 1;
+                break;
+            case "Азия":
+                regionVal = 2;
+                break;
+            case "Африка":
+                regionVal = 3;
+                break;
+            case "Америка":
+                regionVal = 4;
+                break;
+            default:
+                regionVal = 5;
+                break;
+        }
+
         Collections.shuffle(options);
         int correctIndex = options.indexOf(
                 mode == 1 ? capital : countryName
@@ -286,7 +307,8 @@ public class GameRepository {
                 options,
                 correctIndex,
                 mediaUrl,
-                mode
+                mode,
+                regionVal
         );
     }
 
@@ -314,8 +336,8 @@ public class GameRepository {
         Log.d(TAG, "Игра сохранена локально. ID: " + session.getId() +
                 ", счет: " + session.getScore());
 
-        if (isNetworkAvailable() && preferencesHelper.hasValidToken()) {
-            if(pendingGames.size() > 1) syncPendingGames();
+        if (preferencesHelper.hasValidToken()) {
+            if (pendingGames.size() > 1) syncPendingGames();
             else {
                 FinishGameRequest fgr = new FinishGameRequest(
                         pendingGame.getModeValue(),
@@ -361,16 +383,16 @@ public class GameRepository {
             return;
         }
 
-        if (!isNetworkAvailable()) {
-            Log.d(TAG, "Нет интернета, синхронизация отложена");
-            return;
-        }
+        //if (!isNetworkAvailable()) {
+          //  Log.d(TAG, "Нет интернета, синхронизация отложена");
+            //return;
+        //}
 
         List<SyncGameSessionRequest> syncList = new ArrayList<>();
 
         for (PendingGame game : pendingGames) {
             SyncGameSessionRequest syncRequest = new SyncGameSessionRequest(
-                    UUID.fromString(game.getId()),
+                    UUID.randomUUID(),
                     game.getModeValue(),
                     game.getTotalQuestions(),
                     game.getCorrectAnswers(),
@@ -392,6 +414,7 @@ public class GameRepository {
         apiServiceWithAuth.syncGames(syncList).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d(TAG, "Код ответа sync: " + response.code());
                 if (response.isSuccessful()) {
                     clearPendingGames();
                     Log.d(TAG, "Игры успешно синхронизированы");
@@ -422,22 +445,17 @@ public class GameRepository {
         });
     }
     private void clearPendingGames() {
-        executorService.execute(() -> {
-            try {
-                pendingGames.clear();
-                File file = new File(context.getFilesDir(), PENDING_GAMES_FILE);
-                if (file.exists()) {
-                    FileOutputStream fos = new FileOutputStream(file);
-                    ObjectOutputStream oos = new ObjectOutputStream(fos);
-                    oos.writeObject(new ArrayList<PendingGame>());
-                    oos.close();
-                } else {
-                    Log.d(TAG, "Файл PENDING_GAMES_FILE не существует");
-                }
-            } catch (Exception e) {
-                Log.e(TAG, "Ошибка при очистке файла PENDING_GAMES_FILE", e);
-            }
-        });
+        pendingGames.clear();
+        try {
+            File file = new File(context.getFilesDir(), PENDING_GAMES_FILE);
+            FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(gson.toJson(new ArrayList<>()));
+            oos.close();
+            Log.d(TAG, "Файл очищен");
+        } catch (Exception e) {
+            Log.e(TAG, "Ошибка очистки", e);
+        }
     }
     private List<PendingGame> loadPendingGames() {
         try {

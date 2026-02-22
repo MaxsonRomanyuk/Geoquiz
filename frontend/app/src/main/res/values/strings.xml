@@ -117,6 +117,18 @@
     <string name="outline_question">Which country does this outline belong to?</string>
     <string name="end_game">End Game</string>
 
+    <!--Results-->
+    <string name="results">Results</string>
+    <string name="score_format">%1$d/%2$d</string>
+    <string name="correct_answers">Correct answers</string>
+    <string name="points_earned">Points</string>
+    <string name="play_again">Play Again</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="excellent_result">Congratulations! You successfully completed the level!\nYou are a true geography expert!</string>
+    <string name="great_result">Great result! You\'ve shown excellent knowledge!\nTry again to beat your record!</string>
+    <string name="good_result">Good result! Keep practicing!\nYou\'re getting better every time!</string>
+    <string name="try_again">Don\'t give up! Try again.\nPractice makes perfect!</string>
+
     <!-- Bottom Navigation -->
     <string name="home">Home</string>
     <string name="play">Play</string>

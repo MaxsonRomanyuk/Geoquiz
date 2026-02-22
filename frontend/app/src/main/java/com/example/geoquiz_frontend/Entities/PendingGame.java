@@ -24,6 +24,11 @@ public class PendingGame implements Serializable {
         this.playedAt = session.getPlayedAt();
         this.totalQuestions = session.getTotalQuestions();
         this.correctAnswers = session.getCorrectAnswers();
+        this.europeCorrect = session.getEuropeCorrect();
+        this.asiaCorrect = session.getAsiaCorrect();
+        this.africaCorrect = session.getAfricaCorrect();
+        this.americaCorrect = session.getAmericaCorrect();
+        this.oceaniaCorrect = session.getOceaniaCorrect();
         this.score = session.getScore();
         this.timeSpent = session.getTimeSpent();
         this.isOnline = session.isOnline();
