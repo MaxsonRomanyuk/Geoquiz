@@ -42,7 +42,7 @@
 
     <!--Profile Screen-->
     <string name="win_rate">Win Rate</string>
-    <string name="longest_streak">Longest Streak</string>
+    <string name="longest_streak">Current Streak</string>
     <string name="match_history">Match History</string>
     <string name="geo_quiz_plus">⭐ GeoQuiz Plus</string>
     <string name="get">GET</string>

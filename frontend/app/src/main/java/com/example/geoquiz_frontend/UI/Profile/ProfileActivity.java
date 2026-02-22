@@ -146,7 +146,7 @@ public class ProfileActivity extends BaseActivity {
             tvGamesPlayed.setText(String.valueOf(stats.getGamesPlayed()));
             tvWins.setText(String.valueOf(stats.getWins()));
             tvWinRate.setText(String.format("%.0f%%", stats.getWinRate()));
-            tvCurrentStreak.setText(String.valueOf(stats.getMaxWinStreak()));
+            tvCurrentStreak.setText(String.valueOf(stats.getCurrentWinStreak()));
         }
 
         if (geography != null) {

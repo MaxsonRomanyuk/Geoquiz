@@ -2,13 +2,17 @@ package com.example.geoquiz_frontend;
 
 import android.content.Context;
 
+import com.example.geoquiz_frontend.Data.DatabaseHelper;
 import com.example.geoquiz_frontend.Entities.User;
 
 public class AuthManager {
     private PreferencesHelper preferencesHelper;
+    private DatabaseHelper databaseHelper;
 
     public AuthManager(Context context) {
+
         preferencesHelper = new PreferencesHelper(context);
+        databaseHelper = new DatabaseHelper(context);
     }
 
     public void loginAsGuest() {
@@ -21,6 +25,7 @@ public class AuthManager {
     }
 
     public void logout() {
+        databaseHelper.deleteUserStats(preferencesHelper.getUserId());
         preferencesHelper.clearCurrentUser();
     }
 

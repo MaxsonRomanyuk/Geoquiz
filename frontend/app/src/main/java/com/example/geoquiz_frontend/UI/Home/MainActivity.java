@@ -16,6 +16,7 @@ import com.example.geoquiz_frontend.ApiClient;
 import com.example.geoquiz_frontend.ApiService;
 import com.example.geoquiz_frontend.AuthManager;
 import com.example.geoquiz_frontend.DTOs.ProfileResponse;
+import com.example.geoquiz_frontend.Data.DatabaseHelper;
 import com.example.geoquiz_frontend.Data.UserRepository;
 import com.example.geoquiz_frontend.LocaleHelper;
 import com.example.geoquiz_frontend.PreferencesHelper;
@@ -46,6 +47,7 @@ public class MainActivity extends BaseActivity {
     private ApiService apiService;
     private ProfileResponse profileData;
     private UserRepository userRepository;
+    private DatabaseHelper databaseHelper;
 
 
     @Override
@@ -56,12 +58,12 @@ public class MainActivity extends BaseActivity {
         authManager = new AuthManager(this);
         initViews();
         preferencesHelper = new PreferencesHelper(this);
+        databaseHelper = new DatabaseHelper(this);
         if (!preferencesHelper.hasValidToken()) {
             handleUnauthorized();
             //redirectToLogin();
             return;
         }
-
         userRepository = UserRepository.getInstance(this);
         apiService = ApiClient.getApiWithAuth(preferencesHelper);
 
@@ -170,10 +172,6 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void savePreferencesStats() {
-        if (profileData == null) return;
-        preferencesHelper.setCurrentUserStats(profileData.getUser(), profileData.getStats(), profileData.getGeography());
-    }
     private void updateUI(ProfileResponse profileData) {
         if (profileData == null) {
             Log.e("MainActivity", "profileData is null");
@@ -248,7 +246,7 @@ public class MainActivity extends BaseActivity {
         redirectToLogin();
     }
     private void redirectToLogin() {
-        preferencesHelper.clearCurrentUser();
+        authManager.logout();
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

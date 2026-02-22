@@ -43,16 +43,17 @@ namespace GeoQuiz_backend.Application.Services
             await _db.SaveChangesAsync();
         }
 
-        public async Task<string> LoginAsync(LoginRequest request)
+        public async Task<AuthResponse> LoginAsync(LoginRequest request)
         {
             var user = await _db.Users
                 .FirstOrDefaultAsync(u => u.Email == request.Email);
+            var userId = user?.Id;
+            var userName = user?.UserName;
 
             if (user == null ||
                 !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
                 throw new Exception("Invalid credentials");
-
-            return GenerateJwt(user);
+            return new AuthResponse { Token = GenerateJwt(user), UserId = (Guid)userId, UserName = userName };
         }
 
         private string GenerateJwt(User user)

@@ -26,8 +26,7 @@ namespace GeoQuiz_backend.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<AuthResponse>> Login(LoginRequest request)
         {
-            var token = await _authService.LoginAsync(request);
-            return Ok(new AuthResponse { Token = token });
+            return Ok(await _authService.LoginAsync(request));
         }
     }
 }

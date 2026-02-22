@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.example.geoquiz_frontend.Data.DatabaseHelper;
+import com.example.geoquiz_frontend.Data.UserRepository;
 import com.example.geoquiz_frontend.Engine.GameManager;
 import com.example.geoquiz_frontend.Entities.GameQuestion;
 import com.example.geoquiz_frontend.Entities.GameSession;
@@ -49,8 +51,10 @@ public class SoloGameActivity extends BaseActivity {
 
     private GameManager gameManager;
     private PreferencesHelper preferencesHelper;
+    private DatabaseHelper databaseHelper;
     private GameSession currentSession;
     private List<GameQuestion> questions;
+    private UserRepository userRepository;
 
 
     private CountDownTimer timer;
@@ -79,8 +83,10 @@ public class SoloGameActivity extends BaseActivity {
         setContentView(R.layout.activity_solo_game);
 
         preferencesHelper = new PreferencesHelper(this);
+        databaseHelper = new DatabaseHelper(this);
         gameManager = GameManager.getInstance(this);
 
+        userRepository = UserRepository.getInstance(this);
 
         language = preferencesHelper.getLanguage();
 
@@ -390,6 +396,8 @@ public class SoloGameActivity extends BaseActivity {
 
         currentSession = createGameSession();
         gameManager.saveGameSession(currentSession);
+        databaseHelper.updateStatsAfterGame(preferencesHelper.getUserId(), gameMode, correctAnswers > 8, correctAnswers, score,
+                                            correctEurope, correctAsia, correctAfrica , correctAmerica , correctOceania);
 
         Log.d(TAG, "Ending game. Score: " + score + ", Correct: " + correctAnswers);
 
@@ -402,6 +410,7 @@ public class SoloGameActivity extends BaseActivity {
             mediaPlayer = null;
         }
 
+        userRepository.refreshFromDb();
 
         Intent intent = new Intent(this, GameResultActivity.class);
         intent.putExtra("SCORE", score);

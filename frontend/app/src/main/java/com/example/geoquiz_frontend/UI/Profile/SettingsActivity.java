@@ -46,7 +46,6 @@ public class SettingsActivity extends BaseActivity {
         initViews();
         setupClickListeners();
         setupCurrentSettings();
-        //applyTheme();
 
     }
     private void initViews() {

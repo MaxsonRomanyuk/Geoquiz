@@ -4,7 +4,7 @@ namespace GeoQuiz_backend.Application.Interfaces
     public interface IAuthService
     {
         Task RegisterAsync(RegisterRequest request);
-        Task<string> LoginAsync(LoginRequest request);
+        Task<AuthResponse> LoginAsync(LoginRequest request);
 
     }
 }

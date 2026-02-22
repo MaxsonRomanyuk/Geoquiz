@@ -8,16 +8,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.example.geoquiz_frontend.DTOs.BootstrapResponse;
+import com.example.geoquiz_frontend.Entities.UserStats;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-public class GameDatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "GameDatabaseHelper";
     private static final String DATABASE_NAME = "geoquiz.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
 
     private static final String TABLE_COUNTRIES = "countries";
@@ -39,9 +38,31 @@ public class GameDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_QUESTION_DIFFICULTY = "difficulty";
     private static final String COLUMN_QUESTION_TYPE = "type";
 
+
+
+    private static final String TABLE_USER_STATS = "user_stats";
+    private static final String COLUMN_USER_ID = "user_id";
+    private static final String COLUMN_GAMES_PLAYED = "games_played";
+    private static final String COLUMN_GAMES_WON = "games_won";
+    private static final String COLUMN_WIN_RATE = "win_rate";
+    private static final String COLUMN_LEVEL = "level";
+    private static final String COLUMN_EXPERIENCE = "experience";
+    private static final String COLUMN_DAILY_STREAK = "daily_streak";
+    private static final String COLUMN_WIN_STREAK = "win_streak";
+    private static final String COLUMN_EUROPE_CORRECT = "europe_correct";
+    private static final String COLUMN_ASIA_CORRECT = "asia_correct";
+    private static final String COLUMN_AFRICA_CORRECT = "africa_correct";
+    private static final String COLUMN_AMERICA_CORRECT = "america_correct";
+    private static final String COLUMN_OCEANIA_CORRECT = "oceania_correct";
+    private static final String COLUMN_BEST_CONTINENT = "best_continent";
+    private static final String COLUMN_CAPITALS_CORRECT = "capitals_correct";
+    private static final String COLUMN_FLAGS_CORRECT = "flags_correct";
+    private static final String COLUMN_OUTLINES_CORRECT = "outlines_correct";
+    private static final String COLUMN_LANGUAGES_CORRECT = "languages_correct";
+
     private final Gson gson = new Gson();
 
-    public GameDatabaseHelper(Context context) {
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -70,8 +91,30 @@ public class GameDatabaseHelper extends SQLiteOpenHelper {
                 + TABLE_COUNTRIES + "(" + COLUMN_COUNTRY_ID + "))";
         db.execSQL(createQuestionsTable);
 
+        String createUserStatsTable = "CREATE TABLE " + TABLE_USER_STATS + "("
+                + COLUMN_USER_ID + " TEXT PRIMARY KEY,"
+                + COLUMN_GAMES_PLAYED + " INTEGER DEFAULT 0,"
+                + COLUMN_GAMES_WON + " INTEGER DEFAULT 0,"
+                + COLUMN_WIN_RATE + " REAL DEFAULT 0,"
+                + COLUMN_LEVEL + " INTEGER DEFAULT 1,"
+                + COLUMN_EXPERIENCE + " INTEGER DEFAULT 0,"
+                + COLUMN_DAILY_STREAK + " INTEGER DEFAULT 0,"
+                + COLUMN_WIN_STREAK + " INTEGER DEFAULT 0,"
+                + COLUMN_EUROPE_CORRECT + " INTEGER DEFAULT 0,"
+                + COLUMN_ASIA_CORRECT + " INTEGER DEFAULT 0,"
+                + COLUMN_AFRICA_CORRECT + " INTEGER DEFAULT 0,"
+                + COLUMN_AMERICA_CORRECT + " INTEGER DEFAULT 0,"
+                + COLUMN_OCEANIA_CORRECT + " INTEGER DEFAULT 0,"
+                + COLUMN_BEST_CONTINENT + " TEXT,"
+                + COLUMN_CAPITALS_CORRECT + " INTEGER DEFAULT 0,"
+                + COLUMN_FLAGS_CORRECT + " INTEGER DEFAULT 0,"
+                + COLUMN_OUTLINES_CORRECT + " INTEGER DEFAULT 0,"
+                + COLUMN_LANGUAGES_CORRECT + " INTEGER DEFAULT 0)";
+        db.execSQL(createUserStatsTable);
+
         db.execSQL("CREATE INDEX idx_questions_type ON " + TABLE_QUESTIONS + "(" + COLUMN_QUESTION_TYPE + ")");
         db.execSQL("CREATE INDEX idx_questions_country ON " + TABLE_QUESTIONS + "(" + COLUMN_QUESTION_COUNTRY_ID + ")");
+        db.execSQL("CREATE INDEX idx_user_stats_user ON " + TABLE_USER_STATS + "(" + COLUMN_USER_ID + ")");
     }
 
     @Override
@@ -204,24 +247,6 @@ public class GameDatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return count > 0;
     }
-
-//    public int getCountriesCount() {
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_COUNTRIES, null);
-//        cursor.moveToFirst();
-//        int count = cursor.getInt(0);
-//        cursor.close();
-//        return count;
-//    }
-//
-//    public int getQuestionsCount() {
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_QUESTIONS, null);
-//        cursor.moveToFirst();
-//        int count = cursor.getInt(0);
-//        cursor.close();
-//        return count;
-//    }
     @SuppressLint("Range")
     private BootstrapResponse.CountryDto cursorToCountry(Cursor cursor) {
         BootstrapResponse.CountryDto country = new BootstrapResponse.CountryDto();
@@ -256,26 +281,163 @@ public class GameDatabaseHelper extends SQLiteOpenHelper {
 
         return question;
     }
-    private void checkDatabaseContents(SQLiteDatabase db) {
-        Cursor countryCursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_COUNTRIES, null);
-        countryCursor.moveToFirst();
-        int countryCount = countryCursor.getInt(0);
-        countryCursor.close();
 
-        Cursor questionCursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_QUESTIONS, null);
-        questionCursor.moveToFirst();
-        int questionCount = questionCursor.getInt(0);
-        questionCursor.close();
+    public void saveUserStats(UserStats stats) {
+        SQLiteDatabase db = this.getWritableDatabase();
 
-        Log.d(TAG, "ИТОГО в БД: " + countryCount + " стран, " + questionCount + " вопросов");
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_USER_ID, stats.getUserId());
+        values.put(COLUMN_GAMES_PLAYED, stats.getGamesPlayed());
+        values.put(COLUMN_GAMES_WON, stats.getGamesWon());
+        values.put(COLUMN_WIN_RATE, stats.getWinRate());
+        values.put(COLUMN_LEVEL, stats.getLevel());
+        values.put(COLUMN_EXPERIENCE, stats.getExperience());
+        values.put(COLUMN_DAILY_STREAK, stats.getDailyStreak());
+        values.put(COLUMN_WIN_STREAK, stats.getWinStreak());
+        values.put(COLUMN_EUROPE_CORRECT, stats.getEuropeCorrect());
+        values.put(COLUMN_ASIA_CORRECT, stats.getAsiaCorrect());
+        values.put(COLUMN_AFRICA_CORRECT, stats.getAfricaCorrect());
+        values.put(COLUMN_AMERICA_CORRECT, stats.getAmericaCorrect());
+        values.put(COLUMN_OCEANIA_CORRECT, stats.getOceaniaCorrect());
+        values.put(COLUMN_BEST_CONTINENT, stats.getBestContinent());
+        values.put(COLUMN_CAPITALS_CORRECT, stats.getCapitalsCorrect());
+        values.put(COLUMN_FLAGS_CORRECT, stats.getFlagsCorrect());
+        values.put(COLUMN_OUTLINES_CORRECT, stats.getOutlinesCorrect());
+        values.put(COLUMN_LANGUAGES_CORRECT, stats.getLanguagesCorrect());
 
-        if (questionCount > 0) {
-            Cursor typeCursor = db.rawQuery(
-                    "SELECT " + COLUMN_QUESTION_TYPE + ", COUNT(*) FROM " + TABLE_QUESTIONS + " GROUP BY " + COLUMN_QUESTION_TYPE,null);
-            while (typeCursor.moveToNext()) {
-                Log.d(TAG, "  Тип " + typeCursor.getInt(0) + ": " + typeCursor.getInt(1) + " вопросов");
-            }
-            typeCursor.close();
+        long result = db.insertWithOnConflict(TABLE_USER_STATS, null, values,
+                SQLiteDatabase.CONFLICT_REPLACE);
+        Log.d(TAG, "Сохранена статистика для пользователя " + stats.getUserId() + ": " + result);
+    }
+    public UserStats getUserStats(String userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_USER_STATS, null,
+                COLUMN_USER_ID + "=?", new String[]{userId},
+                null, null, null);
+
+        UserStats stats = null;
+        if (cursor.moveToFirst()) {
+            stats = cursorToUserStats(cursor);
         }
+        cursor.close();
+
+        return stats;
+    }
+    public void updateStatsAfterGame
+            (String userId, int mode, boolean won, int correctAnswers, int xpGained,
+             int correctEu, int correctAs, int correctAf, int correctAm, int correctOc) {
+        UserStats stats = getUserStats(userId);
+        if (stats == null) {
+            stats = new UserStats(userId);
+        }
+
+        stats.setGamesPlayed(stats.getGamesPlayed() + 1);
+        if (won) {
+            stats.setGamesWon(stats.getGamesWon() + 1);
+            stats.setWinStreak(stats.getWinStreak() + 1);
+        } else {
+            stats.setWinStreak(0);
+        }
+
+        stats.setWinRate((float) stats.getGamesWon() / stats.getGamesPlayed() * 100);
+
+        stats.setExperience(stats.getExperience() + xpGained);
+
+        int exp = stats.getExperience();
+        int expToNextLevel = stats.getLevel()*100;
+
+        if (exp > expToNextLevel)
+        {
+            stats.setExperience(exp-expToNextLevel);
+            stats.setLevel(stats.getLevel()+1);
+        }
+
+        if (correctAnswers>0)
+        {
+            stats.setEuropeCorrect(stats.getEuropeCorrect() + correctEu);
+            stats.setAsiaCorrect(stats.getAsiaCorrect() + correctAs);
+            stats.setAfricaCorrect(stats.getAfricaCorrect() + correctAf);
+            stats.setAmericaCorrect(stats.getAmericaCorrect() + correctAm);
+            stats.setOceaniaCorrect(stats.getOceaniaCorrect() + correctOc);
+
+            updateBestContinent(userId);
+        }
+
+        switch (mode) {
+            case 0:
+                stats.setCapitalsCorrect(stats.getCapitalsCorrect() + correctAnswers);
+                break;
+            case 1:
+                stats.setFlagsCorrect(stats.getFlagsCorrect() + correctAnswers);
+                break;
+            case 2:
+                stats.setOutlinesCorrect(stats.getOutlinesCorrect() + correctAnswers);
+                break;
+            case 3:
+                stats.setLanguagesCorrect(stats.getLanguagesCorrect() + correctAnswers);
+                break;
+        }
+
+        saveUserStats(stats);
+    }
+    private void updateBestContinent(String userId) {
+        UserStats stats = getUserStats(userId);
+        if (stats == null) return;
+
+        int[] values = {
+                stats.getEuropeCorrect(),
+                stats.getAsiaCorrect(),
+                stats.getAfricaCorrect(),
+                stats.getAmericaCorrect(),
+                stats.getOceaniaCorrect()
+        };
+        String[] continents = {"Европа", "Азия", "Африка", "Америка", "Океания"};
+
+        int maxIndex = 0;
+        for (int i = 1; i < values.length; i++) {
+            if (values[i] > values[maxIndex]) {
+                maxIndex = i;
+            }
+        }
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_BEST_CONTINENT, continents[maxIndex]);
+        db.update(TABLE_USER_STATS, contentValues, COLUMN_USER_ID + "=?", new String[]{userId});
+    }
+
+    public void deleteUserStats(String userId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_USER_STATS, COLUMN_USER_ID + "=?", new String[]{userId});
+        Log.d(TAG, "Удалена статистика пользователя " + userId);
+    }
+    @SuppressLint("Range")
+    private UserStats cursorToUserStats(Cursor cursor) {
+        UserStats stats = new UserStats(
+                cursor.getString(cursor.getColumnIndex(COLUMN_USER_ID))
+        );
+
+        stats.setGamesPlayed(cursor.getInt(cursor.getColumnIndex(COLUMN_GAMES_PLAYED)));
+        stats.setGamesWon(cursor.getInt(cursor.getColumnIndex(COLUMN_GAMES_WON)));
+        stats.setWinRate(cursor.getFloat(cursor.getColumnIndex(COLUMN_WIN_RATE)));
+        stats.setLevel(cursor.getInt(cursor.getColumnIndex(COLUMN_LEVEL)));
+        stats.setExperience(cursor.getInt(cursor.getColumnIndex(COLUMN_EXPERIENCE)));
+        stats.setDailyStreak(cursor.getInt(cursor.getColumnIndex(COLUMN_DAILY_STREAK)));
+        stats.setWinStreak(cursor.getInt(cursor.getColumnIndex(COLUMN_WIN_STREAK)));
+
+        stats.setEuropeCorrect(cursor.getInt(cursor.getColumnIndex(COLUMN_EUROPE_CORRECT)));
+        stats.setAsiaCorrect(cursor.getInt(cursor.getColumnIndex(COLUMN_ASIA_CORRECT)));
+        stats.setAfricaCorrect(cursor.getInt(cursor.getColumnIndex(COLUMN_AFRICA_CORRECT)));
+        stats.setAmericaCorrect(cursor.getInt(cursor.getColumnIndex(COLUMN_AMERICA_CORRECT)));
+        stats.setOceaniaCorrect(cursor.getInt(cursor.getColumnIndex(COLUMN_OCEANIA_CORRECT)));
+        stats.setBestContinent(cursor.getString(cursor.getColumnIndex(COLUMN_BEST_CONTINENT)));
+
+        stats.setCapitalsCorrect(cursor.getInt(cursor.getColumnIndex(COLUMN_CAPITALS_CORRECT)));
+        stats.setFlagsCorrect(cursor.getInt(cursor.getColumnIndex(COLUMN_FLAGS_CORRECT)));
+        stats.setOutlinesCorrect(cursor.getInt(cursor.getColumnIndex(COLUMN_OUTLINES_CORRECT)));
+        stats.setLanguagesCorrect(cursor.getInt(cursor.getColumnIndex(COLUMN_LANGUAGES_CORRECT)));
+
+        return stats;
     }
 }

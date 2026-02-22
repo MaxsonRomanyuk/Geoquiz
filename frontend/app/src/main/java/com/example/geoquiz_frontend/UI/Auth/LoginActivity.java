@@ -37,6 +37,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class LoginActivity extends BaseActivity {
     private MaterialButtonToggleGroup toggleGroup;
@@ -187,8 +188,9 @@ public class LoginActivity extends BaseActivity {
             public void onResponse(@NonNull Call<AuthResponse> call, @NonNull Response<AuthResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String token = response.body().getToken();
-
-                    getUserData(email, token);
+                    String uid = response.body().getUserId();
+                    String name = response.body().getUserName();
+                    saveUserData(email, token, uid, name);
                 } else {
                     showTempMessage(getString(R.string.error_user_not_found));
                     showLoading(false);
@@ -233,15 +235,16 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void getUserData(String email, String token) {
+    private void saveUserData(String email, String token, String uid, String name) {
         if (preferencesHelper == null) {
             preferencesHelper = new PreferencesHelper(LoginActivity.this);
         }
         saveAuthToken(token);
 
         User user = new User();
+        user.setId(uid);
         user.setEmail(email);
-        user.setName(email.split("@")[0]); // temp
+        user.setName(name);
         user.setPremium(false);
         authManager.LoginWithEmail(user);
 

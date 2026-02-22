@@ -43,7 +43,7 @@
 
     <!-- Profile Screen -->
     <string name="win_rate">Процент побед</string>
-    <string name="longest_streak">Лучшая серия</string>
+    <string name="longest_streak">Текущая серия</string>
     <string name="match_history">История матчей</string>
     <string name="geo_quiz_plus">⭐ GeoQuiz Plus</string>
     <string name="get">ПОЛУЧИТЬ</string>

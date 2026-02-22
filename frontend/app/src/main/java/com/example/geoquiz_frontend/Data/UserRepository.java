@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.geoquiz_frontend.ApiClient;
 import com.example.geoquiz_frontend.ApiService;
 import com.example.geoquiz_frontend.DTOs.ProfileResponse;
+import com.example.geoquiz_frontend.Entities.UserStats;
 import com.example.geoquiz_frontend.PreferencesHelper;
 
 import retrofit2.Call;
@@ -19,9 +20,11 @@ public class UserRepository {
 
     private ApiService apiService;
     private PreferencesHelper preferencesHelper;
+    private DatabaseHelper databaseHelper;
 
     private UserRepository(Context context) {
         preferencesHelper = new PreferencesHelper(context);
+        databaseHelper = new DatabaseHelper(context);
         if (preferencesHelper.hasValidToken()) {
             apiService = ApiClient.getApiWithAuth(preferencesHelper);
         }
@@ -53,11 +56,21 @@ public class UserRepository {
 
         isLoading.setValue(true);
 
-        ProfileResponse cachedData = preferencesHelper.getCurrentUserStats();
-        if (cachedData != null && !forceRefresh) {
-            userData.setValue(cachedData);
+        String userId = preferencesHelper.getUserId();
+        if (userId == null) {
+            errorMessage.setValue("User not logged in");
             isLoading.setValue(false);
             return;
+        }
+
+        if (!forceRefresh) {
+            UserStats cachedStats = databaseHelper.getUserStats(userId);
+            if (cachedStats != null) {
+                ProfileResponse profileResponse = convertStatsToProfile(cachedStats);
+                userData.setValue(profileResponse);
+                isLoading.setValue(false);
+                return;
+            }
         }
 
         if (apiService == null) {
@@ -71,12 +84,12 @@ public class UserRepository {
             public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
                 isLoading.setValue(false);
                 if (response.isSuccessful() && response.body() != null) {
-                    userData.setValue(response.body());
-                    preferencesHelper.setCurrentUserStats(
-                            response.body().getUser(),
-                            response.body().getStats(),
-                            response.body().getGeography()
-                    );
+                    ProfileResponse profile = response.body();
+
+                    UserStats stats = convertProfileToStats(profile, userId);
+                    databaseHelper.saveUserStats(stats);
+
+                    userData.setValue(profile);
                 } else {
                     errorMessage.setValue("Error loading data: " + response.code());
                 }
@@ -89,9 +102,78 @@ public class UserRepository {
             }
         });
     }
+    public void refreshFromDb() {
+        String userId = preferencesHelper.getUserId();
+        if (userId == null) return;
 
+        UserStats cachedStats = databaseHelper.getUserStats(userId);
+        if (cachedStats != null) {
+            ProfileResponse profileResponse = convertStatsToProfile(cachedStats);
+            userData.setValue(profileResponse);
+        }
+    }
+    private ProfileResponse convertStatsToProfile(UserStats stats) {
+        ProfileResponse profile = new ProfileResponse();
+
+        ProfileResponse.UserDto user = new ProfileResponse.UserDto();
+        user.setId(stats.getUserId());
+        user.setUserName(preferencesHelper.getUserName());
+        user.setEmail(preferencesHelper.getUserEmail());
+
+        ProfileResponse.StatsDto statsDto = new ProfileResponse.StatsDto();
+        statsDto.setGamesPlayed(stats.getGamesPlayed());
+        statsDto.setWins(stats.getGamesWon());
+        statsDto.setWinRate(stats.getWinRate());
+        statsDto.setLevel(stats.getLevel());
+        statsDto.setExperience(stats.getExperience());
+        statsDto.setDailyStreak(stats.getDailyStreak());
+        statsDto.setCurrentWinStreak(stats.getWinStreak());
+
+        ProfileResponse.GeographyDto geo = new ProfileResponse.GeographyDto();
+        geo.setEuropeCorrect(stats.getEuropeCorrect());
+        geo.setAsiaCorrect(stats.getAsiaCorrect());
+        geo.setAfricaCorrect(stats.getAfricaCorrect());
+        geo.setAmericaCorrect(stats.getAmericaCorrect());
+        geo.setOceaniaCorrect(stats.getOceaniaCorrect());
+
+        profile.setUser(user);
+        profile.setStats(statsDto);
+        profile.setGeography(geo);
+
+        return profile;
+    }
     public void clearData() {
         userData.setValue(null);
         preferencesHelper.clearCurrentUser();
+    }
+
+    private UserStats convertProfileToStats(ProfileResponse profile, String userId) {
+        UserStats stats = new UserStats(userId);
+
+        ProfileResponse.StatsDto s = profile.getStats();
+        stats.setGamesPlayed(s.getGamesPlayed());
+        stats.setGamesWon(s.getWins());
+        stats.setWinRate((float) s.getWinRate());
+        stats.setLevel(s.getLevel());
+        stats.setExperience(s.getExperience());
+        stats.setDailyStreak(s.getDailyStreak());
+        stats.setWinStreak(s.getCurrentWinStreak());
+
+        ProfileResponse.GeographyDto g = profile.getGeography();
+        stats.setEuropeCorrect(g.getEuropeCorrect());
+        stats.setAsiaCorrect(g.getAsiaCorrect());
+        stats.setAfricaCorrect(g.getAfricaCorrect());
+        stats.setAmericaCorrect(g.getAmericaCorrect());
+        stats.setOceaniaCorrect(g.getOceaniaCorrect());
+        stats.setBestContinent(g.getBestContinent());
+
+        if (profile.getGameModes() != null) {
+            stats.setCapitalsCorrect(profile.getGameModes().getCapitalsCorrect());
+            stats.setFlagsCorrect(profile.getGameModes().getFlagsCorrect());
+            stats.setOutlinesCorrect(profile.getGameModes().getOutlinesCorrect());
+            stats.setLanguagesCorrect(profile.getGameModes().getLanguagesCorrect());
+        }
+
+        return stats;
     }
 }

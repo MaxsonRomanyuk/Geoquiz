@@ -49,7 +49,7 @@ public class GameRepository {
     private final PreferencesHelper preferencesHelper;
     private final ApiService apiService;
     private final ApiService apiServiceWithAuth;
-    private final GameDatabaseHelper dbHelper;
+    private final DatabaseHelper dbHelper;
     private final Gson gson;
     private final ExecutorService executorService;
 
@@ -62,7 +62,7 @@ public class GameRepository {
         this.preferencesHelper = new PreferencesHelper(context);
         this.apiService = ApiClient.getApi();
         this.apiServiceWithAuth = ApiClient.getApiWithAuth(preferencesHelper);
-        this.dbHelper = new GameDatabaseHelper(context);
+        this.dbHelper = new DatabaseHelper(context);
         this.gson = new Gson();
         this.executorService = Executors.newSingleThreadExecutor();
         this.pendingGames = loadPendingGames();
