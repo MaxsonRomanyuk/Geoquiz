@@ -21,7 +21,7 @@
 
 
         <item name="colorButtonNormal">#48BB78</item>
-        <item name="colorError">#ED8936</item>
+        <item name="colorError">#800000</item>
         <item name="colorErrorContainer">#F56565</item>
     </style>
 

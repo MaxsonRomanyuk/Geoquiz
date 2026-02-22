@@ -8,6 +8,8 @@ import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.UI.Base.BaseActivity;
 import com.example.geoquiz_frontend.UI.Home.MainActivity;
 import com.example.geoquiz_frontend.UI.Profile.ProfileActivity;
+import com.example.geoquiz_frontend.UI.PvP.DraftModeActivity;
+import com.example.geoquiz_frontend.UI.PvP.MatchmakingActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -41,7 +43,8 @@ public class GameTypesActivity extends BaseActivity {
         });
 
         btnPvPMode.setOnClickListener(v -> {
-            //
+            Intent intent = new Intent(this, MatchmakingActivity.class);
+            startActivity(intent);
         });
 
         btnKingMode.setOnClickListener(v -> {

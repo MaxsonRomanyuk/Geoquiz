@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:background="?attr/colorBackgroundFloating"
+                    app:cardBackgroundColor="@android:color/transparent"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="6dp"
                     android:layout_marginEnd="12dp"

@@ -119,7 +119,6 @@
 
     <!--Results-->
     <string name="results">Результаты</string>
-    <string name="score_format">%1$d/%2$d</string>
     <string name="correct_answers">Правильных ответов</string>
     <string name="points_earned">Очков</string>
     <string name="play_again">Сыграть снова</string>
@@ -128,6 +127,24 @@
     <string name="great_result">Прекрасный результат! Вы показали отличные знания!\nПопробуйте еще раз, чтобы побить свой рекорд!</string>
     <string name="good_result">Хороший результат! Продолжайте тренироваться!\nС каждым разом у вас получается лучше!</string>
     <string name="try_again">Не сдавайтесь! Попробуйте еще раз.\nПрактика ведет к совершенству!</string>
+
+    <!--Matchmaking-->
+    <string name="find_opponent_title">Поиск соперника</string>
+    <string name="searching_for_opponent">Поиск соперника...</string>
+    <string name="opponent_found">Соперник найден!</string>
+    <string name="players_online_format">%d игроков онлайн</string>
+    <string name="score_format">Очки: %d</string>
+    <string name="cancel">Отмена</string>
+    <!--Draft-->
+    <string name="draft_mode">Драфт режим</string>
+    <string name="your_turn_ban">Ваш ход! Выберите режим для бана</string>
+    <string name="ban_category">Забаньте категорию</string>
+    <string name="capitals">Столицы</string>
+    <string name="flags">Флаги</string>
+    <string name="borders">Границы</string>
+    <string name="languages">Языки</string>
+    <string name="banned">ЗАБАНЕНО</string>
+    <string name="opponent_selecting">Противник выбирает...</string>
 
     <!-- Bottom Navigation -->
     <string name="home">Главная</string>

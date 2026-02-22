@@ -43,6 +43,12 @@
         <activity
             android:name=".UI.Game.GameResultActivity"
             android:exported="false"/>
+        <activity
+            android:name=".UI.PvP.MatchmakingActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".UI.PvP.DraftModeActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>

@@ -1,0 +1,11 @@
+<resources>
+    <attr name="colorError" format="color" />
+    <attr name="colorTertiaryFixed" format="color" />
+    <attr name="colorPrimary" format="color" />
+    <attr name="colorSecondary" format="color" />
+    <attr name="colorAccent" format="color" />
+    <attr name="colorSurface" format="color" />
+    <attr name="colorOutline" format="color" />
+    <attr name="colorTertiary" format="color" />
+    <attr name="colorButtonNormal" format="color" />
+</resources>

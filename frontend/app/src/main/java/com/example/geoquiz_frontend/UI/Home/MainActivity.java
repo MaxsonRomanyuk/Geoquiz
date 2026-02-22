@@ -26,6 +26,8 @@ import com.example.geoquiz_frontend.UI.Base.BaseActivity;
 import com.example.geoquiz_frontend.UI.Game.GameModesActivity;
 import com.example.geoquiz_frontend.UI.Game.GameTypesActivity;
 import com.example.geoquiz_frontend.UI.Profile.ProfileActivity;
+import com.example.geoquiz_frontend.UI.PvP.DraftModeActivity;
+import com.example.geoquiz_frontend.UI.PvP.MatchmakingActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 
@@ -118,7 +120,8 @@ public class MainActivity extends BaseActivity {
         });
 
         cardDuel.setOnClickListener(v -> {
-            // Navigate to duel mode
+            Intent intent = new Intent(this, MatchmakingActivity.class);
+            startActivity(intent);
         });
 
         cardKing.setOnClickListener(v -> {

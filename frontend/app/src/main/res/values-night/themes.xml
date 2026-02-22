@@ -19,7 +19,7 @@
 
 
         <item name="colorButtonNormal">#68D391</item>
-        <item name="colorError">#F6AD55</item>
+        <item name="colorError">#FF0000</item>
         <item name="colorErrorContainer">#FEB2B2</item>
     </style>
 </resources>

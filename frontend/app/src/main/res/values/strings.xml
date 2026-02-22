@@ -23,15 +23,15 @@
 
     <string name="level_prefix">Level </string>
     <string name="total_points">Total points</string>
-    <string name="game_type">Game Type</string>
+    <string name="game_type">Game type</string>
     <string name="solo">Solo</string>
     <string name="duel">1v1 Duel</string>
-    <string name="king_of_the_hill">King of the Hill</string>
-    <string name="your_stats">Your Stats</string>
-    <string name="games_played">Games Played</string>
+    <string name="king_of_the_hill">King of the hill</string>
+    <string name="your_stats">Your stats</string>
+    <string name="games_played">Games played</string>
     <string name="wins">Wins</string>
     <string name="accuracy">Accuracy</string>
-    <string name="best_continent">Best Continent</string>
+    <string name="best_continent">Best continent</string>
 
     <!-- Continents -->
     <string name="europe">Europe</string>
@@ -41,9 +41,9 @@
     <string name="oceania">Oceania</string>
 
     <!--Profile Screen-->
-    <string name="win_rate">Win Rate</string>
-    <string name="longest_streak">Current Streak</string>
-    <string name="match_history">Match History</string>
+    <string name="win_rate">Win rate</string>
+    <string name="longest_streak">Current streak</string>
+    <string name="match_history">Match history</string>
     <string name="geo_quiz_plus">⭐ GeoQuiz Plus</string>
     <string name="get">GET</string>
     <string name="remove_ads">Remove\nAds</string>
@@ -57,16 +57,16 @@
     <string name="basic_settings">Basic</string>
     <string name="language">Language</string>
     <string name="theme">Theme</string>
-    <string name="update_data">Update Data</string>
+    <string name="update_data">Update data</string>
     <string name="available">Available</string>
     <string name="up_to_date">Up to date</string>
     <string name="checking">Checking...</string>
     <string name="about_app">About</string>
-    <string name="privacy_policy">Privacy Policy</string>
-    <string name="terms_of_use">Terms of Use</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="terms_of_use">Terms of use</string>
     <string name="account">Account</string>
     <string name="subscription">Subscription</string>
-    <string name="not_subscribed">Not Subscribed</string>
+    <string name="not_subscribed">Not subscribed</string>
     <string name="subscribed">Subscribed</string>
     <string name="logout">Logout</string>
     <string name="back">Back</string>
@@ -75,10 +75,10 @@
     <string name="choose_game_mode">Choose Game Mode</string>
     <string name="test_your_knowledge">Test your geography knowledge</string>
 
-    <string name="country_capitals">Country Capitals</string>
-    <string name="country_flags">Country Flags</string>
-    <string name="country_outlines">Country Outlines</string>
-    <string name="country_languages">Country Languages</string>
+    <string name="country_capitals">Country capitals</string>
+    <string name="country_flags">Country flags</string>
+    <string name="country_outlines">Country outlines</string>
+    <string name="country_languages">Country languages</string>
 
     <string name="guess_capitals_desc">Guess the capital cities</string>
     <string name="guess_flags_desc">Identify countries by flags</string>
@@ -119,7 +119,6 @@
 
     <!--Results-->
     <string name="results">Results</string>
-    <string name="score_format">%1$d/%2$d</string>
     <string name="correct_answers">Correct answers</string>
     <string name="points_earned">Points</string>
     <string name="play_again">Play Again</string>
@@ -128,6 +127,25 @@
     <string name="great_result">Great result! You\'ve shown excellent knowledge!\nTry again to beat your record!</string>
     <string name="good_result">Good result! Keep practicing!\nYou\'re getting better every time!</string>
     <string name="try_again">Don\'t give up! Try again.\nPractice makes perfect!</string>
+
+
+    <!--Matchmaking-->
+    <string name="find_opponent_title">Find opponent</string>
+    <string name="searching_for_opponent">Searching for opponent...</string>
+    <string name="opponent_found">Opponent found!</string>
+    <string name="players_online_format">%d players online</string>
+    <string name="score_format">Score: %d</string>
+    <string name="cancel">Cancel</string>
+    <!--Draft-->
+    <string name="draft_mode">Draft Mode</string>
+    <string name="your_turn_ban">Your turn! Ban a category</string>
+    <string name="ban_category">Ban a category</string>
+    <string name="capitals">Capitals</string>
+    <string name="flags">Flags</string>
+    <string name="borders">Borders</string>
+    <string name="languages">Languages</string>
+    <string name="banned">BANNED</string>
+    <string name="opponent_selecting">Opponent is selecting...</string>
 
     <!-- Bottom Navigation -->
     <string name="home">Home</string>

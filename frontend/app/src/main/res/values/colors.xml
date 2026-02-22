@@ -5,6 +5,9 @@
     <color name="dark_gradient_start">#1A365D</color>
     <color name="dark_gradient_end">#0F1419</color>
 
+    <color name="colorError">#800000</color>
+    <color name="primary">#1437AD</color>
+
     <color name="white">#ffffff</color>
     <color name="premium">#f0ea19</color>
 </resources>
