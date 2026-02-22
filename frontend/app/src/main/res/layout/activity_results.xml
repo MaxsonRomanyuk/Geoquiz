@@ -30,7 +30,7 @@
                 android:text="🏆"
                 android:textSize="70sp"
                 android:gravity="center"
-                android:background="?attr/colorSurface"
+                app:cardBackgroundColor="@android:color/transparent"
                 app:cornerRadius="60dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="16dp"
@@ -89,7 +89,7 @@
                             android:layout_marginBottom="4dp"
                             android:text="8/10"
                             android:textColor="?attr/colorButtonNormal"
-                            android:textSize="42sp"
+                            android:textSize="36sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -122,7 +122,7 @@
                             android:layout_marginBottom="4dp"
                             android:text="72"
                             android:textColor="?attr/colorAccent"
-                            android:textSize="42sp"
+                            android:textSize="36sp"
                             android:textStyle="bold" />
 
                         <TextView

@@ -132,4 +132,4 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapGet("/", () => "Backend is running");
 
-app.Run();
+app.Run("http://0.0.0.0:5238");
