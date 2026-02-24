@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/colorBackgroundFloating"
+    android:background="@drawable/background_gradient"
     android:padding="20dp"
-    tools:context=".UI.Profile.SettingsActivity">
+    tools:context=".Presentation.ui.Profile.SettingsActivity">
 
     <TextView
         android:id="@+id/tv_title"

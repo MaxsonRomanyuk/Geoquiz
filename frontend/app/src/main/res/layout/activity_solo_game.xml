@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="?attr/colorBackgroundFloating"
-    tools:context=".UI.Game.SoloGameActivity">
+    android:background="@drawable/background_gradient"
+    tools:context=".Presentation.ui.Game.SoloGameActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

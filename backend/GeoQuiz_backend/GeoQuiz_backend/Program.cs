@@ -1,9 +1,11 @@
+using GeoQuiz_backend.Application.Hubs;
 using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Application.Services;
 using GeoQuiz_backend.Application.Services.PvP;
 using GeoQuiz_backend.Infrastructure.Data;
 using GeoQuiz_backend.Infrastructure.Mongo;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -55,6 +57,15 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// SignalR
+builder.Services.AddScoped<ISignalRNotificationService, SignalRNotificationService>();
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = true;
+    options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+    options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
+});
+
 // MySQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
@@ -80,7 +91,7 @@ builder.Services.AddScoped<IAchievementService, AchievementService>();
 
 //PVP
 builder.Services.AddSingleton<MatchmakingQueue>();
-builder.Services.AddScoped<MatchmakingService>();
+builder.Services.AddScoped<IMatchmakingService, MatchmakingService>();
 builder.Services.AddScoped<IDraftService, DraftService>();
 builder.Services.AddScoped<IQuestionSetService, QuestionSetService>();
 builder.Services.AddScoped<IPvPGameSessionService, PvPGameSessionService>();
@@ -124,6 +135,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapHub<PvPHub>("/pvpHub", options =>
+{
+    options.Transports = HttpTransportType.WebSockets |
+                         HttpTransportType.LongPolling;
+});
 
 app.UseCors("AllowAll");
 app.UseAuthentication();

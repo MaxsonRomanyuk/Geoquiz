@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorBackgroundFloating"
-    tools:context=".UI.PvP.MatchmakingActivity">
+    android:background="@drawable/background_gradient"
+    tools:context=".Presentation.ui.PvP.MatchmakingActivity">
 
     <LinearLayout
         android:id="@+id/layoutTopBar"
@@ -157,7 +157,7 @@
                             android:textStyle="bold"/>
 
                         <TextView
-                            android:id="@+id/tvCurrentPlayerRating"
+                            android:id="@+id/tvCurrentPlayerScore"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/score_format"
@@ -231,7 +231,7 @@
                             android:textStyle="bold"/>
 
                         <TextView
-                            android:id="@+id/tvOpponentRating"
+                            android:id="@+id/tvOpponentScore"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/score_format"

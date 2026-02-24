@@ -5,7 +5,7 @@ using GeoQuiz_backend.Infrastructure.Data;
 
 namespace GeoQuiz_backend.Application.Services.PvP
 {
-    public class MatchmakingService
+    public class MatchmakingService : IMatchmakingService
     {
         private readonly MatchmakingQueue _queue;
         private readonly AppDbContext _db;
@@ -40,6 +40,16 @@ namespace GeoQuiz_backend.Application.Services.PvP
             await _draftService.CreateDraftAsync(match);
 
             return match;
+        }
+        public Task LeaveQueueAsync(Guid userId)
+        {
+            _queue.Remove(userId); 
+            return Task.CompletedTask;
+        }
+
+        public Task<bool> IsInQueueAsync(Guid userId)
+        {
+            return Task.FromResult(_queue.Contains(userId)); 
         }
     }
 }

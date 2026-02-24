@@ -11,7 +11,7 @@
         <item name="colorSurface">#1A202C</item>
         <item name="colorOutline">#2D3748</item>
 
-        <item name="colorBackgroundFloating">@drawable/background_gradient_dark</item>
+        <item name="colorBackgroundFloating">@color/dark_gradient_end</item>
 
         <item name="colorTertiary">#F7FAFC</item>
         <item name="colorTertiaryContainer">#E2E8F0</item>

@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GeoQuiz_frontend">
         <activity
-            android:name=".UI.Auth.LoginActivity"
+            android:name=".Presentation.ui.Auth.LoginActivity"
             android:exported="true"
             tools:ignore="Instantiatable">
             <intent-filter>
@@ -23,31 +23,31 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UI.Home.MainActivity"
+            android:name=".Presentation.ui.Home.MainActivity"
             android:exported="false"/>
         <activity
-            android:name=".UI.Profile.ProfileActivity"
+            android:name=".Presentation.ui.Profile.ProfileActivity"
             android:exported="false"/>
         <activity
-            android:name=".UI.Profile.SettingsActivity"
+            android:name=".Presentation.ui.Profile.SettingsActivity"
             android:exported="false"/>
         <activity
-            android:name=".UI.Game.GameModesActivity"
+            android:name=".Presentation.ui.Game.GameModesActivity"
             android:exported="false"/>
         <activity
-            android:name=".UI.Game.GameTypesActivity"
+            android:name=".Presentation.ui.Game.GameTypesActivity"
             android:exported="false"/>
         <activity
-            android:name=".UI.Game.SoloGameActivity"
+            android:name=".Presentation.ui.Game.SoloGameActivity"
             android:exported="false"/>
         <activity
-            android:name=".UI.Game.GameResultActivity"
+            android:name=".Presentation.ui.Game.GameResultActivity"
             android:exported="false"/>
         <activity
-            android:name=".UI.PvP.MatchmakingActivity"
+            android:name=".Presentation.ui.PvP.MatchmakingActivity"
             android:exported="false"/>
         <activity
-            android:name=".UI.PvP.DraftModeActivity"
+            android:name=".Presentation.ui.PvP.DraftModeActivity"
             android:exported="false"/>
     </application>
 
