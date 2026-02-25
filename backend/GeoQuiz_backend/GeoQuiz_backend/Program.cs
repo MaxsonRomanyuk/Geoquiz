@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +60,11 @@ builder.Services.AddSwaggerGen(c =>
 
 // SignalR
 builder.Services.AddScoped<ISignalRNotificationService, SignalRNotificationService>();
+builder.Services.AddSignalR()
+    .AddJsonProtocol(options => {
+        options.PayloadSerializerOptions.Converters
+            .Add(new JsonStringEnumConverter());
+    });
 builder.Services.AddSignalR(options =>
 {
     options.EnableDetailedErrors = true;

@@ -18,6 +18,9 @@ namespace GeoQuiz_backend.Application.Services.PvP
         {
             await _hubContext.Clients.User(userId.ToString()).MatchFound(matchData);
         }
-
+        public async Task NotifyDraftUpdated(Guid matchId, DraftUpdateData updateData)
+        {
+            await _hubContext.Clients.Group($"match_{matchId}").DraftUpdated(updateData);
+        }
     }
 }

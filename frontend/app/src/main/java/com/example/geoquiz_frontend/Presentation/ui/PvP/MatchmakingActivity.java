@@ -15,14 +15,14 @@ import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
-import com.example.geoquiz_frontend.data.remote.SignalRClient;
+import com.example.geoquiz_frontend.data.remote.SignalRClientManager;
+import com.example.geoquiz_frontend.data.remote.dtos.DraftUpdateData;
 import com.example.geoquiz_frontend.data.remote.dtos.MatchFoundData;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.Locale;
-import java.util.Random;
 
 public class MatchmakingActivity extends BaseActivity {
 
@@ -41,8 +41,9 @@ public class MatchmakingActivity extends BaseActivity {
 
 
 
-    private SignalRClient signalRClient;
+    private SignalRClientManager signalRManager;
     private PreferencesHelper preferencesHelper;
+    private String activityId;
     private DatabaseHelper databaseHelper;
     private boolean isSearching = false;
     private MatchFoundData matchData;
@@ -54,10 +55,20 @@ public class MatchmakingActivity extends BaseActivity {
         setContentView(R.layout.activity_matchmaking);
 
         preferencesHelper = new PreferencesHelper(this);
+        activityId = "matchmaking_" + System.currentTimeMillis();
         databaseHelper = new DatabaseHelper(this);
+
         initViews();
         setupClickListeners();
         loadCurrentPlayerData();
+
+        signalRManager = SignalRClientManager.getInstance();
+        String token = preferencesHelper.getAuthToken();
+        String userId = preferencesHelper.getUserId();
+
+        if (token != null && !token.isEmpty()) {
+            signalRManager.init(token, userId);
+        }
 
         connectToSignalR();
     }
@@ -102,41 +113,29 @@ public class MatchmakingActivity extends BaseActivity {
         tvCurrentPlayerLevel.setText("Lvl " + (level > 0 ? level : 1));
     }
     private void connectToSignalR() {
-        String token = preferencesHelper.getAuthToken();
-        if (token == null || token.isEmpty()) {
-            Log.e(TAG, "No auth token found");
-            finish();
-            return;
-        }
-
-        showStatus("Connected...");
-
-        signalRClient = new SignalRClient(token, new SignalRClient.ConnectionListener() {
+        signalRManager.addListener(activityId, new SignalRClientManager.ConnectionListener() {
             @Override
             public void onConnected() {
                 runOnUiThread(() -> {
-                    Log.d(TAG, "Connected to SignalR, joining queue");
-                    showStatus("Search opponent...");
+                    Log.d(TAG, "Connected, joining queue");
+                    showStatus("Searching for opponent...");
                     startSearch();
-                    signalRClient.joinQueue();
+                    signalRManager.joinQueue();
                 });
             }
 
             @Override
             public void onDisconnected() {
                 runOnUiThread(() -> {
-                    Log.d(TAG, "Disconnected from SignalR");
-                    if (isSearching) {
-                        showStatus("Connection lost");
-                        new Handler().postDelayed(() -> connectToSignalR(), 3000);
-                    }
+                    Log.d(TAG, "Disconnected");
+                    showStatus("Connection lost");
                 });
             }
 
             @Override
             public void onError(String error) {
                 runOnUiThread(() -> {
-                    Log.e(TAG, "SignalR error: " + error);
+                    Log.e(TAG, "Error: " + error);
                     showStatus("Error: " + error);
                 });
             }
@@ -144,14 +143,17 @@ public class MatchmakingActivity extends BaseActivity {
             @Override
             public void onMatchFound(MatchFoundData data) {
                 runOnUiThread(() -> {
-                    Log.d(TAG, "Match found! Match ID: " + data.getMatchId());
-                    matchData = data;
-                    showOpponentFound(data);
+                    Log.d(TAG, "Match found: " + data.getMatchId());
+                    navigateToDraftMode(data);
                 });
+            }
+
+            @Override
+            public void onDraftUpdated(DraftUpdateData data) {
             }
         });
 
-        signalRClient.start();
+        signalRManager.start();
     }
     private void startSearch() {
         isSearching = true;
@@ -219,15 +221,17 @@ public class MatchmakingActivity extends BaseActivity {
         intent.putExtra("availableModes", data.getAvailableModes().toArray(new String[0]));
         intent.putExtra("currentTurnUserId", data.getCurrentTurnUserId());
         intent.putExtra("yourId", data.getYourId());
+        intent.putExtra("yourLevel", databaseHelper.getUserStats(preferencesHelper.getUserId()).getLevel());
         intent.putExtra("timePerTurn", data.getTimePerTurnSeconds());
+
+        intent.putExtra("connectionActive", true);
         startActivity(intent);
-        finish();
     }
     private void cancelSearchAndExit() {
         cancelSearch();
-        if (signalRClient != null && signalRClient.isConnected()) {
-            signalRClient.leaveQueue();
-            signalRClient.stop();
+        if (signalRManager!= null && signalRManager.isConnected()) {
+            signalRManager.leaveQueue();
+            signalRManager.stop();
         }
         finish();
     }
@@ -239,9 +243,6 @@ public class MatchmakingActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        cancelSearch();
-        if (signalRClient != null) {
-            signalRClient.stop();
-        }
+        signalRManager.removeListener(activityId);
     }
 }

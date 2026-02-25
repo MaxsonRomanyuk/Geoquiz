@@ -1,8 +1,11 @@
 package com.example.geoquiz_frontend.Presentation.ui.PvP;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,39 +18,50 @@ import androidx.core.content.ContextCompat;
 import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.data.remote.SignalRClientManager;
+import com.example.geoquiz_frontend.data.remote.dtos.DraftUpdateData;
+import com.example.geoquiz_frontend.data.remote.dtos.MatchFoundData;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DraftModeActivity extends BaseActivity {
+    private static final String TAG = "DraftModeActivity";
+
     private ImageView ivBack;
     private TextView tvPlayer1Name, tvPlayer1Score, tvPlayer1Level;
     private TextView tvPlayer2Name, tvPlayer2Score, tvPlayer2Level;
-    private TextView tvTurnStatus;
+    private TextView tvTurnStatus, tvTimer;
     private ProgressBar progressTurn;
+    private LinearProgressIndicator progressTimer;
+
 
     private MaterialCardView cardCapitals, cardFlags, cardOutlines, cardLanguages;
-
-
     private List<MaterialCardView> modeCards;
     private List<String> bannedModes;
-    private boolean isPlayerTurn = true;
-    private int bannedCount = 0;
-    private final int TOTAL_MODES = 4;
-    private final int BANS_PER_PLAYER = 1;
-    private String selectedMode = "";
 
+    private SignalRClientManager signalRManager;
     private PreferencesHelper preferencesHelper;
-    private Handler handler = new Handler();
+    private String activityId;
 
+    private String matchId;
+    private String yourId;
+    private Integer yourLvl;
+    private String currentTurnUserId;
+    private List<String> availableModes;
+    private int timePerTurn;
+    private boolean isPlayerTurn = false;
+    private boolean isDraftActive = true;
 
-    private TextView tvTimer;
-    private LinearProgressIndicator progressTimer;
     private Handler timerHandler = new Handler();
     private Runnable timerRunnable;
     private int timeLeft = 10;
+
+    private String opponentName;
+    private int opponentLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,22 +69,21 @@ public class DraftModeActivity extends BaseActivity {
         setContentView(R.layout.activity_draft_mode);
 
         preferencesHelper = new PreferencesHelper(this);
+        activityId = "draft_" + System.currentTimeMillis();
+
 
         initViews();
         setupClickListeners();
-        //loadPlayerData();
+        getIntentData();
 
-
-        updateTurnStatus();
-        startPlayerTurnTimer();
 
         bannedModes = new ArrayList<>();
-        modeCards = new ArrayList<>();
+        modeCards = Arrays.asList(cardCapitals, cardFlags, cardOutlines, cardLanguages);
 
-        modeCards.add(cardCapitals);
-        modeCards.add(cardFlags);
-        modeCards.add(cardOutlines);
-        modeCards.add(cardLanguages);
+
+        signalRManager = SignalRClientManager.getInstance();
+        signalRManager.setCurrentMatch(matchId);
+        connectToSignalR();
     }
 
     private void initViews() {
@@ -96,70 +109,235 @@ public class DraftModeActivity extends BaseActivity {
         cardLanguages = findViewById(R.id.cardLanguages);
 
     }
-
     private void setupClickListeners() {
         ivBack.setOnClickListener(v -> finish());
 
         cardCapitals.setOnClickListener(v -> {
-            if (isPlayerTurn && !isCardBanned(cardCapitals)) {
-                banMode(cardCapitals, "capitals");
+            if (isPlayerTurn && isCardAvailable(cardCapitals)) {
+                sendBanMode("capitals");
             }
         });
 
         cardFlags.setOnClickListener(v -> {
-            if (isPlayerTurn && !isCardBanned(cardFlags)) {
-                banMode(cardFlags, "flags");
+            if (isPlayerTurn && isCardAvailable(cardFlags)) {
+                sendBanMode("flags");
             }
         });
 
         cardOutlines.setOnClickListener(v -> {
-            if (isPlayerTurn && !isCardBanned(cardOutlines)) {
-                banMode(cardOutlines, "outlines");
+            if (isPlayerTurn && isCardAvailable(cardOutlines)) {
+                sendBanMode("outlines");
             }
         });
 
         cardLanguages.setOnClickListener(v -> {
-            if (isPlayerTurn && !isCardBanned(cardLanguages)) {
-                banMode(cardLanguages, "languages");
+            if (isPlayerTurn && isCardAvailable(cardLanguages)) {
+                sendBanMode("languages");
             }
         });
     }
-
-    private void loadPlayerData() {
-
+    private void getIntentData() {
         Intent intent = getIntent();
-        if (intent != null) {
-            String player1Name = intent.getStringExtra("player1_name");
-            String player1Score = intent.getStringExtra("player1_score");
-            String player1Level = intent.getStringExtra("player1_level");
-            String player2Name = intent.getStringExtra("player2_name");
-            String player2Score = intent.getStringExtra("player2_score");
-            String player2Level = intent.getStringExtra("player2_level");
+        matchId = intent.getStringExtra("matchId");
+        opponentName = intent.getStringExtra("opponentName");
+        opponentLevel = intent.getIntExtra("opponentLevel", 1);
+        currentTurnUserId = intent.getStringExtra("currentTurnUserId");
+        yourId = intent.getStringExtra("yourId");
+        yourLvl = intent.getIntExtra("yourLevel", 1);
+        timePerTurn = intent.getIntExtra("timePerTurn", 10);
 
-            if (player1Name != null) tvPlayer1Name.setText(player1Name);
-            if (player1Score != null) tvPlayer1Score.setText(player1Score);
-            if (player1Level != null) tvPlayer1Level.setText("Level " + player1Level);
-            if (player2Name != null) tvPlayer2Name.setText(player2Name);
-            if (player2Score != null) tvPlayer2Score.setText(player2Score);
-            if (player2Level != null) tvPlayer2Level.setText("Level " + player2Level);
+        String[] modesArray = intent.getStringArrayExtra("availableModes");
+        if (modesArray != null) {
+            availableModes = Arrays.asList(modesArray);
+        }
+
+        isPlayerTurn = yourId.equals(currentTurnUserId);
+
+        loadPlayerData();
+    }
+    private void loadPlayerData() {
+        String username = preferencesHelper.getUserName();
+        int level = yourLvl;
+        int score = (100 * (level - 1) * level) / 2 + 67; // temp
+
+        tvPlayer1Name.setText(username != null ? username : "You");
+        tvPlayer1Score.setText(String.valueOf(score));
+        tvPlayer1Level.setText("Level " + level);
+
+        tvPlayer2Name.setText(opponentName);
+        tvPlayer2Score.setText(String.valueOf((100 * (opponentLevel - 1) * opponentLevel) / 2 + 67));
+        tvPlayer2Level.setText("Level " + opponentLevel);
+    }
+    private void connectToSignalR() {
+        signalRManager.addListener(activityId, new SignalRClientManager.ConnectionListener() {
+            @Override
+            public void onConnected() {
+                runOnUiThread(() -> {
+                    Log.d(TAG, "Connected to SignalR for draft");
+                    updateTurnStatus();
+                    if (isPlayerTurn) {
+                        startTimer();
+                    }
+                });
+            }
+
+            @Override
+            public void onDisconnected() {
+                runOnUiThread(() -> {
+                    Log.d(TAG, "Disconnected from SignalR");
+                    Toast.makeText(DraftModeActivity.this,"Connection lost", Toast.LENGTH_SHORT).show();
+                });
+            }
+
+            @Override
+            public void onError(String error) {
+                runOnUiThread(() -> {
+                    Log.e(TAG, "SignalR error: " + error);
+                    Toast.makeText(DraftModeActivity.this,"Error: " + error, Toast.LENGTH_SHORT).show();
+                });
+            }
+
+            @Override
+            public void onMatchFound(MatchFoundData data) {
+                //
+            }
+
+            @Override
+            public void onDraftUpdated(DraftUpdateData data) {
+                runOnUiThread(() -> handleDraftUpdate(data));
+            }
+        });
+
+        if (!signalRManager.isConnected()) {
+            signalRManager.start();
+        } else {
+            updateTurnStatus();
+            if (isPlayerTurn) {
+                startTimer();
+            }
         }
     }
+    private void handleDraftUpdate(DraftUpdateData data) {
+        Log.d(TAG, "Draft updated: " + data.getBannedMode() + " banned by " + data.getBannedByUserId());
+        if (!matchId.equals(data.getMatchId())) {
+            Log.w(TAG, "Received update for wrong match: " + data.getMatchId());
+            return;
+        }
+        availableModes = data.getRemainingModes();
 
-    private void startPlayerTurnTimer() {
-        timeLeft = 10;
+        String bannedMode = convertServerModeToClient(data.getBannedMode());
+        if (bannedMode != null) {
+            banModeLocally(bannedMode, data.getBannedByUserId());
+        }
+
+        currentTurnUserId = data.getNextTurnUserId();
+        isPlayerTurn = yourId.equals(currentTurnUserId);
+
+        updateTurnStatus();
+
+        if (isPlayerTurn && isDraftActive) {
+            startTimer();
+        } else {
+            stopTimer();
+        }
+
+        if (availableModes.size() == 1) {
+            tvTurnStatus.setText("Final mode selected!");
+        }
+    }
+    private void banModeLocally(String mode, String bannedByUserId) {
+        MaterialCardView card = getCardByMode(mode);
+        if (card != null) {
+            card.setStrokeColor(getColorFromAttr(R.attr.colorError));
+            card.setAlpha(0.5f);
+            card.setClickable(false);
+
+            bannedModes.add(mode);
+
+            String message;
+            if (bannedByUserId.equals(yourId)) {
+                message = "You banned: " + getModeName(mode);
+            } else {
+                message = "Opponent banned: " + getModeName(mode);
+            }
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void sendBanMode(String mode) {
+        if (signalRManager != null && signalRManager.isConnected()) {
+            stopTimer();
+            Log.d(TAG, "Attempting to ban mode: " + mode + " for match: " + matchId);
+
+            if (!isPlayerTurn) {
+                Log.w(TAG, "Attempted to ban mode but not player's turn");
+                Toast.makeText(this, "Not your turn!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            signalRManager.banMode(matchId, mode, getLanguageCode());
+
+            MaterialCardView card = getCardByMode(mode);
+            if (card != null) {
+                card.setEnabled(false);
+                card.setAlpha(0.5f);
+            }
+
+            Log.d(TAG, "Ban mode sent: " + mode);
+        } else {
+            Toast.makeText(this, "Not connected to server", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private String getLanguageCode() {
+        return "ru".equals(preferencesHelper.getLanguage()) ? "ru" : "en";
+    }
+    private boolean isCardAvailable(MaterialCardView card) {
+        return card.isClickable();
+    }
+    private String convertServerModeToClient(String serverMode) {
+        if (serverMode == null) return null;
+
+        switch (serverMode) {
+            case "Capital": return "capitals";
+            case "Flag": return "flags";
+            case "Outline": return "outlines";
+            case "Language": return "languages";
+            default:
+                Log.w(TAG, "Unknown server mode: " + serverMode);
+                return null;
+        }
+    }
+    private MaterialCardView getCardByMode(String mode) {
+        switch (mode) {
+            case "capitals": return cardCapitals;
+            case "flags": return cardFlags;
+            case "outlines": return cardOutlines;
+            case "languages": return cardLanguages;
+            default: return null;
+        }
+    }
+    private String getModeFromCard(MaterialCardView card) {
+        if (card == cardCapitals) return "capitals";
+        if (card == cardFlags) return "flags";
+        if (card == cardOutlines) return "outlines";
+        if (card == cardLanguages) return "languages";
+        return "";
+    }
+    private void startTimer() {
+        timeLeft = timePerTurn;
         progressTimer.setProgress(0);
         progressTimer.setMax(100);
         progressTimer.setVisibility(View.VISIBLE);
-        tvTimer.setVisibility(View.VISIBLE);
         tvTimer.setText(timeLeft + "s");
+
+        progressTimer.setIndicatorColor(getColorFromAttr(R.attr.colorPrimary));
+        tvTimer.setTextColor(getColorFromAttr(R.attr.colorPrimary));
 
         timerRunnable = new Runnable() {
             @Override
             public void run() {
-                if (timeLeft > 0) {
+                if (timeLeft > 0 && isPlayerTurn && isDraftActive) {
                     timeLeft--;
 
-                    int progress = (10 - timeLeft) * 10;
+                    int progress = (timePerTurn - timeLeft) * 100 / timePerTurn;
                     progressTimer.setProgress(progress);
                     tvTimer.setText(timeLeft + "s");
 
@@ -171,7 +349,7 @@ public class DraftModeActivity extends BaseActivity {
                     }
 
                     timerHandler.postDelayed(this, 1000);
-                } else {
+                } else if (timeLeft == 0 && isPlayerTurn && isDraftActive) {
                     onPlayerTimeout();
                 }
             }
@@ -179,13 +357,12 @@ public class DraftModeActivity extends BaseActivity {
 
         timerHandler.post(timerRunnable);
     }
+
     private void stopTimer() {
         timerHandler.removeCallbacks(timerRunnable);
         progressTimer.setVisibility(View.GONE);
         tvTimer.setVisibility(View.GONE);
 
-        progressTimer.setIndicatorColor(getColorFromAttr(R.attr.colorPrimary));
-        tvTimer.setTextColor(getColorFromAttr(R.attr.colorPrimary));
     }
 
     private void onPlayerTimeout() {
@@ -210,7 +387,8 @@ public class DraftModeActivity extends BaseActivity {
             else {
                 modeName = "";
             }
-            banMode(randomChoice, modeName);
+
+            sendBanMode(modeName);
 
             Toast.makeText(this,
                     "ru".equals(preferencesHelper.getLanguage()) ?
@@ -219,57 +397,7 @@ public class DraftModeActivity extends BaseActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
-    private void banMode(MaterialCardView card, String modeName) {
-        stopTimer();
 
-        card.setStrokeColor(getColorFromAttr(R.attr.colorError));
-        card.setAlpha(0.5f);
-        card.setClickable(false);
-
-        bannedModes.add(modeName);
-        bannedCount++;
-
-        String message = getString(
-                "ru".equals(preferencesHelper.getLanguage()) ?
-                        "Режим забанен: " + getModeName(modeName) :
-                        "Mode banned: " + getModeName(modeName)
-        );
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-
-        if (bannedCount >= 3) {
-            stopTimer();
-            determineRemainingMode();
-        } else {
-            switchTurn();
-        }
-    }
-
-    private void determineRemainingMode() {
-        for (MaterialCardView card : modeCards) {
-            if (card.isClickable()) {
-                if (card == cardCapitals) selectedMode = "capitals";
-                else if (card == cardFlags) selectedMode = "flags";
-                else if (card == cardOutlines) selectedMode = "outlines";
-                else if (card == cardLanguages) selectedMode = "languages";
-
-                startGameWithMode(selectedMode);
-                return;
-            }
-        }
-    }
-
-    private void startGameWithMode(String mode) {
-        String message = getString(
-                "ru".equals(preferencesHelper.getLanguage()) ?
-                        "Играем в режим: " + getModeName(mode) :
-                        "Playing mode: " + getModeName(mode)
-        );
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-
-        // startIntent
-
-        handler.postDelayed(() -> finish(), 2000);
-    }
 
     private String getModeName(String mode) {
         String lang = preferencesHelper.getLanguage();
@@ -287,78 +415,24 @@ public class DraftModeActivity extends BaseActivity {
         }
     }
 
-    private boolean isCardBanned(MaterialCardView card) {
-        return !card.isClickable();
-    }
-
-    private void switchTurn() {
-        isPlayerTurn = !isPlayerTurn;
-        updateTurnStatus();
-
-        if (!isPlayerTurn) {
-            progressTurn.setVisibility(View.VISIBLE);
-
-            handler.postDelayed(this::opponentTurn, 2000);
-        } else {
-            progressTurn.setVisibility(View.GONE);
-            startPlayerTurnTimer();
-        }
-    }
-
-    private void opponentTurn() {
-        List<MaterialCardView> availableCards = new ArrayList<>();
-        for (MaterialCardView card : modeCards) {
-            if (card.isClickable()) {
-                availableCards.add(card);
-            }
-        }
-
-        if (!availableCards.isEmpty()) {
-            int randomIndex = (int) (Math.random() * availableCards.size());
-            MaterialCardView opponentChoice = availableCards.get(randomIndex);
-            String modeName;
-
-            if (opponentChoice == cardCapitals) modeName = "capitals";
-            else if (opponentChoice == cardFlags) modeName = "flags";
-            else if (opponentChoice == cardOutlines) modeName = "outlines";
-            else if (opponentChoice == cardLanguages) modeName = "languages";
-            else {
-                modeName = "";
-            }
-
-            runOnUiThread(() -> {
-                opponentChoice.setStrokeColor(getColorFromAttr(R.attr.colorError));
-                opponentChoice.setAlpha(0.5f);
-                opponentChoice.setClickable(false);
-
-                bannedModes.add(modeName);
-                bannedCount++;
-
-                String message = getString(
-                        "ru".equals(preferencesHelper.getLanguage()) ?
-                                "Противник забанил: " + getModeName(modeName) :
-                                "Opponent banned: " + getModeName(modeName)
-                );
-                Toast.makeText(DraftModeActivity.this, message, Toast.LENGTH_SHORT).show();
-
-                if (bannedCount >= 3) {
-                    determineRemainingMode();
-                } else {
-                    switchTurn();
-                }
-            });
-        }
-    }
-
     private void updateTurnStatus() {
         String lang = preferencesHelper.getLanguage();
+
+        if (!isDraftActive) {
+            tvTurnStatus.setText("Draft completed");
+            return;
+        }
 
         if (isPlayerTurn) {
             tvTurnStatus.setText("ru".equals(lang) ? "Ваш ход! Забаньте режим" : "Your turn! Ban a mode");
             tvTurnStatus.setTextColor(getColorFromAttr(R.attr.colorPrimary));
+            tvTimer.setVisibility(View.VISIBLE);
+            progressTurn.setVisibility(View.GONE);
         } else {
             tvTurnStatus.setText("ru".equals(lang) ? "Противник выбирает..." : "Opponent is selecting...");
             tvTurnStatus.setTextColor(getColorFromAttr(R.attr.colorTertiaryFixed));
+            tvTimer.setVisibility(View.GONE);
+            progressTurn.setVisibility(View.VISIBLE);
         }
     }
 
@@ -370,14 +444,11 @@ public class DraftModeActivity extends BaseActivity {
         return ContextCompat.getColor(this, R.color.primary);
     }
 
-    private String getString(String text) {
-        return text;
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        handler.removeCallbacksAndMessages(null);
         timerHandler.removeCallbacksAndMessages(null);
+        signalRManager.removeListener(activityId);
     }
 }

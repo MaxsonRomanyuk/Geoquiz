@@ -6,7 +6,7 @@ namespace GeoQuiz_backend.Application.Interfaces
     {
         Task NotifyMatchFound(Guid userId, MatchFoundWithDraftData matchData);
 
-        //Task NotifyDraftUpdated(Guid matchId, DraftUpdateData updateData);
+        Task NotifyDraftUpdated(Guid matchId, DraftUpdateData updateData);
 
         //Task NotifyGameReady(Guid matchId, GameReadyData gameData);
 

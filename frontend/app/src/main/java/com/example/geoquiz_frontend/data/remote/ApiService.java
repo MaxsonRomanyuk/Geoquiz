@@ -7,8 +7,6 @@ import com.example.geoquiz_frontend.data.remote.dtos.LoginRequest;
 import com.example.geoquiz_frontend.data.remote.dtos.ProfileResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.RegisterRequest;
 import com.example.geoquiz_frontend.data.remote.dtos.SyncGameSessionRequest;
-import com.example.geoquiz_frontend.data.remote.dtos.TestRequest;
-import com.example.geoquiz_frontend.data.remote.dtos.TestResponse;
 
 import java.util.List;
 
@@ -17,8 +15,6 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 public interface ApiService {
-    @POST("api/test/echo")
-    Call<TestResponse> echo(@Body TestRequest request);
     @POST("api/auth/register")
     Call<Void> register(@Body RegisterRequest request);
     @POST("api/auth/login")

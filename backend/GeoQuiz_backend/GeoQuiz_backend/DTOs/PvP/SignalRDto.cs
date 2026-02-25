@@ -29,7 +29,7 @@ namespace GeoQuiz_backend.DTOs.PvP
     public class DraftUpdateData
     {
         public Guid MatchId { get; set; }
-        public GameMode BannedMode { get; set; } 
+        public GameMode BannedMode { get; set; }
         public Guid BannedByUserId { get; set; } 
         public List<GameMode> RemainingModes { get; set; } 
         public Guid NextTurnUserId { get; set; } 
