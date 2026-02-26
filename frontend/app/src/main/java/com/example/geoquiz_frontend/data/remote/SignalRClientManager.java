@@ -91,7 +91,13 @@ public class SignalRClientManager {
             }
         }
     }
+    public void addListener(String key, ConnectionListener listener) {
+        listeners.put(key, listener);
+    }
 
+    public void removeListener(String key) {
+        listeners.remove(key);
+    }
     public void start() {
         if (hubConnection.getConnectionState() == HubConnectionState.DISCONNECTED && !isConnecting) {
             isConnecting = true;
@@ -152,14 +158,6 @@ public class SignalRClientManager {
     public void setCurrentMatch(String matchId) {
         this.currentMatchId = matchId;
         Log.d(TAG, "Current match set to: " + matchId);
-    }
-
-    public void addListener(String key, ConnectionListener listener) {
-        listeners.put(key, listener);
-    }
-
-    public void removeListener(String key) {
-        listeners.remove(key);
     }
 
     public boolean isConnected() {

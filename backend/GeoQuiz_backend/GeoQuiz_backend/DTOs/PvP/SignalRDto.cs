@@ -87,8 +87,6 @@ namespace GeoQuiz_backend.DTOs.PvP
         public int OpponentCorrectCount { get; set; }
 
         public int RemainingTimeSeconds { get; set; }
-
-        public bool CanProceedImmediately { get; set; } = true;
         public bool IsLastQuestion { get; set; }
     }
     public class PlayerRoundResult
@@ -97,7 +95,6 @@ namespace GeoQuiz_backend.DTOs.PvP
         public bool IsCorrect { get; set; } 
         public int TimeSpentMs { get; set; } 
         public int ScoreGained { get; set; }
-        public int? SelectedOptionIndex { get; set; }
     }
 
 
