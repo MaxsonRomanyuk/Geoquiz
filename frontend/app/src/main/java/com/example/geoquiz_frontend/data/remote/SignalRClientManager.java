@@ -3,8 +3,14 @@ package com.example.geoquiz_frontend.data.remote;
 import android.util.Log;
 
 import com.example.geoquiz_frontend.data.remote.dtos.BanModeRequest;
+import com.example.geoquiz_frontend.data.remote.dtos.DisconnectData;
 import com.example.geoquiz_frontend.data.remote.dtos.DraftUpdateData;
+import com.example.geoquiz_frontend.data.remote.dtos.GameFinishedData;
+import com.example.geoquiz_frontend.data.remote.dtos.GameReadyData;
 import com.example.geoquiz_frontend.data.remote.dtos.MatchFoundData;
+import com.example.geoquiz_frontend.data.remote.dtos.QuestionResultData;
+import com.example.geoquiz_frontend.data.remote.dtos.SubmitAnswerRequest;
+import com.example.geoquiz_frontend.data.remote.dtos.TimerUpdateData;
 import com.google.gson.Gson;
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
@@ -34,6 +40,11 @@ public class SignalRClientManager {
         void onError(String error);
         void onMatchFound(MatchFoundData matchData);
         void onDraftUpdated(DraftUpdateData draftData);
+        void onGameReady(GameReadyData gameData);
+        void onQuestionResult(QuestionResultData resultData);
+        void onTimerUpdate(TimerUpdateData timerData);
+        void onGameFinished(GameFinishedData finishData);
+        void onOpponentDisconnected(DisconnectData disconnectData);
     }
 
     private SignalRClientManager() {}
@@ -78,6 +89,31 @@ public class SignalRClientManager {
             Log.e(TAG, "Connection closed: " + error);
             notifyListeners(listener -> listener.onDisconnected());
         });
+
+        hubConnection.on("GameReady", (gameData) -> {
+            Log.d(TAG, "GameReady received");
+            notifyListeners(listener -> listener.onGameReady(gameData));
+        }, GameReadyData.class);
+
+        hubConnection.on("QuestionResult", (resultData) -> {
+            Log.d(TAG, "QuestionResult received for question " + resultData.getQuestionNumber());
+            notifyListeners(listener -> listener.onQuestionResult(resultData));
+        }, QuestionResultData.class);
+
+        hubConnection.on("TimerUpdate", (timerData) -> {
+            Log.d(TAG, "TimerUpdate received: " + timerData.getRemainingTimeSeconds() + "s");
+            notifyListeners(listener -> listener.onTimerUpdate(timerData));
+        }, TimerUpdateData.class);
+
+        hubConnection.on("GameFinished", (finishData) -> {
+            Log.d(TAG, "GameFinished received");
+            notifyListeners(listener -> listener.onGameFinished(finishData));
+        }, GameFinishedData.class);
+
+        hubConnection.on("OpponentDisconnected", (disconnectData) -> {
+            Log.d(TAG, "OpponentDisconnected received");
+            notifyListeners(listener -> listener.onOpponentDisconnected(disconnectData));
+        }, DisconnectData.class);
     }
 
     private interface ListenerAction {
@@ -144,6 +180,15 @@ public class SignalRClientManager {
 
             hubConnection.send("BanMode", matchId, modeValue, langValue);
             Log.d(TAG, "BanMode sent: " + mode + " for match " + matchId);
+        }
+    }
+    public void submitAnswer(String matchId, String questionId, int selectedIndex,
+                             int timeSpentMs, int questionNumber) {
+        if (hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
+            SubmitAnswerRequest request = new SubmitAnswerRequest(
+                    matchId, questionId, selectedIndex, timeSpentMs, questionNumber);
+            hubConnection.send("SubmitAnswer", request);
+            Log.d(TAG, "SubmitAnswer sent for question " + questionNumber);
         }
     }
     private int convertModeToInt(String mode) {

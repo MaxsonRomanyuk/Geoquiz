@@ -33,7 +33,8 @@ namespace GeoQuiz_backend.DTOs.PvP
         public Guid BannedByUserId { get; set; } 
         public List<GameMode> RemainingModes { get; set; } 
         public Guid NextTurnUserId { get; set; } 
-        public int Step { get; set; } 
+        public int Step { get; set; }
+        public bool IsDraftCompleted { get; set; }
     }
 
 

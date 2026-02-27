@@ -16,8 +16,13 @@ import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
 import com.example.geoquiz_frontend.data.remote.SignalRClientManager;
+import com.example.geoquiz_frontend.data.remote.dtos.DisconnectData;
 import com.example.geoquiz_frontend.data.remote.dtos.DraftUpdateData;
+import com.example.geoquiz_frontend.data.remote.dtos.GameFinishedData;
+import com.example.geoquiz_frontend.data.remote.dtos.GameReadyData;
 import com.example.geoquiz_frontend.data.remote.dtos.MatchFoundData;
+import com.example.geoquiz_frontend.data.remote.dtos.QuestionResultData;
+import com.example.geoquiz_frontend.data.remote.dtos.TimerUpdateData;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -150,6 +155,21 @@ public class MatchmakingActivity extends BaseActivity {
 
             @Override
             public void onDraftUpdated(DraftUpdateData data) {
+            }
+            @Override
+            public void onGameReady(GameReadyData gameData) {
+            }
+            @Override
+            public void onQuestionResult(QuestionResultData resultData) {
+            }
+            @Override
+            public void onTimerUpdate(TimerUpdateData timerData) {
+            }
+            @Override
+            public void onGameFinished(GameFinishedData finishData) {
+            }
+            @Override
+            public void onOpponentDisconnected(DisconnectData disconnectData) {
             }
         });
 

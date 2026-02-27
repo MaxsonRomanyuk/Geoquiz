@@ -9,6 +9,7 @@ using GeoQuiz_backend.Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -31,6 +32,8 @@ namespace GeoQuiz_backend.Application.Hubs
         private readonly ILogger<PvPHub> _logger;
         private readonly AppDbContext _db;
 
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+
         private static readonly ConcurrentDictionary<Guid, string> _userConnections = new();
         private static readonly ConcurrentDictionary<Guid, CancellationTokenSource> _draftTimers = new();
         private static readonly ConcurrentDictionary<Guid, Guid> _userCurrentMatch = new();
@@ -50,7 +53,8 @@ namespace GeoQuiz_backend.Application.Hubs
                     IQuestionRepository questionRepository,
                     ICountryRepository countryRepository,
                     ILogger<PvPHub> logger,
-                    AppDbContext db)
+                    AppDbContext db,
+                    IServiceScopeFactory serviceScopeFactory)
         {
             _notificationService = notificationService;
             _matchmaking = matchmaking;
@@ -62,6 +66,7 @@ namespace GeoQuiz_backend.Application.Hubs
             _countryRepository = countryRepository;
             _logger = logger;
             _db = db;
+            _serviceScopeFactory = serviceScopeFactory;
         }
         public override async Task OnConnectedAsync()
         {
@@ -241,22 +246,23 @@ namespace GeoQuiz_backend.Application.Hubs
                     oldCts.Cancel();
                 }
 
+                var updateData = new DraftUpdateData
+                {
+                    MatchId = matchId,
+                    BannedMode = mode,
+                    BannedByUserId = userId,
+                    RemainingModes = draft.AvailableModes,
+                    NextTurnUserId = draft.CurrentTurnUserId,
+                    Step = draft.Step,
+                    IsDraftCompleted = draft.PvPMatch.Status == PvPMatchStatus.Ready
+                };
+
+                await _notificationService.NotifyDraftUpdated(matchId, updateData);
+
+                _logger.LogInformation("Draft updated for match {MatchId}. Remaining modes: {Modes}", matchId, string.Join(", ", draft.AvailableModes));
+
                 if (draft.PvPMatch.Status == PvPMatchStatus.Drafting)
                 {
-                    var updateData = new DraftUpdateData
-                    {
-                        MatchId = matchId,
-                        BannedMode = mode,
-                        BannedByUserId = userId,
-                        RemainingModes = draft.AvailableModes,
-                        NextTurnUserId = draft.CurrentTurnUserId,
-                        Step = draft.Step
-                    };
-
-                    await _notificationService.NotifyDraftUpdated(matchId, updateData);
-
-                    _logger.LogInformation("Draft updated for match {MatchId}. Remaining modes: {Modes}", matchId, string.Join(", ", draft.AvailableModes));
-
                     StartDraftTimer(matchId, draft.CurrentTurnUserId, language);
                 }
                 else if (draft.PvPMatch.Status == PvPMatchStatus.Ready)
@@ -349,7 +355,7 @@ namespace GeoQuiz_backend.Application.Hubs
                         Options = allOptions.Select((c, idx) => new OptionData
                         {
                             Index = idx,
-                            Text = GetCountryName(c, language),
+                            Text = match.SelectedMode == GameMode.Capital? GetCountryCapital(c, language) : GetCountryName(c, language),
                             ImageUrl = GetImageUrl(question.Type, c)
                         }).ToList(),
                         ImageUrl = GetImageUrl(question.Type, correctCountry),
@@ -357,7 +363,7 @@ namespace GeoQuiz_backend.Application.Hubs
                     });
                 }
 
-                var startTime = DateTime.UtcNow.AddSeconds(3);
+                var startTime = DateTime.UtcNow.AddSeconds(2);
                 _gameTimers[matchId] = new GameTimer { StartTime = startTime };
 
                 await _notificationService.NotifyGameReady(matchId, new GameReadyData
@@ -491,7 +497,7 @@ namespace GeoQuiz_backend.Application.Hubs
             {
                 while (!timer.Cts.Token.IsCancellationRequested)
                 {
-                    await Task.Delay(5000, timer.Cts.Token);
+                    await Task.Delay(1000, timer.Cts.Token);
 
                     var remaining = await GetRemainingTimeAsync(matchId);
 
@@ -504,7 +510,13 @@ namespace GeoQuiz_backend.Application.Hubs
 
                     if (remaining <= 0)
                     {
-                        await FinalizeGameAsync(matchId, GameFinishReason.TimeOut);
+                        using (var scope = _serviceScopeFactory.CreateScope())
+                        {
+                            var scopedResultService = scope.ServiceProvider.GetRequiredService<IPvPResultService>();
+                            var scopedDb = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+                            await FinalizeGameAsync(matchId, GameFinishReason.TimeOut, scopedResultService, scopedDb);
+                        }
                         break;
                     }
                 }
@@ -515,6 +527,10 @@ namespace GeoQuiz_backend.Application.Hubs
             }
         }
         private async Task FinalizeGameAsync(Guid matchId, GameFinishReason reason)
+        {
+            await FinalizeGameAsync(matchId, reason, _resultService, _db);
+        }
+        private async Task FinalizeGameAsync(Guid matchId, GameFinishReason reason, IPvPResultService resultService, AppDbContext db)
         {
             _logger.LogInformation("Finalizing match {MatchId} with reason {Reason}", matchId, reason);
 
@@ -616,7 +632,10 @@ namespace GeoQuiz_backend.Application.Hubs
                 _ => language == AppLanguage.Ru ? "Вопрос" : "Question"
             };
         }
-
+        private string GetCountryCapital(Country country, AppLanguage language)
+        {
+            return language == AppLanguage.Ru ? country.Capital.Ru : country.Capital.En;
+        }
         private string GetCountryName(Country country, AppLanguage language)
         {
             return language == AppLanguage.Ru ? country.Name.Ru : country.Name.En;

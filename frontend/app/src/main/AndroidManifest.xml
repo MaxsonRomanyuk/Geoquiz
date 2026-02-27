@@ -49,6 +49,9 @@
         <activity
             android:name=".Presentation.ui.PvP.DraftModeActivity"
             android:exported="false"/>
+        <activity
+            android:name=".Presentation.ui.PvP.PvPGameActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>

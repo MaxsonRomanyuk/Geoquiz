@@ -146,6 +146,8 @@
     <string name="banned">ЗАБАНЕНО</string>
     <string name="opponent_selecting">Противник выбирает...</string>
 
+    <string name="pvp_battle">PvP Битва</string>
+
     <!-- Bottom Navigation -->
     <string name="home">Главная</string>
     <string name="play">Играть</string>

@@ -147,6 +147,8 @@
     <string name="banned">BANNED</string>
     <string name="opponent_selecting">Opponent is selecting...</string>
 
+    <string name="pvp_battle">PvP Battle</string>
+
     <!-- Bottom Navigation -->
     <string name="home">Home</string>
     <string name="play">Play</string>

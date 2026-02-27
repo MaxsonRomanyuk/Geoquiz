@@ -87,7 +87,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
             var correctCountry = countries.First(c => c.Id == question.CountryId);
 
             var index = questionSet.QuestionIds.IndexOf(dto.QuestionId);
-            var rnd = new Random(questionSet.Seed + index);
+            var rnd = new Random(questionSet.Seed + dto.QuestionId.GetHashCode());
 
             var wrong = countries.Where(c => c.Id != correctCountry.Id)
                 .OrderBy(_ => rnd.Next()).Take(3).ToList();
@@ -158,7 +158,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
         {
             var maxScore = 10;
             var penalty = timeMs / 1000;
-            return Math.Max(0, maxScore - penalty);
+            return Math.Max(1, maxScore - penalty);
         }
     }
 }

@@ -9,6 +9,7 @@ public class DraftUpdateData {
     private List<String> remainingModes;
     private String nextTurnUserId;
     private int step;
+    private boolean DraftCompleted;
 
     public String getMatchId() { return matchId; }
     public String getBannedMode() { return bannedMode; }
@@ -16,4 +17,5 @@ public class DraftUpdateData {
     public List<String> getRemainingModes() { return remainingModes; }
     public String getNextTurnUserId() { return nextTurnUserId; }
     public int getStep() { return step; }
+    public boolean isDraftCompleted() {return DraftCompleted; }
 }

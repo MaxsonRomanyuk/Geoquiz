@@ -19,10 +19,16 @@ import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.data.remote.SignalRClientManager;
+import com.example.geoquiz_frontend.data.remote.dtos.DisconnectData;
 import com.example.geoquiz_frontend.data.remote.dtos.DraftUpdateData;
+import com.example.geoquiz_frontend.data.remote.dtos.GameFinishedData;
+import com.example.geoquiz_frontend.data.remote.dtos.GameReadyData;
 import com.example.geoquiz_frontend.data.remote.dtos.MatchFoundData;
+import com.example.geoquiz_frontend.data.remote.dtos.QuestionResultData;
+import com.example.geoquiz_frontend.data.remote.dtos.TimerUpdateData;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -116,24 +122,28 @@ public class DraftModeActivity extends BaseActivity {
             if (isPlayerTurn && isCardAvailable(cardCapitals)) {
                 sendBanMode("capitals");
             }
+            else if (!isPlayerTurn) Toast.makeText(this, "Not your turn!", Toast.LENGTH_SHORT).show();
         });
 
         cardFlags.setOnClickListener(v -> {
             if (isPlayerTurn && isCardAvailable(cardFlags)) {
                 sendBanMode("flags");
             }
+            else if (!isPlayerTurn) Toast.makeText(this, "Not your turn!", Toast.LENGTH_SHORT).show();
         });
 
         cardOutlines.setOnClickListener(v -> {
             if (isPlayerTurn && isCardAvailable(cardOutlines)) {
                 sendBanMode("outlines");
             }
+            else if (!isPlayerTurn) Toast.makeText(this, "Not your turn!", Toast.LENGTH_SHORT).show();
         });
 
         cardLanguages.setOnClickListener(v -> {
             if (isPlayerTurn && isCardAvailable(cardLanguages)) {
                 sendBanMode("languages");
             }
+            else if (!isPlayerTurn) Toast.makeText(this, "Not your turn!", Toast.LENGTH_SHORT).show();
         });
     }
     private void getIntentData() {
@@ -206,6 +216,22 @@ public class DraftModeActivity extends BaseActivity {
             public void onDraftUpdated(DraftUpdateData data) {
                 runOnUiThread(() -> handleDraftUpdate(data));
             }
+            @Override
+            public void onGameReady(GameReadyData gameData) {
+                runOnUiThread(() -> handleGameReady(gameData));
+            }
+            @Override
+            public void onQuestionResult(QuestionResultData resultData) {
+            }
+            @Override
+            public void onTimerUpdate(TimerUpdateData timerData) {
+            }
+            @Override
+            public void onGameFinished(GameFinishedData finishData) {
+            }
+            @Override
+            public void onOpponentDisconnected(DisconnectData disconnectData) {
+            }
         });
 
         if (!signalRManager.isConnected()) {
@@ -219,6 +245,7 @@ public class DraftModeActivity extends BaseActivity {
     }
     private void handleDraftUpdate(DraftUpdateData data) {
         Log.d(TAG, "Draft updated: " + data.getBannedMode() + " banned by " + data.getBannedByUserId());
+
         if (!matchId.equals(data.getMatchId())) {
             Log.w(TAG, "Received update for wrong match: " + data.getMatchId());
             return;
@@ -241,7 +268,12 @@ public class DraftModeActivity extends BaseActivity {
             stopTimer();
         }
 
-        if (availableModes.size() == 1) {
+        if (data.isDraftCompleted()) {
+            tvTurnStatus.setText("Draft completed! Starting game...");
+            isDraftActive = false;
+            stopTimer();
+
+        } else if (availableModes.size() == 1) {
             tvTurnStatus.setText("Final mode selected!");
         }
     }
@@ -444,6 +476,21 @@ public class DraftModeActivity extends BaseActivity {
         return ContextCompat.getColor(this, R.color.primary);
     }
 
+    private void handleGameReady(GameReadyData data) {
+        Log.d(TAG, "Game ready! Mode: " + data.getSelectedMode());
+
+        Gson gson = new Gson();
+        String gameDataJson = gson.toJson(data);
+
+        Intent intent = new Intent(this, PvPGameActivity.class);
+        intent.putExtra("matchId", data.getMatchId());
+        intent.putExtra("opponentName", opponentName);
+        intent.putExtra("opponentLevel", opponentLevel);
+        intent.putExtra("yourLevel", yourLvl);
+        intent.putExtra("gameData", gameDataJson);
+        startActivity(intent);
+        finish();
+    }
 
     @Override
     protected void onDestroy() {
