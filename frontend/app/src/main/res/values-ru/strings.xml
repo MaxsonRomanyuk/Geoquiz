@@ -22,7 +22,7 @@
     <string name="error_user_not_found">Нет такого пользователя</string>
     <string name="error_email_taken">Email уже занят</string>
 <!--Home-->
-    <string name="level_prefix">Уровень</string>
+    <string name="level_prefix">Уровень  </string>
     <string name="total_points">Всего очков</string>
     <string name="game_type">Тип игры</string>
     <string name="solo">Соло</string>
@@ -139,6 +139,9 @@
     <string name="draft_mode">Драфт режим</string>
     <string name="your_turn_ban">Ваш ход! Выберите режим для бана</string>
     <string name="ban_category">Забаньте категорию</string>
+    <string name="you_banned">Вы забанили: </string>
+    <string name="opponent_banned">Оппонент забанил: </string>
+    <string name="not_your_turn">Не ваша очередь!</string>
     <string name="capitals">Столицы</string>
     <string name="flags">Флаги</string>
     <string name="borders">Границы</string>
@@ -147,6 +150,14 @@
     <string name="opponent_selecting">Противник выбирает...</string>
 
     <string name="pvp_battle">PvP Битва</string>
+    <string name="opponent_disconnected">Оппонент отключился. Вы победили!</string>
+
+
+    <!--Errors-->
+    <string name="connection_lost">Соединение потеряно</string>
+    <string name="error">Ошибка: </string>
+    <string name="no_server">Соединение с сервером не установлено</string>
+    <string name="no_game_data">Ошибка: отстутствуют данные игры</string>
 
     <!-- Bottom Navigation -->
     <string name="home">Главная</string>

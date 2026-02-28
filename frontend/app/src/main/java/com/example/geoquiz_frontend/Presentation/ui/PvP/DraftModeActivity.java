@@ -51,6 +51,7 @@ public class DraftModeActivity extends BaseActivity {
 
     private SignalRClientManager signalRManager;
     private PreferencesHelper preferencesHelper;
+    private String language;
     private String activityId;
 
     private String matchId;
@@ -76,7 +77,7 @@ public class DraftModeActivity extends BaseActivity {
 
         preferencesHelper = new PreferencesHelper(this);
         activityId = "draft_" + System.currentTimeMillis();
-
+        language = preferencesHelper.getLanguage();
 
         initViews();
         setupClickListeners();
@@ -118,32 +119,33 @@ public class DraftModeActivity extends BaseActivity {
     private void setupClickListeners() {
         ivBack.setOnClickListener(v -> finish());
 
+        String message = language.equals("ru") ? "Сейчас не ваша очередь!" : "Not your turn!";
         cardCapitals.setOnClickListener(v -> {
             if (isPlayerTurn && isCardAvailable(cardCapitals)) {
                 sendBanMode("capitals");
             }
-            else if (!isPlayerTurn) Toast.makeText(this, "Not your turn!", Toast.LENGTH_SHORT).show();
+            else if (!isPlayerTurn) Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         });
 
         cardFlags.setOnClickListener(v -> {
             if (isPlayerTurn && isCardAvailable(cardFlags)) {
                 sendBanMode("flags");
             }
-            else if (!isPlayerTurn) Toast.makeText(this, "Not your turn!", Toast.LENGTH_SHORT).show();
+            else if (!isPlayerTurn) Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         });
 
         cardOutlines.setOnClickListener(v -> {
             if (isPlayerTurn && isCardAvailable(cardOutlines)) {
                 sendBanMode("outlines");
             }
-            else if (!isPlayerTurn) Toast.makeText(this, "Not your turn!", Toast.LENGTH_SHORT).show();
+            else if (!isPlayerTurn) Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         });
 
         cardLanguages.setOnClickListener(v -> {
             if (isPlayerTurn && isCardAvailable(cardLanguages)) {
                 sendBanMode("languages");
             }
-            else if (!isPlayerTurn) Toast.makeText(this, "Not your turn!", Toast.LENGTH_SHORT).show();
+            else if (!isPlayerTurn) Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         });
     }
     private void getIntentData() {
@@ -170,13 +172,15 @@ public class DraftModeActivity extends BaseActivity {
         int level = yourLvl;
         int score = (100 * (level - 1) * level) / 2 + 67; // temp
 
+
+
         tvPlayer1Name.setText(username != null ? username : "You");
         tvPlayer1Score.setText(String.valueOf(score));
-        tvPlayer1Level.setText("Level " + level);
+        tvPlayer1Level.setText(getString(R.string.level_prefix) + level);
 
         tvPlayer2Name.setText(opponentName);
         tvPlayer2Score.setText(String.valueOf((100 * (opponentLevel - 1) * opponentLevel) / 2 + 67));
-        tvPlayer2Level.setText("Level " + opponentLevel);
+        tvPlayer2Level.setText(getString(R.string.level_prefix) + level);
     }
     private void connectToSignalR() {
         signalRManager.addListener(activityId, new SignalRClientManager.ConnectionListener() {
@@ -195,7 +199,7 @@ public class DraftModeActivity extends BaseActivity {
             public void onDisconnected() {
                 runOnUiThread(() -> {
                     Log.d(TAG, "Disconnected from SignalR");
-                    Toast.makeText(DraftModeActivity.this,"Connection lost", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DraftModeActivity.this, getString(R.string.connection_lost), Toast.LENGTH_SHORT).show();
                 });
             }
 
@@ -203,7 +207,7 @@ public class DraftModeActivity extends BaseActivity {
             public void onError(String error) {
                 runOnUiThread(() -> {
                     Log.e(TAG, "SignalR error: " + error);
-                    Toast.makeText(DraftModeActivity.this,"Error: " + error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DraftModeActivity.this, getString(R.string.error) + error, Toast.LENGTH_SHORT).show();
                 });
             }
 
@@ -288,9 +292,9 @@ public class DraftModeActivity extends BaseActivity {
 
             String message;
             if (bannedByUserId.equals(yourId)) {
-                message = "You banned: " + getModeName(mode);
+                message = getString(R.string.you_banned) + getModeName(mode);
             } else {
-                message = "Opponent banned: " + getModeName(mode);
+                message = getString(R.string.opponent_banned) + getModeName(mode);
             }
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
@@ -302,7 +306,7 @@ public class DraftModeActivity extends BaseActivity {
 
             if (!isPlayerTurn) {
                 Log.w(TAG, "Attempted to ban mode but not player's turn");
-                Toast.makeText(this, "Not your turn!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.not_your_turn), Toast.LENGTH_SHORT).show();
                 return;
             }
             signalRManager.banMode(matchId, mode, getLanguageCode());
@@ -315,7 +319,7 @@ public class DraftModeActivity extends BaseActivity {
 
             Log.d(TAG, "Ban mode sent: " + mode);
         } else {
-            Toast.makeText(this, "Not connected to server", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_server), Toast.LENGTH_SHORT).show();
         }
     }
     private String getLanguageCode() {
@@ -456,12 +460,12 @@ public class DraftModeActivity extends BaseActivity {
         }
 
         if (isPlayerTurn) {
-            tvTurnStatus.setText("ru".equals(lang) ? "Ваш ход! Забаньте режим" : "Your turn! Ban a mode");
+            tvTurnStatus.setText(getString(R.string.your_turn_ban));
             tvTurnStatus.setTextColor(getColorFromAttr(R.attr.colorPrimary));
             tvTimer.setVisibility(View.VISIBLE);
             progressTurn.setVisibility(View.GONE);
         } else {
-            tvTurnStatus.setText("ru".equals(lang) ? "Противник выбирает..." : "Opponent is selecting...");
+            tvTurnStatus.setText(getString(R.string.opponent_selecting));
             tvTurnStatus.setTextColor(getColorFromAttr(R.attr.colorTertiaryFixed));
             tvTimer.setVisibility(View.GONE);
             progressTurn.setVisibility(View.VISIBLE);

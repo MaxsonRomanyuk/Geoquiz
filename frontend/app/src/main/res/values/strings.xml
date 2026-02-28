@@ -140,6 +140,9 @@
     <string name="draft_mode">Draft Mode</string>
     <string name="your_turn_ban">Your turn! Ban a category</string>
     <string name="ban_category">Ban a category</string>
+    <string name="you_banned">You banned: </string>
+    <string name="opponent_banned">Opponent banned: </string>
+    <string name="not_your_turn">Not your turn!</string>
     <string name="capitals">Capitals</string>
     <string name="flags">Flags</string>
     <string name="borders">Borders</string>
@@ -148,6 +151,13 @@
     <string name="opponent_selecting">Opponent is selecting...</string>
 
     <string name="pvp_battle">PvP Battle</string>
+    <string name="opponent_disconnected">Opponent disconnected. You win!</string>
+
+    <!--Errors-->
+    <string name="connection_lost">Connection lost</string>
+    <string name="error">Error: </string>
+    <string name="no_server">Not connected to server</string>
+    <string name="no_game_data">Error: no game data</string>
 
     <!-- Bottom Navigation -->
     <string name="home">Home</string>

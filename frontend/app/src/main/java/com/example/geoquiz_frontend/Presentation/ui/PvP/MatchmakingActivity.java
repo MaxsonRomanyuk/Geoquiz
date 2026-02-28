@@ -48,10 +48,12 @@ public class MatchmakingActivity extends BaseActivity {
 
     private SignalRClientManager signalRManager;
     private PreferencesHelper preferencesHelper;
+    private String language;
     private String activityId;
     private DatabaseHelper databaseHelper;
     private boolean isSearching = false;
     private MatchFoundData matchData;
+
 
 
     @Override
@@ -62,6 +64,8 @@ public class MatchmakingActivity extends BaseActivity {
         preferencesHelper = new PreferencesHelper(this);
         activityId = "matchmaking_" + System.currentTimeMillis();
         databaseHelper = new DatabaseHelper(this);
+
+        language  = preferencesHelper.getLanguage();
 
         initViews();
         setupClickListeners();
@@ -115,7 +119,7 @@ public class MatchmakingActivity extends BaseActivity {
 
         tvCurrentPlayerName.setText(username != null ? username : "Guest");
         tvCurrentPlayerScore.setText(getString(R.string.score_format, Math.max(score, 0)));
-        tvCurrentPlayerLevel.setText("Lvl " + (level > 0 ? level : 1));
+        tvCurrentPlayerLevel.setText(language.equals("ru") ? "Ур " + (level > 0 ? level : 1) : "Lvl " + (level > 0 ? level : 1));
     }
     private void connectToSignalR() {
         signalRManager.addListener(activityId, new SignalRClientManager.ConnectionListener() {
@@ -123,7 +127,7 @@ public class MatchmakingActivity extends BaseActivity {
             public void onConnected() {
                 runOnUiThread(() -> {
                     Log.d(TAG, "Connected, joining queue");
-                    showStatus("Searching for opponent...");
+                    showStatus(getString(R.string.searching_for_opponent));
                     startSearch();
                     signalRManager.joinQueue();
                 });
@@ -133,7 +137,7 @@ public class MatchmakingActivity extends BaseActivity {
             public void onDisconnected() {
                 runOnUiThread(() -> {
                     Log.d(TAG, "Disconnected");
-                    showStatus("Connection lost");
+                    showStatus(getString(R.string.connection_lost));
                 });
             }
 
@@ -141,7 +145,7 @@ public class MatchmakingActivity extends BaseActivity {
             public void onError(String error) {
                 runOnUiThread(() -> {
                     Log.e(TAG, "Error: " + error);
-                    showStatus("Error: " + error);
+                    showStatus(getString(R.string.error) + error);
                 });
             }
 

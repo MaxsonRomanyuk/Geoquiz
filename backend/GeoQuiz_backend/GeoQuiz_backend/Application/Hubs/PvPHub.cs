@@ -355,8 +355,7 @@ namespace GeoQuiz_backend.Application.Hubs
                         Options = allOptions.Select((c, idx) => new OptionData
                         {
                             Index = idx,
-                            Text = match.SelectedMode == GameMode.Capital? GetCountryCapital(c, language) : GetCountryName(c, language),
-                            ImageUrl = GetImageUrl(question.Type, c)
+                            Text = match.SelectedMode == GameMode.Capital? GetCountryCapital(c, language) : GetCountryName(c, language)
                         }).ToList(),
                         ImageUrl = GetImageUrl(question.Type, correctCountry),
                         AudioUrl = GetAudioUrl(question.Type, correctCountry)

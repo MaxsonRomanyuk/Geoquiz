@@ -41,8 +41,6 @@ public class PvPGameActivity extends BaseActivity {
 
     private ImageView ivClose;
 
-    private FrameLayout framePlayer1, framePlayer2;
-    private LinearLayout layoutPlayer1, layoutPlayer2;
     private TextView tvPlayer1Name, tvPlayer1TotalScore, tvPlayer1Score;
     private TextView tvPlayer2Name, tvPlayer2TotalScore, tvPlayer2Score;
     private TextView tvCrownPlayer1, tvCrownPlayer2;
@@ -51,7 +49,6 @@ public class PvPGameActivity extends BaseActivity {
     private FrameLayout imageContainer;
     private ImageView ivQuestionImage;
     private Button btnPlayAudio;
-    private LinearLayout optionsContainer;
     private Button[] optionButtons = new Button[4];
 
     private SignalRClientManager signalRManager;
@@ -77,7 +74,6 @@ public class PvPGameActivity extends BaseActivity {
     private boolean hasAnswered = false;
     private long questionStartTime;
 
-    // Timer
     private Handler timerHandler = new Handler();
     private int timeLeft = 60;
     private int yourCurrentScore = 0;
@@ -102,7 +98,7 @@ public class PvPGameActivity extends BaseActivity {
             handleGameReady(gameData);
         } else {
             Log.e(TAG, "No game data received!");
-            Toast.makeText(this, "Error: No game data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_game_data), Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -116,11 +112,6 @@ public class PvPGameActivity extends BaseActivity {
 
     private void initViews() {
         ivClose = findViewById(R.id.ivClose);
-
-        framePlayer1 = findViewById(R.id.framePlayer1);
-        framePlayer2 = findViewById(R.id.framePlayer2);
-        layoutPlayer1 = findViewById(R.id.layoutPlayer1);
-        layoutPlayer2 = findViewById(R.id.layoutPlayer2);
 
         tvPlayer1Name = findViewById(R.id.tvPlayer1Name);
         tvPlayer1TotalScore = findViewById(R.id.tvPlayer1TotalScore);
@@ -140,7 +131,6 @@ public class PvPGameActivity extends BaseActivity {
         imageContainer = findViewById(R.id.image_container);
         ivQuestionImage = findViewById(R.id.iv_question_image);
         btnPlayAudio = findViewById(R.id.btn_play_audio);
-        optionsContainer = findViewById(R.id.options_container);
 
         optionButtons[0] = findViewById(R.id.btn_option1);
         optionButtons[1] = findViewById(R.id.btn_option2);
@@ -198,7 +188,7 @@ public class PvPGameActivity extends BaseActivity {
             public void onDisconnected() {
                 runOnUiThread(() -> {
                     Toast.makeText(PvPGameActivity.this,
-                            "Connection lost", Toast.LENGTH_SHORT).show();
+                            getString(R.string.connection_lost), Toast.LENGTH_SHORT).show();
                     finish();
                 });
             }
@@ -207,7 +197,7 @@ public class PvPGameActivity extends BaseActivity {
             public void onError(String error) {
                 runOnUiThread(() -> {
                     Toast.makeText(PvPGameActivity.this,
-                            "Error: " + error, Toast.LENGTH_SHORT).show();
+                            getString(R.string.error) + error, Toast.LENGTH_SHORT).show();
                 });
             }
 
@@ -384,8 +374,6 @@ public class PvPGameActivity extends BaseActivity {
 
         if (timeLeft <= 10) {
             tvTimer.setTextColor(ContextCompat.getColor(this, R.color.colorError));
-        } else {
-            tvTimer.setTextColor(ContextCompat.getColor(this, R.color.primary));
         }
     }
 
@@ -425,7 +413,7 @@ public class PvPGameActivity extends BaseActivity {
     }
 
     private void handleOpponentDisconnected(DisconnectData data) {
-        Toast.makeText(this, "Opponent disconnected. You win!", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.opponent_disconnected), Toast.LENGTH_LONG).show();
 
         new Handler().postDelayed(() -> {
             finish();
