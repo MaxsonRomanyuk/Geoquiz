@@ -176,11 +176,11 @@ public class DraftModeActivity extends BaseActivity {
 
         tvPlayer1Name.setText(username != null ? username : "You");
         tvPlayer1Score.setText(String.valueOf(score));
-        tvPlayer1Level.setText(getString(R.string.level_prefix) + level);
+        tvPlayer1Level.setText(getString(R.string.level_prefix) + " " + level);
 
         tvPlayer2Name.setText(opponentName);
         tvPlayer2Score.setText(String.valueOf((100 * (opponentLevel - 1) * opponentLevel) / 2 + 67));
-        tvPlayer2Level.setText(getString(R.string.level_prefix) + level);
+        tvPlayer2Level.setText(getString(R.string.level_prefix) + " " + level);
     }
     private void connectToSignalR() {
         signalRManager.addListener(activityId, new SignalRClientManager.ConnectionListener() {
@@ -235,6 +235,7 @@ public class DraftModeActivity extends BaseActivity {
             }
             @Override
             public void onOpponentDisconnected(DisconnectData disconnectData) {
+                runOnUiThread(() -> handleOpponentDisconnected(disconnectData));
             }
         });
 
@@ -479,7 +480,13 @@ public class DraftModeActivity extends BaseActivity {
         }
         return ContextCompat.getColor(this, R.color.primary);
     }
+    private void handleOpponentDisconnected(DisconnectData data) {
+        Toast.makeText(this, getString(R.string.opponent_disconnected_2), Toast.LENGTH_LONG).show();
 
+        new Handler().postDelayed(() -> {
+            finish();
+        }, 2000);
+    }
     private void handleGameReady(GameReadyData data) {
         Log.d(TAG, "Game ready! Mode: " + data.getSelectedMode());
 

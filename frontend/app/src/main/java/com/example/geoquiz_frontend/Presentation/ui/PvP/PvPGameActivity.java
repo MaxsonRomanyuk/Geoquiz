@@ -393,23 +393,24 @@ public class PvPGameActivity extends BaseActivity {
     private void handleGameFinished(GameFinishedData data) {
         Log.d(TAG, "Game finished! Winner: " + data.getWinnerId());
 
-        String message;
-        if (data.isWinner()) {
-            message = "You won! +" + data.getExperienceGained() + " XP";
-            yourTotalScore += 50;
-        } else {
-            message = "You lost! +" + data.getExperienceGained() + " XP";
-        }
+        Intent intent = new Intent(this, PvPResultActivity.class);
+        intent.putExtra("player_won", data.isWinner());
+        intent.putExtra("finish_reason", data.getFinishReason());
 
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        intent.putExtra("player_score", data.getYourStats().getFinalScore());
+        intent.putExtra("player_correct", data.getYourStats().getCorrectAnswers());
+        intent.putExtra("player_total_questions", data.getYourStats().getTotalQuestionsAnswered());
+        intent.putExtra("player_avg_time", data.getYourStats().getAverageAnswerTimeMs());
 
-        if (data.getUnlockedAchievements() != null && !data.getUnlockedAchievements().isEmpty()) {
-            showAchievements(data.getUnlockedAchievements());
-        }
+        intent.putExtra("opponent_score", data.getOpponentStats().getFinalScore());
+        intent.putExtra("opponent_correct", data.getOpponentStats().getCorrectAnswers());
+        intent.putExtra("opponent_total_questions", data.getOpponentStats().getTotalQuestionsAnswered());
+        intent.putExtra("opponent_avg_time", data.getOpponentStats().getAverageAnswerTimeMs());
+        intent.putExtra("opponent_name", opponentName);
 
-        new Handler().postDelayed(() -> {
-            finish();
-        }, 3000);
+        intent.putExtra("experience_gained", data.getExperienceGained());
+        startActivity(intent);
+        finish();
     }
 
     private void handleOpponentDisconnected(DisconnectData data) {

@@ -139,19 +139,19 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
         public async Task FinishAsync(Guid matchId, Guid userId)
         {
-            var match = await _db.PvPMatches.FirstAsync(m => m.Id == matchId);
+            //var match = await _db.PvPMatches.FirstAsync(m => m.Id == matchId);
 
-            var answers = await _db.PvPAnswers
-                .Where(a => a.MatchId == matchId)
-                .ToListAsync();
+            //var answers = await _db.PvPAnswers
+            //    .Where(a => a.MatchId == matchId)
+            //    .ToListAsync();
 
-            var p1 = answers.Count(a => a.UserId == match.Player1Id);
-            var p2 = answers.Count(a => a.UserId == match.Player2Id);
+            //var p1 = answers.Count(a => a.UserId == match.Player1Id);
+            //var p2 = answers.Count(a => a.UserId == match.Player2Id);
 
-            if (p1 >= 10 && p2 >= 10)
-            {
-                await _resultService.FinalizeMatchAsync(matchId);
-            }
+            //if (p1 >= 10 && p2 >= 10)
+            //{
+            //    await _resultService.FinalizeMatchAsync(matchId);
+            //}
         }
 
         private int CalculateScore(int timeMs)

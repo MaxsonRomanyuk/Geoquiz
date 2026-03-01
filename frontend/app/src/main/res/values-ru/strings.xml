@@ -22,7 +22,7 @@
     <string name="error_user_not_found">Нет такого пользователя</string>
     <string name="error_email_taken">Email уже занят</string>
 <!--Home-->
-    <string name="level_prefix">Уровень  </string>
+    <string name="level_prefix">Уровень</string>
     <string name="total_points">Всего очков</string>
     <string name="game_type">Тип игры</string>
     <string name="solo">Соло</string>
@@ -151,6 +151,21 @@
 
     <string name="pvp_battle">PvP Битва</string>
     <string name="opponent_disconnected">Оппонент отключился. Вы победили!</string>
+
+    <!--Pvp RESULTS-->
+    <string name="victory">ПОБЕДА!</string>
+    <string name="defeat">ПОРАЖЕНИЕ</string>
+    <string name="final_score">Итоговый счёт</string>
+    <string name="avg_time">Ср. время</string>
+    <string name="experience_gained">Получено опыта</string>
+    <string name="questions">Вопросов</string>
+    <string name="total_time">Общее время</string>
+    <string name="rematch">Реванш</string>
+    <string name="good_game">Хорошая игра!</string>
+    <string name="all_questions_answered">Все вопросы отвечены</string>
+    <string name="time_out">Время вышло</string>
+    <string name="opponent_disconnected_2">Противник отключился</string>
+    <string name="player_disconnected">Вы отключились</string>
 
 
     <!--Errors-->

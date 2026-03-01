@@ -22,7 +22,7 @@ public class GameResultActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_results);
+        setContentView(R.layout.activity_solo_results);
 
         score = getIntent().getIntExtra("SCORE", 0);
         correctAnswers = getIntent().getIntExtra("CORRECT", 0);

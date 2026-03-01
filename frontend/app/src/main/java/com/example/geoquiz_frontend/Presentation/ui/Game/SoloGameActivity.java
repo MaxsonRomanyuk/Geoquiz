@@ -69,6 +69,7 @@ public class SoloGameActivity extends BaseActivity {
     private int currentQuestionIndex = 0;
     private int score = 0;
     private int correctAnswers = 0;
+    private int wrongAnswers = 0;
     private int correctEurope = 0;
     private int correctAsia = 0;
     private int correctAfrica = 0;
@@ -338,6 +339,14 @@ public class SoloGameActivity extends BaseActivity {
                     break;
             }
         }
+        else {
+            wrongAnswers++;
+            if(wrongAnswers >=3)
+            {
+                endGame();
+                return;
+            }
+        }
 
         setButtonsEnabled(false);
 
@@ -414,7 +423,7 @@ public class SoloGameActivity extends BaseActivity {
         Intent intent = new Intent(this, GameResultActivity.class);
         intent.putExtra("SCORE", score);
         intent.putExtra("CORRECT", correctAnswers);
-        intent.putExtra("TOTAL", TOTAL_QUESTIONS);
+        intent.putExtra("TOTAL", currentQuestionIndex);
         intent.putExtra("TIME", (int) (TOTAL_TIME_MS - timeLeft));
         intent.putExtra("GAME_MODE", gameMode);
         startActivity(intent);

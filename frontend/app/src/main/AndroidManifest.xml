@@ -52,6 +52,9 @@
         <activity
             android:name=".Presentation.ui.PvP.PvPGameActivity"
             android:exported="false"/>
+        <activity
+            android:name=".Presentation.ui.PvP.PvPResultActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>

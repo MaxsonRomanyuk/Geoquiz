@@ -19,7 +19,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
             _achievementService = achievementService;
         }
 
-        public async Task<PvPMatchResultDto> FinalizeMatchAsync(Guid matchId)
+        public async Task<PvPMatchResultDto> FinalizeMatchAsync(Guid matchId, GameFinishReason reason, Guid userId)
         {
             var match = await _db.PvPMatches
                 .Include(m => m.Player1).ThenInclude(u => u.Stats)
@@ -33,24 +33,45 @@ namespace GeoQuiz_backend.Application.Services.PvP
             var p1Answers = answers.Where(a => a.UserId == match.Player1Id).ToList();
             var p2Answers = answers.Where(a => a.UserId == match.Player2Id).ToList();
 
-            if (p1Answers.Count < 10 || p2Answers.Count < 10)
-                throw new InvalidOperationException("Match not finished");
+            //if (p1Answers.Count < 10 || p2Answers.Count < 10)
+            //    throw new InvalidOperationException("Match not finished");
 
             var p1Score = p1Answers.Sum(a => a.ScoreGained);
             var p2Score = p2Answers.Sum(a => a.ScoreGained);
 
-            var winnerId = p1Score >= p2Score
+
+            Guid winnerId;
+            if (reason == GameFinishReason.OpponentDisconnected) {
+                winnerId = match.Player1Id == userId
+                ? match.Player2Id
+                : match.Player1Id;
+            }
+            else
+            {
+                winnerId = p1Score >= p2Score
                 ? match.Player1Id
                 : match.Player2Id;
-
+            }
             match.WinnerId = winnerId;
             match.Status = PvPMatchStatus.Finished;
             match.FinishedAt = DateTime.UtcNow;
 
-            GameMode gm = (GameMode)match.SelectedMode;
+            GameMode gameMode;
+            if (match.SelectedMode.HasValue)
+            {
+                gameMode = match.SelectedMode.Value;
+            }
+            else if (match.QuestionSet != null)
+            {
+                gameMode = match.QuestionSet.Mode;
+            }
+            else
+            {
+                throw new InvalidOperationException($"Match {matchId} has no game mode");
+            }
 
-            var s1 = CreateSession(match.Player1Id, matchId, p1Answers, p1Score, gm);
-            var s2 = CreateSession(match.Player2Id, matchId, p2Answers, p2Score, gm);
+            var s1 = CreateSession(match.Player1Id, matchId, p1Answers, p1Score, gameMode);
+            var s2 = CreateSession(match.Player2Id, matchId, p2Answers, p2Score, gameMode);
 
             _db.GameSessions.AddRange(s1, s2);
 
@@ -76,13 +97,13 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
             stats.TotalGamesPlayed++;
             stats.PvPGamesPlayed++;
-            AddExperience(stats, self.Score);
 
             if (winnerId == user.Id)
             {
                 stats.TotalGamesWon++;
                 stats.PvPGamesWon++;
                 stats.CurrentPvPStreak++;
+                AddExperience(stats, self.Score);
             }
             else
             {

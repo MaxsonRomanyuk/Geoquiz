@@ -118,6 +118,7 @@ namespace GeoQuiz_backend.DTOs.PvP
         public int OpponentCurrentScore { get; set; }
 
         public GameFinishedData? EarlyFinishData { get; set; }
+
     }
     public enum DisconnectReason
     {

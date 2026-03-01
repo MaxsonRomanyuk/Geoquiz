@@ -106,7 +106,7 @@ namespace GeoQuiz_backend.Application.Hubs
                     _logger.LogInformation("User {UserId} removed from group match_{MatchId}",
                         userId, matchId);
 
-                    await FinalizeGameAsync(matchId, GameFinishReason.OpponentDisconnected);
+                    await FinalizeGameAsync(matchId, GameFinishReason.OpponentDisconnected, userId);
                 }
             }
 
@@ -515,6 +515,7 @@ namespace GeoQuiz_backend.Application.Hubs
                             var scopedDb = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
                             await FinalizeGameAsync(matchId, GameFinishReason.TimeOut, scopedResultService, scopedDb);
+                            int a = 2;
                         }
                         break;
                     }
@@ -525,11 +526,11 @@ namespace GeoQuiz_backend.Application.Hubs
                 _logger.LogDebug("Game timer cancelled for match {MatchId}", matchId);
             }
         }
-        private async Task FinalizeGameAsync(Guid matchId, GameFinishReason reason)
+        private async Task FinalizeGameAsync(Guid matchId, GameFinishReason reason, Guid? userId = null)
         {
-            await FinalizeGameAsync(matchId, reason, _resultService, _db);
+            await FinalizeGameAsync(matchId, reason, _resultService, _db, userId);
         }
-        private async Task FinalizeGameAsync(Guid matchId, GameFinishReason reason, IPvPResultService resultService, AppDbContext db)
+        private async Task FinalizeGameAsync(Guid matchId, GameFinishReason reason, IPvPResultService resultService, AppDbContext db, Guid? userId = null)
         {
             _logger.LogInformation("Finalizing match {MatchId} with reason {Reason}", matchId, reason);
 
@@ -540,14 +541,38 @@ namespace GeoQuiz_backend.Application.Hubs
                     timer.Cts.Cancel();
                 }
 
-                var result = await _resultService.FinalizeMatchAsync(matchId);
-
-                var match = await _db.PvPMatches
+                var match = await db.PvPMatches
                     .Include(m => m.Player1)
                     .Include(m => m.Player2)
                     .FirstAsync(m => m.Id == matchId);
 
-                var answers = await _db.PvPAnswers
+                if (reason == GameFinishReason.OpponentDisconnected && match.Status == PvPMatchStatus.Drafting)
+                {
+                    var disconnectedPlayer = GetUserId();
+                    var playerInDraft = match.Player1Id == disconnectedPlayer ? match.Player2Id : match.Player1Id;
+                    await _notificationService.NotifyOpponentDisconnected(playerInDraft, new DisconnectData
+                    {
+                        MatchId = matchId,
+                        Reason = DisconnectReason.ConnectionLost,
+                        YouWin = true,
+                        DisconnectedUserId = disconnectedPlayer,
+                        DisconnectedAtQuestion = 0,
+                        YourCurrentScore = 0,
+                        OpponentCurrentScore = 0
+                    });
+                    _logger.LogInformation("Player {DisconnectedPlayer} disconnected during draft, notified {PlayerInDraft}",
+                        disconnectedPlayer, playerInDraft);
+
+                    _userCurrentMatch.TryRemove(match.Player1Id, out _);
+                    _userCurrentMatch.TryRemove(match.Player2Id, out _);
+                    _draftTimers.TryRemove(matchId, out _);
+
+                    return;
+                }
+
+                var result = await resultService.FinalizeMatchAsync(matchId, reason, userId ?? Guid.Empty);
+
+                var answers = await db.PvPAnswers
                     .Where(a => a.MatchId == matchId)
                     .ToListAsync();
 
@@ -583,7 +608,7 @@ namespace GeoQuiz_backend.Application.Hubs
                     FinishReason = reason,
                     YourStats = p1Stats,
                     OpponentStats = p2Stats,
-                    ExperienceGained = p1Answers.Sum(a => a.ScoreGained)
+                    ExperienceGained = result.WinnerId == match.Player1Id ? p1Answers.Sum(a => a.ScoreGained) : 0,
                 });
 
                 await _notificationService.NotifyGameFinished(match.Player2Id, new GameFinishedData
@@ -593,7 +618,7 @@ namespace GeoQuiz_backend.Application.Hubs
                     FinishReason = reason,
                     YourStats = p2Stats,
                     OpponentStats = p1Stats,
-                    ExperienceGained = p2Answers.Sum(a => a.ScoreGained)
+                    ExperienceGained = result.WinnerId == match.Player2Id ? p2Answers.Sum(a => a.ScoreGained) : 0,
                 });
 
                 _userCurrentMatch.TryRemove(match.Player1Id, out _);

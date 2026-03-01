@@ -79,6 +79,7 @@ public class MatchmakingActivity extends BaseActivity {
             signalRManager.init(token, userId);
         }
 
+        signalRManager.removeListener(activityId);
         connectToSignalR();
     }
 
@@ -153,7 +154,8 @@ public class MatchmakingActivity extends BaseActivity {
             public void onMatchFound(MatchFoundData data) {
                 runOnUiThread(() -> {
                     Log.d(TAG, "Match found: " + data.getMatchId());
-                    navigateToDraftMode(data);
+                    stopSearch();
+                    showOpponentFound(data);
                 });
             }
 
@@ -194,7 +196,10 @@ public class MatchmakingActivity extends BaseActivity {
         };
         timerHandler.post(timerRunnable);
     }
-
+    private void stopSearch() {
+        isSearching = false;
+        timerHandler.removeCallbacks(timerRunnable);
+    }
     private void updateTimerDisplay() {
         int minutes = seconds / 60;
         int secs = seconds % 60;
@@ -205,9 +210,10 @@ public class MatchmakingActivity extends BaseActivity {
         tvSearchStatus.setText(status);
     }
     private void showOpponentFound(MatchFoundData data) {
-        isSearching = false;
+        stopSearch();
+
         progressSearch.setVisibility(View.GONE);
-        showStatus("Opponent found!");
+        showStatus(getString(R.string.opponent_found));
 
         tvOpponentName.setText(data.getOpponentName());
         tvOpponentScore.setText(getString(R.string.score_format, calculateRatingFromLevel(data.getOpponentLevel())));
