@@ -1,6 +1,7 @@
 using GeoQuiz_backend.Application.Hubs;
 using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Application.Services;
+using GeoQuiz_backend.Application.Services.KingOfTheHill;
 using GeoQuiz_backend.Application.Services.PvP;
 using GeoQuiz_backend.Infrastructure.Data;
 using GeoQuiz_backend.Infrastructure.Mongo;
@@ -103,7 +104,8 @@ builder.Services.AddScoped<IQuestionSetService, QuestionSetService>();
 builder.Services.AddScoped<IPvPGameSessionService, PvPGameSessionService>();
 builder.Services.AddScoped<IPvPResultService, PvPResultService>();
 
-
+//KingOfTheHill
+builder.Services.AddScoped<IKothMatchmakingService, KothMatchmakingService>();
 
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -143,6 +145,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapHub<PvPHub>("/pvpHub", options =>
+{
+    options.Transports = HttpTransportType.WebSockets |
+                         HttpTransportType.LongPolling;
+});
+app.MapHub<KothHub>("/kothHub", options =>
 {
     options.Transports = HttpTransportType.WebSockets |
                          HttpTransportType.LongPolling;

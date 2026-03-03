@@ -1,4 +1,5 @@
-﻿using GeoQuiz_backend.DTOs.PvP;
+﻿using GeoQuiz_backend.DTOs.KingOfTheHill;
+using GeoQuiz_backend.DTOs.PvP;
 
 namespace GeoQuiz_backend.Application.Interfaces
 {
@@ -17,5 +18,12 @@ namespace GeoQuiz_backend.Application.Interfaces
         Task NotifyGameFinished(Guid userId, GameFinishedData finishData);
 
         Task NotifyOpponentDisconnected(Guid userId, DisconnectData disconnectData);
+
+
+
+        Task NotifyPlayerJoined(Guid lobbyId, PlayerJoinedData data);
+        Task NotifyPlayerLeft(Guid lobbyId, PlayerLeftData data);
+        Task NotifyLobbyCountdown(Guid lobbyId, int secondsRemaining);
+        Task NotifyLobbyCountdownCancelled(Guid lobbyId);
     }
 }
