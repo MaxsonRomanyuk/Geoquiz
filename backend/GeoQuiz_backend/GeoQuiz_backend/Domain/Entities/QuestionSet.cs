@@ -6,8 +6,10 @@ namespace GeoQuiz_backend.Domain.Entities
     {
         public Guid Id { get; set; }
 
-        public Guid PvPMatchId { get; set; }
-        public PvPMatch PvPMatch { get; set; } = null!;
+        public Guid? PvPMatchId { get; set; }
+        public PvPMatch? PvPMatch { get; set; }
+        public Guid? KothMatchId { get; set; }
+        public KothMatch? KothMatch { get; set; }
 
         public GameMode Mode { get; set; }
         public AppLanguage Language { get; set; }

@@ -515,7 +515,6 @@ namespace GeoQuiz_backend.Application.Hubs
                             var scopedDb = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
                             await FinalizeGameAsync(matchId, GameFinishReason.TimeOut, scopedResultService, scopedDb);
-                            int a = 2;
                         }
                         break;
                     }

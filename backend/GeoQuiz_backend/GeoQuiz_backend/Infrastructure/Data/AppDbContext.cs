@@ -20,6 +20,9 @@ namespace GeoQuiz_backend.Infrastructure.Data
         public DbSet<ModeDraft> ModeDrafts => Set<ModeDraft>();
         public DbSet<QuestionSet> QuestionSets => Set<QuestionSet>();
         public DbSet<PvPAnswer> PvPAnswers => Set<PvPAnswer>();
+        public DbSet<KothMatch> KothMatches => Set<KothMatch>();
+        public DbSet<KothPlayer> KothPlayers => Set<KothPlayer>();
+        public DbSet<KothAnswer> KothAnswers => Set<KothAnswer>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,6 +36,9 @@ namespace GeoQuiz_backend.Infrastructure.Data
             modelBuilder.Entity<ModeDraft>().ToTable("modedraft");
             modelBuilder.Entity<QuestionSet>().ToTable("questionset");
             modelBuilder.Entity<PvPAnswer>().ToTable("pvpanswers");
+            modelBuilder.Entity<KothMatch>().ToTable("kothmatches");
+            modelBuilder.Entity<KothPlayer>().ToTable("kothplayers");
+            modelBuilder.Entity<KothAnswer>().ToTable("kothanswers");
 
             modelBuilder.Entity<User>(entity =>
             {
@@ -86,6 +92,9 @@ namespace GeoQuiz_backend.Infrastructure.Data
                 entity.Property(e => e.MaxWinStreak).HasDefaultValue(0);
                 entity.Property(e => e.DailyLoginStreak).HasDefaultValue(0);
                 entity.Property(e => e.LastLoginDate).IsRequired();
+                entity.Property(e => e.KothGamesPlayed).HasDefaultValue(0);
+                entity.Property(e => e.KothGamesWon).HasDefaultValue(0);
+                entity.Property(e => e.KothTop3Finishes).HasDefaultValue(0);
 
             });
 
@@ -138,6 +147,12 @@ namespace GeoQuiz_backend.Infrastructure.Data
                 entity.HasOne(e => e.PvPMatch)
                     .WithMany()
                     .HasForeignKey(e => e.PvPMatchId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .IsRequired(false);
+
+                entity.HasOne(e => e.KothMatch)
+                    .WithMany()
+                    .HasForeignKey(e => e.KothMatchId)
                     .OnDelete(DeleteBehavior.SetNull)
                     .IsRequired(false);
             });
@@ -230,6 +245,9 @@ namespace GeoQuiz_backend.Infrastructure.Data
                         v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new()
                     );
 
+                entity.HasIndex(e => e.KothMatchId)
+                    .IsUnique(false);
+
                 entity.Property(e => e.CreatedAt).IsRequired();
             });
 
@@ -256,6 +274,108 @@ namespace GeoQuiz_backend.Infrastructure.Data
                     .WithMany(u => u.PvPAnswers)
                     .HasForeignKey(e => e.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+            modelBuilder.Entity<KothMatch>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Status)
+                    .IsRequired();
+
+                entity.Property(e => e.SelectedMode)
+                    .IsRequired(false);
+
+                entity.Property(e => e.CurrentRound)
+                    .HasDefaultValue(1);
+
+                entity.Property(e => e.CurrentRoundType)
+                    .HasDefaultValue(RoundType.Classic);
+
+                entity.Property(e => e.CreatedAt)
+                    .IsRequired();
+
+                entity.Property(e => e.StartedAt)
+                    .IsRequired(false);
+
+                entity.Property(e => e.FinishedAt)
+                    .IsRequired(false);
+
+                entity.HasOne(e => e.Winner)
+                    .WithMany()
+                    .HasForeignKey(e => e.WinnerId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .IsRequired(false);
+
+                entity.HasOne(e => e.QuestionSet)
+                    .WithOne(q => q.KothMatch)
+                    .HasForeignKey<QuestionSet>(q => q.KothMatchId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired(false);
+            });
+
+            modelBuilder.Entity<KothPlayer>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.JoinedAt)
+                    .IsRequired();
+
+                entity.Property(e => e.Place)
+                    .IsRequired(false);
+
+                entity.Property(e => e.IsActive)
+                    .HasDefaultValue(true);
+
+                entity.Property(e => e.RoundEliminated)
+                    .HasDefaultValue(0);
+
+                entity.HasOne(e => e.Match)
+                    .WithMany(m => m.Players)
+                    .HasForeignKey(e => e.MatchId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(e => new { e.MatchId, e.UserId }).IsUnique();
+            });
+
+            modelBuilder.Entity<KothAnswer>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.QuestionId)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.RoundNumber)
+                    .IsRequired();
+
+                entity.Property(e => e.IsCorrect)
+                    .IsRequired();
+
+                entity.Property(e => e.TimeSpentMs)
+                    .IsRequired();
+
+                entity.Property(e => e.ScoreGained)
+                    .IsRequired();
+
+                entity.Property(e => e.AnsweredAt)
+                    .IsRequired();
+
+                entity.HasOne(e => e.Match)
+                    .WithMany(m => m.Answers)
+                    .HasForeignKey(e => e.MatchId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(e => new { e.MatchId, e.RoundNumber });
             });
             base.OnModelCreating(modelBuilder);
         }

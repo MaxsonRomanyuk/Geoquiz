@@ -89,7 +89,8 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/level_prefix"
                                 android:textColor="?attr/colorTertiary"
-                                android:textSize="20sp"/>
+                                android:textSize="20sp"
+                                android:textStyle="bold"/>
 
                             <TextView
                                 android:id="@+id/tvLevel"
@@ -119,7 +120,7 @@
                             android:layout_marginTop="8dp"
                             android:progress="60"
                             android:progressTint="?attr/colorPrimary"
-                            android:progressBackgroundTint="?attr/colorOutline"/>
+                            android:progressBackgroundTint="?attr/colorTertiaryFixed"/>
                     </LinearLayout>
 
                     <ImageView

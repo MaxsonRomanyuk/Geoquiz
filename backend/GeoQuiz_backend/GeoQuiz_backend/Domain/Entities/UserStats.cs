@@ -42,6 +42,10 @@ namespace GeoQuiz_backend.Domain.Entities
         public int PvPGamesWon { get; set; }
         public int CurrentPvPStreak { get; set; }
 
+        public int KothGamesPlayed { get; set; }
+        public int KothGamesWon { get; set; }
+        public int KothTop3Finishes { get; set; }
+
         public User User { get; set; } = null!;
     }
 }
