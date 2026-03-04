@@ -168,6 +168,13 @@
     <string name="opponent_disconnected_2">Opponent disconnected</string>
     <string name="player_disconnected">You disconnected</string>
 
+
+    <!--King of the hill-->
+    <!--Lobby-->
+    <string name="empty">Empty</string>
+    <string name="leave">Leave</string>
+    <string name="wait_players">Waiting...</string>
+
     <!--Errors-->
     <string name="connection_lost">Connection lost</string>
     <string name="error">Error: </string>

@@ -7,9 +7,9 @@ import android.util.Log;
 
 import com.example.geoquiz_frontend.data.remote.ApiClient;
 import com.example.geoquiz_frontend.data.remote.ApiService;
-import com.example.geoquiz_frontend.data.remote.dtos.BootstrapResponse;
-import com.example.geoquiz_frontend.data.remote.dtos.FinishGameRequest;
-import com.example.geoquiz_frontend.data.remote.dtos.SyncGameSessionRequest;
+import com.example.geoquiz_frontend.data.remote.dtos.solo.BootstrapResponse;
+import com.example.geoquiz_frontend.data.remote.dtos.solo.FinishGameRequest;
+import com.example.geoquiz_frontend.data.remote.dtos.solo.SyncGameSessionRequest;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
 import com.example.geoquiz_frontend.domain.entities.GameQuestion;
 import com.example.geoquiz_frontend.domain.entities.GameSession;

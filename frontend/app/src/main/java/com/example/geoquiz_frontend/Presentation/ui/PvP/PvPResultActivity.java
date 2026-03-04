@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.example.geoquiz_frontend.Presentation.ui.Home.MainActivity;
 import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.data.remote.SignalRClientManager;
+import com.example.geoquiz_frontend.data.remote.PvPSignalRClientManager;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.Objects;
@@ -38,7 +38,7 @@ public class PvPResultActivity extends BaseActivity {
     private String opponentName;
 
     private PreferencesHelper preferencesHelper;
-    private SignalRClientManager signalRManager;
+    private PvPSignalRClientManager signalRManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class PvPResultActivity extends BaseActivity {
         setContentView(R.layout.activity_pvp_results);
 
         preferencesHelper = new PreferencesHelper(this);
-        signalRManager = SignalRClientManager.getInstance();
+        signalRManager = PvPSignalRClientManager.getInstance();
         getIntentData();
         initViews();
         setupClickListeners();

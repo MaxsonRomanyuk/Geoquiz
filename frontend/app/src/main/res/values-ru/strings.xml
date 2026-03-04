@@ -167,7 +167,11 @@
     <string name="opponent_disconnected_2">Противник отключился</string>
     <string name="player_disconnected">Вы отключились</string>
 
-
+    <!--King of the hill-->
+    <!--Lobby-->
+    <string name="empty">Пусто</string>
+    <string name="leave">Выйти</string>
+    <string name="wait_players">Ожидаем...</string>
     <!--Errors-->
     <string name="connection_lost">Соединение потеряно</string>
     <string name="error">Ошибка: </string>

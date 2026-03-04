@@ -1,12 +1,12 @@
 package com.example.geoquiz_frontend.data.remote;
 
-import com.example.geoquiz_frontend.data.remote.dtos.AuthResponse;
-import com.example.geoquiz_frontend.data.remote.dtos.BootstrapResponse;
-import com.example.geoquiz_frontend.data.remote.dtos.FinishGameRequest;
-import com.example.geoquiz_frontend.data.remote.dtos.LoginRequest;
-import com.example.geoquiz_frontend.data.remote.dtos.ProfileResponse;
-import com.example.geoquiz_frontend.data.remote.dtos.RegisterRequest;
-import com.example.geoquiz_frontend.data.remote.dtos.SyncGameSessionRequest;
+import com.example.geoquiz_frontend.data.remote.dtos.auth.AuthResponse;
+import com.example.geoquiz_frontend.data.remote.dtos.solo.BootstrapResponse;
+import com.example.geoquiz_frontend.data.remote.dtos.solo.FinishGameRequest;
+import com.example.geoquiz_frontend.data.remote.dtos.auth.LoginRequest;
+import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
+import com.example.geoquiz_frontend.data.remote.dtos.auth.RegisterRequest;
+import com.example.geoquiz_frontend.data.remote.dtos.solo.SyncGameSessionRequest;
 
 import java.util.List;
 

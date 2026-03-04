@@ -2,6 +2,7 @@
 using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.DTOs.KingOfTheHill;
 using GeoQuiz_backend.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 {
@@ -25,9 +26,24 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             _logger = logger;
         }
 
-        public async Task<KothLobby?> JoinLobbyAsync(Guid userId)
+        public async Task<(KothLobby? Lobby, string UserName, int UserLevel)> JoinLobbyAsync(Guid userId)
         {
             KothLobby lobby;
+            string userName;
+            int userLevel;
+
+            var user = await _db.Users
+                .Include(u => u.Stats)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+            {
+                _logger.LogError("User {UserId} not found", userId);
+                return (null, string.Empty, 0); 
+            }
+
+            userName = user.UserName;
+            userLevel = user.Stats?.Level ?? 1;
 
             lock (_lobbyLock)
             {
@@ -37,7 +53,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 if (existingLobby != null)
                 {
                     _logger.LogWarning("User {UserId} already in lobby {LobbyId}", userId, existingLobby.Id);
-                    return existingLobby;
+                    return (existingLobby, userName, userLevel);
                 }
 
                 lobby = _activeLobbies.Values.FirstOrDefault(l => l.PlayerIds.Count < 32);
@@ -61,16 +77,10 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 }
             }
 
-            await _notificationService.NotifyPlayerJoined(lobby.Id, new PlayerJoinedData
-            {
-                LobbyId = lobby.Id,
-                PlayerId = userId,
-                TotalPlayers = lobby.PlayerIds.Count
-            });
 
             await CheckStartConditionsAsync(lobby.Id);
 
-            return lobby;
+            return (lobby, userName, userLevel);
         }
 
         public async Task LeaveLobbyAsync(Guid userId)

@@ -1,4 +1,4 @@
-package com.example.geoquiz_frontend.data.remote.dtos;
+package com.example.geoquiz_frontend.data.remote.dtos.profile;
 
 import java.util.Date;
 import java.util.List;

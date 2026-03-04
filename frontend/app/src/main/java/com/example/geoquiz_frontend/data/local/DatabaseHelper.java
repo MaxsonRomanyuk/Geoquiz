@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.geoquiz_frontend.data.remote.dtos.BootstrapResponse;
+import com.example.geoquiz_frontend.data.remote.dtos.solo.BootstrapResponse;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
 import com.google.gson.Gson;
 

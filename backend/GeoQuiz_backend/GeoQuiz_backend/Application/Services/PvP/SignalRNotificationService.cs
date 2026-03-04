@@ -11,9 +11,11 @@ namespace GeoQuiz_backend.Application.Services.PvP
         private readonly IHubContext<PvPHub, IPvPHubClient> _pvpHub;
         private readonly IHubContext<KothHub, IKothHubClient> _kothHub;
 
-        public SignalRNotificationService(IHubContext<PvPHub, IPvPHubClient> hubContext)
+        public SignalRNotificationService(IHubContext<PvPHub, IPvPHubClient> pvpHub, IHubContext<KothHub, IKothHubClient> kothHub)
         {
-            _pvpHub = hubContext;
+            _pvpHub = pvpHub;
+            _kothHub = kothHub;
+
         }
 
         public async Task NotifyMatchFound(Guid userId, MatchFoundWithDraftData matchData)

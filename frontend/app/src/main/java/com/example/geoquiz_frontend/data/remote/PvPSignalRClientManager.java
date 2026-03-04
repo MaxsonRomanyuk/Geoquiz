@@ -2,16 +2,14 @@ package com.example.geoquiz_frontend.data.remote;
 
 import android.util.Log;
 
-import com.example.geoquiz_frontend.data.remote.dtos.BanModeRequest;
-import com.example.geoquiz_frontend.data.remote.dtos.DisconnectData;
-import com.example.geoquiz_frontend.data.remote.dtos.DraftUpdateData;
-import com.example.geoquiz_frontend.data.remote.dtos.GameFinishedData;
-import com.example.geoquiz_frontend.data.remote.dtos.GameReadyData;
-import com.example.geoquiz_frontend.data.remote.dtos.MatchFoundData;
-import com.example.geoquiz_frontend.data.remote.dtos.QuestionResultData;
-import com.example.geoquiz_frontend.data.remote.dtos.SubmitAnswerRequest;
-import com.example.geoquiz_frontend.data.remote.dtos.TimerUpdateData;
-import com.google.gson.Gson;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.DisconnectData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.DraftUpdateData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameFinishedData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameReadyData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.MatchFoundData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.QuestionResultData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerRequest;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.TimerUpdateData;
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
 import com.microsoft.signalr.HubConnectionState;
@@ -20,11 +18,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import io.reactivex.rxjava3.core.Completable;
 
-public class SignalRClientManager {
+public class PvPSignalRClientManager {
     private static final String TAG = "SignalRClientManager";
     private static final String HUB_URL = "http://192.168.100.49:5238/pvpHub";
 
-    private static SignalRClientManager instance;
+    private static PvPSignalRClientManager instance;
     private HubConnection hubConnection;
     private String jwtToken;
     private boolean isConnecting = false;
@@ -47,11 +45,11 @@ public class SignalRClientManager {
         void onOpponentDisconnected(DisconnectData disconnectData);
     }
 
-    private SignalRClientManager() {}
+    private PvPSignalRClientManager() {}
 
-    public static synchronized SignalRClientManager getInstance() {
+    public static synchronized PvPSignalRClientManager getInstance() {
         if (instance == null) {
-            instance = new SignalRClientManager();
+            instance = new PvPSignalRClientManager();
         }
         return instance;
     }

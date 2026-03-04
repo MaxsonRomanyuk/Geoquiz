@@ -1,4 +1,6 @@
 ﻿using GeoQuiz_backend.Application.Interfaces;
+using GeoQuiz_backend.Domain.Entities;
+using GeoQuiz_backend.DTOs.KingOfTheHill;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Concurrent;
@@ -12,7 +14,6 @@ namespace GeoQuiz_backend.Application.Hubs
     public class KothHub : Hub<IKothHubClient>
     {
         private readonly IKothMatchmakingService _matchmaking;
-        private readonly IKothGameService _gameService;
         private readonly ISignalRNotificationService _notificationService;
         private readonly ILogger<KothHub> _logger;
 
@@ -22,12 +23,10 @@ namespace GeoQuiz_backend.Application.Hubs
 
         public KothHub(
             IKothMatchmakingService matchmaking,
-            IKothGameService gameService,
             ISignalRNotificationService notificationService,
             ILogger<KothHub> logger)
         {
             _matchmaking = matchmaking;
-            _gameService = gameService;
             _notificationService = notificationService;
             _logger = logger;
         }
@@ -69,17 +68,28 @@ namespace GeoQuiz_backend.Application.Hubs
 
             try
             {
-                var lobby = await _matchmaking.JoinLobbyAsync(userId);
+                (KothLobby? lobby, string userName, int userLevel) = await _matchmaking.JoinLobbyAsync(userId);
+                //var lobby = await _matchmaking.JoinLobbyAsync(userId);
 
                 if (lobby != null)
                 {
                     var connectionId = Context.ConnectionId;
                     await Groups.AddToGroupAsync(connectionId, $"lobby_{lobby.Id}");
 
+                    await _notificationService.NotifyPlayerJoined(lobby.Id, new PlayerJoinedData
+                    {
+                        LobbyId = lobby.Id,
+                        PlayerId = userId,
+                        PlayerName = userName,
+                        PlayerLevel = userLevel,
+                        TotalPlayers = lobby.PlayerIds.Count
+                    });
+
                     _userCurrentLobby[userId] = lobby.Id;
 
                     _logger.LogInformation("User {UserId} added to lobby group {LobbyId}",
                         userId, lobby.Id);
+
                 }
             }
             catch (Exception ex)

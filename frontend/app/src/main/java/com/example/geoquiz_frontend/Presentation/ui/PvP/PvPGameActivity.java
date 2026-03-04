@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,17 +17,17 @@ import androidx.core.content.ContextCompat;
 import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.data.remote.SignalRClientManager;
-import com.example.geoquiz_frontend.data.remote.dtos.DisconnectData;
-import com.example.geoquiz_frontend.data.remote.dtos.DraftUpdateData;
-import com.example.geoquiz_frontend.data.remote.dtos.GameFinishedData;
-import com.example.geoquiz_frontend.data.remote.dtos.GameReadyData;
-import com.example.geoquiz_frontend.data.remote.dtos.MatchFoundData;
-import com.example.geoquiz_frontend.data.remote.dtos.OptionData;
-import com.example.geoquiz_frontend.data.remote.dtos.QuestionData;
-import com.example.geoquiz_frontend.data.remote.dtos.QuestionResultData;
-import com.example.geoquiz_frontend.data.remote.dtos.TimerUpdateData;
-import com.example.geoquiz_frontend.data.remote.dtos.UnlockedAchievement;
+import com.example.geoquiz_frontend.data.remote.PvPSignalRClientManager;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.DisconnectData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.DraftUpdateData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameFinishedData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameReadyData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.MatchFoundData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.OptionData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.QuestionData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.QuestionResultData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.TimerUpdateData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.UnlockedAchievement;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -51,7 +50,7 @@ public class PvPGameActivity extends BaseActivity {
     private Button btnPlayAudio;
     private Button[] optionButtons = new Button[4];
 
-    private SignalRClientManager signalRManager;
+    private PvPSignalRClientManager signalRManager;
     private PreferencesHelper preferencesHelper;
     private String activityId;
 
@@ -106,7 +105,7 @@ public class PvPGameActivity extends BaseActivity {
         setupClickListeners();
         loadPlayerData();
 
-        signalRManager = SignalRClientManager.getInstance();
+        signalRManager = PvPSignalRClientManager.getInstance();
         connectToSignalR();
     }
 
@@ -178,7 +177,7 @@ public class PvPGameActivity extends BaseActivity {
     }
 
     private void connectToSignalR() {
-        signalRManager.addListener(activityId, new SignalRClientManager.ConnectionListener() {
+        signalRManager.addListener(activityId, new PvPSignalRClientManager.ConnectionListener() {
             @Override
             public void onConnected() {
                 Log.d(TAG, "Connected to SignalR for game");

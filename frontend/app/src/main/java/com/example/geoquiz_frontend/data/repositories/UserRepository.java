@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.geoquiz_frontend.data.remote.ApiClient;
 import com.example.geoquiz_frontend.data.remote.ApiService;
-import com.example.geoquiz_frontend.data.remote.dtos.ProfileResponse;
+import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
 import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;

@@ -1,4 +1,4 @@
-package com.example.geoquiz_frontend.data.remote.dtos;
+package com.example.geoquiz_frontend.data.remote.dtos.auth;
 
 public class RegisterRequest {
     private String userName;

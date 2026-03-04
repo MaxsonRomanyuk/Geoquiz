@@ -15,14 +15,14 @@ import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
-import com.example.geoquiz_frontend.data.remote.SignalRClientManager;
-import com.example.geoquiz_frontend.data.remote.dtos.DisconnectData;
-import com.example.geoquiz_frontend.data.remote.dtos.DraftUpdateData;
-import com.example.geoquiz_frontend.data.remote.dtos.GameFinishedData;
-import com.example.geoquiz_frontend.data.remote.dtos.GameReadyData;
-import com.example.geoquiz_frontend.data.remote.dtos.MatchFoundData;
-import com.example.geoquiz_frontend.data.remote.dtos.QuestionResultData;
-import com.example.geoquiz_frontend.data.remote.dtos.TimerUpdateData;
+import com.example.geoquiz_frontend.data.remote.PvPSignalRClientManager;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.DisconnectData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.DraftUpdateData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameFinishedData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameReadyData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.MatchFoundData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.QuestionResultData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.TimerUpdateData;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -46,7 +46,7 @@ public class MatchmakingActivity extends BaseActivity {
 
 
 
-    private SignalRClientManager signalRManager;
+    private PvPSignalRClientManager signalRManager;
     private PreferencesHelper preferencesHelper;
     private String language;
     private String activityId;
@@ -71,7 +71,7 @@ public class MatchmakingActivity extends BaseActivity {
         setupClickListeners();
         loadCurrentPlayerData();
 
-        signalRManager = SignalRClientManager.getInstance();
+        signalRManager = PvPSignalRClientManager.getInstance();
         String token = preferencesHelper.getAuthToken();
         String userId = preferencesHelper.getUserId();
 
@@ -123,7 +123,7 @@ public class MatchmakingActivity extends BaseActivity {
         tvCurrentPlayerLevel.setText(language.equals("ru") ? "Ур " + (level > 0 ? level : 1) : "Lvl " + (level > 0 ? level : 1));
     }
     private void connectToSignalR() {
-        signalRManager.addListener(activityId, new SignalRClientManager.ConnectionListener() {
+        signalRManager.addListener(activityId, new PvPSignalRClientManager.ConnectionListener() {
             @Override
             public void onConnected() {
                 runOnUiThread(() -> {

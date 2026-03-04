@@ -55,6 +55,9 @@
         <activity
             android:name=".Presentation.ui.PvP.PvPResultActivity"
             android:exported="false"/>
+        <activity
+            android:name=".Presentation.ui.King.KingLobbyActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>

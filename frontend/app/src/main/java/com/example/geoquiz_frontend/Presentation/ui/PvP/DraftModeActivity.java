@@ -1,7 +1,5 @@
 package com.example.geoquiz_frontend.Presentation.ui.PvP;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,14 +16,14 @@ import androidx.core.content.ContextCompat;
 import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
-import com.example.geoquiz_frontend.data.remote.SignalRClientManager;
-import com.example.geoquiz_frontend.data.remote.dtos.DisconnectData;
-import com.example.geoquiz_frontend.data.remote.dtos.DraftUpdateData;
-import com.example.geoquiz_frontend.data.remote.dtos.GameFinishedData;
-import com.example.geoquiz_frontend.data.remote.dtos.GameReadyData;
-import com.example.geoquiz_frontend.data.remote.dtos.MatchFoundData;
-import com.example.geoquiz_frontend.data.remote.dtos.QuestionResultData;
-import com.example.geoquiz_frontend.data.remote.dtos.TimerUpdateData;
+import com.example.geoquiz_frontend.data.remote.PvPSignalRClientManager;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.DisconnectData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.DraftUpdateData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameFinishedData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameReadyData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.MatchFoundData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.QuestionResultData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.TimerUpdateData;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.gson.Gson;
@@ -49,7 +47,7 @@ public class DraftModeActivity extends BaseActivity {
     private List<MaterialCardView> modeCards;
     private List<String> bannedModes;
 
-    private SignalRClientManager signalRManager;
+    private PvPSignalRClientManager signalRManager;
     private PreferencesHelper preferencesHelper;
     private String language;
     private String activityId;
@@ -88,7 +86,7 @@ public class DraftModeActivity extends BaseActivity {
         modeCards = Arrays.asList(cardCapitals, cardFlags, cardOutlines, cardLanguages);
 
 
-        signalRManager = SignalRClientManager.getInstance();
+        signalRManager = PvPSignalRClientManager.getInstance();
         signalRManager.setCurrentMatch(matchId);
         connectToSignalR();
     }
@@ -183,7 +181,7 @@ public class DraftModeActivity extends BaseActivity {
         tvPlayer2Level.setText(getString(R.string.level_prefix) + " " + level);
     }
     private void connectToSignalR() {
-        signalRManager.addListener(activityId, new SignalRClientManager.ConnectionListener() {
+        signalRManager.addListener(activityId, new PvPSignalRClientManager.ConnectionListener() {
             @Override
             public void onConnected() {
                 runOnUiThread(() -> {

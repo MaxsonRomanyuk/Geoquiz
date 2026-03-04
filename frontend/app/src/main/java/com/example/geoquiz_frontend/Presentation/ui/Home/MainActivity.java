@@ -7,10 +7,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.geoquiz_frontend.Presentation.ui.King.KingLobbyActivity;
 import com.example.geoquiz_frontend.data.remote.ApiClient;
 import com.example.geoquiz_frontend.data.remote.ApiService;
 import com.example.geoquiz_frontend.Presentation.utils.AuthManager;
-import com.example.geoquiz_frontend.data.remote.dtos.ProfileResponse;
+import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
@@ -114,7 +115,8 @@ public class MainActivity extends BaseActivity {
         });
 
         cardKing.setOnClickListener(v -> {
-            // Navigate to king of the hill
+            Intent intent = new Intent(this, KingLobbyActivity.class);
+            startActivity(intent);
         });
     }
 
