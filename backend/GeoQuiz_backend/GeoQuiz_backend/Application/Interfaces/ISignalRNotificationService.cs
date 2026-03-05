@@ -21,7 +21,8 @@ namespace GeoQuiz_backend.Application.Interfaces
 
 
 
-        Task NotifyPlayerJoined(Guid lobbyId, PlayerJoinedData data);
+        Task NotifyPlayerJoinedToOthers(Guid lobbyId, PlayerJoinedData data, string connectionIdToExclude);
+        Task NotifyCurrentPlayerAboutLobby(Guid userId, LobbyInitialStateData data);
         Task NotifyPlayerLeft(Guid lobbyId, PlayerLeftData data);
         Task NotifyLobbyCountdown(Guid lobbyId, int secondsRemaining);
         Task NotifyLobbyCountdownCancelled(Guid lobbyId);

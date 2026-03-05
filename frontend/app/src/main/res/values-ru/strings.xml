@@ -171,7 +171,8 @@
     <!--Lobby-->
     <string name="empty">Пусто</string>
     <string name="leave">Выйти</string>
-    <string name="wait_players">Ожидаем...</string>
+    <string name="slot">Слот</string>
+    <string name="wait_players">Ждём...</string>
     <!--Errors-->
     <string name="connection_lost">Соединение потеряно</string>
     <string name="error">Ошибка: </string>

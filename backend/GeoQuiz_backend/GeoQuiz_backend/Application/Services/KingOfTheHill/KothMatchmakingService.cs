@@ -47,8 +47,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
             lock (_lobbyLock)
             {
-                var existingLobby = _activeLobbies.Values
-                    .FirstOrDefault(l => l.PlayerIds.Contains(userId));
+                var existingLobby = _activeLobbies.Values.FirstOrDefault(l => l.PlayersLobby.Any(p => p.Id == userId));
 
                 if (existingLobby != null)
                 {
@@ -56,14 +55,14 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     return (existingLobby, userName, userLevel);
                 }
 
-                lobby = _activeLobbies.Values.FirstOrDefault(l => l.PlayerIds.Count < 32);
+                lobby = _activeLobbies.Values.FirstOrDefault(l => l.PlayersLobby.Count < 32)!;
 
                 if (lobby == null)
                 {
                     lobby = new KothLobby
                     {
                         Id = Guid.NewGuid(),
-                        PlayerIds = new List<Guid> { userId },
+                        PlayersLobby = new List<PlayerLobby> { new PlayerLobby { Id = userId, Name = userName, Level = userLevel } },
                         CreatedAt = DateTime.UtcNow
                     };
                     _activeLobbies[lobby.Id] = lobby;
@@ -72,13 +71,18 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 }
                 else
                 {
-                    lobby.PlayerIds.Add(userId);
-                    _logger.LogInformation("User {UserId} joined lobby {LobbyId}, now {Count}/32", userId, lobby.Id, lobby.PlayerIds.Count);
+                    lobby.PlayersLobby.Add(new PlayerLobby
+                    {
+                        Id = userId,
+                        Name = userName,
+                        Level = userLevel
+                    });
+                    _logger.LogInformation("User {UserId} joined lobby {LobbyId}, now {Count}/32", userId, lobby.Id, lobby.PlayersLobby.Count);
                 }
             }
 
+            _ = CheckStartConditionsFireAndForget(lobby.Id);
 
-            await CheckStartConditionsAsync(lobby.Id);
 
             return (lobby, userName, userLevel);
         }
@@ -92,14 +96,16 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             lock (_lobbyLock)
             {
                 var lobby = _activeLobbies.Values
-                    .FirstOrDefault(l => l.PlayerIds.Contains(userId));
+                    .FirstOrDefault(l => l.PlayersLobby.Any(p => p.Id == userId));
 
                 if (lobby == null)
                     return;
 
                 lobbyId = lobby.Id;
-                lobby.PlayerIds.Remove(userId);
-                remainingPlayers = lobby.PlayerIds.Count;
+
+                var playerLobby = lobby.PlayersLobby.FirstOrDefault(p => p.Id == userId);
+                lobby.PlayersLobby.Remove(playerLobby);
+                remainingPlayers = lobby.PlayersLobby.Count;
 
                 _logger.LogInformation("User {UserId} left lobby {LobbyId}, remaining {Count}", userId, lobby.Id, remainingPlayers);
 
@@ -138,29 +144,43 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 await CancelLobbyTimerAsync(lobbyId.Value);
             }
         }
-
+        private async Task CheckStartConditionsFireAndForget(Guid lobbyId)
+        {
+            try
+            {
+                await CheckStartConditionsAsync(lobbyId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in background lobby check for {LobbyId}", lobbyId);
+            }
+        }
         private async Task CheckStartConditionsAsync(Guid lobbyId)
         {
             bool shouldStartTimer = false;
+            bool shouldStartImmediately = false;
 
             lock (_lobbyLock)
             {
                 if (!_activeLobbies.TryGetValue(lobbyId, out var lobby))
                     return;
 
-                if (lobby.PlayerIds.Count >= 32)
+                if (lobby.PlayersLobby.Count >= 32)
                 {
                     _logger.LogInformation("Lobby {LobbyId} full (32 players), starting immediately", lobbyId);
-                    // start
-                    return;
+                    shouldStartImmediately = true;
                 }
 
-                if (lobby.PlayerIds.Count >= 4 && !_lobbyTimers.ContainsKey(lobbyId))
+                if (lobby.PlayersLobby.Count >= 4 && !_lobbyTimers.ContainsKey(lobbyId))
                 {
                     shouldStartTimer = true;
                 }
             }
 
+            if (shouldStartImmediately)
+            {
+                await StartGameAsync(lobbyId); 
+            }
             if (shouldStartTimer)
             {
                 await StartLobbyTimerAsync(lobbyId);
@@ -195,7 +215,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                         if (!_activeLobbies.TryGetValue(lobbyId, out var lobby))
                             return;
 
-                        stillValid = lobby.PlayerIds.Count >= 4;
+                        stillValid = lobby.PlayersLobby.Count >= 4;
                     }
 
                     if (!stillValid)
@@ -213,7 +233,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     _lobbyTimers.Remove(lobbyId);
                 }
 
-                // start
+                await StartGameAsync(lobbyId);
             }
             catch (TaskCanceledException)
             {
@@ -245,9 +265,25 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             lock (_lobbyLock)
             {
                 var inLobby = _activeLobbies.Values
-                    .Any(l => l.PlayerIds.Contains(userId));
+                    .Any(l => l.PlayersLobby.Any(p => p.Id == userId));
                 return Task.FromResult(inLobby);
             }
+        }
+        private async Task StartGameAsync(Guid lobbyId)
+        {
+            _logger.LogInformation("Starting game for lobby {LobbyId}", lobbyId);
+
+            lock (_lobbyLock)
+            {
+                _activeLobbies.Remove(lobbyId);
+                if (_lobbyTimers.TryGetValue(lobbyId, out var cts))
+                {
+                    cts.Cancel();
+                    _lobbyTimers.Remove(lobbyId);
+                }
+            }
+
+            //
         }
     }
 }

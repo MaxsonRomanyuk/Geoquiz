@@ -173,6 +173,7 @@
     <!--Lobby-->
     <string name="empty">Empty</string>
     <string name="leave">Leave</string>
+    <string name="slot">Slot</string>
     <string name="wait_players">Waiting...</string>
 
     <!--Errors-->

@@ -17,8 +17,10 @@ import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
 import com.example.geoquiz_frontend.data.remote.KothSignalRClientManager;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.LobbyInitialStateData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerJoinedData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerLeftData;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerLobby;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -41,9 +43,6 @@ public class KingLobbyActivity extends BaseActivity {
     private MaterialButton btnLeave;
 
     private Handler timerHandler = new Handler();
-    private Runnable timerRunnable;
-    private int seconds = 0;
-    private boolean isSearching = false;
     private boolean isCountdownActive = false;
 
     private int currentPlayers = 0;
@@ -137,7 +136,9 @@ public class KingLobbyActivity extends BaseActivity {
             params.height = GridLayout.LayoutParams.WRAP_CONTENT;
             params.columnSpec = GridLayout.spec(i % 4, 1f);
             params.rowSpec = GridLayout.spec(i / 4);
-            params.setMargins(4, 4, 4, 4);
+            params.setMargins(10, 10, 10, 10);
+
+            slotView.setAlpha(0.5f);
 
             gridPlayers.addView(slotView, params);
 
@@ -156,16 +157,18 @@ public class KingLobbyActivity extends BaseActivity {
         if (occupied && name != null) {
             tvIcon.setText(getPlayerIcon(name));
             tvPlayerName.setText(truncateName(name));
-            tvPlayerLevel.setText("Lvl " + level);
+            tvPlayerLevel.setText(getString(R.string.level_prefix) + " " + level);
 
             if (id != null && id.equals(playerId)) {
                 card.setStrokeColor(getColorFromAttr(R.attr.colorPrimary));
                 card.setStrokeWidth(2);
                 tvPlayerName.setTextColor(getColorFromAttr(R.attr.colorPrimary));
+                slotView.setAlpha(1f);
             } else {
                 card.setStrokeColor(getColorFromAttr(R.attr.colorTertiaryFixed));
                 card.setStrokeWidth(1);
                 tvPlayerName.setTextColor(getColorFromAttr(R.attr.colorTertiary));
+                slotView.setAlpha(0.8f);
             }
 
             slot.isOccupied = true;
@@ -178,8 +181,8 @@ public class KingLobbyActivity extends BaseActivity {
             }
         } else {
             tvIcon.setText("👤");
-            tvPlayerName.setText("Слот " + (slot.position + 1));
-            tvPlayerLevel.setText("ждем...");
+            tvPlayerName.setText(getString(R.string.slot) + " " + (slot.position + 1));
+            tvPlayerLevel.setText(getString(R.string.wait_players));
 
             card.setStrokeColor(getColorFromAttr(R.attr.colorTertiaryFixed));
             card.setStrokeWidth(1);
@@ -266,7 +269,7 @@ public class KingLobbyActivity extends BaseActivity {
             }
 
             @Override
-            public void onPlayerJoined(PlayerJoinedData data) {
+            public void onPlayerJoinedToOthers(PlayerJoinedData data) {
                 runOnUiThread(() -> {
                     Log.d(TAG, "Player joined: " + data.getPlayerId());
 
@@ -285,7 +288,29 @@ public class KingLobbyActivity extends BaseActivity {
                     }
                 });
             }
+            @Override
+            public void onPlayerAboutLobby(LobbyInitialStateData data) {
+                runOnUiThread(() -> {
+                    Log.d(TAG, "Player joined to lobby: " + data.getLobbyId());
 
+                    if (currentLobbyId == null) {
+                        currentLobbyId = data.getLobbyId();
+                        signalRClient.setCurrentLobby(currentLobbyId);
+                    }
+
+                    List<PlayerLobby> dataPlayers = data.getPlayers();
+                    for (PlayerLobby player : dataPlayers)
+                    {
+                        int slotIndex = findEmptySlot();
+                        if (slotIndex >= 0) {
+                            PlayerSlot slot = playerSlots.get(slotIndex);
+
+                            updateSlotDisplay(slot, true, player.getName(), player.getLevel(), player.getId());
+                            updatePlayerCount();
+                        }
+                    }
+                });
+            }
             @Override
             public void onPlayerLeft(PlayerLeftData data) {
                 runOnUiThread(() -> {
@@ -311,8 +336,8 @@ public class KingLobbyActivity extends BaseActivity {
 
                     tvTimer.setText(String.format(Locale.getDefault(), "00:%02d", secondsRemaining));
 
-                    if (secondsRemaining <= 0) {
-                        //
+                    if (secondsRemaining <= 1) {
+                        Toast.makeText(KingLobbyActivity.this, "bb" , Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -344,7 +369,6 @@ public class KingLobbyActivity extends BaseActivity {
         tvTimer.setText(status);
     }
     private void cancelSearchAndExit() {
-        cancelSearch();
         if (signalRClient != null && signalRClient.isConnected()) {
             if (currentLobbyId != null) {
                 signalRClient.leaveLobby();
@@ -353,15 +377,10 @@ public class KingLobbyActivity extends BaseActivity {
         }
 
         Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
     }
 
-    private void cancelSearch() {
-        isSearching = false;
-        timerHandler.removeCallbacks(timerRunnable);
-    }
 
     private int getColorFromAttr(int attrResId) {
         android.util.TypedValue typedValue = new android.util.TypedValue();
@@ -375,7 +394,6 @@ public class KingLobbyActivity extends BaseActivity {
         if (signalRClient != null) {
             signalRClient.removeListener(activityId);
         }
-        cancelSearch();
     }
 
     @Override

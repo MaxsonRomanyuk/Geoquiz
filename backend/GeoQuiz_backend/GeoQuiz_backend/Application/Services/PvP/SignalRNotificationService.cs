@@ -53,9 +53,13 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
 
 
-        public async Task NotifyPlayerJoined(Guid lobbyId, PlayerJoinedData data)
+        public async Task NotifyPlayerJoinedToOthers(Guid lobbyId, PlayerJoinedData data, string connectionIdToExclude)
         {
-             await _kothHub.Clients.Group($"lobby_{lobbyId}").PlayerJoined(data);
+             await _kothHub.Clients.GroupExcept($"lobby_{lobbyId}", connectionIdToExclude).PlayerJoinedToOthers(data);
+        }
+        public async Task NotifyCurrentPlayerAboutLobby(Guid userId, LobbyInitialStateData data)
+        {
+            await _kothHub.Clients.User(userId.ToString()).PlayerAboutLobby(data);
         }
 
         public async Task NotifyPlayerLeft(Guid lobbyId, PlayerLeftData data)

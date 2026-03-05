@@ -2,6 +2,7 @@ package com.example.geoquiz_frontend.data.remote;
 
 import android.util.Log;
 
+import com.example.geoquiz_frontend.data.remote.dtos.koth.LobbyInitialStateData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerJoinedData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerLeftData;
 import com.google.gson.Gson;
@@ -34,7 +35,8 @@ public class KothSignalRClientManager {
         void onDisconnected();
         void onError(String error);
 
-        void onPlayerJoined(PlayerJoinedData data);
+        void onPlayerJoinedToOthers(PlayerJoinedData data);
+        void onPlayerAboutLobby(LobbyInitialStateData data);
         void onPlayerLeft(PlayerLeftData data);
         void onLobbyCountdown(int secondsRemaining);
         void onLobbyCountdownCancelled();
@@ -72,10 +74,15 @@ public class KothSignalRClientManager {
     }
 
     private void registerHandlers() {
-        hubConnection.on("PlayerJoined", (data) -> {
+        hubConnection.on("PlayerJoinedToOthers", (data) -> {
             Log.d(TAG, "PlayerJoined received");
-            notifyListeners(listener -> listener.onPlayerJoined(data));
+            notifyListeners(listener -> listener.onPlayerJoinedToOthers(data));
         }, PlayerJoinedData.class);
+
+        hubConnection.on("PlayerAboutLobby", (data) -> {
+            Log.d(TAG, "PlayerAbout received");
+            notifyListeners(listener -> listener.onPlayerAboutLobby(data));
+        }, LobbyInitialStateData.class);
 
         hubConnection.on("PlayerLeft", (data) -> {
             Log.d(TAG, "PlayerLeft received");
