@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GeoQuiz_backend.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace GeoQuiz_backend.Domain.Entities
 {

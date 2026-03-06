@@ -1,4 +1,5 @@
-﻿using GeoQuiz_backend.Domain.Enums;
+﻿using GeoQuiz_backend.Domain.Entities;
+using GeoQuiz_backend.Domain.Enums;
 
 namespace GeoQuiz_backend.Domain.Entities
 {
@@ -11,7 +12,7 @@ namespace GeoQuiz_backend.Domain.Entities
         public KothMatchStatus Status { get; set; } 
 
         public GameMode? SelectedMode { get; set; } 
-
+        
         public QuestionSet? QuestionSet { get; set; } 
 
         public ICollection<KothAnswer> Answers { get; set; } = new List<KothAnswer>();

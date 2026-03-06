@@ -1,7 +1,8 @@
-﻿using GeoQuiz_backend.Application.Hubs;
-using GeoQuiz_backend.Application.Interfaces;
-using GeoQuiz_backend.DTOs.KingOfTheHill;
-using GeoQuiz_backend.DTOs.PvP;
+﻿using GeoQuiz_backend.Application.Interfaces;
+using GeoQuiz_backend.API.HubClients;
+using GeoQuiz_backend.API.Hubs;
+using GeoQuiz_backend.Application.DTOs.KingOfTheHill;
+using GeoQuiz_backend.Application.DTOs.PvP;
 using Microsoft.AspNetCore.SignalR;
 
 namespace GeoQuiz_backend.Application.Services.PvP

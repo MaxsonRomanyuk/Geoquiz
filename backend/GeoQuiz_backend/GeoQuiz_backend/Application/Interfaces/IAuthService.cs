@@ -1,4 +1,4 @@
-﻿using GeoQuiz_backend.DTOs.Auth;
+﻿using GeoQuiz_backend.Application.DTOs.Auth;
 namespace GeoQuiz_backend.Application.Interfaces
 {
     public interface IAuthService

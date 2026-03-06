@@ -1,4 +1,4 @@
-﻿using GeoQuiz_backend.DTOs.Game;
+﻿using GeoQuiz_backend.Application.DTOs.Game;
 
 namespace GeoQuiz_backend.Application.Interfaces
 {

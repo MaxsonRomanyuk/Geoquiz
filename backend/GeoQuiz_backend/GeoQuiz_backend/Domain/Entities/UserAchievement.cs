@@ -1,4 +1,6 @@
-﻿namespace GeoQuiz_backend.Domain.Entities
+﻿using GeoQuiz_backend.Domain.Entities;
+
+namespace GeoQuiz_backend.Domain.Entities
 {
     public class UserAchievement
     {

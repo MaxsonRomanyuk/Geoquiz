@@ -1,0 +1,10 @@
+﻿using GeoQuiz.Backend.Application.DTOs.PvP;
+
+namespace GeoQuiz.Backend.Application.Interfaces;
+public interface IPvPGameSessionService
+{
+    Task StartMatchAsync(Guid matchId);
+    Task<PvPGameStateDto> GetGameStateAsync(Guid matchId, Guid userId);
+    Task<SubmitAnswerResponse> SubmitAnswerAsync(Guid matchId, Guid userId, SubmitAnswerRequest dto);
+    Task FinishAsync(Guid matchId, Guid userId);
+}

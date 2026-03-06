@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\SignalRDto\" />
+    <Folder Include="Infrastructure\Persistence\MySQL\Repositories\" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 ﻿using GeoQuiz_backend.Domain.Enums;
+using GeoQuiz_backend.Domain.Entities;
 
 namespace GeoQuiz_backend.Domain.Entities
 {

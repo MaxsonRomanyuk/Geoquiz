@@ -1,10 +1,12 @@
-using GeoQuiz_backend.Application.Hubs;
 using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Application.Services;
 using GeoQuiz_backend.Application.Services.KingOfTheHill;
 using GeoQuiz_backend.Application.Services.PvP;
-using GeoQuiz_backend.Infrastructure.Data;
-using GeoQuiz_backend.Infrastructure.Mongo;
+using GeoQuiz_backend.API.Hubs;
+using GeoQuiz_backend.Application.Services.PvP;
+using GeoQuiz_backend.Infrastructure.Persistence.Mongo;
+using GeoQuiz_backend.Infrastructure.Persistence.Mongo.Repositories;
+using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.EntityFrameworkCore;

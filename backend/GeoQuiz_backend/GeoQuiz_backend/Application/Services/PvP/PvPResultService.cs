@@ -1,10 +1,11 @@
 ﻿using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Domain.Enums;
-using GeoQuiz_backend.DTOs.PvP;
-using GeoQuiz_backend.Infrastructure.Data;
+using GeoQuiz_backend.Application.DTOs.PvP;
+using GeoQuiz_backend.Domain.Entities;
+using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 using Microsoft.EntityFrameworkCore;
-using static GeoQuiz_backend.Application.Achievements.AchievementsPayloads;
+using static GeoQuiz_backend.Application.Payloads.AchievementsPayloads;
 
 namespace GeoQuiz_backend.Application.Services.PvP
 {

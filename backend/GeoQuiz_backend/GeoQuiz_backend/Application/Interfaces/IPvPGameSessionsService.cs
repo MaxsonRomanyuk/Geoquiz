@@ -1,4 +1,4 @@
-﻿using GeoQuiz_backend.DTOs.PvP;
+﻿using GeoQuiz_backend.Application.DTOs.PvP;
 
 namespace GeoQuiz_backend.Application.Interfaces
 {

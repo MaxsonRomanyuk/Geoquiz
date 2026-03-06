@@ -1,7 +1,7 @@
 ﻿using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Domain.Enums;
-using GeoQuiz_backend.Infrastructure.Data;
+using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 
 namespace GeoQuiz_backend.Application.Services.PvP
 {
