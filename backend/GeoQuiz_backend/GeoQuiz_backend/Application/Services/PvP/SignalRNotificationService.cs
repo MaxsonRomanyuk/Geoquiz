@@ -65,17 +65,48 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
         public async Task NotifyPlayerLeft(Guid lobbyId, PlayerLeftData data)
         {
-             await _kothHub.Clients.Group($"lobby_{lobbyId}").PlayerLeft(data);
+            await _kothHub.Clients.Group($"lobby_{lobbyId}").PlayerLeft(data);
         }
 
         public async Task NotifyLobbyCountdown(Guid lobbyId, int secondsRemaining)
         {
-             await _kothHub.Clients.Group($"lobby_{lobbyId}").LobbyCountdown(secondsRemaining);
+            await _kothHub.Clients.Group($"lobby_{lobbyId}").LobbyCountdown(secondsRemaining);
         }
 
         public async Task NotifyLobbyCountdownCancelled(Guid lobbyId)
         {
-             await _kothHub.Clients.Group($"lobby_{lobbyId}").LobbyCountdownCancelled();
+            await _kothHub.Clients.Group($"lobby_{lobbyId}").LobbyCountdownCancelled();
+        }
+        public async Task NotifyMatchStarted(Guid matchId, MatchStartedData data)
+        {
+            await _kothHub.Clients.Group($"match_{matchId}").MatchStarted(data);
+            
+        }
+
+        public async Task NotifyRoundStarted(Guid matchId, RoundStartedData data)
+        {
+            await _kothHub.Clients.Group($"match_{matchId}").RoundStarted(data);
+            
+        }
+
+        public async Task NotifyRoundFinished(Guid matchId, RoundFinishedData data)
+        {
+            await _kothHub.Clients.Group($"match_{matchId}").RoundFinished(data);
+        }
+        public async Task NotifyPlayerEliminated(Guid userId, PlayerEliminatedData data)
+        {
+            await _kothHub.Clients.User(userId.ToString()).PlayerEliminated(data);
+
+        }
+        public async Task NotifyAnswerResult(Guid userId, AnswerResultData data)
+        {
+            await _kothHub.Clients.User(userId.ToString()).AnswerResult(data);
+            
+        }
+
+        public async Task NotifyMatchFinished(Guid userId, MatchFinishedData data)
+        {
+            await _kothHub.Clients.User(userId.ToString()).MatchFinished(data);
         }
     }
 }

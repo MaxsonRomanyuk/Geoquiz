@@ -119,10 +119,7 @@ namespace GeoQuiz_backend.Application.Services
                         ua.IsUnlocked = true;
                         ua.UnlockedAt = DateTime.UtcNow;
 
-                        _logger.LogInformation(
-                            "Achievement unlocked: {Code} for user {UserId}",
-                            achievement.Code,
-                            userId);
+                        _logger.LogInformation("Achievement unlocked: {Code} for user {UserId}", achievement.Code, userId);
                     }
                 }
             }
