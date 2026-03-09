@@ -3,7 +3,6 @@
     public class PlayerAnswer
     {
         public string QuestionId { get; set; } = null!;
-        public int SelectedOptionIndex { get; set; }
         public bool IsCorrect { get; set; }
         public int TimeSpentMs { get; set; }
         public int ScoreGained { get; set; }

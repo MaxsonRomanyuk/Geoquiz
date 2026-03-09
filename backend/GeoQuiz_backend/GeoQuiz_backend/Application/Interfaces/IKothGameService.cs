@@ -6,7 +6,7 @@ namespace GeoQuiz_backend.Application.Interfaces
 {
     public interface IKothGameService
     {
-        Task<KothMatch> StartMatchFromLobbyAsync(Guid lobbyId, List<(Guid UserId, string UserName, int Level)> players);
+        Task<KothMatch> StartMatchFromLobbyAsync(List<PlayerInfo> players);
         Task<RoundStartedData?> StartNextRoundAsync(Guid matchId);
         Task<AnswerResultData> SubmitAnswerAsync(Guid matchId, Guid userId, SubmitAnswerRequest request);
         Task<RoundFinishedData> FinishRoundAsync(Guid matchId);

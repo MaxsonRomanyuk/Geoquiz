@@ -5,6 +5,7 @@ namespace GeoQuiz_backend.Application.Payloads
     public class KothGameState
     {
         public Guid MatchId { get; set; }
+        public KothMatch Match { get; set; } = null!;
         public List<Guid> ActivePlayerIds { get; set; } = new();
         public Dictionary<Guid, PlayerGameInfo> Players { get; set; } = new();
         public List<Guid> EliminatedPlayers { get; set; } = new();

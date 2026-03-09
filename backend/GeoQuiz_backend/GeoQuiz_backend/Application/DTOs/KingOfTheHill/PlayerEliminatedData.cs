@@ -2,10 +2,10 @@
 {
     public class PlayerEliminatedData
     {
-        public int RoundNumber { get; set; }
+        public Guid PlayerId { get; set; }
+        public int RoundsSurvived { get; set; }
         public int Place { get; set; } 
         public int CorrectAnswers { get; set; }
         public int TotalScore { get; set; }
-        public int RoundsSurvived { get; set; }
     }
 }

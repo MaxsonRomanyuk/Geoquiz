@@ -11,7 +11,7 @@ namespace GeoQuiz_backend.Domain.Entities
 
         public KothMatchStatus Status { get; set; } 
 
-        public GameMode? SelectedMode { get; set; } 
+        public GameMode SelectedMode { get; set; } 
         
         public QuestionSet? QuestionSet { get; set; } 
 
