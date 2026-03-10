@@ -117,6 +117,7 @@ public class GameRepository {
                     if (data.getCountries() == null || data.getCountries().isEmpty()) {
                         Log.e(TAG, "СЕРВЕР ВЕРНУЛ ПУСТОЙ СПИСОК СТРАН!");
                     }
+
                     if (data.getQuestions() == null || data.getQuestions().isEmpty()) {
                         Log.e(TAG, "СЕРВЕР ВЕРНУЛ ПУСТОЙ СПИСОК ВОПРОСОВ!");
                     }

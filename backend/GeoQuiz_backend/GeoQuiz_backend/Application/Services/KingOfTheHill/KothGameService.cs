@@ -7,6 +7,7 @@ using GeoQuiz_backend.Domain.Mongo;
 using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Concurrent;
 
 namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 {
@@ -18,9 +19,8 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
         private readonly ISignalRNotificationService _notificationService;
         private readonly ILogger<KothGameService> _logger;
 
-        private static readonly Dictionary<Guid, KothGameState> _activeGames = new();
-        private static readonly object _gameLock = new();
-        private static readonly Dictionary<Guid, CancellationTokenSource> _roundTimers = new();
+        private static readonly ConcurrentDictionary<Guid, KothGameState> _activeGames = new();
+        private static readonly ConcurrentDictionary<Guid, CancellationTokenSource> _roundTimers = new();
 
         public KothGameService(
             AppDbContext db,
@@ -49,6 +49,8 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             _logger.LogInformation("Starting KOTH match {MatchId} with {PlayerCount} players, max questions: {MaxQuestions}, seed: {Seed}",
                 matchId, totalPlayers, maxQuestions, seed);
 
+            var questions = await GenerateQuestionsAsync(maxQuestions, seed, randomMode);
+
             var questionSet = new QuestionSet
             {
                 Id = Guid.NewGuid(),
@@ -57,11 +59,9 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 Language = AppLanguage.Ru,
                 Seed = seed,
                 CreatedAt = DateTime.UtcNow,
-                QuestionIds = new List<string>()
+                QuestionIds = questions.Select(q => q.QuestionId).ToList()
             };
 
-            var questions = await GenerateQuestionsAsync(maxQuestions, seed, randomMode);
-            questionSet.QuestionIds = questions.Select(q => q.QuestionId).ToList();
 
             var match = new KothMatch
             {
@@ -111,12 +111,19 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 Questions = questions,
                 PlayerAnswers = players.ToDictionary(p => p.PlayerId, p => new Dictionary<int, PlayerAnswer>()),
                 PlayerScores = players.ToDictionary(p => p.PlayerId, p => 0),
-                PlayerCorrectCount = players.ToDictionary(p => p.PlayerId, p => 0)
+                PlayerCorrectCount = players.ToDictionary(p => p.PlayerId, p => 0),
+                PlayerPlaces = new Dictionary<Guid, int>(),
+                IsRoundStarting = false,
+                IsRoundFinishing = false,
+                IsRoundFinished = false,
+                IsMatchFinishing = false,
+                AnsweredPlayers = new HashSet<Guid>()
             };
 
-            lock (_gameLock)
+            if (!_activeGames.TryAdd(matchId, gameState))
             {
-                _activeGames[matchId] = gameState;
+                _logger.LogError("Failed to add game {MatchId} to active games", matchId);
+                throw new Exception("Game already exists");
             }
 
             var matchStartedData = new MatchStartedData
@@ -146,14 +153,29 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
         public async Task<RoundStartedData?> StartNextRoundAsync(Guid matchId)
         {
-            RoundStartedData roundStartedData = null!;
-            Guid? gameStateForTimer = null;
-
-            lock (_gameLock)
+            if (!_activeGames.TryGetValue(matchId, out var gameState))
             {
-                if (!_activeGames.TryGetValue(matchId, out var gameState))
+                _logger.LogWarning("Game {MatchId} not found", matchId);
+                return null;
+            }
+
+            lock (gameState)
+            {
+                if (gameState.IsRoundStarting)
                 {
-                    _logger.LogWarning("Game {MatchId} not found", matchId);
+                    _logger.LogWarning("Round already starting for match {MatchId}", matchId);
+                    return null;
+                }
+
+                if (gameState.IsRoundFinished)
+                {
+                    _logger.LogWarning("Round already finished for match {MatchId}", matchId);
+                    return null;
+                }
+
+                if (gameState.IsMatchFinishing)
+                {
+                    _logger.LogWarning("Match is finishing for {MatchId}", matchId);
                     return null;
                 }
 
@@ -162,6 +184,14 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     _ = FinishMatchAsync(matchId);
                     return null;
                 }
+
+                gameState.IsRoundStarting = true;
+                gameState.IsRoundFinishing = false;
+                gameState.IsRoundFinished = false;
+            }
+
+            try
+            {
 
                 gameState.CurrentRound++;
 
@@ -180,16 +210,22 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 if (gameState.CurrentRound > gameState.Questions.Count)
                 {
                     _logger.LogError("Not enough questions for match {MatchId}", matchId);
+
+                    lock (gameState)
+                    {
+                        gameState.IsRoundStarting = false;
+                    }
                     return null;
                 }
 
                 var question = gameState.Questions[gameState.CurrentRound - 1];
                 gameState.RoundStartTime = DateTime.UtcNow;
                 gameState.EliminatedThisRound.Clear();
+                gameState.AnsweredPlayers.Clear(); 
 
                 var questionData = MapToQuestionData(question);
 
-                roundStartedData = new RoundStartedData
+                var roundStartedData = new RoundStartedData
                 {
                     RoundNumber = gameState.CurrentRound,
                     RoundType = gameState.CurrentRoundType,
@@ -198,24 +234,26 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     TimeLimitSeconds = 10
                 };
 
-                gameStateForTimer = matchId;
-            }
-
-            if (roundStartedData != null && gameStateForTimer.HasValue)
-            {
                 await _notificationService.NotifyRoundStarted(matchId, roundStartedData);
 
                 var cts = new CancellationTokenSource();
-                lock (_gameLock)
-                {
-                    _roundTimers[matchId] = cts;
-                }
+                _roundTimers[matchId] = cts;
 
                 _ = Task.Run(async () =>
                 {
                     try
                     {
                         await Task.Delay(TimeSpan.FromSeconds(10), cts.Token);
+
+                        lock (gameState)
+                        {
+                            if (gameState.IsRoundFinished || gameState.IsMatchFinishing)
+                            {
+                                _logger.LogDebug("Round already finished for match {MatchId}", matchId);
+                                return;
+                            }
+                        }
+
                         await FinishRoundAsync(matchId);
                     }
                     catch (TaskCanceledException)
@@ -223,91 +261,92 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                         _logger.LogDebug("Round timer cancelled for match {MatchId}", matchId);
                     }
                 }, cts.Token);
-            }
 
-            return roundStartedData;
+                return roundStartedData;
+            }
+            finally
+            {
+                lock (gameState)
+                {
+                    gameState.IsRoundStarting = false;
+                }
+            }
         }
 
         public async Task<AnswerResultData> SubmitAnswerAsync(Guid matchId, Guid userId, SubmitAnswerRequest request)
         {
-            AnswerResultData result = null!;
-            bool shouldFinishRoundEarly = false;
-            Guid matchToFinish = Guid.Empty;
-            PlayerAnswer answer = null!;
-            KothGameState gameState = null!;
+            if (!_activeGames.TryGetValue(matchId, out var gameState))
+                throw new Exception("Game not found");
 
-            lock (_gameLock)
+            lock (gameState)
             {
-                if (!_activeGames.TryGetValue(matchId, out gameState))
-                    throw new Exception("Game not found");
-
                 if (!gameState.ActivePlayerIds.Contains(userId))
                     throw new Exception("Player is eliminated");
 
-                if (gameState.PlayerAnswers.ContainsKey(userId) &&
-                    gameState.PlayerAnswers[userId].ContainsKey(request.RoundNumber))
+                if (gameState.IsRoundFinished)
+                    throw new Exception("Round already finished");
+
+                if (gameState.AnsweredPlayers.Contains(userId))
                     throw new Exception("Already answered this round");
 
                 if (request.RoundNumber > gameState.Questions.Count)
                     throw new Exception("Invalid round number");
 
-                var question = gameState.Questions[request.RoundNumber - 1];
-                var isCorrect = request.SelectedOptionIndex == question.CorrectOptionIndex;
-                var scoreGained = isCorrect ? CalculateScore(request.TimeSpentMs) : 0;
+                gameState.AnsweredPlayers.Add(userId);
+            }
 
-                answer = new PlayerAnswer
-                {
-                    QuestionId = request.QuestionId,
-                    IsCorrect = isCorrect,
-                    TimeSpentMs = request.TimeSpentMs,
-                    ScoreGained = scoreGained,
-                    AnsweredAt = DateTime.UtcNow
-                };
+            var question = gameState.Questions[request.RoundNumber - 1];
+            var isCorrect = request.SelectedOptionIndex == question.CorrectOptionIndex;
+            var scoreGained = isCorrect ? CalculateScore(request.TimeSpentMs) : 0;
 
+            var answer = new PlayerAnswer
+            {
+                QuestionId = request.QuestionId,
+                IsCorrect = isCorrect,
+                TimeSpentMs = request.TimeSpentMs,
+                ScoreGained = scoreGained,
+                AnsweredAt = DateTime.UtcNow
+            };
+
+            lock (gameState)
+            {
                 gameState.PlayerAnswers[userId][request.RoundNumber] = answer;
 
                 if (isCorrect)
                 {
-                    gameState.PlayerScores[userId] += scoreGained;
-                    gameState.PlayerCorrectCount[userId]++;
-                }
-
-                result = new AnswerResultData
-                {
-                    IsCorrect = isCorrect,
-                    ScoreGained = scoreGained,
-                    TimeSpentMs = request.TimeSpentMs,
-                    RemainingPlayers = gameState.ActivePlayerIds.Count,
-                    CorrectOptionIndex = question.CorrectOptionIndex
-                };
-
-                var totalActivePlayers = gameState.ActivePlayerIds.Count;
-                var answeredCount = gameState.PlayerAnswers.Count(kvp =>
-                    kvp.Value.ContainsKey(request.RoundNumber));
-
-                if (answeredCount >= totalActivePlayers)
-                {
-                    shouldFinishRoundEarly = true;
-                    matchToFinish = matchId;
+                    gameState.PlayerScores[userId] = gameState.PlayerScores.GetValueOrDefault(userId) + scoreGained;
+                    gameState.PlayerCorrectCount[userId] = gameState.PlayerCorrectCount.GetValueOrDefault(userId) + 1;
                 }
             }
 
-            await SaveAnswerToDbAsync(matchId, userId, request.RoundNumber, answer);
-
-            await _notificationService.NotifyAnswerResult(userId, result); 
-
-            if (shouldFinishRoundEarly && matchToFinish != Guid.Empty)
+            var result = new AnswerResultData
             {
-                if (_roundTimers.TryGetValue(matchId, out var cts))
+                IsCorrect = isCorrect,
+                ScoreGained = scoreGained,
+                TimeSpentMs = request.TimeSpentMs,
+                RemainingPlayers = gameState.ActivePlayerIds.Count,
+                CorrectOptionIndex = question.CorrectOptionIndex
+            };
+
+            _ = Task.Run(() => SaveAnswerToDbAsync(matchId, userId, request.RoundNumber, answer));
+
+            await _notificationService.NotifyAnswerResult(userId, result);
+
+            bool allAnswered = false;
+            lock (gameState)
+            {
+                allAnswered = gameState.AnsweredPlayers.Count >= gameState.ActivePlayerIds.Count;
+            }
+
+            if (allAnswered)
+            {
+                if (_roundTimers.TryRemove(matchId, out var cts))
                 {
                     cts.Cancel();
-                    lock (_gameLock)
-                    {
-                        _roundTimers.Remove(matchId);
-                    }
-
-                    _ = Task.Run(() => FinishRoundAsync(matchId));
+                    cts.Dispose();
                 }
+
+                _ = Task.Run(() => FinishRoundAsync(matchId));
             }
 
             return result;
@@ -315,95 +354,138 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
         public async Task<RoundFinishedData> FinishRoundAsync(Guid matchId)
         {
-            RoundFinishedData roundFinishedData = null!;
-            bool isMatchFinished = false;
-            Guid matchToProcess = Guid.Empty;
-            List<Guid> eliminatedPlayers = null!;
-            List<PlayerEliminatedData> eliminatedData = null!;
+            if (!_activeGames.TryGetValue(matchId, out var gameState))
+                throw new Exception("Game not found");
 
-            lock (_gameLock)
+            lock (gameState)
             {
-                if (!_activeGames.TryGetValue(matchId, out var gameState))
-                    throw new Exception("Game not found");
-
-                var currentRound = gameState.CurrentRound;
-                var eliminatedThisRound = new List<Guid>();
-                var playerResults = new Dictionary<Guid, PlayerRoundResult>();
-
-                foreach (var playerId in gameState.ActivePlayerIds.ToList())
+                if (gameState.IsRoundFinishing)
                 {
-                    var hasAnswered = gameState.PlayerAnswers.ContainsKey(playerId) &&
-                                      gameState.PlayerAnswers[playerId].ContainsKey(currentRound);
+                    _logger.LogWarning("Round already finishing for match {MatchId}", matchId);
+                    return null!;
+                }
 
-                    PlayerRoundResult result;
+                if (gameState.IsRoundFinished)
+                {
+                    _logger.LogWarning("Round already finished for match {MatchId}", matchId);
+                    return null!;
+                }
 
-                    if (!hasAnswered)
+                if (gameState.IsMatchFinishing)
+                {
+                    _logger.LogWarning("Match is finishing for {MatchId}", matchId);
+                    return null!;
+                }
+
+                gameState.IsRoundFinishing = true;
+            }
+
+            try
+            {
+                if (_roundTimers.TryRemove(matchId, out var cts))
+                {
+                    cts.Cancel();
+                    cts.Dispose();
+                }
+
+                Dictionary<Guid, PlayerRoundResult> playerResults;
+                List<Guid> eliminatedThisRound;
+
+                lock (gameState)
+                {
+                    var currentRound = gameState.CurrentRound;
+                    playerResults = new Dictionary<Guid, PlayerRoundResult>();
+                    eliminatedThisRound = new List<Guid>();
+
+                    foreach (var playerId in gameState.ActivePlayerIds.ToList())
                     {
-                        result = new PlayerRoundResult
-                        {
-                            PlayerId = playerId,
-                            HasAnswered = false,
-                            IsCorrect = false,
-                            TimeSpentMs = 0,
-                            ScoreGained = 0
-                        };
-                        eliminatedThisRound.Add(playerId);
-                    }
-                    else
-                    {
-                        var answer = gameState.PlayerAnswers[playerId][currentRound];
-                        result = new PlayerRoundResult
-                        {
-                            PlayerId = playerId,
-                            HasAnswered = true,
-                            IsCorrect = answer.IsCorrect,
-                            TimeSpentMs = answer.TimeSpentMs,
-                            ScoreGained = answer.ScoreGained
-                        };
+                        var hasAnswered = gameState.PlayerAnswers.ContainsKey(playerId) && gameState.PlayerAnswers[playerId].ContainsKey(currentRound);
 
-                        if (!answer.IsCorrect)
+                        PlayerRoundResult result;
+
+                        if (!hasAnswered)
                         {
+                            result = new PlayerRoundResult
+                            {
+                                PlayerId = playerId,
+                                HasAnswered = false,
+                                IsCorrect = false,
+                                TimeSpentMs = 0,
+                                ScoreGained = 0
+                            };
                             eliminatedThisRound.Add(playerId);
                         }
+                        else
+                        {
+                            var answer = gameState.PlayerAnswers[playerId][currentRound];
+                            result = new PlayerRoundResult
+                            {
+                                PlayerId = playerId,
+                                HasAnswered = true,
+                                IsCorrect = answer.IsCorrect,
+                                TimeSpentMs = answer.TimeSpentMs,
+                                ScoreGained = answer.ScoreGained
+                            };
+
+                            if (!answer.IsCorrect)
+                            {
+                                eliminatedThisRound.Add(playerId);
+                            }
+                        }
+
+                        playerResults[playerId] = result;
                     }
 
-                    playerResults[playerId] = result;
-                }
-
-                if (gameState.CurrentRoundType == RoundType.Speed)
-                {
-                    var correctAnswers = playerResults
-                        .Where(kvp => kvp.Value.IsCorrect)
-                        .Select(kvp => kvp.Key)
-                        .ToList();
-
-                    if (correctAnswers.Count > 0)
+                    if (gameState.CurrentRoundType == RoundType.Speed)
                     {
-                        var slowest = correctAnswers
-                            .OrderByDescending(id => playerResults[id].TimeSpentMs)
-                            .First();
+                        var correctAnswers = playerResults
+                            .Where(kvp => kvp.Value.IsCorrect)
+                            .Select(kvp => kvp.Key)
+                            .ToList();
 
-                        if (!eliminatedThisRound.Contains(slowest))
+                        if (correctAnswers.Count > 0)
                         {
-                            eliminatedThisRound.Add(slowest);
+                            var slowest = correctAnswers
+                                .OrderByDescending(id => playerResults[id].TimeSpentMs)
+                                .First();
+
+                            if (!eliminatedThisRound.Contains(slowest))
+                            {
+                                eliminatedThisRound.Add(slowest);
+                            }
                         }
                     }
+
+                    var eliminatedScores = new Dictionary<Guid, int>();
+
+                    foreach (var playerId in eliminatedThisRound)
+                    {
+                        gameState.ActivePlayerIds.Remove(playerId);
+                        gameState.EliminatedPlayers.Add(playerId);
+                        gameState.EliminatedThisRound.Add(playerId);
+                        gameState.Players[playerId].IsActive = false;
+                        gameState.Players[playerId].EliminatedAtRound = currentRound;
+
+                        eliminatedScores[playerId] = gameState.PlayerScores[playerId];
+                    }
+
+                    var maxPlace = gameState.ActivePlayerIds.Count + gameState.EliminatedThisRound.Count;
+                    var minPlace = gameState.ActivePlayerIds.Count;
+
+                    for (var place = maxPlace; place > minPlace; place--)
+                    {
+                        var minScores = eliminatedScores.Values.Min();
+                        var minPlayers = eliminatedScores.FirstOrDefault(e => e.Value == minScores).Key;
+                        gameState.PlayerPlaces[minPlayers] = place;
+                        eliminatedScores.Remove(minPlayers);
+                    }
+
+                    gameState.IsRoundFinished = true;
                 }
 
-                eliminatedThisRound = eliminatedThisRound.Distinct().ToList();
-
-                foreach (var playerId in eliminatedThisRound)
+                var roundFinishedData = new RoundFinishedData
                 {
-                    gameState.ActivePlayerIds.Remove(playerId);
-                    gameState.EliminatedPlayers.Add(playerId);
-                    gameState.EliminatedThisRound.Add(playerId);
-                    gameState.Players[playerId].IsActive = false;
-                    gameState.Players[playerId].EliminatedAtRound = currentRound;
-                }
-
-                roundFinishedData = new RoundFinishedData
-                {
-                    RoundNumber = currentRound,
+                    RoundNumber = gameState.CurrentRound,
                     RoundType = gameState.CurrentRoundType,
                     EliminatedPlayerIds = eliminatedThisRound,
                     Results = playerResults.Values.ToList(),
@@ -411,171 +493,152 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     IsMatchFinished = gameState.ActivePlayerIds.Count <= 1
                 };
 
-                isMatchFinished = roundFinishedData.IsMatchFinished;
-                eliminatedPlayers = eliminatedThisRound;
-                matchToProcess = matchId;
+                await _notificationService.NotifyRoundFinished(matchId, roundFinishedData);
 
-                eliminatedData = new List<PlayerEliminatedData>();
-                foreach (var playerId in eliminatedPlayers)
+                foreach (var playerId in eliminatedThisRound)
                 {
-                    eliminatedData.Add(new PlayerEliminatedData
+                    var data = new PlayerEliminatedData
                     {
                         PlayerId = playerId,
                         RoundsSurvived = roundFinishedData.RoundNumber,
-                        Place = roundFinishedData.RemainingPlayers + 1,
+                        Place = gameState.PlayerPlaces[playerId],
                         CorrectAnswers = gameState.PlayerCorrectCount[playerId],
                         TotalScore = gameState.PlayerScores[playerId]
+                    };
+
+                    await _notificationService.NotifyPlayerEliminated(playerId, data);
+                }
+
+                if (roundFinishedData.IsMatchFinished)
+                {
+                    _ = Task.Run(() => FinishMatchAsync(matchId));
+                }
+                else
+                {
+                    _ = Task.Run(async () =>
+                    {
+                        await Task.Delay(2000);
+                        await StartNextRoundAsync(matchId);
                     });
                 }
 
+                return roundFinishedData;
             }
-
-            if (roundFinishedData != null)
+            finally
             {
-                await _notificationService.NotifyRoundFinished(matchId, roundFinishedData);
-
-                if (eliminatedData != null)
+                lock (gameState)
                 {
-                    foreach (var data in eliminatedData)
-                    {
-                        await _notificationService.NotifyPlayerEliminated(data.PlayerId, data);
-                    }
+                    gameState.IsRoundFinishing = false;
                 }
             }
-
-            if (_roundTimers.TryGetValue(matchId, out var cts))
-            {
-                cts.Cancel();
-                lock (_gameLock)
-                {
-                    _roundTimers.Remove(matchId);
-                }
-            }
-
-            if (isMatchFinished)
-            {
-                _ = Task.Run(() => FinishMatchAsync(matchId));
-            }
-            else if (matchToProcess != Guid.Empty)
-            {
-                _ = Task.Run(async () =>
-                {
-                    await Task.Delay(2000);
-                    await StartNextRoundAsync(matchId);
-                });
-            }
-
-            return roundFinishedData;
         }
-
-
         public async Task<MatchFinishedData> FinishMatchAsync(Guid matchId)
         {
-            MatchFinishedData matchFinishedData = null!;
-            List<(Guid UserId, MatchFinishedData Data)> notifications = new();
-            KothMatch dbMatch = null!;
-            Dictionary<Guid, PlayerFinalStanding> standings = new();
-            GameMode mode = GameMode.Capital;
+            if (!_activeGames.TryGetValue(matchId, out var gameState))
+                throw new Exception("Game not found");
 
-            lock (_gameLock)
+            lock (gameState)
             {
-                if (!_activeGames.TryGetValue(matchId, out var gameState))
-                    throw new Exception("Game not found");
-
-                dbMatch = gameState.Match; 
-                mode = dbMatch.SelectedMode;
-
-                Guid? winnerId = gameState.ActivePlayerIds.Count == 1?
-                    gameState.ActivePlayerIds.First() : null;
-
-                var finalStandings = new List<PlayerFinalStanding>();
-
-                if (winnerId.HasValue)
+                if (gameState.IsMatchFinishing)
                 {
-                    var standing = new PlayerFinalStanding
-                    {
-                        PlayerId = winnerId.Value,
-                        PlayerName = gameState.Players[winnerId.Value].UserName,
-                        Place = 1,
-                        CorrectAnswers = gameState.PlayerCorrectCount[winnerId.Value],
-                        TotalScore = gameState.PlayerScores[winnerId.Value],
-                        RoundsSurvived = gameState.CurrentRound
-                    };
-                    finalStandings.Add(standing);
-                    standings[winnerId.Value] = standing;
+                    _logger.LogWarning("Match already finishing for {MatchId}", matchId);
+                    return null!;
                 }
 
-                var eliminatedPlayers = gameState.EliminatedPlayers
-                    .Select((id, index) => new { id, place = gameState.EliminatedPlayers.Count - index + 2 }) //temp
-                    .OrderBy(x => x.place);
+                gameState.IsMatchFinishing = true;
+            }
 
-                foreach (var item in eliminatedPlayers)
+            try
+            {
+                _activeGames.TryRemove(matchId, out _);
+
+                if (_roundTimers.TryRemove(matchId, out var cts))
                 {
-                    var standing = new PlayerFinalStanding
-                    {
-                        PlayerId = item.id,
-                        PlayerName = gameState.Players[item.id].UserName,
-                        Place = item.place,
-                        CorrectAnswers = gameState.PlayerCorrectCount.ContainsKey(item.id)
-                            ? gameState.PlayerCorrectCount[item.id] : 0,
-                        TotalScore = gameState.PlayerScores.ContainsKey(item.id)
-                            ? gameState.PlayerScores[item.id] : 0,
-                        RoundsSurvived = gameState.Players[item.id].EliminatedAtRound
-                    };
-                    finalStandings.Add(standing);
-                    standings[item.id] = standing;
+                    cts.Cancel();
+                    cts.Dispose();
                 }
 
-                matchFinishedData = new MatchFinishedData
+                List<PlayerFinalStanding> finalStandings;
+                Dictionary<Guid, PlayerFinalStanding> standings;
+                Guid? winnerId;
+                GameMode mode;
+
+                lock (gameState)
+                {
+                    winnerId = gameState.ActivePlayerIds.Count == 1
+                        ? gameState.ActivePlayerIds.First()
+                        : null;
+
+                    mode = gameState.Match.SelectedMode;
+                    finalStandings = new List<PlayerFinalStanding>();
+                    standings = new Dictionary<Guid, PlayerFinalStanding>();
+
+                    if (winnerId.HasValue)
+                    {
+                        var standing = new PlayerFinalStanding
+                        {
+                            PlayerId = winnerId.Value,
+                            PlayerName = gameState.Players[winnerId.Value].UserName,
+                            Place = 1,
+                            CorrectAnswers = gameState.PlayerCorrectCount[winnerId.Value],
+                            TotalScore = gameState.PlayerScores[winnerId.Value],
+                            RoundsSurvived = gameState.CurrentRound
+                        };
+                        finalStandings.Add(standing);
+                        standings[winnerId.Value] = standing;
+                    }
+
+                    var eliminatedPlayers = gameState.EliminatedPlayers
+                        .Select(id => new { id, place = gameState.PlayerPlaces[id] })
+                        .OrderBy(x => x.place);
+
+                    foreach (var item in eliminatedPlayers)
+                    {
+                        var standing = new PlayerFinalStanding
+                        {
+                            PlayerId = item.id,
+                            PlayerName = gameState.Players[item.id].UserName,
+                            Place = item.place,
+                            CorrectAnswers = gameState.PlayerCorrectCount.GetValueOrDefault(item.id),
+                            TotalScore = gameState.PlayerScores.GetValueOrDefault(item.id),
+                            RoundsSurvived = gameState.Players[item.id].EliminatedAtRound
+                        };
+                        finalStandings.Add(standing);
+                        standings[item.id] = standing;
+                    }
+                }
+
+                var matchFinishedData = new MatchFinishedData
                 {
                     MatchId = matchId,
                     WinnerId = winnerId ?? Guid.Empty,
                     FinalStandings = finalStandings
                 };
 
-                foreach (var player in finalStandings)
-                {
-                    notifications.Add((player.PlayerId, matchFinishedData));
-                }
-
-                _activeGames.Remove(matchId);
-            }
-
-            if (dbMatch != null)
-            {
-                dbMatch.Status = KothMatchStatus.Finished;
-                dbMatch.FinishedAt = DateTime.UtcNow;
-                dbMatch.WinnerId = matchFinishedData.WinnerId != Guid.Empty ? matchFinishedData.WinnerId : null;
-
-                foreach (var player in dbMatch.Players)
-                {
-                    if (standings.TryGetValue(player.UserId, out var standing))
-                    {
-                        player.Place = standing.Place;
-                        player.IsActive = standing.Place == 1; 
-                        player.RoundEliminated = standing.RoundsSurvived;
-                    }
-                }
-
+                await UpdateDatabaseWithResults(matchId, standings, mode, matchFinishedData);
+                await CreateGameSessionsAsync(matchId, standings, mode);
                 await _db.SaveChangesAsync();
+
+                foreach (var standing in finalStandings)
+                {
+                    await _notificationService.NotifyMatchFinished(standing.PlayerId, matchFinishedData);
+                }
+
+                return matchFinishedData;
             }
-
-            await CreateGameSessionsAsync(matchId, standings, mode);
-
-            foreach (var (userId, data) in notifications)
+            finally
             {
-                await _notificationService.NotifyMatchFinished(userId, data);
+                lock (gameState)
+                {
+                    gameState.IsMatchFinishing = false;
+                }
             }
-
-            return matchFinishedData;
         }
+
         public Task<KothGameState?> GetGameStateAsync(Guid matchId)
         {
-            lock (_gameLock)
-            {
-                _activeGames.TryGetValue(matchId, out var gameState);
-                return Task.FromResult(gameState);
-            }
+            _activeGames.TryGetValue(matchId, out var gameState);
+            return Task.FromResult(gameState);
         }
 
         private async Task<List<GameQuestion>> GenerateQuestionsAsync(int count, int seed, GameMode mode)
@@ -673,6 +736,30 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             _db.KothAnswers.Add(kothAnswer);
             await _db.SaveChangesAsync();
         }
+        private async Task UpdateDatabaseWithResults(Guid matchId, Dictionary<Guid, PlayerFinalStanding> standings, GameMode mode, MatchFinishedData matchFinishedData)
+        {
+            var dbMatch = await _db.KothMatches
+                .Include(m => m.Players)
+                .FirstOrDefaultAsync(m => m.Id == matchId);
+
+            if (dbMatch == null) return;
+
+            dbMatch.Status = KothMatchStatus.Finished;
+            dbMatch.FinishedAt = DateTime.UtcNow;
+            dbMatch.WinnerId = matchFinishedData.WinnerId != Guid.Empty ? matchFinishedData.WinnerId : null;
+
+            foreach (var player in dbMatch.Players)
+            {
+                if (standings.TryGetValue(player.UserId, out var standing))
+                {
+                    player.Place = standing.Place;
+                    player.IsActive = standing.Place == 1;
+                    player.RoundEliminated = standing.RoundsSurvived;
+                }
+            }
+
+            //await _db.SaveChangesAsync();
+        }
         private async Task CreateGameSessionsAsync(Guid matchId, Dictionary<Guid, PlayerFinalStanding> standings, GameMode mode)
         {
             foreach (var (userId, standing) in standings)
@@ -701,8 +788,10 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 await UpdateUserStatsAsync(userId, gameSession, standing.Place == 1);
             }
 
-            await _db.SaveChangesAsync();
+            //await _db.SaveChangesAsync();
         }
+
+
 
         private async Task UpdateUserStatsAsync(Guid userId, GameSession session, bool isWinner)
         {
@@ -736,7 +825,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 stats.Level++;
             }
 
-            await _db.SaveChangesAsync();
+            //await _db.SaveChangesAsync();
         }
 
         private int GetXpToNextLevel(int level) => level * 100;

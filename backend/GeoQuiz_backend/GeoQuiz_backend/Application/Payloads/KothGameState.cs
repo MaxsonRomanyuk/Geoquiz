@@ -17,5 +17,12 @@ namespace GeoQuiz_backend.Application.Payloads
         public Dictionary<Guid, Dictionary<int, PlayerAnswer>> PlayerAnswers { get; set; } = new();
         public Dictionary<Guid, int> PlayerScores { get; set; } = new();
         public Dictionary<Guid, int> PlayerCorrectCount { get; set; } = new();
+        public Dictionary<Guid, int> PlayerPlaces { get; set; } = new();
+
+        public bool IsRoundStarting { get; set; }      
+        public bool IsRoundFinishing { get; set; }     
+        public bool IsRoundFinished { get; set; }      
+        public bool IsMatchFinishing { get; set; }
+        public HashSet<Guid> AnsweredPlayers { get; set; } = new();
     }
 }
