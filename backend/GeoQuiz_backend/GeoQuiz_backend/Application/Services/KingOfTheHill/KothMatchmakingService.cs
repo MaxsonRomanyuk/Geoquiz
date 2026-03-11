@@ -3,6 +3,7 @@ using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 {
@@ -10,6 +11,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
     {
         private readonly AppDbContext _db;
         private readonly ISignalRNotificationService _notificationService;
+        private readonly IKothGameService _gameService;
         private readonly ILogger<KothMatchmakingService> _logger;
 
         private static readonly Dictionary<Guid, KothLobby> _activeLobbies = new();
@@ -19,10 +21,12 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
         public KothMatchmakingService(
             AppDbContext db,
             ISignalRNotificationService notificationService,
+            IKothGameService gameService,
             ILogger<KothMatchmakingService> logger)
         {
             _db = db;
             _notificationService = notificationService;
+            _gameService = gameService;
             _logger = logger;
         }
 
@@ -273,16 +277,26 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
         {
             _logger.LogInformation("Starting game for lobby {LobbyId}", lobbyId);
 
+            List<PlayerInfo> playersInfo = new List<PlayerInfo>();
+            List<PlayerLobby> playersLobby = new List<PlayerLobby>();
             lock (_lobbyLock)
             {
-                _activeLobbies.Remove(lobbyId);
+                if (_activeLobbies.TryGetValue(lobbyId, out var lobby))
+                {
+                    playersLobby = lobby.PlayersLobby;
+                    _activeLobbies.Remove(lobbyId);
+                }
                 if (_lobbyTimers.TryGetValue(lobbyId, out var cts))
                 {
                     cts.Cancel();
                     _lobbyTimers.Remove(lobbyId);
                 }
             }
-
+            foreach (PlayerLobby player in playersLobby)
+            {
+                playersInfo.Add(PlayerInfo.FromPlayerLobby(player));
+            }
+            await _gameService.StartMatchFromLobbyAsync(playersInfo);
             //
         }
     }

@@ -17,10 +17,16 @@ import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
 import com.example.geoquiz_frontend.data.remote.KothSignalRClientManager;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.AnswerResultData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.LobbyInitialStateData;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.MatchFinishedData;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.MatchStartedData;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerEliminatedData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerJoinedData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerLeftData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerLobby;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.RoundFinishedData;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.RoundStartedData;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -350,7 +356,24 @@ public class KingLobbyActivity extends BaseActivity {
                     isCountdownActive = false;
                 });
             }
-
+            @Override
+            public void onMatchStarted(MatchStartedData data) {
+            }
+            @Override
+            public void onRoundStarted(RoundStartedData data) {
+            }
+            @Override
+            public void onRoundFinished(RoundFinishedData data) {
+            }
+            @Override
+            public void onPlayerEliminated(PlayerEliminatedData data) {
+            }
+            @Override
+            public void onAnswerResult(AnswerResultData data) {
+            }
+            @Override
+            public void onMatchFinished(MatchFinishedData data) {
+            }
         });
 
         signalRClient.start();

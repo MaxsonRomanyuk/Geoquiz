@@ -2,9 +2,16 @@ package com.example.geoquiz_frontend.data.remote;
 
 import android.util.Log;
 
+import com.example.geoquiz_frontend.data.remote.dtos.koth.AnswerResultData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.LobbyInitialStateData;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.MatchFinishedData;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.MatchStartedData;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerEliminatedData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerJoinedData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerLeftData;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.RoundFinishedData;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.RoundStartedData;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.SubmitAnswerRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.microsoft.signalr.HubConnection;
@@ -40,6 +47,13 @@ public class KothSignalRClientManager {
         void onPlayerLeft(PlayerLeftData data);
         void onLobbyCountdown(int secondsRemaining);
         void onLobbyCountdownCancelled();
+
+        void onMatchStarted(MatchStartedData data);
+        void onRoundStarted(RoundStartedData data);
+        void onRoundFinished(RoundFinishedData data);
+        void onPlayerEliminated(PlayerEliminatedData data);
+        void onAnswerResult(AnswerResultData data);
+        void onMatchFinished(MatchFinishedData data);
     }
 
     private KothSignalRClientManager() {}
@@ -98,6 +112,36 @@ public class KothSignalRClientManager {
             Log.d(TAG, "LobbyCountdownCancelled received");
             notifyListeners(listener -> listener.onLobbyCountdownCancelled());
         });
+
+        hubConnection.on("MatchStarted", (data) -> {
+            Log.d(TAG, "MatchStarted received: " + data.getMatchId());
+            notifyListeners(listener -> listener.onMatchStarted(data));
+        }, MatchStartedData.class);
+
+        hubConnection.on("RoundStarted", (data) -> {
+            Log.d(TAG, "RoundStarted received: Round " + data.getRoundNumber());
+            notifyListeners(listener -> listener.onRoundStarted(data));
+        }, RoundStartedData.class);
+
+        hubConnection.on("RoundFinished", (data) -> {
+            Log.d(TAG, "RoundFinished received: " + data.getEliminatedPlayerIds().size() + " eliminated");
+            notifyListeners(listener -> listener.onRoundFinished(data));
+        }, RoundFinishedData.class);
+
+        hubConnection.on("PlayerEliminated", (data) -> {
+            Log.d(TAG, "PlayerEliminated received for player: " + data.getPlayerId());
+            notifyListeners(listener -> listener.onPlayerEliminated(data));
+        }, PlayerEliminatedData.class);
+
+        hubConnection.on("AnswerResult", (data) -> {
+            Log.d(TAG, "AnswerResult received, correct: " + data.isCorrect());
+            notifyListeners(listener -> listener.onAnswerResult(data));
+        }, AnswerResultData.class);
+
+        hubConnection.on("MatchFinished", (data) -> {
+            Log.d(TAG, "MatchFinished received");
+            notifyListeners(listener -> listener.onMatchFinished(data));
+        }, MatchFinishedData.class);
 
         hubConnection.onClosed(error -> {
             Log.e(TAG, "Connection closed: " + error);
@@ -162,7 +206,15 @@ public class KothSignalRClientManager {
         }
     }
 
-
+    public void submitAnswer(String matchId, int roundNumber, String questionId, int selectedOptionIndex, int timeSpentMs) {
+        if (hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
+            SubmitAnswerRequest request = new SubmitAnswerRequest(
+                    matchId, roundNumber, questionId, selectedOptionIndex, timeSpentMs
+            );
+            hubConnection.send("SumbitAnswer", request);
+            Log.d(TAG, "SubmitAnswer sent for round " + roundNumber);
+        }
+    }
     public void leaveMatch(String matchId) {
         if (hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
             hubConnection.send("LeaveMatch", matchId);

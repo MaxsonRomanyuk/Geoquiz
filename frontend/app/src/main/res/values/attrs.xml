@@ -1,5 +1,6 @@
 <resources>
     <attr name="colorError" format="color" />
+    <attr name="colorSuccess" format="color" />
     <attr name="colorTertiaryFixed" format="color" />
     <attr name="colorPrimary" format="color" />
     <attr name="colorSecondary" format="color" />

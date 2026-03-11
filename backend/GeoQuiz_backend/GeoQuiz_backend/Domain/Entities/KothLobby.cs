@@ -10,7 +10,7 @@
     public class PlayerLobby
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         public int Level { get; set; }
     }
 }

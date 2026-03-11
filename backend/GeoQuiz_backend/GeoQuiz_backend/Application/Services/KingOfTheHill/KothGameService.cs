@@ -62,7 +62,6 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 QuestionIds = questions.Select(q => q.QuestionId).ToList()
             };
 
-
             var match = new KothMatch
             {
                 Id = matchId,
@@ -159,23 +158,15 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 return null;
             }
 
+            RoundStartedData roundStartedData;
+            CancellationTokenSource cts;
+
             lock (gameState)
             {
-                if (gameState.IsRoundStarting)
+                if (gameState.IsRoundStarting || gameState.IsRoundFinished || gameState.IsMatchFinishing)
                 {
-                    _logger.LogWarning("Round already starting for match {MatchId}", matchId);
-                    return null;
-                }
-
-                if (gameState.IsRoundFinished)
-                {
-                    _logger.LogWarning("Round already finished for match {MatchId}", matchId);
-                    return null;
-                }
-
-                if (gameState.IsMatchFinishing)
-                {
-                    _logger.LogWarning("Match is finishing for {MatchId}", matchId);
+                    _logger.LogDebug("Match {MatchId} cannot start round: Starting={IsRoundStarting}, Finished={IsRoundFinished}, Finishing={IsMatchFinishing}",
+                        matchId, gameState.IsRoundStarting, gameState.IsRoundFinished, gameState.IsMatchFinishing);
                     return null;
                 }
 
@@ -186,15 +177,8 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 }
 
                 gameState.IsRoundStarting = true;
-                gameState.IsRoundFinishing = false;
-                gameState.IsRoundFinished = false;
-            }
-
-            try
-            {
 
                 gameState.CurrentRound++;
-
                 if (gameState.CurrentRound == 1)
                 {
                     gameState.CurrentRoundType = RoundType.Classic;
@@ -209,35 +193,31 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
                 if (gameState.CurrentRound > gameState.Questions.Count)
                 {
-                    _logger.LogError("Not enough questions for match {MatchId}", matchId);
-
-                    lock (gameState)
-                    {
-                        gameState.IsRoundStarting = false;
-                    }
+                    gameState.IsRoundStarting = false;
                     return null;
                 }
 
                 var question = gameState.Questions[gameState.CurrentRound - 1];
                 gameState.RoundStartTime = DateTime.UtcNow;
                 gameState.EliminatedThisRound.Clear();
-                gameState.AnsweredPlayers.Clear(); 
+                gameState.AnsweredPlayers.Clear();
 
-                var questionData = MapToQuestionData(question);
-
-                var roundStartedData = new RoundStartedData
+                roundStartedData = new RoundStartedData
                 {
                     RoundNumber = gameState.CurrentRound,
                     RoundType = gameState.CurrentRoundType,
-                    Question = questionData,
+                    Question = MapToQuestionData(question),
                     RoundStartTime = gameState.RoundStartTime,
                     TimeLimitSeconds = 10
                 };
 
-                await _notificationService.NotifyRoundStarted(matchId, roundStartedData);
-
-                var cts = new CancellationTokenSource();
+                cts = new CancellationTokenSource();
                 _roundTimers[matchId] = cts;
+            }
+
+            try
+            {
+                await _notificationService.NotifyRoundStarted(matchId, roundStartedData);
 
                 _ = Task.Run(async () =>
                 {
@@ -245,24 +225,22 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     {
                         await Task.Delay(TimeSpan.FromSeconds(10), cts.Token);
 
+                        bool shouldFinish;
                         lock (gameState)
                         {
-                            if (gameState.IsRoundFinished || gameState.IsMatchFinishing)
-                            {
-                                _logger.LogDebug("Round already finished for match {MatchId}", matchId);
-                                return;
-                            }
+                            shouldFinish = !gameState.IsRoundFinished && !gameState.IsMatchFinishing;
                         }
 
-                        await FinishRoundAsync(matchId);
+                        if (shouldFinish)
+                        {
+                            await FinishRoundAsync(matchId);
+                        }
                     }
                     catch (TaskCanceledException)
                     {
                         _logger.LogDebug("Round timer cancelled for match {MatchId}", matchId);
                     }
                 }, cts.Token);
-
-                return roundStartedData;
             }
             finally
             {
@@ -271,6 +249,8 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     gameState.IsRoundStarting = false;
                 }
             }
+
+            return roundStartedData;
         }
 
         public async Task<AnswerResultData> SubmitAnswerAsync(Guid matchId, Guid userId, SubmitAnswerRequest request)
@@ -328,9 +308,23 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 CorrectOptionIndex = question.CorrectOptionIndex
             };
 
-            _ = Task.Run(() => SaveAnswerToDbAsync(matchId, userId, request.RoundNumber, answer));
+            var kothAnswer = new KothAnswer
+            {
+                Id = Guid.NewGuid(),
+                MatchId = matchId,
+                UserId = userId,
+                QuestionId = answer.QuestionId,
+                RoundNumber = request.RoundNumber,
+                IsCorrect = answer.IsCorrect,
+                TimeSpentMs = answer.TimeSpentMs,
+                ScoreGained = answer.ScoreGained,
+                AnsweredAt = answer.AnsweredAt
+            };
 
-            await _notificationService.NotifyAnswerResult(userId, result);
+            lock (gameState)
+            {
+                gameState.PendingAnswers.Add(kothAnswer);
+            }
 
             bool allAnswered = false;
             lock (gameState)
@@ -455,9 +449,6 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                             }
                         }
                     }
-
-                    var eliminatedScores = new Dictionary<Guid, int>();
-
                     foreach (var playerId in eliminatedThisRound)
                     {
                         gameState.ActivePlayerIds.Remove(playerId);
@@ -466,27 +457,44 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                         gameState.Players[playerId].IsActive = false;
                         gameState.Players[playerId].EliminatedAtRound = currentRound;
 
-                        eliminatedScores[playerId] = gameState.PlayerScores[playerId];
                     }
 
-                    var maxPlace = gameState.ActivePlayerIds.Count + gameState.EliminatedThisRound.Count;
-                    var minPlace = gameState.ActivePlayerIds.Count;
+                    var eliminatedWithStats = eliminatedThisRound
+                        .Select(id => new
+                        {
+                            PlayerId = id,
+                            Score = gameState.PlayerScores[id],
+                            TimeSpent = gameState.PlayerAnswers.ContainsKey(id) &&
+                                        gameState.PlayerAnswers[id].ContainsKey(currentRound)
+                                        ? gameState.PlayerAnswers[id][currentRound].TimeSpentMs
+                                        : int.MaxValue 
+                        })
+                        .OrderBy(x => x.Score)          
+                        .ThenByDescending(x => x.TimeSpent) 
+                        .ToList();
 
-                    for (var place = maxPlace; place > minPlace; place--)
+                    int currentPlace = gameState.ActivePlayerIds.Count + eliminatedWithStats.Count;
+                    foreach (var item in eliminatedWithStats)
                     {
-                        var minScores = eliminatedScores.Values.Min();
-                        var minPlayers = eliminatedScores.FirstOrDefault(e => e.Value == minScores).Key;
-                        gameState.PlayerPlaces[minPlayers] = place;
-                        eliminatedScores.Remove(minPlayers);
+                        gameState.PlayerPlaces[item.PlayerId] = currentPlace;
+                        currentPlace--;
                     }
 
                     gameState.IsRoundFinished = true;
+                }
+
+                if (gameState.PendingAnswers.Any())
+                {
+                    _db.KothAnswers.AddRange(gameState.PendingAnswers);
+                    await _db.SaveChangesAsync();
+                    gameState.PendingAnswers.Clear();
                 }
 
                 var roundFinishedData = new RoundFinishedData
                 {
                     RoundNumber = gameState.CurrentRound,
                     RoundType = gameState.CurrentRoundType,
+                    CorrectOptionIndex = gameState.Questions[gameState.CurrentRound - 1].CorrectOptionIndex,
                     EliminatedPlayerIds = eliminatedThisRound,
                     Results = playerResults.Values.ToList(),
                     RemainingPlayers = gameState.ActivePlayerIds.Count,
@@ -619,10 +627,8 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 await CreateGameSessionsAsync(matchId, standings, mode);
                 await _db.SaveChangesAsync();
 
-                foreach (var standing in finalStandings)
-                {
-                    await _notificationService.NotifyMatchFinished(standing.PlayerId, matchFinishedData);
-                }
+                
+                await _notificationService.NotifyMatchFinished(matchId, matchFinishedData);
 
                 return matchFinishedData;
             }
@@ -718,24 +724,6 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 AudioUrl = question.AudioUrl
             };
         }
-        private async Task SaveAnswerToDbAsync(Guid matchId, Guid userId, int roundNumber, PlayerAnswer answer)
-        {
-            var kothAnswer = new KothAnswer
-            {
-                Id = Guid.NewGuid(),
-                MatchId = matchId,
-                UserId = userId,
-                QuestionId = answer.QuestionId,
-                RoundNumber = roundNumber,
-                IsCorrect = answer.IsCorrect,
-                TimeSpentMs = answer.TimeSpentMs,
-                ScoreGained = answer.ScoreGained,
-                AnsweredAt = answer.AnsweredAt
-            };
-
-            _db.KothAnswers.Add(kothAnswer);
-            await _db.SaveChangesAsync();
-        }
         private async Task UpdateDatabaseWithResults(Guid matchId, Dictionary<Guid, PlayerFinalStanding> standings, GameMode mode, MatchFinishedData matchFinishedData)
         {
             var dbMatch = await _db.KothMatches
@@ -815,15 +803,15 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             if (session.Place <= 3)
             {
                 stats.KothTop3Finishes++;
+                stats.Experience += session.Score;
+
+                if (stats.Experience >= GetXpToNextLevel(stats.Level))
+                {
+                    stats.Experience -= GetXpToNextLevel(stats.Level);
+                    stats.Level++;
+                }
             }
 
-            stats.Experience += session.Score;
-
-            while (stats.Experience >= GetXpToNextLevel(stats.Level))
-            {
-                stats.Experience -= GetXpToNextLevel(stats.Level);
-                stats.Level++;
-            }
 
             //await _db.SaveChangesAsync();
         }

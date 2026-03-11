@@ -88,7 +88,6 @@ namespace GeoQuiz_backend.Application.Services.PvP
             await _kothHub.Clients.Group($"match_{matchId}").RoundStarted(data);
             
         }
-
         public async Task NotifyRoundFinished(Guid matchId, RoundFinishedData data)
         {
             await _kothHub.Clients.Group($"match_{matchId}").RoundFinished(data);
@@ -103,10 +102,9 @@ namespace GeoQuiz_backend.Application.Services.PvP
             await _kothHub.Clients.User(userId.ToString()).AnswerResult(data);
             
         }
-
-        public async Task NotifyMatchFinished(Guid userId, MatchFinishedData data)
+        public async Task NotifyMatchFinished(Guid matchId, MatchFinishedData data)
         {
-            await _kothHub.Clients.User(userId.ToString()).MatchFinished(data);
+            await _kothHub.Clients.Group($"match_{matchId}").MatchFinished(data);
         }
     }
 }

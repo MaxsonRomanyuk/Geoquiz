@@ -7,7 +7,7 @@ namespace GeoQuiz_backend.Application.DTOs.KingOfTheHill
         public Guid MatchId { get; set; }
         public Guid WinnerId { get; set; }
         public List<PlayerFinalStanding> FinalStandings { get; set; } = new();
-        public List<UnlockedAchievement> UnlockedAchievements { get; set; } = new();
+        //public List<UnlockedAchievement> UnlockedAchievements { get; set; } = new();
     }
 
     public class PlayerFinalStanding

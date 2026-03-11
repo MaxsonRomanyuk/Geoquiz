@@ -173,6 +173,14 @@
     <string name="leave">Выйти</string>
     <string name="slot">Слот</string>
     <string name="wait_players">Ждём...</string>
+    <!--Game-->
+    <string name="speed_round">СКОРОСТНОЙ</string>
+    <string name="classic_round">КЛАССИЧЕСКИЙ</string>
+    <string name="eliminated_players">Выбывшие</string>
+    <string name="spectator_mode">РЕЖИМ НАБЛЮДАТЕЛЯ</string>
+    <string name="watching_game">Вы наблюдаете за игрой</string>
+    <string name="spectate">Наблюдать</string>
+    <string name="exit">Выйти</string>
     <!--Errors-->
     <string name="connection_lost">Соединение потеряно</string>
     <string name="error">Ошибка: </string>

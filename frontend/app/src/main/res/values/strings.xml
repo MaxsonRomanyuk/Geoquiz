@@ -176,6 +176,15 @@
     <string name="slot">Slot</string>
     <string name="wait_players">Waiting...</string>
 
+    <!--Game-->
+    <string name="speed_round">SPEED</string>
+    <string name="classic_round">CLASSIC</string>
+    <string name="eliminated_players">Eliminated</string>
+    <string name="spectator_mode">SPECTATOR MODE</string>
+    <string name="watching_game">You are watching the game</string>
+    <string name="spectate">Spectate</string>
+    <string name="exit">Exit</string>
+
     <!--Errors-->
     <string name="connection_lost">Connection lost</string>
     <string name="error">Error: </string>

@@ -6,6 +6,7 @@
     <color name="dark_gradient_end">#0F1419</color>
 
     <color name="colorError">#800000</color>
+    <color name="colorSuccess">#32CD32</color>
     <color name="primary">#1437AD</color>
 
     <color name="white">#ffffff</color>
