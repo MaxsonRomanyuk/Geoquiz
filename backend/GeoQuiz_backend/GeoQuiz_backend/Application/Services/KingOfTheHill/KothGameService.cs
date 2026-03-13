@@ -36,7 +36,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             _logger = logger;
         }
 
-        public async Task<KothMatch> StartMatchFromLobbyAsync(List<PlayerInfo> players)
+        public async Task<KothMatch> StartMatchFromLobbyAsync(List<PlayerInfo> players, Guid lobbyId)
         {
             var matchId = Guid.NewGuid();
             var totalPlayers = players.Count;
@@ -139,7 +139,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 }).ToList()
             };
 
-            await _notificationService.NotifyMatchStarted(matchId, matchStartedData);
+            await _notificationService.NotifyMatchStarted(lobbyId, matchStartedData);
 
             _ = Task.Run(async () =>
             {

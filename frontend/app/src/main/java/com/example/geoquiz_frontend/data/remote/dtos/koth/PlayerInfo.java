@@ -1,10 +1,17 @@
 package com.example.geoquiz_frontend.data.remote.dtos.koth;
 
-public class PlayerInfo {
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
+public class PlayerInfo implements Serializable {
+    @SerializedName("playerId")
     private String playerId;
 
+    @SerializedName("playerName")
     private String playerName;
 
+    @SerializedName("playerLevel")
     private int playerLevel;
 
     public String getPlayerId() { return playerId; }

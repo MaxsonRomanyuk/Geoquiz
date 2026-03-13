@@ -1,5 +1,7 @@
 package com.example.geoquiz_frontend.data.remote.dtos.koth;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class MatchStartedData {
@@ -10,7 +12,7 @@ public class MatchStartedData {
     private int totalRounds;
 
     private String firstRoundStartTime;
-
+    @SerializedName("allPlayers")
     private List<PlayerInfo> allPlayers;
 
     public String getMatchId() { return matchId; }

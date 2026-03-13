@@ -12,6 +12,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
         private readonly AppDbContext _db;
         private readonly ISignalRNotificationService _notificationService;
         private readonly IKothGameService _gameService;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger<KothMatchmakingService> _logger;
 
         private static readonly Dictionary<Guid, KothLobby> _activeLobbies = new();
@@ -22,11 +23,13 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             AppDbContext db,
             ISignalRNotificationService notificationService,
             IKothGameService gameService,
+            IServiceScopeFactory serviceScopeFactory,
             ILogger<KothMatchmakingService> logger)
         {
             _db = db;
             _notificationService = notificationService;
             _gameService = gameService;
+            _serviceScopeFactory = serviceScopeFactory;
             _logger = logger;
         }
 
@@ -85,12 +88,65 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 }
             }
 
-            _ = CheckStartConditionsFireAndForget(lobby.Id);
+            await CheckStartConditionsAsync(lobby.Id);
 
 
             return (lobby, userName, userLevel);
         }
+        private async Task CheckStartConditionsAsync(Guid lobbyId)
+        {
+            try
+            {
+                bool shouldStartTimer = false;
+                bool shouldStartImmediately = false;
+                List<PlayerLobby> playersToStart = null;
 
+                lock (_lobbyLock)
+                {
+                    if (!_activeLobbies.TryGetValue(lobbyId, out var lobby))
+                        return;
+
+                    if (lobby.PlayersLobby.Count >= 32)
+                    {
+                        _logger.LogInformation("Lobby {LobbyId} full (32 players), starting immediately", lobbyId);
+                        shouldStartImmediately = true;
+                        playersToStart = lobby.PlayersLobby;
+                        _activeLobbies.Remove(lobbyId);
+
+                        if (_lobbyTimers.TryGetValue(lobbyId, out var cts))
+                        {
+                            cts.Cancel();
+                            _lobbyTimers.Remove(lobbyId);
+                        }
+                    }
+                    else if (lobby.PlayersLobby.Count >= 2 && !_lobbyTimers.ContainsKey(lobbyId))
+                    {
+                        shouldStartTimer = true;
+                    }
+                }
+
+                if (shouldStartImmediately && playersToStart != null)
+                {
+                    _ = Task.Run(async () =>
+                    {
+                        using (var scope = _serviceScopeFactory.CreateScope())
+                        {
+                            var gameService = scope.ServiceProvider.GetRequiredService<IKothGameService>();
+                            var playersInfo = playersToStart.Select(p => PlayerInfo.FromPlayerLobby(p)).ToList();
+                            await gameService.StartMatchFromLobbyAsync(playersInfo, lobbyId);
+                        }
+                    });
+                }
+                else if (shouldStartTimer)
+                {
+                    _ = Task.Run(async () => await StartLobbyTimerAsync(lobbyId));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in CheckStartConditions for lobby {LobbyId}", lobbyId);
+            }
+        }
         public async Task LeaveLobbyAsync(Guid userId)
         {
             Guid? lobbyId = null;
@@ -145,49 +201,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
             if (shouldCancelTimer && lobbyId.HasValue)
             {
-                await CancelLobbyTimerAsync(lobbyId.Value);
-            }
-        }
-        private async Task CheckStartConditionsFireAndForget(Guid lobbyId)
-        {
-            try
-            {
-                await CheckStartConditionsAsync(lobbyId);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error in background lobby check for {LobbyId}", lobbyId);
-            }
-        }
-        private async Task CheckStartConditionsAsync(Guid lobbyId)
-        {
-            bool shouldStartTimer = false;
-            bool shouldStartImmediately = false;
-
-            lock (_lobbyLock)
-            {
-                if (!_activeLobbies.TryGetValue(lobbyId, out var lobby))
-                    return;
-
-                if (lobby.PlayersLobby.Count >= 32)
-                {
-                    _logger.LogInformation("Lobby {LobbyId} full (32 players), starting immediately", lobbyId);
-                    shouldStartImmediately = true;
-                }
-
-                if (lobby.PlayersLobby.Count >= 4 && !_lobbyTimers.ContainsKey(lobbyId))
-                {
-                    shouldStartTimer = true;
-                }
-            }
-
-            if (shouldStartImmediately)
-            {
-                await StartGameAsync(lobbyId); 
-            }
-            if (shouldStartTimer)
-            {
-                await StartLobbyTimerAsync(lobbyId);
+                _ = Task.Run(async () => await CancelLobbyTimerAsync(lobbyId.Value));
             }
         }
 
@@ -206,20 +220,31 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             {
                 for (int i = COUNTDOWN_SECONDS; i > 0; i--)
                 {
-                    if (cts.Token.IsCancellationRequested)
-                        return;
+                    if (cts.Token.IsCancellationRequested) return;
 
-                    await _notificationService.NotifyLobbyCountdown(lobbyId, i);
+                    using (var scope = _serviceScopeFactory.CreateScope())
+                    {
+                        var notificationService = scope.ServiceProvider.GetRequiredService<ISignalRNotificationService>();
+                        await notificationService.NotifyLobbyCountdown(lobbyId, i);
+                    }
 
                     await Task.Delay(1000, cts.Token);
 
                     bool stillValid;
+                    List<PlayerLobby> playersToStart = null;
+
                     lock (_lobbyLock)
                     {
                         if (!_activeLobbies.TryGetValue(lobbyId, out var lobby))
                             return;
 
-                        stillValid = lobby.PlayersLobby.Count >= 4;
+                        stillValid = lobby.PlayersLobby.Count >= 2;
+
+                        if (i == 1 && stillValid)
+                        {
+                            playersToStart = lobby.PlayersLobby;
+                            _activeLobbies.Remove(lobbyId);
+                        }
                     }
 
                     if (!stillValid)
@@ -228,16 +253,25 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                         await CancelLobbyTimerAsync(lobbyId);
                         return;
                     }
+
+                    if (i == 1 && playersToStart != null)
+                    {
+                        _logger.LogInformation("Lobby {LobbyId} countdown finished, starting game", lobbyId);
+
+                        lock (_lobbyLock)
+                        {
+                            _lobbyTimers.Remove(lobbyId);
+                        }
+
+                        using (var scope = _serviceScopeFactory.CreateScope())
+                        {
+                            var gameService = scope.ServiceProvider.GetRequiredService<IKothGameService>();
+                            var playersInfo = playersToStart.Select(p => PlayerInfo.FromPlayerLobby(p)).ToList();
+                            await gameService.StartMatchFromLobbyAsync(playersInfo, lobbyId);
+                        }
+                        return;
+                    }
                 }
-
-                _logger.LogInformation("Lobby {LobbyId} countdown finished, starting game", lobbyId);
-
-                lock (_lobbyLock)
-                {
-                    _lobbyTimers.Remove(lobbyId);
-                }
-
-                await StartGameAsync(lobbyId);
             }
             catch (TaskCanceledException)
             {
@@ -260,7 +294,11 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             if (cts != null)
             {
                 cts.Cancel();
-                await _notificationService.NotifyLobbyCountdownCancelled(lobbyId);
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var notificationService = scope.ServiceProvider.GetRequiredService<ISignalRNotificationService>();
+                    await notificationService.NotifyLobbyCountdownCancelled(lobbyId);
+                }
             }
         }
 
@@ -268,36 +306,10 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
         {
             lock (_lobbyLock)
             {
-                var inLobby = _activeLobbies.Values
-                    .Any(l => l.PlayersLobby.Any(p => p.Id == userId));
+                var inLobby = _activeLobbies.Values.Any(l => l.PlayersLobby.Any(p => p.Id == userId));
                 return Task.FromResult(inLobby);
             }
         }
-        private async Task StartGameAsync(Guid lobbyId)
-        {
-            _logger.LogInformation("Starting game for lobby {LobbyId}", lobbyId);
-
-            List<PlayerInfo> playersInfo = new List<PlayerInfo>();
-            List<PlayerLobby> playersLobby = new List<PlayerLobby>();
-            lock (_lobbyLock)
-            {
-                if (_activeLobbies.TryGetValue(lobbyId, out var lobby))
-                {
-                    playersLobby = lobby.PlayersLobby;
-                    _activeLobbies.Remove(lobbyId);
-                }
-                if (_lobbyTimers.TryGetValue(lobbyId, out var cts))
-                {
-                    cts.Cancel();
-                    _lobbyTimers.Remove(lobbyId);
-                }
-            }
-            foreach (PlayerLobby player in playersLobby)
-            {
-                playersInfo.Add(PlayerInfo.FromPlayerLobby(player));
-            }
-            await _gameService.StartMatchFromLobbyAsync(playersInfo);
-            //
-        }
+        
     }
 }

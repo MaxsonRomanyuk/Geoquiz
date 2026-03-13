@@ -283,9 +283,6 @@ namespace GeoQuiz_backend.Infrastructure.Persistence.MySQL
                 entity.Property(e => e.Status)
                     .IsRequired();
 
-                entity.Property(e => e.SelectedMode)
-                    .IsRequired(false);
-
                 entity.Property(e => e.CurrentRound)
                     .HasDefaultValue(1);
 

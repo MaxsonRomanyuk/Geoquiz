@@ -358,6 +358,9 @@ public class KingLobbyActivity extends BaseActivity {
             }
             @Override
             public void onMatchStarted(MatchStartedData data) {
+                signalRClient.joinMatch(data.getMatchId());
+                stopSearch();
+                runOnUiThread(() -> handleMatchStarted(data));
             }
             @Override
             public void onRoundStarted(RoundStartedData data) {
@@ -377,6 +380,16 @@ public class KingLobbyActivity extends BaseActivity {
         });
 
         signalRClient.start();
+    }
+    private void handleMatchStarted(MatchStartedData data) {
+        Log.d(TAG, "Match started! Total players: " + data.getTotalPlayers() + ", rounds: " + data.getTotalRounds());
+
+        Intent intent = new Intent(this, KingGameActivity.class);
+        intent.putExtra("match_id", data.getMatchId());
+        intent.putExtra("total_players", data.getTotalPlayers());
+        intent.putExtra("total_rounds", data.getTotalRounds());
+        intent.putExtra("all_players", new ArrayList<>(data.getAllPlayers()));
+        startActivity(intent);
     }
     private void startSearch() {
         layoutTimer.setVisibility(View.VISIBLE);

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.SignalR;
 using System.Collections.Concurrent;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
 
 namespace GeoQuiz_backend.API.Hubs
 {
@@ -34,18 +33,17 @@ namespace GeoQuiz_backend.API.Hubs
             _notificationService = notificationService;
             _logger = logger;
         }
-
         public override async Task OnConnectedAsync()
         {
             var userId = GetUserId();
             var connectionId = Context.ConnectionId;
 
             _userConnections[userId] = connectionId;
-            _logger.LogInformation("User {UserId} connected to KothHub with connection {ConnectionId}",
-                userId, connectionId);
+            _logger.LogInformation("User {UserId} connected to KothHub with connection {ConnectionId}", userId, connectionId);
 
             await base.OnConnectedAsync();
         }
+        
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
@@ -57,6 +55,10 @@ namespace GeoQuiz_backend.API.Hubs
                 {
                     await _matchmaking.LeaveLobbyAsync(userId);
                     _userCurrentLobby.TryRemove(userId, out _);
+                }
+                if (_userCurrentMatch.TryGetValue(userId, out var matchId))
+                {
+                    _userCurrentMatch.TryRemove(userId, out _); // add leavematch
                 }
 
                 _logger.LogInformation("User {UserId} disconnected from KothHub", userId);
@@ -99,8 +101,7 @@ namespace GeoQuiz_backend.API.Hubs
 
                     _userCurrentLobby[userId] = lobby.Id;
 
-                    _logger.LogInformation("User {UserId} added to lobby group {LobbyId}",
-                        userId, lobby.Id);
+                    _logger.LogInformation("User {UserId} added to lobby group {LobbyId}", userId, lobby.Id);
 
                 }
             }
@@ -132,7 +133,23 @@ namespace GeoQuiz_backend.API.Hubs
                 throw new HubException("Failed to leave lobby");
             }
         }
+        public async Task JoinMatch(Guid matchId)
+        {
+            var userId = GetUserId();
+            if (!_userCurrentLobby.TryGetValue(userId, out var lobbyId))
+            {
+                _logger.LogWarning("User {UserId} tried to join match {MatchId} but not in any lobby", userId, matchId);
+                return;
+            }
 
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"lobby_{lobbyId}");
+            _userCurrentLobby.TryRemove(userId, out _);
+
+            await Groups.AddToGroupAsync(Context.ConnectionId, $"match_{matchId}");
+            _userCurrentMatch[userId] = matchId;
+
+            _logger.LogInformation("User {UserId} moved from lobby {LobbyId} to match {MatchId}", userId, lobbyId, matchId);
+        }
         public async Task LeaveMatch(Guid matchId)
         {
             var userId = GetUserId();
@@ -140,6 +157,7 @@ namespace GeoQuiz_backend.API.Hubs
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"match_{matchId}");
             _userCurrentMatch.TryRemove(userId, out _);
+            _userCurrentLobby.TryRemove(userId, out _);
         }
 
         public async Task SumbitAnswer(SubmitAnswerRequest request)

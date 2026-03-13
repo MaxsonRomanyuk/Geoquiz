@@ -1,6 +1,4 @@
 ﻿using GeoQuiz_backend.Application.Interfaces;
-using GeoQuiz_backend.Application.Services;
-using GeoQuiz_backend.Application.Services.PvP;
 using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Domain.Enums;
 using GeoQuiz_backend.Domain.Mongo;
@@ -10,10 +8,7 @@ using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 

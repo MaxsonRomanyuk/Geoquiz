@@ -179,6 +179,7 @@
     <!--Game-->
     <string name="speed_round">SPEED</string>
     <string name="classic_round">CLASSIC</string>
+    <string name="you_were_eliminated_place">You were eliminated. Place: %d</string>
     <string name="eliminated_players">Eliminated</string>
     <string name="spectator_mode">SPECTATOR MODE</string>
     <string name="watching_game">You are watching the game</string>

@@ -161,7 +161,7 @@ public class MainActivity extends BaseActivity {
 
         userRepository.getErrorMessage().observe(this, error -> {
             if (error != null) {
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
             }
         });
     }

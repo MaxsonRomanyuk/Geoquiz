@@ -205,14 +205,11 @@ public class KothSignalRClientManager {
             Log.d(TAG, "LeaveLobby sent");
         }
     }
-
-    public void submitAnswer(String matchId, int roundNumber, String questionId, int selectedOptionIndex, int timeSpentMs) {
+    public void joinMatch(String matchId) {
         if (hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
-            SubmitAnswerRequest request = new SubmitAnswerRequest(
-                    matchId, roundNumber, questionId, selectedOptionIndex, timeSpentMs
-            );
-            hubConnection.send("SumbitAnswer", request);
-            Log.d(TAG, "SubmitAnswer sent for round " + roundNumber);
+            hubConnection.send("JoinMatch", matchId);
+            Log.d(TAG, "JoinMatch sent for match " + matchId);
+            this.currentMatchId = matchId;
         }
     }
     public void leaveMatch(String matchId) {
@@ -222,6 +219,16 @@ public class KothSignalRClientManager {
             this.currentMatchId = null;
         }
     }
+    public void submitAnswer(String matchId, int roundNumber, String questionId, int selectedOptionIndex, int timeSpentMs) {
+        if (hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
+            SubmitAnswerRequest request = new SubmitAnswerRequest(
+                    matchId, roundNumber, questionId, selectedOptionIndex, timeSpentMs
+            );
+            hubConnection.send("SumbitAnswer", request);
+            Log.d(TAG, "SubmitAnswer sent for round " + roundNumber);
+        }
+    }
+
 
     public void setCurrentLobby(String lobbyId) {
         this.currentLobbyId = lobbyId;
