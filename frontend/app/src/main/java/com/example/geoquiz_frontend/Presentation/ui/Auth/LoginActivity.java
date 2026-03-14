@@ -246,6 +246,7 @@ public class LoginActivity extends BaseActivity {
 
         userRepository = UserRepository.getInstance(this);
         userRepository.loadUserData(true);
+        gameManager = GameManager.getInstance(this);
         loadData();
         startMainActivity();
     }

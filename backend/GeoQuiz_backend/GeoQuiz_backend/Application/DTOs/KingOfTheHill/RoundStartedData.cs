@@ -6,7 +6,7 @@ namespace GeoQuiz_backend.Application.DTOs.KingOfTheHill
     public class RoundStartedData
     {
         public int RoundNumber { get; set; }
-        public RoundType RoundType { get; set; } 
+        public int RoundType { get; set; } 
         public QuestionData Question { get; set; } = null!;
         public DateTime RoundStartTime { get; set; }
         public int TimeLimitSeconds { get; set; } = 10;

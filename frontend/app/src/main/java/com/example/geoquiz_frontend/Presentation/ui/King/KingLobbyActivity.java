@@ -359,7 +359,6 @@ public class KingLobbyActivity extends BaseActivity {
             @Override
             public void onMatchStarted(MatchStartedData data) {
                 signalRClient.joinMatch(data.getMatchId());
-                stopSearch();
                 runOnUiThread(() -> handleMatchStarted(data));
             }
             @Override

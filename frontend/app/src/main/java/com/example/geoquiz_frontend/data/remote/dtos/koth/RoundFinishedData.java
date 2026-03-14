@@ -1,6 +1,7 @@
 package com.example.geoquiz_frontend.data.remote.dtos.koth;
 
 import com.example.geoquiz_frontend.domain.enums.RoundType;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
@@ -8,7 +9,9 @@ public class RoundFinishedData {
     private int roundNumber;
     private int roundType;
     private int correctOptionIndex;
+    @SerializedName("eliminatedPlayerIds")
     private List<String> eliminatedPlayerIds;
+    @SerializedName("results")
     private List<PlayerRoundResult> results;
     private int remainingPlayers;
     private boolean isMatchFinished;

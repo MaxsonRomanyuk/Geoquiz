@@ -26,8 +26,6 @@ namespace GeoQuiz_backend.Application.Interfaces
         Task NotifyPlayerLeft(Guid lobbyId, PlayerLeftData data);
         Task NotifyLobbyCountdown(Guid lobbyId, int secondsRemaining);
         Task NotifyLobbyCountdownCancelled(Guid lobbyId);
-
-        //Task NotifyMatchStarted(Guid matchId, List<PlayerInfo> players, MatchStartedData data);
         Task NotifyMatchStarted(Guid lobbyId, MatchStartedData data);
         Task NotifyRoundStarted(Guid matchId, RoundStartedData data);
         Task NotifyRoundFinished(Guid matchId, RoundFinishedData data);

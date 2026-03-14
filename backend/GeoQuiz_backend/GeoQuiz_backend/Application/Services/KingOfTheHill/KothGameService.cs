@@ -1,4 +1,7 @@
-﻿using GeoQuiz_backend.Application.DTOs.KingOfTheHill;
+﻿using Amazon.Runtime.Internal;
+using GeoQuiz_backend.API.HubClients;
+using GeoQuiz_backend.API.Hubs;
+using GeoQuiz_backend.Application.DTOs.KingOfTheHill;
 using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Application.Payloads;
 using GeoQuiz_backend.Domain.Entities;
@@ -6,8 +9,11 @@ using GeoQuiz_backend.Domain.Enums;
 using GeoQuiz_backend.Domain.Mongo;
 using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 {
@@ -17,6 +23,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
         private readonly IQuestionRepository _questionRepo;
         private readonly ICountryRepository _countryRepo;
         private readonly ISignalRNotificationService _notificationService;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger<KothGameService> _logger;
 
         private static readonly ConcurrentDictionary<Guid, KothGameState> _activeGames = new();
@@ -27,12 +34,14 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             IQuestionRepository questionRepo,
             ICountryRepository countryRepo,
             ISignalRNotificationService notificationService,
+            IServiceScopeFactory serviceScopeFactory,
             ILogger<KothGameService> logger)
         {
             _db = db;
             _questionRepo = questionRepo;
             _countryRepo = countryRepo;
             _notificationService = notificationService;
+            _serviceScopeFactory = serviceScopeFactory;
             _logger = logger;
         }
 
@@ -143,7 +152,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
             _ = Task.Run(async () =>
             {
-                await Task.Delay(3000);
+                await Task.Delay(1000);
                 await StartNextRoundAsync(matchId);
             });
 
@@ -165,7 +174,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             {
                 if (gameState.IsRoundStarting || gameState.IsRoundFinished || gameState.IsMatchFinishing)
                 {
-                    _logger.LogDebug("Match {MatchId} cannot start round: Starting={IsRoundStarting}, Finished={IsRoundFinished}, Finishing={IsMatchFinishing}",
+                    _logger.LogInformation("Match {MatchId} cannot start round: Starting={IsRoundStarting}, Finished={IsRoundFinished}, Finishing={IsMatchFinishing}",
                         matchId, gameState.IsRoundStarting, gameState.IsRoundFinished, gameState.IsMatchFinishing);
                     return null;
                 }
@@ -205,7 +214,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 roundStartedData = new RoundStartedData
                 {
                     RoundNumber = gameState.CurrentRound,
-                    RoundType = gameState.CurrentRoundType,
+                    RoundType = gameState.CurrentRoundType == RoundType.Classic ? 1 : 2,
                     Question = MapToQuestionData(question),
                     RoundStartTime = gameState.RoundStartTime,
                     TimeLimitSeconds = 10
@@ -274,7 +283,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
                 gameState.AnsweredPlayers.Add(userId);
             }
-
+            _logger.LogInformation("Answer submitting for  match {MatchId} with players, time Spents: {TimeSpentMs}", matchId, request.TimeSpentMs);
             var question = gameState.Questions[request.RoundNumber - 1];
             var isCorrect = request.SelectedOptionIndex == question.CorrectOptionIndex;
             var scoreGained = isCorrect ? CalculateScore(request.TimeSpentMs) : 0;
@@ -384,6 +393,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
                 Dictionary<Guid, PlayerRoundResult> playerResults;
                 List<Guid> eliminatedThisRound;
+                List<KothAnswer> pendingAnswers = new List<KothAnswer>();
 
                 lock (gameState)
                 {
@@ -437,7 +447,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                             .Select(kvp => kvp.Key)
                             .ToList();
 
-                        if (correctAnswers.Count > 0)
+                        if (correctAnswers.Count > 1)
                         {
                             var slowest = correctAnswers
                                 .OrderByDescending(id => playerResults[id].TimeSpentMs)
@@ -480,20 +490,29 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                         currentPlace--;
                     }
 
+                    pendingAnswers = gameState.PendingAnswers.ToList();
+                    gameState.PendingAnswers.Clear();
                     gameState.IsRoundFinished = true;
                 }
 
-                if (gameState.PendingAnswers.Any())
+                if (pendingAnswers.Any())
                 {
-                    _db.KothAnswers.AddRange(gameState.PendingAnswers);
-                    await _db.SaveChangesAsync();
-                    gameState.PendingAnswers.Clear();
+                    await Task.Run(async () =>
+                    {
+                        using (var scope = _serviceScopeFactory.CreateScope())
+                        {
+                            var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                            dbContext.KothAnswers.AddRange(pendingAnswers);
+                            await dbContext.SaveChangesAsync();
+                            _logger.LogInformation("Saved {Count} answers for match {MatchId}", pendingAnswers.Count, matchId);
+                        }
+                    });
                 }
 
                 var roundFinishedData = new RoundFinishedData
                 {
                     RoundNumber = gameState.CurrentRound,
-                    RoundType = gameState.CurrentRoundType,
+                    RoundType = gameState.CurrentRoundType == RoundType.Classic ? 1 : 2,
                     CorrectOptionIndex = gameState.Questions[gameState.CurrentRound - 1].CorrectOptionIndex,
                     EliminatedPlayerIds = eliminatedThisRound,
                     Results = playerResults.Values.ToList(),
@@ -502,7 +521,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 };
 
                 await _notificationService.NotifyRoundFinished(matchId, roundFinishedData);
-
+                _logger.LogInformation("Finish round {RoundNumber} for {matchId}", roundFinishedData.RoundNumber ,matchId);
                 foreach (var playerId in eliminatedThisRound)
                 {
                     var data = new PlayerEliminatedData
@@ -513,8 +532,14 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                         CorrectAnswers = gameState.PlayerCorrectCount[playerId],
                         TotalScore = gameState.PlayerScores[playerId]
                     };
-
+                    
                     await _notificationService.NotifyPlayerEliminated(playerId, data);
+                }
+
+                lock (gameState)
+                {
+                    gameState.IsRoundFinishing = false;
+                    gameState.IsRoundFinished = false;
                 }
 
                 if (roundFinishedData.IsMatchFinished)
@@ -523,21 +548,18 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 }
                 else
                 {
-                    _ = Task.Run(async () =>
-                    {
-                        await Task.Delay(2000);
-                        await StartNextRoundAsync(matchId);
-                    });
+                    _ = Task.Run(() => StartNextRoundAsync(matchId));
                 }
 
                 return roundFinishedData;
             }
             finally
             {
-                lock (gameState)
-                {
-                    gameState.IsRoundFinishing = false;
-                }
+                //lock (gameState)
+                //{
+                //    gameState.IsRoundFinishing = false;
+                //    gameState.IsRoundFinished = false;
+                //}
             }
         }
         public async Task<MatchFinishedData> FinishMatchAsync(Guid matchId)
@@ -623,11 +645,20 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     FinalStandings = finalStandings
                 };
 
-                await UpdateDatabaseWithResults(matchId, standings, mode, matchFinishedData);
-                await CreateGameSessionsAsync(matchId, standings, mode);
-                await _db.SaveChangesAsync();
-
                 
+                
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    await UpdateDatabaseWithResults(dbContext, matchId, standings, mode, matchFinishedData);
+                    await CreateGameSessionsAsync(dbContext, matchId, standings, mode);
+                    await dbContext.SaveChangesAsync();
+                    _logger.LogInformation("Saved finish match for match {MatchId}", matchId);
+                }
+                
+                //await _db.SaveChangesAsync();
+
+                _logger.LogInformation("Finish match {matchId}", matchId);
                 await _notificationService.NotifyMatchFinished(matchId, matchFinishedData);
 
                 return matchFinishedData;
@@ -724,9 +755,9 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 AudioUrl = question.AudioUrl
             };
         }
-        private async Task UpdateDatabaseWithResults(Guid matchId, Dictionary<Guid, PlayerFinalStanding> standings, GameMode mode, MatchFinishedData matchFinishedData)
+        private async Task UpdateDatabaseWithResults(AppDbContext db ,Guid matchId, Dictionary<Guid, PlayerFinalStanding> standings, GameMode mode, MatchFinishedData matchFinishedData)
         {
-            var dbMatch = await _db.KothMatches
+            var dbMatch = await db.KothMatches
                 .Include(m => m.Players)
                 .FirstOrDefaultAsync(m => m.Id == matchId);
 
@@ -748,11 +779,11 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
             //await _db.SaveChangesAsync();
         }
-        private async Task CreateGameSessionsAsync(Guid matchId, Dictionary<Guid, PlayerFinalStanding> standings, GameMode mode)
+        private async Task CreateGameSessionsAsync(AppDbContext db , Guid matchId, Dictionary<Guid, PlayerFinalStanding> standings, GameMode mode)
         {
             foreach (var (userId, standing) in standings)
             {
-                var answers = await _db.KothAnswers
+                var answers = await db.KothAnswers
                     .Where(a => a.MatchId == matchId && a.UserId == userId)
                     .ToListAsync();
 
@@ -771,9 +802,9 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     RoundsSurvived = standing.RoundsSurvived
                 };
 
-                _db.GameSessions.Add(gameSession);
+                db.GameSessions.Add(gameSession);
 
-                await UpdateUserStatsAsync(userId, gameSession, standing.Place == 1);
+                await UpdateUserStatsAsync(db ,userId, gameSession, standing.Place == 1);
             }
 
             //await _db.SaveChangesAsync();
@@ -781,9 +812,9 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
 
 
-        private async Task UpdateUserStatsAsync(Guid userId, GameSession session, bool isWinner)
+        private async Task UpdateUserStatsAsync(AppDbContext db,Guid userId, GameSession session, bool isWinner)
         {
-            var user = await _db.Users
+            var user = await db.Users
                 .Include(u => u.Stats)
                 .FirstOrDefaultAsync(u => u.Id == userId);
 

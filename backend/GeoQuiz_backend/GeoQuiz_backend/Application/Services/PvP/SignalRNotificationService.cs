@@ -62,28 +62,19 @@ namespace GeoQuiz_backend.Application.Services.PvP
         {
             await _kothHub.Clients.User(userId.ToString()).PlayerAboutLobby(data);
         }
-
         public async Task NotifyPlayerLeft(Guid lobbyId, PlayerLeftData data)
         {
             await _kothHub.Clients.Group($"lobby_{lobbyId}").PlayerLeft(data);
         }
-
         public async Task NotifyLobbyCountdown(Guid lobbyId, int secondsRemaining)
         {
             await _kothHub.Clients.Group($"lobby_{lobbyId}").LobbyCountdown(secondsRemaining);
         }
-
         public async Task NotifyLobbyCountdownCancelled(Guid lobbyId)
         {
             await _kothHub.Clients.Group($"lobby_{lobbyId}").LobbyCountdownCancelled();
         }
-        //public async Task NotifyMatchStarted(Guid matchId, List<PlayerInfo> players, MatchStartedData data)
-        //{
-        //    foreach (var player in players)
-        //    {
-        //        await _kothHub.Clients.User(player.PlayerId.ToString()).MatchStarted(data);
-        //    }
-        //}
+
         public async Task NotifyMatchStarted(Guid lobbyId, MatchStartedData data)
         {
             await _kothHub.Clients.Group($"lobby_{lobbyId}").MatchStarted(data);
@@ -91,6 +82,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
         public async Task NotifyRoundStarted(Guid matchId, RoundStartedData data)
         {
             await _kothHub.Clients.Group($"match_{matchId}").RoundStarted(data);
+            //await _kothHub.Clients.User(matchId.ToString()).RoundStarted(data);
         }
         public async Task NotifyRoundFinished(Guid matchId, RoundFinishedData data)
         {
