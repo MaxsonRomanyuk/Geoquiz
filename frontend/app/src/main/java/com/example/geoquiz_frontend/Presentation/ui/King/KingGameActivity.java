@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
 import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
@@ -56,7 +57,6 @@ public class KingGameActivity extends BaseActivity {
 
 
     private int currentRound = 0;
-    private int totalRounds = 0;
     private RoundType currentRoundType = RoundType.CLASSIC;
     private QuestionData currentQuestion;
     private int selectedOptionIndex = -1;
@@ -69,7 +69,6 @@ public class KingGameActivity extends BaseActivity {
     private Handler timerHandler = new Handler();
     private Runnable timerRunnable;
     private int timeLeft = 10;
-    private int yourPlace = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +130,6 @@ public class KingGameActivity extends BaseActivity {
         Intent intent = getIntent();
         matchId = intent.getStringExtra("match_id");
         totalPlayers = intent.getIntExtra("total_players", 0);
-        totalRounds = intent.getIntExtra("total_rounds", 0);
         allPlayers = (List<PlayerInfo>) intent.getSerializableExtra("all_players");
         if (allPlayers == null) {
             allPlayers = new ArrayList<>();
@@ -280,18 +278,30 @@ public class KingGameActivity extends BaseActivity {
         if (data.getPlayerId().equals(userId)) {
             Log.d(TAG, "You have been eliminated! Place: " + data.getPlace());
             isEliminated = true;
-            yourPlace = data.getPlace();
 
-            Toast.makeText(this,getString(R.string.you_were_eliminated_place, data.getPlace()), Toast.LENGTH_LONG).show();
+            String playerName = "Player";
+            for (PlayerInfo player: allPlayers) {
+                if (player.getPlayerId().equals(userId)) playerName = player.getPlayerName();
+            }
 
+            Intent intent = new Intent(this, KingEliminatedActivity.class);
+            intent.putExtra("player_name", playerName);
+            intent.putExtra("rounds_survived", data.getRoundsSurvived());
+            intent.putExtra("place", data.getPlace());
+            intent.putExtra("correct_answers", data.getCorrectAnswers());
+            intent.putExtra("total_score", data.getTotalScore());
+            intent.putExtra("is_manually_disabled", data.isManuallyDisabled());
+            intent.putExtra("total_players", totalPlayers);
+            startActivity(intent);
         }
+
     }
 
     private void handleAnswerResult(AnswerResultData data) {
         Log.d(TAG, "Answer result: correct=" + data.isCorrect() + ", score=" + data.getScoreGained());
 
         if (!isEliminated) {
-            yourScore = data.getScoreGained();
+            yourScore += data.getScoreGained();
             tvScore.setText(String.valueOf(yourScore));
 
             highlightSelectedAnswer(data.isCorrect(), data.getCorrectOptionIndex());
@@ -415,12 +425,32 @@ public class KingGameActivity extends BaseActivity {
     }
 
     private void exitGame() {
+        String currentLanguage = preferencesHelper.getLanguage();
+
+        String title = "ru".equals(currentLanguage) ? "Выход из игры" : "Exit Game";
+        String message = "ru".equals(currentLanguage)
+                ? "Вы уверены, что хотите покинуть игру?"
+                : "Are you sure you want to leave the game?";
+        String positiveButton = "ru".equals(currentLanguage) ? "Да, выйти" : "Yes, leave";
+        String negativeButton = "ru".equals(currentLanguage) ? "Отмена" : "Cancel";
+
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(positiveButton, (dialog, which) -> {
+                    performExitGame();
+                })
+                .setNegativeButton(negativeButton, null)
+                .show();
+    }
+
+    private void performExitGame() {
         stopTimer();
         if (signalRManager != null && signalRManager.isConnected() && matchId != null) {
             signalRManager.leaveMatch(matchId);
-            //signalRManager.stop();
+            // signalRManager.stop();
         }
-        finish();
+        //finish();
     }
 
     @Override

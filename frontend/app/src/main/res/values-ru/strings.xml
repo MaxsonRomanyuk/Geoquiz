@@ -173,6 +173,7 @@
     <string name="leave">Выйти</string>
     <string name="slot">Слот</string>
     <string name="wait_players">Ждём...</string>
+
     <!--Game-->
     <string name="speed_round">СКОРОСТНОЙ</string>
     <string name="classic_round">КЛАССИЧЕСКИЙ</string>
@@ -182,6 +183,17 @@
     <string name="watching_game">Вы наблюдаете за игрой</string>
     <string name="spectate">Наблюдать</string>
     <string name="exit">Выйти</string>
+
+    <!--EliminatedPlayer-->
+    <string name="eliminated_result">Ваш результат</string>
+    <string name="you_were_eliminated">Вы выбыли!</string>
+    <string name="place_template">%d место из %d</string>
+    <string name="your_results">Ваши результаты</string>
+    <string name="rounds_survived">Раундов выжил</string>
+    <string name="total_score">Всего очков</string>
+    <string name="player">Игрок</string>
+    <string name="match_continues">Матч продолжается без вас...</string>
+    <string name="manual_disable_message">Вы покинули игру</string>
     <!--Errors-->
     <string name="connection_lost">Соединение потеряно</string>
     <string name="error">Ошибка: </string>

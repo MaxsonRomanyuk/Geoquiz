@@ -204,18 +204,6 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 }
             }
 
-            var data = new PlayerEliminatedData
-            {
-                PlayerId = userId,
-                RoundsSurvived = gameState.CurrentRound,
-                Place = gameState.PlayerPlaces[userId],
-                CorrectAnswers = gameState.PlayerCorrectCount[userId],
-                TotalScore = gameState.PlayerScores[userId],
-                IsManuallyDisabled = true
-            };
-
-            await _notificationService.NotifyPlayerEliminated(userId, data);
-
             if (shouldFinishMatch)
             {
                 _logger.LogInformation("Only one player left in match {MatchId}, finishing", matchId);
@@ -232,6 +220,17 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             if (shouldFinishRoundEarly)
             {
                 _logger.LogInformation("All players answered after user left, finishing round early for match {MatchId}", matchId);
+                var data = new PlayerEliminatedData
+                {
+                    PlayerId = userId,
+                    RoundsSurvived = gameState.CurrentRound,
+                    Place = gameState.PlayerPlaces[userId],
+                    CorrectAnswers = gameState.PlayerCorrectCount[userId],
+                    TotalScore = gameState.PlayerScores[userId],
+                    IsManuallyDisabled = true
+                };
+
+                await _notificationService.NotifyPlayerEliminated(userId, data);
 
                 if (_roundTimers.TryRemove(matchId, out var cts))
                 {
@@ -612,20 +611,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
                 await _notificationService.NotifyRoundFinished(matchId, roundFinishedData);
                 _logger.LogInformation("Finish round {RoundNumber} for {matchId}", roundFinishedData.RoundNumber ,matchId);
-                foreach (var playerId in eliminatedThisRound)
-                {
-                    var data = new PlayerEliminatedData
-                    {
-                        PlayerId = playerId,
-                        RoundsSurvived = roundFinishedData.RoundNumber,
-                        Place = gameState.PlayerPlaces[playerId],
-                        CorrectAnswers = gameState.PlayerCorrectCount[playerId],
-                        TotalScore = gameState.PlayerScores[playerId],
-                        IsManuallyDisabled = false
-                    };
-                    
-                    await _notificationService.NotifyPlayerEliminated(playerId, data);
-                }
+
 
                 lock (gameState)
                 {
@@ -639,6 +625,20 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 }
                 else
                 {
+                    foreach (var playerId in eliminatedThisRound)
+                    {
+                        var data = new PlayerEliminatedData
+                        {
+                            PlayerId = playerId,
+                            RoundsSurvived = roundFinishedData.RoundNumber,
+                            Place = gameState.PlayerPlaces[playerId],
+                            CorrectAnswers = gameState.PlayerCorrectCount[playerId],
+                            TotalScore = gameState.PlayerScores[playerId],
+                            IsManuallyDisabled = false
+                        };
+
+                        await _notificationService.NotifyPlayerEliminated(playerId, data);
+                    }
                     _ = Task.Run(() => StartNextRoundAsync(matchId));
                 }
 

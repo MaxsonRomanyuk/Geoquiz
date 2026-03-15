@@ -186,6 +186,17 @@
     <string name="spectate">Spectate</string>
     <string name="exit">Exit</string>
 
+    <!--EliminatedPlayer-->
+    <string name="eliminated_result">Your result</string>
+    <string name="you_were_eliminated">You were eliminated!</string>
+    <string name="place_template">Place %d of %d</string>
+    <string name="your_results">Your Results</string>
+    <string name="rounds_survived">Rounds survived</string>
+    <string name="total_score">Total score</string>
+    <string name="player">Player</string>
+    <string name="match_continues">The match continues without you...</string>
+    <string name="manual_disable_message">You have left the game</string>
+
     <!--Errors-->
     <string name="connection_lost">Connection lost</string>
     <string name="error">Error: </string>
