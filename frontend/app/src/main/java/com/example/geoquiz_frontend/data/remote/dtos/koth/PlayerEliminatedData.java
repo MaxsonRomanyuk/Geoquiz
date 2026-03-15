@@ -6,10 +6,12 @@ public class PlayerEliminatedData {
     private int place;
     private int correctAnswers;
     private int totalScore;
+    private boolean isManuallyDisabled;
 
     public String getPlayerId() { return playerId; }
     public int getRoundsSurvived() { return roundsSurvived; }
     public int getPlace() { return place; }
     public int getCorrectAnswers() { return correctAnswers; }
     public int getTotalScore() { return totalScore; }
+    public boolean isManuallyDisabled() { return isManuallyDisabled; }
 }

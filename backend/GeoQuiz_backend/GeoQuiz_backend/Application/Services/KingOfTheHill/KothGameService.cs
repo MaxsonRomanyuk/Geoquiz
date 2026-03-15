@@ -159,6 +159,90 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             return match;
         }
 
+        public async Task LeaveMatchAsync(Guid userId, Guid matchId)
+        {
+            if (!_activeGames.TryGetValue(matchId, out var gameState))
+                throw new Exception("Game not found");
+
+            bool shouldFinishRoundEarly = false;
+            bool shouldFinishMatch = false;
+
+            lock (gameState)
+            {
+                if (!gameState.ActivePlayerIds.Contains(userId))
+                {
+                    _logger.LogWarning("User {UserId} already not active in match {MatchId}", userId, matchId);
+                    return;
+                }
+                gameState.ActivePlayerIds.Remove(userId);
+                if (!gameState.EliminatedPlayers.Contains(userId))
+                {
+                    gameState.EliminatedPlayers.Add(userId);
+                }
+                if (!gameState.EliminatedThisRound.Contains(userId))
+                {
+                    gameState.EliminatedThisRound.Add(userId);
+                }
+                gameState.Players[userId].IsActive = false;
+                gameState.Players[userId].EliminatedAtRound = gameState.CurrentRound;
+                gameState.PlayerPlaces[userId] = gameState.ActivePlayerIds.Count + 1;
+
+
+                if (gameState.ActivePlayerIds.Count <= 1)
+                {
+                    shouldFinishMatch = true;
+                }
+                else
+                {
+                    var eliminatedAnswered = 0;
+                    foreach (var playerId in gameState.EliminatedThisRound)
+                    {
+                        var hasAnswered = gameState.PlayerAnswers.ContainsKey(playerId) && gameState.PlayerAnswers[playerId].ContainsKey(gameState.CurrentRound);
+                        if (hasAnswered) eliminatedAnswered++;
+                    }
+                    shouldFinishRoundEarly = gameState.AnsweredPlayers.Count >= gameState.ActivePlayerIds.Count + eliminatedAnswered;
+                }
+            }
+
+            var data = new PlayerEliminatedData
+            {
+                PlayerId = userId,
+                RoundsSurvived = gameState.CurrentRound,
+                Place = gameState.PlayerPlaces[userId],
+                CorrectAnswers = gameState.PlayerCorrectCount[userId],
+                TotalScore = gameState.PlayerScores[userId],
+                IsManuallyDisabled = true
+            };
+
+            await _notificationService.NotifyPlayerEliminated(userId, data);
+
+            if (shouldFinishMatch)
+            {
+                _logger.LogInformation("Only one player left in match {MatchId}, finishing", matchId);
+
+                if (_roundTimers.TryRemove(matchId, out var cts))
+                {
+                    cts.Cancel();
+                    cts.Dispose();
+                }
+
+                _ = Task.Run(() => FinishMatchAsync(matchId));
+                return;
+            }
+            if (shouldFinishRoundEarly)
+            {
+                _logger.LogInformation("All players answered after user left, finishing round early for match {MatchId}", matchId);
+
+                if (_roundTimers.TryRemove(matchId, out var cts))
+                {
+                    cts.Cancel();
+                    cts.Dispose();
+                }
+
+                _ = Task.Run(() => FinishRoundAsync(matchId));
+            }
+        }
+
         public async Task<RoundStartedData?> StartNextRoundAsync(Guid matchId)
         {
             if (!_activeGames.TryGetValue(matchId, out var gameState))
@@ -338,7 +422,13 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             bool allAnswered = false;
             lock (gameState)
             {
-                allAnswered = gameState.AnsweredPlayers.Count >= gameState.ActivePlayerIds.Count;
+                var eliminatedAnswered = 0;
+                foreach (var playerId in gameState.EliminatedThisRound)
+                {
+                    var hasAnswered = gameState.PlayerAnswers.ContainsKey(playerId) && gameState.PlayerAnswers[playerId].ContainsKey(gameState.CurrentRound);
+                    if (hasAnswered) eliminatedAnswered++;
+                }
+                allAnswered = gameState.AnsweredPlayers.Count >= gameState.ActivePlayerIds.Count + eliminatedAnswered;
             }
 
             if (allAnswered)
@@ -530,7 +620,8 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                         RoundsSurvived = roundFinishedData.RoundNumber,
                         Place = gameState.PlayerPlaces[playerId],
                         CorrectAnswers = gameState.PlayerCorrectCount[playerId],
-                        TotalScore = gameState.PlayerScores[playerId]
+                        TotalScore = gameState.PlayerScores[playerId],
+                        IsManuallyDisabled = false
                     };
                     
                     await _notificationService.NotifyPlayerEliminated(playerId, data);

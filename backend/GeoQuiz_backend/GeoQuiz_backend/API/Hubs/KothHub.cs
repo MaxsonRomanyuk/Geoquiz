@@ -58,7 +58,8 @@ namespace GeoQuiz_backend.API.Hubs
                 }
                 if (_userCurrentMatch.TryGetValue(userId, out var matchId))
                 {
-                    _userCurrentMatch.TryRemove(userId, out _); // add leavematch
+                    _userCurrentMatch.TryRemove(userId, out _);
+                    await _gameService.LeaveMatchAsync(userId, matchId);
                 }
 
                 _logger.LogInformation("User {UserId} disconnected from KothHub", userId);
@@ -156,7 +157,10 @@ namespace GeoQuiz_backend.API.Hubs
             _logger.LogInformation("User {UserId} leaving match {MatchId}", userId, matchId);
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"match_{matchId}");
+
             _userCurrentMatch.TryRemove(userId, out _);
+            await _gameService.LeaveMatchAsync(userId, matchId);
+
             _userCurrentLobby.TryRemove(userId, out _);
         }
 

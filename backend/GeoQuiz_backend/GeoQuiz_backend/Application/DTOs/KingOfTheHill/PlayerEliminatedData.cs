@@ -7,5 +7,6 @@
         public int Place { get; set; } 
         public int CorrectAnswers { get; set; }
         public int TotalScore { get; set; }
+        public bool IsManuallyDisabled { get; set; }
     }
 }
