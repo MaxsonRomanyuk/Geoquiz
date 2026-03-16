@@ -194,6 +194,15 @@
     <string name="player">Игрок</string>
     <string name="match_continues">Матч продолжается без вас...</string>
     <string name="manual_disable_message">Вы покинули игру</string>
+
+    <!--KingResult-->
+    <string name="game_over">Игра окончена</string>
+    <string name="winners_title">ПОБЕДИТЕЛЬ</string>
+    <string name="final_standings">Итоговая таблица</string>
+    <string name="rounds_short">Раунд</string>
+    <string name="correct_short">Верно</string>
+    <string name="score_short">Очки</string>
+
     <!--Errors-->
     <string name="connection_lost">Соединение потеряно</string>
     <string name="error">Ошибка: </string>

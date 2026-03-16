@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_marginBottom="4dp"
+    android:layout_marginStart="0dp"
+    android:background="?attr/colorSurface"
+    android:alpha="0.85"
+    android:paddingHorizontal="12dp"
+    app:cornerRadius="8dp">
+    <View
+        android:id="@+id/vSelfIndicator"
+        android:layout_width="4dp"
+        android:layout_height="0dp"
+        android:background="?attr/colorAccent"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvPlace"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:text="1"
+        android:textColor="?attr/colorTertiary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        app:cornerRadius="16dp"
+        app:layout_constraintStart_toEndOf="@id/vSelfIndicator"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvCrown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="👑"
+        android:textSize="12sp"
+        android:visibility="gone"
+        android:elevation="4dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="-4dp"
+        app:layout_constraintStart_toStartOf="@id/tvPlace"
+        app:layout_constraintTop_toTopOf="@id/tvPlace"/>
+
+    <TextView
+        android:id="@+id/tvPlayerName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="PlayerName"
+        android:textColor="?attr/colorTertiary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end"
+        app:layout_constraintStart_toEndOf="@id/tvPlace"
+        app:layout_constraintEnd_toStartOf="@id/tvYouBadge"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvYouBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="6dp"
+        android:paddingHorizontal="6dp"
+        android:text="@string/your_stats"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:background="@drawable/bg_you_badge"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/tvPlayerName"
+        app:layout_constraintTop_toTopOf="@id/tvPlayerName"
+        app:layout_constraintBottom_toBottomOf="@id/tvPlayerName"/>
+
+    <TextView
+        android:id="@+id/tvRounds"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="5"
+        android:textColor="?attr/colorTertiary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@id/tvYouBadge"
+        app:layout_constraintEnd_toStartOf="@id/tvCorrect"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvCorrect"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:text="8"
+        android:textColor="?attr/colorTertiary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        app:layout_constraintEnd_toStartOf="@id/tvScore"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvScore"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:text="1250"
+        android:textColor="?attr/colorTertiary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:gravity="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

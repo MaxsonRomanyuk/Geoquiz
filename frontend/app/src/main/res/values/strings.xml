@@ -197,6 +197,14 @@
     <string name="match_continues">The match continues without you...</string>
     <string name="manual_disable_message">You have left the game</string>
 
+    <!--KingResult-->
+    <string name="game_over">Game Over</string>
+    <string name="winners_title">WINNER</string>
+    <string name="final_standings">Final Standings</string>
+    <string name="rounds_short">Round</string>
+    <string name="correct_short">Correct</string>
+    <string name="score_short">Score</string>
+
     <!--Errors-->
     <string name="connection_lost">Connection lost</string>
     <string name="error">Error: </string>

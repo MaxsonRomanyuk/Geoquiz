@@ -64,6 +64,9 @@
         <activity
             android:name=".Presentation.ui.King.KingEliminatedActivity"
             android:exported="false"/>
+        <activity
+            android:name=".Presentation.ui.King.KingResultActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>

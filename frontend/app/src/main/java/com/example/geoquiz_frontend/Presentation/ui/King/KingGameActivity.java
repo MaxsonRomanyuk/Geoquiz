@@ -316,8 +316,13 @@ public class KingGameActivity extends BaseActivity {
     private void handleMatchFinished(MatchFinishedData data) {
         Log.d(TAG, "Match finished! Winner: " + data.getWinnerId());
 
-        stopTimer();
-        Toast.makeText( KingGameActivity.this, String.valueOf(data.getWinnerId()), Toast.LENGTH_LONG).show();
+        Gson gson = new Gson();
+        String matchDataJson = gson.toJson(data);
+
+        Intent intent = new Intent(KingGameActivity.this, KingResultActivity.class);
+        intent.putExtra("match_data", matchDataJson);
+        startActivity(intent);
+        finish();
     }
 
     private void submitAnswer(int index) {
@@ -448,7 +453,7 @@ public class KingGameActivity extends BaseActivity {
         stopTimer();
         if (signalRManager != null && signalRManager.isConnected() && matchId != null) {
             signalRManager.leaveMatch(matchId);
-            // signalRManager.stop();
+            signalRManager.stop();
         }
         //finish();
     }

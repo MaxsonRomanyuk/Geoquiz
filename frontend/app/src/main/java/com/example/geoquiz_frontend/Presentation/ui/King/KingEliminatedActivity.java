@@ -10,6 +10,7 @@ import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.Presentation.ui.Home.MainActivity;
 import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
+import com.example.geoquiz_frontend.data.remote.KothSignalRClientManager;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.UUID;
@@ -27,7 +28,7 @@ public class KingEliminatedActivity extends BaseActivity {
     private int totalScore;
     private boolean isManuallyDisabled;
     private int totalPlayers;
-
+    private KothSignalRClientManager signalRManager;
     private PreferencesHelper preferencesHelper;
 
     @Override
@@ -36,6 +37,7 @@ public class KingEliminatedActivity extends BaseActivity {
         setContentView(R.layout.activity_king_eliminated);
 
         preferencesHelper = new PreferencesHelper(this);
+        signalRManager = KothSignalRClientManager.getInstance();
 
         getIntentData();
         initViews();
@@ -98,6 +100,9 @@ public class KingEliminatedActivity extends BaseActivity {
     }
 
     private void exitToMainMenu() {
+        if (signalRManager != null) {
+            signalRManager.stop();
+        }
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
