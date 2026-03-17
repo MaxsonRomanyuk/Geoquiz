@@ -4,9 +4,12 @@ using GeoQuiz_backend.API.Hubs;
 using GeoQuiz_backend.Application.DTOs.KingOfTheHill;
 using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Application.Payloads;
+using GeoQuiz_backend.Application.Payloads.Koth;
+using GeoQuiz_backend.Application.Services.Bots;
 using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Domain.Enums;
 using GeoQuiz_backend.Domain.Mongo;
+using GeoQuiz_backend.Infrastructure.Factories;
 using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.SignalR;
@@ -45,16 +48,27 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             _logger = logger;
         }
 
-        public async Task<KothMatch> StartMatchFromLobbyAsync(List<PlayerInfo> players, Guid lobbyId)
+        public async Task<KothMatch> StartMatchFromLobbyAsync(List<PlayerInfo> realPlayers, Guid lobbyId)
         {
             var matchId = Guid.NewGuid();
-            var totalPlayers = players.Count;
-            var maxQuestions = 2 * (totalPlayers - 1);
+            var totalPlayers = realPlayers.Count;
+            int botsNeeded = Math.Max(0, 32 - totalPlayers);
+            
+            
             var seed = new Random().Next();
-
             var availableModes = Enum.GetValues<GameMode>().ToList();
             var randomMode = availableModes[new Random().Next(availableModes.Count)];
 
+            var allPlayers = new List<PlayerInfo>(realPlayers);
+            if (botsNeeded > 0)
+            {
+                var bots = BotFactory.CreateBots(botsNeeded);
+                allPlayers.AddRange(bots);
+
+                _logger.LogInformation("Added {BotCount} bots to match. Total players: {Total}", botsNeeded, allPlayers.Count);
+            }
+
+            var maxQuestions = 2 * (allPlayers.Count - 1);
             _logger.LogInformation("Starting KOTH match {MatchId} with {PlayerCount} players, max questions: {MaxQuestions}, seed: {Seed}",
                 matchId, totalPlayers, maxQuestions, seed);
 
@@ -83,7 +97,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 QuestionSet = questionSet
             };
 
-            foreach (var player in players)
+            foreach (var player in realPlayers)
             {
                 match.Players.Add(new KothPlayer
                 {
@@ -103,23 +117,24 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             {
                 MatchId = matchId,
                 Match = match, 
-                ActivePlayerIds = players.Select(p => p.PlayerId).ToList(),
-                Players = players.ToDictionary(
+                ActivePlayerIds = allPlayers.Select(p => p.PlayerId).ToList(),
+                Players = allPlayers.ToDictionary(
                     p => p.PlayerId,
                     p => new PlayerGameInfo
                     {
                         UserName = p.PlayerName,
                         Level = p.PlayerLevel,
-                        IsActive = true
+                        IsActive = true,
+                        IsBot = p.IsBot
                     }),
                 EliminatedPlayers = new List<Guid>(),
                 EliminatedThisRound = new List<Guid>(),
                 CurrentRound = 0,
                 CurrentRoundType = RoundType.Classic,
                 Questions = questions,
-                PlayerAnswers = players.ToDictionary(p => p.PlayerId, p => new Dictionary<int, PlayerAnswer>()),
-                PlayerScores = players.ToDictionary(p => p.PlayerId, p => 0),
-                PlayerCorrectCount = players.ToDictionary(p => p.PlayerId, p => 0),
+                PlayerAnswers = allPlayers.ToDictionary(p => p.PlayerId, p => new Dictionary<int, PlayerAnswer>()),
+                PlayerScores = allPlayers.ToDictionary(p => p.PlayerId, p => 0),
+                PlayerCorrectCount = allPlayers.ToDictionary(p => p.PlayerId, p => 0),
                 PlayerPlaces = new Dictionary<Guid, int>(),
                 IsRoundStarting = false,
                 IsRoundFinishing = false,
@@ -137,14 +152,15 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             var matchStartedData = new MatchStartedData
             {
                 MatchId = matchId,
-                TotalPlayers = totalPlayers,
+                TotalPlayers = allPlayers.Count,
                 TotalRounds = maxQuestions,
                 FirstRoundStartTime = DateTime.UtcNow.AddSeconds(3),
-                AllPlayers = players.Select(p => new PlayerInfo
+                AllPlayers = allPlayers.Select(p => new PlayerInfo
                 {
                     PlayerId = p.PlayerId,
                     PlayerName = p.PlayerName,
-                    PlayerLevel = p.PlayerLevel
+                    PlayerLevel = p.PlayerLevel,
+                    IsBot = p.IsBot,
                 }).ToList()
             };
 
@@ -152,7 +168,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
             _ = Task.Run(async () =>
             {
-                await Task.Delay(1000);
+                await Task.Delay(250);
                 await StartNextRoundAsync(matchId);
             });
 
@@ -213,7 +229,6 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     cts.Cancel();
                     cts.Dispose();
                 }
-
                 _ = Task.Run(() => FinishMatchAsync(matchId));
                 return;
             }
@@ -310,6 +325,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             try
             {
                 await _notificationService.NotifyRoundStarted(matchId, roundStartedData);
+                await ProcessRoundAnswers(matchId);
 
                 _ = Task.Run(async () =>
                 {
@@ -437,13 +453,62 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     cts.Cancel();
                     cts.Dispose();
                 }
-
+                
                 _ = Task.Run(() => FinishRoundAsync(matchId));
             }
 
             return result;
         }
+        public async Task ProcessRoundAnswers(Guid matchId)
+        {
+            if (!_activeGames.TryGetValue(matchId, out var gameState))
+                throw new Exception("Game not found");
 
+            lock (gameState)
+            {
+                var activeBots = gameState.ActivePlayerIds
+                    .Where(id => gameState.Players[id].IsBot)
+                    .ToList();
+
+                foreach (var botId in activeBots)
+                {
+                    if (!gameState.AnsweredPlayers.Contains(botId))
+                    {
+                        var bot = gameState.Players[botId];
+                        var question = gameState.Questions[gameState.CurrentRound - 1];
+
+                        var botAnswer = BotAnswerService.GenerateAnswer(new PlayerInfo
+                        {
+                            PlayerId = botId,
+                            PlayerName = bot.UserName,
+                            PlayerLevel = bot.Level,
+                            IsBot = bot.IsBot,
+                        }, question);
+
+                        var answer = new PlayerAnswer
+                        {
+                            QuestionId = question.QuestionId,
+                            IsCorrect = botAnswer.IsCorrect,
+                            TimeSpentMs = botAnswer.ResponseTimeMs,
+                            ScoreGained = botAnswer.IsCorrect ? CalculateScore(botAnswer.ResponseTimeMs) : 0,
+                            AnsweredAt = DateTime.UtcNow
+                        };
+
+                        gameState.PlayerAnswers[botId][gameState.CurrentRound] = answer;
+                        gameState.AnsweredPlayers.Add(botId);
+
+                        if (botAnswer.IsCorrect)
+                        {
+                            gameState.PlayerScores[botId] += answer.ScoreGained;
+                            gameState.PlayerCorrectCount[botId]++;
+                        }
+
+                        _logger.LogDebug("Bot {BotId} answered {Result} in {Time}ms",
+                            botId, botAnswer.IsCorrect ? "correctly" : "incorrectly", botAnswer.ResponseTimeMs);
+                    }
+                }
+            }
+        }
         public async Task<RoundFinishedData> FinishRoundAsync(Guid matchId)
         {
             if (!_activeGames.TryGetValue(matchId, out var gameState))
@@ -736,13 +801,25 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     FinalStandings = finalStandings
                 };
 
-                
-                
+                var realStandings = new Dictionary<Guid, PlayerFinalStanding>();
+
+                foreach (var item in standings)
+                {
+                    lock (gameState)
+                    {
+                        if (gameState.Players.TryGetValue(item.Key, out var player) && !player.IsBot)
+                        {
+                            realStandings.Add(item.Key, item.Value);
+                        }
+                    }
+                }
+
+
                 using (var scope = _serviceScopeFactory.CreateScope())
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                    await UpdateDatabaseWithResults(dbContext, matchId, standings, mode, matchFinishedData);
-                    await CreateGameSessionsAsync(dbContext, matchId, standings, mode);
+                    await UpdateDatabaseWithResults(dbContext, matchId, realStandings, mode, matchFinishedData);
+                    await CreateGameSessionsAsync(dbContext, matchId, realStandings, mode);
                     await dbContext.SaveChangesAsync();
                     _logger.LogInformation("Saved finish match for match {MatchId}", matchId);
                 }
@@ -856,7 +933,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
             dbMatch.Status = KothMatchStatus.Finished;
             dbMatch.FinishedAt = DateTime.UtcNow;
-            dbMatch.WinnerId = matchFinishedData.WinnerId != Guid.Empty ? matchFinishedData.WinnerId : null;
+            dbMatch.WinnerId = standings.ContainsKey(matchFinishedData.WinnerId) ? matchFinishedData.WinnerId : null;
 
             foreach (var player in dbMatch.Players)
             {

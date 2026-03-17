@@ -1,5 +1,5 @@
 ﻿using GeoQuiz_backend.Application.DTOs.KingOfTheHill;
-using GeoQuiz_backend.Application.Payloads;
+using GeoQuiz_backend.Application.Payloads.Koth;
 using GeoQuiz_backend.Domain.Entities;
 
 namespace GeoQuiz_backend.Application.Interfaces

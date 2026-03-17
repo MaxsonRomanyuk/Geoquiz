@@ -1,6 +1,6 @@
 ﻿using GeoQuiz_backend.Domain.Mongo;
 
-namespace GeoQuiz_backend.Application.Payloads
+namespace GeoQuiz_backend.Application.Payloads.Koth
 {
     public class GameQuestion
     {

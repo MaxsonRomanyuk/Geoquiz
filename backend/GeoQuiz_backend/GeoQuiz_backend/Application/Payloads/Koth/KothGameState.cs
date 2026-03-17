@@ -1,6 +1,6 @@
 ﻿using GeoQuiz_backend.Domain.Entities;
 
-namespace GeoQuiz_backend.Application.Payloads
+namespace GeoQuiz_backend.Application.Payloads.Koth
 {
     public class KothGameState
     {

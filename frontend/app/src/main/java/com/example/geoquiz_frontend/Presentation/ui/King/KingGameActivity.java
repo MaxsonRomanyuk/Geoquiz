@@ -135,9 +135,9 @@ public class KingGameActivity extends BaseActivity {
             allPlayers = new ArrayList<>();
         }
 
-        for (PlayerInfo playerInfo : allPlayers) {
-            Toast.makeText(this, playerInfo.getPlayerName(), Toast.LENGTH_SHORT).show();
-        }
+//        for (PlayerInfo playerInfo : allPlayers) {
+//            Toast.makeText(this, playerInfo.getPlayerName(), Toast.LENGTH_SHORT).show();
+//        }
 
 
         playersRemaining = totalPlayers;

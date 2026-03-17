@@ -16,13 +16,15 @@ namespace GeoQuiz_backend.Application.DTOs.KingOfTheHill
         public Guid PlayerId { get; set; }
         public string PlayerName { get; set; } = null!;
         public int PlayerLevel { get; set; }
+        public bool IsBot { get; set; }
         public static PlayerInfo FromPlayerLobby(PlayerLobby player)
         {
             return new PlayerInfo
             {
                 PlayerId = player.Id,
                 PlayerName = player.Name,
-                PlayerLevel = player.Level
+                PlayerLevel = player.Level,
+                IsBot = false
             };
         }
     }

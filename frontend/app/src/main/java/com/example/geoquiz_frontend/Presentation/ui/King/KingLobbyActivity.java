@@ -343,7 +343,7 @@ public class KingLobbyActivity extends BaseActivity {
                     tvTimer.setText(String.format(Locale.getDefault(), "00:%02d", secondsRemaining));
 
                     if (secondsRemaining <= 1) {
-                        Toast.makeText(KingLobbyActivity.this, "bb" , Toast.LENGTH_SHORT).show();
+                        //
                     }
                 });
             }
@@ -389,6 +389,7 @@ public class KingLobbyActivity extends BaseActivity {
         intent.putExtra("total_rounds", data.getTotalRounds());
         intent.putExtra("all_players", new ArrayList<>(data.getAllPlayers()));
         startActivity(intent);
+        finish();
     }
     private void startSearch() {
         layoutTimer.setVisibility(View.VISIBLE);
