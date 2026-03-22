@@ -1,5 +1,9 @@
 package com.example.geoquiz_frontend.data.repositories;
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -8,7 +12,7 @@ import com.example.geoquiz_frontend.data.remote.ApiService;
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
-import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,7 +41,12 @@ public class UserRepository {
         }
         return instance;
     }
-
+    public static synchronized void reset() {
+        if (instance != null) {
+            instance.clearData();
+            instance = null;
+        }
+    }
     public LiveData<ProfileResponse> getUserData() {
         return userData;
     }
@@ -80,28 +89,30 @@ public class UserRepository {
             return;
         }
 
-        apiService.getProfile().enqueue(new Callback<ProfileResponse>() {
-            @Override
-            public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
-                isLoading.setValue(false);
-                if (response.isSuccessful() && response.body() != null) {
-                    ProfileResponse profile = response.body();
+        if (!userId.equals("uid")) {
+            apiService.getProfile().enqueue(new Callback<ProfileResponse>() {
+                @Override
+                public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+                    isLoading.setValue(false);
+                    if (response.isSuccessful() && response.body() != null) {
+                        ProfileResponse profile = response.body();
 
-                    UserStats stats = convertProfileToStats(profile, userId);
-                    databaseHelper.saveUserStats(stats);
+                        UserStats stats = convertProfileToStats(profile, userId);
+                        databaseHelper.saveUserStats(stats);
 
-                    userData.setValue(profile);
-                } else {
-                    errorMessage.setValue("Error loading data: " + response.code());
+                        userData.setValue(profile);
+                    } else {
+                        errorMessage.setValue("Error loading data: " + response.code());
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ProfileResponse> call, Throwable t) {
-                isLoading.setValue(false);
-                errorMessage.setValue("Network error: " + t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<ProfileResponse> call, Throwable t) {
+                    isLoading.setValue(false);
+                    errorMessage.setValue("Network error: " + t.getMessage());
+                }
+            });
+        }
     }
     public void refreshFromDb() {
         String userId = preferencesHelper.getUserId();
@@ -145,7 +156,8 @@ public class UserRepository {
     }
     public void clearData() {
         userData.setValue(null);
-        preferencesHelper.clearCurrentUser();
+        isLoading.setValue(false);
+        errorMessage.setValue(null);
     }
 
     private UserStats convertProfileToStats(ProfileResponse profile, String userId) {

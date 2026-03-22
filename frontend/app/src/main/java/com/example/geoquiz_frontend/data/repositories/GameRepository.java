@@ -15,7 +15,7 @@ import com.example.geoquiz_frontend.domain.entities.GameQuestion;
 import com.example.geoquiz_frontend.domain.entities.GameSession;
 import com.example.geoquiz_frontend.domain.entities.PendingGame;
 import com.example.geoquiz_frontend.domain.enums.GameMode;
-import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -446,7 +446,7 @@ public class GameRepository {
             }
         });
     }
-    private void clearPendingGames() {
+    public void clearPendingGames() {
         pendingGames.clear();
         try {
             File file = new File(context.getFilesDir(), PENDING_GAMES_FILE);
@@ -458,6 +458,9 @@ public class GameRepository {
         } catch (Exception e) {
             Log.e(TAG, "Ошибка очистки", e);
         }
+
+
+        //pendingGames = loadPendingGames();
     }
     private List<PendingGame> loadPendingGames() {
         try {

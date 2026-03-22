@@ -1,7 +1,6 @@
-package com.example.geoquiz_frontend.Presentation.ui.King;
+package com.example.geoquiz_frontend.presentation.ui.King;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,11 +8,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.gridlayout.widget.GridLayout;
 
-import com.example.geoquiz_frontend.Presentation.ui.Home.MainActivity;
-import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
+import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
 import com.example.geoquiz_frontend.data.remote.KothSignalRClientManager;
@@ -36,8 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
-import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
+
+import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 
 public class KingLobbyActivity extends BaseActivity {
     private static final String TAG = "KingLobbyActivity";

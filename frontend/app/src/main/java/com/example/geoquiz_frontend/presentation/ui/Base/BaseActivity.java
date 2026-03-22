@@ -1,12 +1,12 @@
-package com.example.geoquiz_frontend.Presentation.ui.Base;
+package com.example.geoquiz_frontend.presentation.ui.Base;
 
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import com.example.geoquiz_frontend.Presentation.utils.LocaleHelper;
-import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.LocaleHelper;
+import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 
 public abstract class BaseActivity extends AppCompatActivity {
     @Override

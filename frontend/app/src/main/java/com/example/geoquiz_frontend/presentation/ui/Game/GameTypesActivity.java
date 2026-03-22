@@ -1,13 +1,14 @@
-package com.example.geoquiz_frontend.Presentation.ui.Game;
+package com.example.geoquiz_frontend.presentation.ui.Game;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
-import com.example.geoquiz_frontend.Presentation.ui.Home.MainActivity;
-import com.example.geoquiz_frontend.Presentation.ui.Profile.ProfileActivity;
-import com.example.geoquiz_frontend.Presentation.ui.PvP.MatchmakingActivity;
+import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
+import com.example.geoquiz_frontend.presentation.ui.King.KingLobbyActivity;
+import com.example.geoquiz_frontend.presentation.ui.Profile.ProfileActivity;
+import com.example.geoquiz_frontend.presentation.ui.PvP.MatchmakingActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 
@@ -45,6 +46,8 @@ public class GameTypesActivity extends BaseActivity {
         });
 
         btnKingMode.setOnClickListener(v -> {
+            Intent intent = new Intent(this, KingLobbyActivity.class);
+            startActivity(intent);
         });
     }
 

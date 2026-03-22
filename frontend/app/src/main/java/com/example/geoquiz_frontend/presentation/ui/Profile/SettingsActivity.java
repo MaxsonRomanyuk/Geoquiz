@@ -1,4 +1,4 @@
-package com.example.geoquiz_frontend.Presentation.ui.Profile;
+package com.example.geoquiz_frontend.presentation.ui.Profile;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -9,16 +9,16 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.example.geoquiz_frontend.Presentation.utils.AuthManager;
+import com.example.geoquiz_frontend.presentation.utils.AuthManager;
 import com.example.geoquiz_frontend.data.remote.dtos.solo.BootstrapResponse;
 import com.example.geoquiz_frontend.data.repositories.GameRepository;
 import com.example.geoquiz_frontend.domain.engine.GameManager;
 import com.example.geoquiz_frontend.domain.entities.User;
-import com.example.geoquiz_frontend.Presentation.utils.LocaleHelper;
-import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.LocaleHelper;
+import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.Presentation.ui.Auth.LoginActivity;
-import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.Auth.LoginActivity;
+import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.google.android.material.card.MaterialCardView;
 
 public class SettingsActivity extends BaseActivity {

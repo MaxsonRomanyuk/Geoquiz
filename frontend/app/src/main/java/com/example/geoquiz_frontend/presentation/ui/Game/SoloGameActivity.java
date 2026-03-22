@@ -1,4 +1,4 @@
-package com.example.geoquiz_frontend.Presentation.ui.Game;
+package com.example.geoquiz_frontend.presentation.ui.Game;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -23,9 +23,9 @@ import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.domain.engine.GameManager;
 import com.example.geoquiz_frontend.domain.entities.GameQuestion;
 import com.example.geoquiz_frontend.domain.entities.GameSession;
-import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package com.example.geoquiz_frontend.Presentation.ui.King;
+package com.example.geoquiz_frontend.presentation.ui.King;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,14 +6,12 @@ import android.view.View;
 import android.widget.TextView;
 
 
-import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
-import com.example.geoquiz_frontend.Presentation.ui.Home.MainActivity;
-import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
+import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.remote.KothSignalRClientManager;
 import com.google.android.material.button.MaterialButton;
-
-import java.util.UUID;
 
 public class KingEliminatedActivity extends BaseActivity {
 

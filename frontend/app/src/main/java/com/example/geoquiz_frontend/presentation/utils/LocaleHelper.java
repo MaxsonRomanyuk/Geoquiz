@@ -1,4 +1,4 @@
-package com.example.geoquiz_frontend.Presentation.utils;
+package com.example.geoquiz_frontend.presentation.utils;
 
 import android.content.Context;
 import android.content.res.Configuration;

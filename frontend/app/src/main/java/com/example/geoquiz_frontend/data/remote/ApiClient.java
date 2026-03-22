@@ -1,5 +1,5 @@
 package com.example.geoquiz_frontend.data.remote;
-import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

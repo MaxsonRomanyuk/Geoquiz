@@ -1,4 +1,4 @@
-package com.example.geoquiz_frontend.Presentation.ui.Auth;
+package com.example.geoquiz_frontend.presentation.ui.Auth;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +12,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import androidx.annotation.NonNull;
 
+import com.example.geoquiz_frontend.data.local.DatabaseHelper;
 import com.example.geoquiz_frontend.data.remote.ApiClient;
 import com.example.geoquiz_frontend.data.remote.ApiService;
-import com.example.geoquiz_frontend.Presentation.utils.AuthManager;
+import com.example.geoquiz_frontend.domain.entities.UserStats;
+import com.example.geoquiz_frontend.presentation.utils.AuthManager;
 import com.example.geoquiz_frontend.data.remote.dtos.auth.AuthResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.solo.BootstrapResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.auth.LoginRequest;
@@ -23,10 +25,10 @@ import com.example.geoquiz_frontend.data.repositories.GameRepository;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.domain.engine.GameManager;
 import com.example.geoquiz_frontend.domain.entities.User;
-import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
-import com.example.geoquiz_frontend.Presentation.ui.Home.MainActivity;
+import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.card.MaterialCardView;
@@ -46,7 +48,6 @@ public class LoginActivity extends BaseActivity {
     private boolean isLoginMode = true;
     private AuthManager authManager;
     private PreferencesHelper preferencesHelper;
-    private UserRepository userRepository;
 
 
     private GameManager gameManager;
@@ -57,8 +58,6 @@ public class LoginActivity extends BaseActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-
 
         authManager = new AuthManager(this);
 
@@ -243,8 +242,7 @@ public class LoginActivity extends BaseActivity {
         user.setName(name);
         user.setPremium(false);
         authManager.LoginWithEmail(user);
-
-        userRepository = UserRepository.getInstance(this);
+        UserRepository userRepository = UserRepository.getInstance(this);
         userRepository.loadUserData(true);
         gameManager = GameManager.getInstance(this);
         loadData();
@@ -258,6 +256,7 @@ public class LoginActivity extends BaseActivity {
     private void loginAsGuest() {
         authManager.loginAsGuest();
         startMainActivity();
+
     }
     private void showTempMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();

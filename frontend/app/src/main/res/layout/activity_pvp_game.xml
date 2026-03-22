@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
-    tools:context=".Presentation.ui.PvP.PvPGameActivity">
+    tools:context=".presentation.ui.PvP.PvPGameActivity">
 
     <LinearLayout
         android:id="@+id/layoutTopBar"

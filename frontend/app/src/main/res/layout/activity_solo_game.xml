@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:background="@drawable/background_gradient"
-    tools:context=".Presentation.ui.Game.SoloGameActivity">
+    tools:context=".presentation.ui.Game.SoloGameActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

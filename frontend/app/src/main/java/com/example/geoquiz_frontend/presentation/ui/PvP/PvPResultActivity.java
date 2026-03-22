@@ -1,13 +1,13 @@
-package com.example.geoquiz_frontend.Presentation.ui.PvP;
+package com.example.geoquiz_frontend.presentation.ui.PvP;
 
-import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
 
-import com.example.geoquiz_frontend.Presentation.ui.Home.MainActivity;
-import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
+import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.remote.PvPSignalRClientManager;
 import com.google.android.material.button.MaterialButton;

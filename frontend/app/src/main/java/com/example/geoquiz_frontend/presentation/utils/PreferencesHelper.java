@@ -1,4 +1,4 @@
-package com.example.geoquiz_frontend.Presentation.utils;
+package com.example.geoquiz_frontend.presentation.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -82,7 +82,8 @@ public class PreferencesHelper {
         return sharedPreferences.getString(KEY_AUTH_TOKEN, null);
     }
     public boolean hasValidToken() {
-        if(Objects.equals(sharedPreferences.getString(KEY_CURRENT_USER_ID, null), "uid"))return true;
+        if (Objects.equals(sharedPreferences.getString(KEY_CURRENT_USER_ID, null), "uid")) return false;
+
         String token = getAuthToken();
         if (token == null) return false;
 

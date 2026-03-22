@@ -1,4 +1,4 @@
-package com.example.geoquiz_frontend.Presentation.ui.Home;
+package com.example.geoquiz_frontend.presentation.ui.Home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,21 +7,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.geoquiz_frontend.Presentation.ui.King.KingLobbyActivity;
+import com.example.geoquiz_frontend.presentation.ui.King.KingLobbyActivity;
 import com.example.geoquiz_frontend.data.remote.ApiClient;
 import com.example.geoquiz_frontend.data.remote.ApiService;
-import com.example.geoquiz_frontend.Presentation.utils.AuthManager;
+import com.example.geoquiz_frontend.presentation.utils.AuthManager;
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
-import com.example.geoquiz_frontend.Presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.Presentation.ui.Auth.LoginActivity;
-import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
-import com.example.geoquiz_frontend.Presentation.ui.Game.GameModesActivity;
-import com.example.geoquiz_frontend.Presentation.ui.Game.GameTypesActivity;
-import com.example.geoquiz_frontend.Presentation.ui.Profile.ProfileActivity;
-import com.example.geoquiz_frontend.Presentation.ui.PvP.MatchmakingActivity;
+import com.example.geoquiz_frontend.presentation.ui.Auth.LoginActivity;
+import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.Game.GameModesActivity;
+import com.example.geoquiz_frontend.presentation.ui.Game.GameTypesActivity;
+import com.example.geoquiz_frontend.presentation.ui.Profile.ProfileActivity;
+import com.example.geoquiz_frontend.presentation.ui.PvP.MatchmakingActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 
@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity {
         initViews();
         preferencesHelper = new PreferencesHelper(this);
         databaseHelper = new DatabaseHelper(this);
-        if (!preferencesHelper.hasValidToken()) {
+        if (!preferencesHelper.hasValidToken() && !preferencesHelper.getUserId().equals("uid")) {
             handleUnauthorized();
             //redirectToLogin();
             return;
@@ -63,7 +63,7 @@ public class MainActivity extends BaseActivity {
         setupBottomNavigation();
         observeUserData();
 
-        userRepository.loadUserData(false);//ошибка для гостя
+        userRepository.loadUserData(false);
     }
 
     private void initViews() {
@@ -239,7 +239,7 @@ public class MainActivity extends BaseActivity {
         tvAccuracy.setText("—%");
     }
     private void handleUnauthorized() {
-        preferencesHelper.clearCurrentUser();
+        //preferencesHelper.clearCurrentUser();
         Toast.makeText(this, "Сессия истекла. Войдите снова.", Toast.LENGTH_LONG).show();
         redirectToLogin();
     }

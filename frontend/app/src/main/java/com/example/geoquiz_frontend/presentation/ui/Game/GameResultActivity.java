@@ -1,12 +1,12 @@
-package com.example.geoquiz_frontend.Presentation.ui.Game;
+package com.example.geoquiz_frontend.presentation.ui.Game;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.Presentation.ui.Base.BaseActivity;
-import com.example.geoquiz_frontend.Presentation.ui.Home.MainActivity;
+import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
 import com.google.android.material.button.MaterialButton;
 
 public class GameResultActivity extends BaseActivity {

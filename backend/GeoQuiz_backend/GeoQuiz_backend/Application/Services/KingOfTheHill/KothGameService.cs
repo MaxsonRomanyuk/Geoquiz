@@ -503,8 +503,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                             gameState.PlayerCorrectCount[botId]++;
                         }
 
-                        _logger.LogDebug("Bot {BotId} answered {Result} in {Time}ms",
-                            botId, botAnswer.IsCorrect ? "correctly" : "incorrectly", botAnswer.ResponseTimeMs);
+                        _logger.LogDebug("Bot {BotId} answered {Result} in {Time}ms", botId, botAnswer.IsCorrect ? "correctly" : "incorrectly", botAnswer.ResponseTimeMs);
                     }
                 }
             }
