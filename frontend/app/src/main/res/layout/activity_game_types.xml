@@ -171,104 +171,147 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@id/cardSolo" >
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@drawable/card_background_game"
-                    android:padding="20dp">
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginBottom="12dp">
+                        android:orientation="vertical"
+                        android:background="@drawable/card_background_game"
+                        android:padding="20dp">
 
-                        <FrameLayout
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:background="?attr/colorSecondary"
-                            app:cornerRadius="28dp"
-                            android:layout_marginEnd="12dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="12dp">
 
-                            <ImageView
-                                android:id="@+id/ivPvPIcon"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:src="@drawable/pvp"
-                                android:scaleType="centerCrop"
-                                android:contentDescription="@string/pvp_mode"
-                                android:padding="0dp"/>
-                        </FrameLayout>
+                            <FrameLayout
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:background="?attr/colorSecondary"
+                                app:cornerRadius="28dp"
+                                android:layout_marginEnd="12dp">
+
+                                <ImageView
+                                    android:id="@+id/ivPvPIcon"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/pvp"
+                                    android:scaleType="centerCrop"
+                                    android:contentDescription="@string/pvp_mode"
+                                    android:padding="0dp"/>
+                            </FrameLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/pvp_mode"
+                                android:textColor="?attr/colorTertiary"
+                                android:textSize="20sp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/pvp_mode"
-                            android:textColor="?attr/colorTertiary"
-                            android:textSize="20sp"
-                            android:textStyle="bold"/>
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/pvp_description"
-                        android:textColor="?attr/colorTertiaryFixed"
-                        android:textSize="14sp"
-                        android:layout_marginBottom="16dp"/>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="20dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="⚔️ "
-                            android:textColor="?attr/colorSecondary"
-                            android:textSize="14sp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/online_players"
+                            android:text="@string/pvp_description"
                             android:textColor="?attr/colorTertiaryFixed"
                             android:textSize="14sp"
-                            android:layout_marginEnd="16dp"/>
+                            android:layout_marginBottom="16dp"/>
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="🏆 "
-                            android:textColor="?attr/colorAccent"
-                            android:textSize="14sp"/>
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="20dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="⚔️ "
+                                android:textColor="?attr/colorSecondary"
+                                android:textSize="14sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/online_players"
+                                android:textColor="?attr/colorTertiaryFixed"
+                                android:textSize="14sp"
+                                android:layout_marginEnd="16dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🏆 "
+                                android:textColor="?attr/colorAccent"
+                                android:textSize="14sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/intellectual_duel"
+                                android:textColor="?attr/colorTertiaryFixed"
+                                android:textSize="14sp"/>
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPvPMode"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:text="@string/find_opponent"
+                            android:textColor="?attr/colorSurface"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="12dp"
+                            android:backgroundTint="?attr/colorSecondary"
+                            app:icon="@drawable/ic_search"
+                            app:iconGravity="textStart"
+                            app:iconTint="?attr/colorSurface"/>
+                    </LinearLayout>
+                    <View
+                        android:id="@+id/vLockedOverlayPvP"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#66000000"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:visibility="gone"/>
+
+                    <LinearLayout
+                        android:id="@+id/layoutLockedBadgePvP"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:paddingHorizontal="14dp"
+                        android:paddingVertical="6dp"
+                        android:background="@drawable/bg_locked_glass"
+                        android:elevation="6dp"
+                        android:visibility="gone">
 
                         <TextView
+                            android:text="🔒"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/intellectual_duel"
-                            android:textColor="?attr/colorTertiaryFixed"
-                            android:textSize="14sp"/>
+                            android:textSize="24sp"
+                            android:layout_marginEnd="6dp"/>
+
+                        <TextView
+                            android:text="@string/unlock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/white"/>
                     </LinearLayout>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnPvPMode"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:text="@string/find_opponent"
-                        android:textColor="?attr/colorSurface"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:cornerRadius="12dp"
-                        android:backgroundTint="?attr/colorSecondary"
-                        app:icon="@drawable/ic_search"
-                        app:iconGravity="textStart"
-                        app:iconTint="?attr/colorSurface"/>
-                </LinearLayout>
+                </FrameLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -283,104 +326,147 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@id/cardPvP">
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@drawable/card_background_game"
-                    android:padding="20dp">
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginBottom="12dp">
+                        android:orientation="vertical"
+                        android:background="@drawable/card_background_game"
+                        android:padding="20dp">
 
-                        <FrameLayout
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:background="?attr/colorAccent"
-                            app:cornerRadius="28dp"
-                            android:layout_marginEnd="12dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="12dp">
 
-                            <ImageView
-                                android:id="@+id/ivKingIcon"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:src="@drawable/king"
-                                android:scaleType="centerCrop"
-                                android:contentDescription="@string/king_of_the_hill"
-                                android:padding="0dp"/>
-                        </FrameLayout>
+                            <FrameLayout
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:background="?attr/colorAccent"
+                                app:cornerRadius="28dp"
+                                android:layout_marginEnd="12dp">
+
+                                <ImageView
+                                    android:id="@+id/ivKingIcon"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/king"
+                                    android:scaleType="centerCrop"
+                                    android:contentDescription="@string/king_of_the_hill"
+                                    android:padding="0dp"/>
+                            </FrameLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/king_of_the_hill"
+                                android:textColor="?attr/colorTertiary"
+                                android:textSize="20sp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/king_of_the_hill"
-                            android:textColor="?attr/colorTertiary"
-                            android:textSize="20sp"
-                            android:textStyle="bold"/>
-                    </LinearLayout>
+                            android:text="@string/king_description"
+                            android:textColor="?attr/colorTertiaryFixed"
+                            android:textSize="14sp"
+                            android:layout_marginBottom="16dp"/>
 
-                    <TextView
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="20dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="👑 "
+                                android:textColor="?attr/colorAccent"
+                                android:textSize="14sp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/battle_royale"
+                                android:textColor="?attr/colorTertiaryFixed"
+                                android:textSize="14sp"
+                                android:layout_marginEnd="16dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="👥 "
+                                android:textColor="?attr/colorTertiaryFixed"
+                                android:textSize="14sp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/participants"
+                                android:textColor="?attr/colorTertiaryFixed"
+                                android:textSize="14sp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnKingMode"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:text="@string/find_lobby"
+                            android:textColor="?attr/colorSurface"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:cornerRadius="12dp"
+                            android:backgroundTint="?attr/colorAccent"
+                            app:icon="@drawable/ic_search"
+                            app:iconGravity="textStart"
+                            app:iconTint="?attr/colorSurface"/>
+                    </LinearLayout>
+                    <View
+                        android:id="@+id/vLockedOverlayKing"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#66000000"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:visibility="gone"/>
+
+                    <LinearLayout
+                        android:id="@+id/layoutLockedBadgeKing"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/king_description"
-                        android:textColor="?attr/colorTertiaryFixed"
-                        android:textSize="14sp"
-                        android:layout_marginBottom="16dp"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:orientation="horizontal"
-                        android:layout_marginBottom="20dp">
+                        android:gravity="center"
+                        android:paddingHorizontal="14dp"
+                        android:paddingVertical="6dp"
+                        android:background="@drawable/bg_locked_glass"
+                        android:elevation="6dp"
+                        android:visibility="gone">
 
                         <TextView
+                            android:text="🔒"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="👑 "
-                            android:textColor="?attr/colorAccent"
-                            android:textSize="14sp"/>
+                            android:textSize="24sp"
+                            android:layout_marginEnd="6dp"/>
 
                         <TextView
+                            android:text="@string/unlock"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/battle_royale"
-                            android:textColor="?attr/colorTertiaryFixed"
-                            android:textSize="14sp"
-                            android:layout_marginEnd="16dp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="👥 "
-                            android:textColor="?attr/colorTertiaryFixed"
-                            android:textSize="14sp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/participants"
-                            android:textColor="?attr/colorTertiaryFixed"
-                            android:textSize="14sp"
-                            android:textStyle="bold"/>
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/white"/>
                     </LinearLayout>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnKingMode"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:text="@string/find_lobby"
-                        android:textColor="?attr/colorSurface"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        app:cornerRadius="12dp"
-                        android:backgroundTint="?attr/colorAccent"
-                        app:icon="@drawable/ic_search"
-                        app:iconGravity="textStart"
-                        app:iconTint="?attr/colorSurface"/>
-                </LinearLayout>
+                </FrameLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <View

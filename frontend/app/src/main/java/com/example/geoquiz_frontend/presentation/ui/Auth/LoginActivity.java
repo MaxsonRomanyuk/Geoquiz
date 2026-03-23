@@ -34,6 +34,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 
@@ -49,8 +50,9 @@ public class LoginActivity extends BaseActivity {
     private AuthManager authManager;
     private PreferencesHelper preferencesHelper;
 
-
     private GameManager gameManager;
+
+    private UserStats userStats;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,12 @@ public class LoginActivity extends BaseActivity {
         initViews();
         setupClickListeners();
 
+        String statsJson = getIntent().getStringExtra("USER_STATS_JSON");
+        if (statsJson != null) {
+            Gson gson = new Gson();
+            userStats = gson.fromJson(statsJson, UserStats.class);
+            userStats.getExperience();
+        }
     }
     private void loadData()
     {
@@ -204,6 +212,8 @@ public class LoginActivity extends BaseActivity {
         ApiService api = ApiClient.getApi();
 
         RegisterRequest request = new RegisterRequest(name, email, password);
+        if (userStats != null) request = new RegisterRequest(name, email, password, userStats);
+
 
         api.register(request).enqueue(new Callback<Void>() {
             @Override
@@ -214,7 +224,7 @@ public class LoginActivity extends BaseActivity {
                 } else {
                     try {
                         String errorBody = response.errorBody().string();
-                        showTempMessage("Ошибка регистрации: email уже занят");
+                        showTempMessage(errorBody);
                     } catch (IOException e) {
                         showTempMessage("Ошибка регистрации");
                     }
@@ -255,6 +265,9 @@ public class LoginActivity extends BaseActivity {
 
     private void loginAsGuest() {
         authManager.loginAsGuest();
+        gameManager = GameManager.getInstance(this);
+        loadData();
+
         startMainActivity();
 
     }

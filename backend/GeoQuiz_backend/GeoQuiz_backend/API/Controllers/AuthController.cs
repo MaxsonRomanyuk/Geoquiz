@@ -2,6 +2,7 @@
 using GeoQuiz_backend.Application.DTOs.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using GeoQuiz_backend.Domain.Entities;
 
 namespace GeoQuiz_backend.API.Controllers
 {

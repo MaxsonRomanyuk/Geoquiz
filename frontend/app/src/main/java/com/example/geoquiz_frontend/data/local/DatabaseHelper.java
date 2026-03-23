@@ -365,16 +365,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         switch (mode) {
-            case 0:
+            case 1:
                 stats.setCapitalsCorrect(stats.getCapitalsCorrect() + correctAnswers);
                 break;
-            case 1:
+            case 2:
                 stats.setFlagsCorrect(stats.getFlagsCorrect() + correctAnswers);
                 break;
-            case 2:
+            case 3:
                 stats.setOutlinesCorrect(stats.getOutlinesCorrect() + correctAnswers);
                 break;
-            case 3:
+            case 4:
                 stats.setLanguagesCorrect(stats.getLanguagesCorrect() + correctAnswers);
                 break;
         }

@@ -28,6 +28,7 @@
     <string name="solo">Соло</string>
     <string name="duel">1v1 Дуэль</string>
     <string name="king_of_the_hill">Царь горы</string>
+    <string name="unlock">Открыть</string>
     <string name="your_stats">Ваша статистика</string>
     <string name="games_played">Сыграно игр</string>
     <string name="wins">Побед</string>
@@ -69,6 +70,7 @@
     <string name="subscription">Подписка</string>
     <string name="not_subscribed">Не активна</string>
     <string name="subscribed">Активна</string>
+    <string name="transfer">Перенести прогресс</string>
     <string name="logout">Выйти из аккаунта</string>
     <string name="back">Назад</string>
     <!-- Game Modes Screen -->

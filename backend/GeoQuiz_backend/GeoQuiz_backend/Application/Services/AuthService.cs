@@ -36,9 +36,43 @@ namespace GeoQuiz_backend.Application.Services
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
                 RegisteredAt = DateTime.UtcNow,
                 IsPremium = false,
-                Stats = new UserStats()
+                Stats = request.Stats == null
+                    ? new UserStats
+                    {
+                        UserId = userId,
+                        LastLoginDate = DateTime.UtcNow
+                    }
+                    : new UserStats
+                    {
+                        UserId = userId,
+                        Level = request.Stats.Level,
+                        Experience = request.Stats.Experience,
+                        TotalGamesPlayed = request.Stats.GamesPlayed,
+                        TotalGamesWon = request.Stats.GamesWon,
+                        CurrentWinStreak = request.Stats.WinStreak,
+                        MaxWinStreak = request.Stats.WinStreak,
+                        DailyLoginStreak = request.Stats.DailyStreak,
+                        LastLoginDate = DateTime.UtcNow,
+                        EuropeCorrect = request.Stats.EuropeCorrect,
+                        AsiaCorrect = request.Stats.AsiaCorrect,
+                        AfricaCorrect = request.Stats.AfricaCorrect,
+                        AmericaCorrect = request.Stats.AmericaCorrect,
+                        OceaniaCorrect = request.Stats.OceaniaCorrect,
+                        FlagsCorrect = request.Stats.FlagsCorrect,
+                        CapitalsCorrect = request.Stats.CapitalsCorrect,
+                        OutlinesCorrect = request.Stats.OutlinesCorrect,
+                        LanguagesCorrect = request.Stats.LanguagesCorrect,
+                        TotalCorrectAnswers = 0,
+                        TotalQuickAnswers = 0,
+                        TotalLastSecondWins = 0,
+                        PvPGamesPlayed = 0,
+                        PvPGamesWon = 0,
+                        CurrentPvPStreak = 0,
+                        KothGamesPlayed = 0,
+                        KothGamesWon = 0,
+                        KothTop3Finishes = 0
+                    }
             };
-
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
         }

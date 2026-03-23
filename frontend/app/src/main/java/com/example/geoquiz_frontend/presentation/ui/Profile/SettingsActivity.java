@@ -4,11 +4,14 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.example.geoquiz_frontend.domain.entities.UserStats;
 import com.example.geoquiz_frontend.presentation.utils.AuthManager;
 import com.example.geoquiz_frontend.data.remote.dtos.solo.BootstrapResponse;
 import com.example.geoquiz_frontend.data.repositories.GameRepository;
@@ -20,6 +23,7 @@ import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.presentation.ui.Auth.LoginActivity;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.google.android.material.card.MaterialCardView;
+import com.google.gson.Gson;
 
 public class SettingsActivity extends BaseActivity {
     private PreferencesHelper preferencesHelper;
@@ -27,7 +31,7 @@ public class SettingsActivity extends BaseActivity {
     private User currentUser;
     private GameManager gameManager;
     private TextView tvCurrentLanguage, tvCurrentTheme, tvUpdateStatus, tvSubscriptionStatus;
-    private MaterialCardView btnLanguage, btnTheme, btnData, btnAbout, btnPrivacy, btnTerms, btnSubscription, btnLogout, btnBack;
+    private MaterialCardView btnLanguage, btnTheme, btnData, btnAbout, btnPrivacy, btnTerms, btnSubscription, btnTransfer, btnLogout, btnBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,11 +44,11 @@ public class SettingsActivity extends BaseActivity {
         authManager = new AuthManager(this);
         currentUser = authManager.getCurrentUser();
         gameManager = GameManager.getInstance(this);
-
         initViews();
         setupClickListeners();
         setupCurrentSettings();
 
+        if (preferencesHelper.getUserId().equals("uid")) btnTransfer.setVisibility(View.VISIBLE);
     }
     private void initViews() {
         tvCurrentLanguage = findViewById(R.id.tv_current_language);
@@ -59,6 +63,7 @@ public class SettingsActivity extends BaseActivity {
         btnPrivacy = findViewById(R.id.btn_privacy);
         btnTerms = findViewById(R.id.btn_terms);
         btnSubscription = findViewById(R.id.btn_subscription);
+        btnTransfer = findViewById(R.id.btn_transfer);
         btnLogout = findViewById(R.id.btn_logout);
         btnBack = findViewById(R.id.btn_back);
     }
@@ -77,9 +82,13 @@ public class SettingsActivity extends BaseActivity {
 
         btnSubscription.setOnClickListener(v -> openSubscriptionScreen());
 
+        btnTransfer.setOnClickListener(v-> showTransferConfirmation());
+
         btnLogout.setOnClickListener(v -> showLogoutConfirmation());
 
         btnBack.setOnClickListener(v -> backToProfile());
+
+
     }
     private void setupCurrentSettings() {
         String currentLanguage = preferencesHelper.getLanguage();
@@ -1095,6 +1104,50 @@ public class SettingsActivity extends BaseActivity {
         Toast.makeText(this, "Экран подписки", Toast.LENGTH_SHORT).show();
 //        Intent intent = new Intent(this, SubscriptionActivity.class);
 //        startActivity(intent);
+    }
+    private void showTransferConfirmation() {
+        String currentLanguage = preferencesHelper.getLanguage();
+
+        String title = "ru".equals(currentLanguage)
+                ? "Перенести прогресс на новый аккаунт?"
+                : "Transfer progress to a new account?";
+
+        String message = "ru".equals(currentLanguage)
+                ? "Вы сохраните все достижения и сможете продолжить игру позже.\n\n" +
+                "Для этого потребуется интернет-соединение.\n" +
+                "Вы выйдете из текущего режима и сможете зарегистрироваться."
+                : "Your progress and achievements will be saved.\n\n" +
+                "An internet connection is required.\n" +
+                "You will exit the current mode and can create an account.";
+
+        String positiveButton = "ru".equals(currentLanguage)
+                ? "Сохранить"
+                : "Save";
+
+        String negativeButton = "ru".equals(currentLanguage)
+                ? "Отмена"
+                : "Cancel";
+
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(positiveButton, (dialog, which) -> openRegistration())
+                .setNegativeButton(negativeButton, null)
+                .show();
+    }
+    private void openRegistration() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        UserStats stats = authManager.getCurrentStats();
+
+        if (stats != null) {
+            Gson gson = new Gson();
+            String statsJson = gson.toJson(stats);
+            intent.putExtra("USER_STATS_JSON", statsJson);
+        }
+
+        authManager.logout();
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
     private void showLogoutConfirmation() {
         String currentLanguage = preferencesHelper.getLanguage();

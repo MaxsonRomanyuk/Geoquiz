@@ -49,7 +49,7 @@ public class AuthManager {
         return preferencesHelper.getCurrentUser();
     }
 
-
+    public UserStats getCurrentStats() { return databaseHelper.getUserStats(preferencesHelper.getUserId()); }
 
 
     public void registerWithEmail(String uid, String email, String name) {

@@ -128,7 +128,7 @@
                         android:layout_height="8dp"
                         android:layout_marginTop="8dp"
                         android:progress="30"
-                        android:progressBackgroundTint="?attr/colorOutline"
+                        android:progressBackgroundTint="?attr/colorTertiaryFixed"
                         android:progressTint="?attr/colorPrimary" />
 
                     <TextView
@@ -267,6 +267,42 @@
                             android:textStyle="bold"
                             tools:ignore="PrivateResource" />
                     </LinearLayout>
+
+                    <View
+                        android:id="@+id/vLockedOverlayPvP"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#66000000"
+                        android:visibility="gone"/>
+
+                    <LinearLayout
+                        android:id="@+id/layoutLockedBadgePvP"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:paddingHorizontal="14dp"
+                        android:paddingVertical="6dp"
+                        android:background="@drawable/bg_locked_glass"
+                        android:elevation="6dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:text="🔒"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:layout_marginEnd="6dp"/>
+
+                        <TextView
+                            android:text="@string/unlock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/white"/>
+                    </LinearLayout>
                 </FrameLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -317,6 +353,42 @@
                             android:shadowDy="2"
                             android:shadowRadius="4"
                             tools:ignore="PrivateResource" />
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/vLockedOverlayKing"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#66000000"
+                        android:visibility="gone"/>
+
+                    <LinearLayout
+                        android:id="@+id/layoutLockedBadgeKing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:paddingHorizontal="14dp"
+                        android:paddingVertical="6dp"
+                        android:background="@drawable/bg_locked_glass"
+                        android:elevation="6dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:text="🔒"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:layout_marginEnd="6dp"/>
+
+                        <TextView
+                            android:text="@string/unlock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/white"/>
                     </LinearLayout>
                 </FrameLayout>
             </com.google.android.material.card.MaterialCardView>

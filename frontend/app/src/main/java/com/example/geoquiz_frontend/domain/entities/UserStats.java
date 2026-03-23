@@ -1,6 +1,8 @@
 package com.example.geoquiz_frontend.domain.entities;
 
-public class UserStats {
+import java.io.Serializable;
+
+public class UserStats implements Serializable {
     private String userId;
     private int gamesPlayed;
     private int gamesWon;
@@ -24,6 +26,7 @@ public class UserStats {
     private int outlinesCorrect;
     private int languagesCorrect;
 
+    public UserStats() {}
     public UserStats(String userId) {
         this.userId = userId;
         this.gamesPlayed = 0;

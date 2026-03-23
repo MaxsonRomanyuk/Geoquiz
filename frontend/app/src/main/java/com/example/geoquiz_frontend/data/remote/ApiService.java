@@ -7,6 +7,7 @@ import com.example.geoquiz_frontend.data.remote.dtos.auth.LoginRequest;
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.auth.RegisterRequest;
 import com.example.geoquiz_frontend.data.remote.dtos.solo.SyncGameSessionRequest;
+import com.example.geoquiz_frontend.domain.entities.UserStats;
 
 import java.util.List;
 

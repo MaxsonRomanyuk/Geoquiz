@@ -27,6 +27,7 @@
     <string name="solo">Solo</string>
     <string name="duel">1v1 Duel</string>
     <string name="king_of_the_hill">King of the hill</string>
+    <string name="unlock">Unlock</string>
     <string name="your_stats">Your stats</string>
     <string name="games_played">Games played</string>
     <string name="wins">Wins</string>
@@ -68,6 +69,7 @@
     <string name="subscription">Subscription</string>
     <string name="not_subscribed">Not subscribed</string>
     <string name="subscribed">Subscribed</string>
+    <string name="transfer">Transfer progress</string>
     <string name="logout">Logout</string>
     <string name="back">Back</string>
 
