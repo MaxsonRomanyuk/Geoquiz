@@ -338,7 +338,7 @@ namespace GeoQuiz_backend.API.Hubs
                     var allOptions = new List<Country> { correctCountry };
                     allOptions.AddRange(wrongCountries);
                     allOptions = allOptions.OrderBy(_ => rnd.Next()).ToList();
-
+                    
                     questionDataList.Add(new QuestionData
                     {
                         QuestionId = question.Id,

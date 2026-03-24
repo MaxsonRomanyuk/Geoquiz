@@ -71,7 +71,7 @@ public class MainActivity extends BaseActivity {
         setupBottomNavigation();
         observeUserData();
 
-        userRepository.loadUserData(false);
+        //userRepository.loadUserData(false);
     }
 
     private void initViews() {

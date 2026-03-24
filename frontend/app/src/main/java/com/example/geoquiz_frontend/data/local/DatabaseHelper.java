@@ -336,22 +336,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (won) {
             stats.setGamesWon(stats.getGamesWon() + 1);
             stats.setWinStreak(stats.getWinStreak() + 1);
+
+            stats.setExperience(stats.getExperience() + xpGained);
+            int exp = stats.getExperience();
+            int expToNextLevel = stats.getLevel()*100;
+            if (exp > expToNextLevel)
+            {
+                stats.setExperience(exp-expToNextLevel);
+                stats.setLevel(stats.getLevel()+1);
+            }
         } else {
             stats.setWinStreak(0);
         }
 
         stats.setWinRate((float) stats.getGamesWon() / stats.getGamesPlayed() * 100);
 
-        stats.setExperience(stats.getExperience() + xpGained);
-
-        int exp = stats.getExperience();
-        int expToNextLevel = stats.getLevel()*100;
-
-        if (exp > expToNextLevel)
-        {
-            stats.setExperience(exp-expToNextLevel);
-            stats.setLevel(stats.getLevel()+1);
-        }
 
         if (correctAnswers>0)
         {

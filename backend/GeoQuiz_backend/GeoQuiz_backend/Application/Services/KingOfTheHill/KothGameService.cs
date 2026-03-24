@@ -979,7 +979,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
 
 
-        private async Task UpdateUserStatsAsync(AppDbContext db,Guid userId, GameSession session, bool isWinner)
+        private async Task UpdateUserStatsAsync(AppDbContext db, Guid userId, GameSession session, bool isWinner)
         {
             var user = await db.Users
                 .Include(u => u.Stats)
@@ -991,6 +991,8 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
             stats.TotalGamesPlayed++;
             stats.KothGamesPlayed++;
+            stats.TotalCorrectAnswers += session.CorrectAnswers;
+
 
             if (isWinner)
             {
@@ -1001,7 +1003,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             if (session.Place <= 3)
             {
                 stats.KothTop3Finishes++;
-                stats.Experience += session.Score;
+                stats.Experience += session.Score * 3;
 
                 if (stats.Experience >= GetXpToNextLevel(stats.Level))
                 {
@@ -1010,7 +1012,13 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 }
             }
 
-
+            switch (session.Mode)
+            {
+                case GameMode.Flag: stats.FlagsCorrect += session.CorrectAnswers; break;
+                case GameMode.Capital: stats.CapitalsCorrect += session.CorrectAnswers; break;
+                case GameMode.Outline: stats.OutlinesCorrect += session.CorrectAnswers; break;
+                case GameMode.Language: stats.LanguagesCorrect += session.CorrectAnswers; break;
+            }
             //await _db.SaveChangesAsync();
         }
 

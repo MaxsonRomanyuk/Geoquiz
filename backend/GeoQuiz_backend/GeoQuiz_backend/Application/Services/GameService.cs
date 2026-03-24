@@ -89,12 +89,11 @@ namespace GeoQuiz_backend.Application.Services
             stats.TotalGamesPlayed++;
             stats.TotalCorrectAnswers += r.CorrectAnswers;
 
-            AddExperience(stats, r.Score);
-
             if (r.CorrectAnswers >= 8)
             {
                 stats.CurrentWinStreak++;
                 stats.TotalGamesWon++;
+                AddExperience(stats, r.Score);
             }
             else
                 stats.CurrentWinStreak = 0;

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.geoquiz_frontend.R;
+import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
 import com.google.android.material.button.MaterialButton;
@@ -13,11 +14,7 @@ public class GameResultActivity extends BaseActivity {
     private TextView tvResultIcon, tvCorrectAnswers, tvScore;
     private TextView tvMessage, tvTime, tvAccuracy;
     private MaterialButton btnRestart, btnMainMenu;
-    int score;
-    int correctAnswers;
-    int totalQuestions;
-    int timeSpent;
-    int gameMode;
+    private int score, correctAnswers, totalQuestions, timeSpent, gameMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +30,7 @@ public class GameResultActivity extends BaseActivity {
         initViews();
         setupClickListeners();
         updateUI();
+        updateStats();
     }
 
     private void initViews() {
@@ -57,6 +55,11 @@ public class GameResultActivity extends BaseActivity {
             startActivity(intent);
             finish();
         });
+    }
+    private void updateStats()
+    {
+        UserRepository userRepository = UserRepository.getInstance(this);
+        userRepository.loadUserData(false);
     }
     private void updateUI() {
 

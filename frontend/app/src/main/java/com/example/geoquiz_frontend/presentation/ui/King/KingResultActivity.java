@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
@@ -43,6 +44,7 @@ public class KingResultActivity extends BaseActivity {
         getIntentData();
         setupClickListeners();
         displayResults();
+        updateStats();
     }
 
     private void initViews() {
@@ -134,7 +136,11 @@ public class KingResultActivity extends BaseActivity {
             layoutStandings.addView(itemView);
         }
     }
-
+    private void updateStats()
+    {
+        UserRepository userRepository = UserRepository.getInstance(this);
+        userRepository.loadUserData(true);
+    }
     private void exitToMainMenu() {
         if (signalRManager != null) {
             signalRManager.stop();

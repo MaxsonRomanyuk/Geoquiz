@@ -95,9 +95,11 @@ namespace GeoQuiz_backend.Application.Services.PvP
         private async Task UpdateUserStats(PvPMatch match, User user, GameSession self, GameSession opponentSession, User opponentUser, Guid? winnerId)
         {
             var stats = user.Stats;
+            var correctAnswers = self.CorrectAnswers;
 
             stats.TotalGamesPlayed++;
             stats.PvPGamesPlayed++;
+            stats.TotalCorrectAnswers += correctAnswers;
 
             if (winnerId == user.Id)
             {
@@ -109,6 +111,16 @@ namespace GeoQuiz_backend.Application.Services.PvP
             else
             {
                 stats.CurrentPvPStreak = 0;
+            }
+
+            stats.MaxWinStreak = Math.Max(stats.MaxWinStreak, stats.CurrentWinStreak);
+
+            switch (match.SelectedMode)
+            {
+                case GameMode.Flag: stats.FlagsCorrect += correctAnswers; break;
+                case GameMode.Capital: stats.CapitalsCorrect += correctAnswers; break;
+                case GameMode.Outline: stats.OutlinesCorrect += correctAnswers; break;
+                case GameMode.Language: stats.LanguagesCorrect += correctAnswers; break;
             }
 
             await _achievementService.CheckAndGrantAsync(

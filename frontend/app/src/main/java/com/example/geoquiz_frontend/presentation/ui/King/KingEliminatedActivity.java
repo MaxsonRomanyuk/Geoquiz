@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 
+import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
@@ -41,6 +42,7 @@ public class KingEliminatedActivity extends BaseActivity {
         initViews();
         setupClickListeners();
         displayPlayerData();
+        updateStats();
     }
 
     private void getIntentData() {
@@ -96,7 +98,11 @@ public class KingEliminatedActivity extends BaseActivity {
             tvMatchMessage.setVisibility(View.VISIBLE);
         }
     }
-
+    private void updateStats()
+    {
+        UserRepository userRepository = UserRepository.getInstance(this);
+        userRepository.loadUserData(true);
+    }
     private void exitToMainMenu() {
         if (signalRManager != null) {
             signalRManager.stop();

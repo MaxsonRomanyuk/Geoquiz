@@ -1,5 +1,6 @@
 package com.example.geoquiz_frontend.presentation.ui.PvP;
 
+import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ public class PvPResultActivity extends BaseActivity {
         initViews();
         setupClickListeners();
         displayResults();
+        updateStats();
     }
 
     private void getIntentData() {
@@ -152,7 +154,11 @@ public class PvPResultActivity extends BaseActivity {
 
         setMessageText();
     }
-
+    private void updateStats()
+    {
+        UserRepository userRepository = UserRepository.getInstance(this);
+        userRepository.loadUserData(true);
+    }
     private void setFinishReasonText(String reason) {
         String currentLanguage = preferencesHelper.getLanguage();
         String reasonText = "";

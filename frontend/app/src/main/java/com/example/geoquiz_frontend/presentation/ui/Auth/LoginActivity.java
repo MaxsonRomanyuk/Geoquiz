@@ -49,7 +49,7 @@ public class LoginActivity extends BaseActivity {
     private boolean isLoginMode = true;
     private AuthManager authManager;
     private PreferencesHelper preferencesHelper;
-
+    private UserRepository userRepository;
     private GameManager gameManager;
 
     private UserStats userStats;
@@ -66,6 +66,10 @@ public class LoginActivity extends BaseActivity {
         if (authManager.isLoggedIn()) {
             gameManager = GameManager.getInstance(this);
             loadData();
+
+            userRepository = UserRepository.getInstance(this);
+            userRepository.loadUserData(false);
+
             startMainActivity();
             return;
         }
@@ -252,10 +256,13 @@ public class LoginActivity extends BaseActivity {
         user.setName(name);
         user.setPremium(false);
         authManager.LoginWithEmail(user);
+
         UserRepository userRepository = UserRepository.getInstance(this);
         userRepository.loadUserData(true);
+
         gameManager = GameManager.getInstance(this);
         loadData();
+
         startMainActivity();
     }
 
@@ -267,6 +274,9 @@ public class LoginActivity extends BaseActivity {
         authManager.loginAsGuest();
         gameManager = GameManager.getInstance(this);
         loadData();
+
+        userRepository = UserRepository.getInstance(this);
+        userRepository.loadUserData(false);
 
         startMainActivity();
 
