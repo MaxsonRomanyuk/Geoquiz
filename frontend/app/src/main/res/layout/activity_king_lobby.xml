@@ -131,10 +131,8 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:cornerRadius="16dp"
-            android:backgroundTint="?attr/colorSurface"
-            app:strokeWidth="1dp"
-            app:strokeColor="?attr/colorError"
-            android:textColor="?attr/colorError"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textColor="?attr/colorOutline"
             app:iconGravity="textStart"
             app:iconTint="?attr/colorError"/>
     </LinearLayout>

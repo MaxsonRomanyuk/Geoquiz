@@ -22,4 +22,12 @@
         <item name="colorError">#FF0000</item>
         <item name="colorErrorContainer">#FEB2B2</item>
     </style>
+    <style name="NavIndicator">
+        <item name="android:color">?attr/colorPrimary</item>
+        <item name="shapeAppearance">@style/NavIndicatorShape</item>
+    </style>
+
+    <style name="NavIndicatorShape">
+        <item name="cornerSize">16dp</item>
+    </style>
 </resources>

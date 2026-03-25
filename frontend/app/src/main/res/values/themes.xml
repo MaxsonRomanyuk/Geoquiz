@@ -23,6 +23,13 @@
         <item name="colorError">#800000</item>
         <item name="colorErrorContainer">#F56565</item>
     </style>
+    <style name="NavIndicator">
+        <item name="android:color">?attr/colorPrimary</item>
+        <item name="shapeAppearance">@style/NavIndicatorShape</item>
+    </style>
 
+    <style name="NavIndicatorShape">
+        <item name="cornerSize">16dp</item>
+    </style>
     <style name="Theme.GeoQuiz_frontend" parent="Base.Theme.GeoQuiz_frontend" />
 </resources>

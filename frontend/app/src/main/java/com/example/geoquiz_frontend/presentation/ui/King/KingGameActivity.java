@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,8 @@ import com.example.geoquiz_frontend.data.remote.KothSignalRClientManager;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.*;
 import com.example.geoquiz_frontend.domain.enums.LocalizedText;
 import com.example.geoquiz_frontend.domain.enums.RoundType;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -38,11 +41,15 @@ public class KingGameActivity extends BaseActivity {
     private ImageView ivClose;
     private TextView tvPlayersRemaining, tvTotalPlayers;
     private TextView tvQuestionNumber, tvRoundTypeIcon, tvRoundType, tvTimer, tvScore, tvQuestionTitle;
+    private LinearLayout layoutQuestionInfo;
     private FrameLayout imageContainer;
     private ImageView ivQuestionImage;
     private Button btnPlayAudio;
     private Button[] optionButtons = new Button[4];
     private Button btnEndGame;
+
+    private View vSpectatorOverlay;
+    private LinearLayout layoutSpectatorLabel;
 
     private KothSignalRClientManager signalRManager;
     private PreferencesHelper preferencesHelper;
@@ -63,6 +70,7 @@ public class KingGameActivity extends BaseActivity {
     private boolean isQuestionActive = false;
     private boolean hasAnswered = false;
     private boolean isEliminated = false;
+    private boolean isSpectator = false;
     private long questionStartTime;
 
 
@@ -97,6 +105,8 @@ public class KingGameActivity extends BaseActivity {
         tvRoundType = findViewById(R.id.tvRoundType);
         tvTimer = findViewById(R.id.tv_timer);
         tvScore = findViewById(R.id.tv_score);
+
+        layoutQuestionInfo = findViewById(R.id.layoutQuestionInfo);
         tvQuestionTitle = findViewById(R.id.tv_question_title);
         imageContainer = findViewById(R.id.image_container);
         ivQuestionImage = findViewById(R.id.iv_question_image);
@@ -107,8 +117,10 @@ public class KingGameActivity extends BaseActivity {
         optionButtons[1] = findViewById(R.id.btn_option2);
         optionButtons[2] = findViewById(R.id.btn_option3);
         optionButtons[3] = findViewById(R.id.btn_option4);
-
         setOptionsEnabled(false);
+
+        vSpectatorOverlay = findViewById(R.id.vSpectatorOverlay);
+        layoutSpectatorLabel = findViewById(R.id.layoutSpectatorLabel);
     }
 
     private void setupClickListeners() {
@@ -275,28 +287,111 @@ public class KingGameActivity extends BaseActivity {
     }
 
     private void handlePlayerEliminated(PlayerEliminatedData data) {
-        if (data.getPlayerId().equals(userId)) {
-            Log.d(TAG, "You have been eliminated! Place: " + data.getPlace());
-            isEliminated = true;
+        if (!data.getPlayerId().equals(userId)) return;
 
-            String playerName = "Player";
-            for (PlayerInfo player: allPlayers) {
-                if (player.getPlayerId().equals(userId)) playerName = player.getPlayerName();
-            }
+        isEliminated = true;
 
-            Intent intent = new Intent(this, KingEliminatedActivity.class);
-            intent.putExtra("player_name", playerName);
-            intent.putExtra("rounds_survived", data.getRoundsSurvived());
-            intent.putExtra("place", data.getPlace());
-            intent.putExtra("correct_answers", data.getCorrectAnswers());
-            intent.putExtra("total_score", data.getTotalScore());
-            intent.putExtra("is_manually_disabled", data.isManuallyDisabled());
-            intent.putExtra("total_players", totalPlayers);
-            startActivity(intent);
+        String currentLanguage = preferencesHelper.getLanguage();
+
+        String title = "ru".equals(currentLanguage)
+                ? "Вы выбыли"
+                : "You are eliminated";
+
+        String message = "ru".equals(currentLanguage)
+                ? "Вы больше не участвуете в раунде.\n\nХотите продолжить наблюдать за игрой или перейти к результатам?"
+                : "You are no longer in the round.\n\nDo you want to keep watching or go to results?";
+
+        String spectate = "ru".equals(currentLanguage)
+                ? "Наблюдать"
+                : "Watch";
+
+        String exit = "ru".equals(currentLanguage)
+                ? "Результаты"
+                : "Results";
+
+        String place = "ru".equals(currentLanguage)
+                ? "🏆 Ваше место: №" + data.getPlace()
+                : "🏆 Your place: №" + data.getPlace();
+
+
+        View view = getLayoutInflater().inflate(R.layout.dialog_eliminated, null);
+
+        TextView tvTitle = view.findViewById(R.id.tvTitle);
+        TextView tvMessage = view.findViewById(R.id.tvMessage);
+        TextView tvPlace = view.findViewById(R.id.tvPlace);
+        MaterialButton btnSpectate = view.findViewById(R.id.btnSpectate);
+        MaterialButton btnExit = view.findViewById(R.id.btnExit);
+
+        tvTitle.setText(title);
+        tvMessage.setText(message);
+        btnSpectate.setText(spectate);
+        btnExit.setText(exit);
+        tvPlace.setText(place);
+
+        AlertDialog dialog = new MaterialAlertDialogBuilder(this)
+                .setView(view)
+                .setCancelable(false)
+                .create();
+
+        btnSpectate.setOnClickListener(v -> {
+            dialog.dismiss();
+            enterSpectatorMode();
+        });
+
+        btnExit.setOnClickListener(v -> {
+            dialog.dismiss();
+            openResultScreen(data);
+        });
+
+        dialog.show();
+        view.setScaleX(0.8f);
+        view.setScaleY(0.8f);
+        view.setAlpha(0f);
+
+        view.animate()
+                .scaleX(1f)
+                .scaleY(1f)
+                .alpha(1f)
+                .setDuration(220)
+                .start();
+    }
+    private void enterSpectatorMode() {
+        isSpectator = true;
+        setOptionsEnabled(false);
+        applySpectatorUI();
+    }
+    private void applySpectatorUI() {
+
+        vSpectatorOverlay.setVisibility(View.VISIBLE);
+        layoutSpectatorLabel.setVisibility(View.VISIBLE);
+
+        vSpectatorOverlay.setAlpha(0f);
+        vSpectatorOverlay.animate().alpha(1f).setDuration(200).start();
+
+        layoutSpectatorLabel.setScaleX(0.8f);
+        layoutSpectatorLabel.setScaleY(0.8f);
+        layoutSpectatorLabel.animate().scaleX(1f).scaleY(1f).setDuration(200).start();
+
+        layoutQuestionInfo.setAlpha(0.8f);
+        tvScore.setAlpha(0.8f);
+    }
+    private void openResultScreen(PlayerEliminatedData data)
+    {
+        String playerName = "Player";
+        for (PlayerInfo player: allPlayers) {
+            if (player.getPlayerId().equals(userId)) playerName = player.getPlayerName();
         }
 
+        Intent intent = new Intent(this, KingEliminatedActivity.class);
+        intent.putExtra("player_name", playerName);
+        intent.putExtra("rounds_survived", data.getRoundsSurvived());
+        intent.putExtra("place", data.getPlace());
+        intent.putExtra("correct_answers", data.getCorrectAnswers());
+        intent.putExtra("total_score", data.getTotalScore());
+        intent.putExtra("is_manually_disabled", data.isManuallyDisabled());
+        intent.putExtra("total_players", totalPlayers);
+        startActivity(intent);
     }
-
     private void handleAnswerResult(AnswerResultData data) {
         Log.d(TAG, "Answer result: correct=" + data.isCorrect() + ", score=" + data.getScoreGained());
 
@@ -326,7 +421,7 @@ public class KingGameActivity extends BaseActivity {
     }
 
     private void submitAnswer(int index) {
-        if (!isQuestionActive || hasAnswered || isEliminated) return;
+        if (!isQuestionActive || hasAnswered || isEliminated || isSpectator) return;
 
         long answerTime = SystemClock.elapsedRealtime() - questionStartTime;
 
@@ -336,8 +431,7 @@ public class KingGameActivity extends BaseActivity {
 
         setOptionsEnabled(false);
 
-        signalRManager.submitAnswer(matchId, currentRound, currentQuestion.getQuestionId(),
-                index,  (int) answerTime);
+        signalRManager.submitAnswer(matchId, currentRound, currentQuestion.getQuestionId(), index,  (int) answerTime);
     }
 
     private void startTimer(int seconds) {

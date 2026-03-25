@@ -138,14 +138,17 @@
             style="@style/QuizOptionButton"/>
 
     </LinearLayout>
-
     <Button
         android:id="@+id/btn_end_game"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
+        android:layout_marginHorizontal="16dp"
         android:text="@string/end_game"
-        android:layout_marginBottom="40dp"
-        android:background="?attr/colorSurfaceInverse"
-        android:textColor="?attr/colorOutline"/>
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:backgroundTint="?attr/colorPrimary"
+        android:textColor="?attr/colorOutline"
+        app:cornerRadius="16dp"
+        android:layout_marginBottom="40dp"/>
 
 </LinearLayout>

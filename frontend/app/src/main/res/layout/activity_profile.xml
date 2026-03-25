@@ -867,15 +867,16 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSurface"
-        app:itemIconTint="?attr/colorPrimary"
-        app:itemTextColor="?attr/colorTertiaryFixed"
-        app:itemBackground="@drawable/bottom_nav_bg"
+        android:background="@drawable/bg_bottom_nav"
+        app:itemIconTint="@color/bottom_nav_icon"
+        app:itemTextColor="@color/bottom_nav_text"
+        app:itemRippleColor="?attr/colorPrimary"
+        app:itemActiveIndicatorStyle="@style/NavIndicator"
         app:menu="@menu/bottom_nav_menu"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:labelVisibilityMode="labeled"
-        app:elevation="8dp"/>
+        app:elevation="12dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
