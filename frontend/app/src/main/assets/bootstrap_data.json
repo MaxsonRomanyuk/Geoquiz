@@ -1,0 +1,7613 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-03-26T10:25:01.604Z",
+  "countries": [
+    {
+      "id": "australia",
+      "name": {
+        "ru": "Австралия",
+        "en": "Australia"
+      },
+      "capital": {
+        "ru": "Канберра",
+        "en": "Canberra"
+      },
+      "region": "Океания",
+      "flagImage": "images/flags/australia.png",
+      "outlineImage": "images/outline/australia.png",
+      "languageAudio": "sounds/languages/australia.mp3"
+    },
+    {
+      "id": "austria",
+      "name": {
+        "ru": "Австрия",
+        "en": "Austria"
+      },
+      "capital": {
+        "ru": "Вена",
+        "en": "Vienna"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/austria.png",
+      "outlineImage": "images/outline/austria.png",
+      "languageAudio": "sounds/languages/austria.mp3"
+    },
+    {
+      "id": "azerbaijan",
+      "name": {
+        "ru": "Азербайджан",
+        "en": "Azerbaijan"
+      },
+      "capital": {
+        "ru": "Баку",
+        "en": "Baku"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/azerbaijan.png",
+      "outlineImage": "images/outline/azerbaijan.png",
+      "languageAudio": "sounds/languages/azerbaijan.mp3"
+    },
+    {
+      "id": "albania",
+      "name": {
+        "ru": "Албания",
+        "en": "Albania"
+      },
+      "capital": {
+        "ru": "Тирана",
+        "en": "Tirana"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/albania.png",
+      "outlineImage": "images/outline/albania.png",
+      "languageAudio": "sounds/languages/albania.mp3"
+    },
+    {
+      "id": "algeria",
+      "name": {
+        "ru": "Алжир",
+        "en": "Algeria"
+      },
+      "capital": {
+        "ru": "Алжир",
+        "en": "Algiers"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/algeria.png",
+      "outlineImage": "images/outline/algeria.png",
+      "languageAudio": "sounds/languages/algeria.mp3"
+    },
+    {
+      "id": "angola",
+      "name": {
+        "ru": "Ангола",
+        "en": "Angola"
+      },
+      "capital": {
+        "ru": "Луанда",
+        "en": "Luanda"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/angola.png",
+      "outlineImage": "images/outline/angola.png",
+      "languageAudio": "sounds/languages/angola.mp3"
+    },
+    {
+      "id": "andorra",
+      "name": {
+        "ru": "Андорра",
+        "en": "Andorra"
+      },
+      "capital": {
+        "ru": "Андорра-ла-Велья",
+        "en": "Andorra la Vella"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/andorra.png",
+      "outlineImage": "images/outline/andorra.png",
+      "languageAudio": "sounds/languages/andorra.mp3"
+    },
+    {
+      "id": "antigua_and_barbuda",
+      "name": {
+        "ru": "Антигуа и Барбуда",
+        "en": "Antigua and Barbuda"
+      },
+      "capital": {
+        "ru": "Сент-Джонс",
+        "en": "St. John's"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/antigua_barbuda.png",
+      "outlineImage": "images/outline/antigua_barbuda.png",
+      "languageAudio": "sounds/languages/antigua_and_barbuda.mp3"
+    },
+    {
+      "id": "argentina",
+      "name": {
+        "ru": "Аргентина",
+        "en": "Argentina"
+      },
+      "capital": {
+        "ru": "Буэнос-Айрес",
+        "en": "Buenos Aires"
+      },
+      "region": "Южная Америка",
+      "flagImage": "images/flags/argentina.png",
+      "outlineImage": "images/outline/argentina.png",
+      "languageAudio": "sounds/languages/argentina.mp3"
+    },
+    {
+      "id": "armenia",
+      "name": {
+        "ru": "Армения",
+        "en": "Armenia"
+      },
+      "capital": {
+        "ru": "Ереван",
+        "en": "Yerevan"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/armenia.png",
+      "outlineImage": "images/outline/armenia.png",
+      "languageAudio": "sounds/languages/armenia.mp3"
+    },
+    {
+      "id": "afghanistan",
+      "name": {
+        "ru": "Афганистан",
+        "en": "Afghanistan"
+      },
+      "capital": {
+        "ru": "Кабул",
+        "en": "Kabul"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/afghanistan.png",
+      "outlineImage": "images/outline/afghanistan.png",
+      "languageAudio": "sounds/languages/afghanistan.mp3"
+    },
+    {
+      "id": "bahamas",
+      "name": {
+        "ru": "Багамские Острова",
+        "en": "Bahamas"
+      },
+      "capital": {
+        "ru": "Нассау",
+        "en": "Nassau"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/bahamas.png",
+      "outlineImage": "images/outline/bahamas.png",
+      "languageAudio": "sounds/languages/bahamas.mp3"
+    },
+    {
+      "id": "bangladesh",
+      "name": {
+        "ru": "Бангладеш",
+        "en": "Bangladesh"
+      },
+      "capital": {
+        "ru": "Дакка",
+        "en": "Dhaka"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/bangladesh.png",
+      "outlineImage": "images/outline/bangladesh.png",
+      "languageAudio": "sounds/languages/bangladesh.mp3"
+    },
+    {
+      "id": "barbados",
+      "name": {
+        "ru": "Барбадос",
+        "en": "Barbados"
+      },
+      "capital": {
+        "ru": "Бриджтаун",
+        "en": "Bridgetown"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/barbados.png",
+      "outlineImage": "images/outline/barbados.png",
+      "languageAudio": "sounds/languages/barbados.mp3"
+    },
+    {
+      "id": "bahrain",
+      "name": {
+        "ru": "Бахрейн",
+        "en": "Bahrain"
+      },
+      "capital": {
+        "ru": "Манама",
+        "en": "Manama"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/bahrain.png",
+      "outlineImage": "images/outline/bahrain.png",
+      "languageAudio": "sounds/languages/bahrain.mp3"
+    },
+    {
+      "id": "belize",
+      "name": {
+        "ru": "Белиз",
+        "en": "Belize"
+      },
+      "capital": {
+        "ru": "Бельмопан",
+        "en": "Belmopan"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/belize.png",
+      "outlineImage": "images/outline/belize.png",
+      "languageAudio": "sounds/languages/belize.mp3"
+    },
+    {
+      "id": "belarus",
+      "name": {
+        "ru": "Беларусь",
+        "en": "Belarus"
+      },
+      "capital": {
+        "ru": "Минск",
+        "en": "Minsk"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/belarus.png",
+      "outlineImage": "images/outline/belarus.png",
+      "languageAudio": "sounds/languages/belarus.mp3"
+    },
+    {
+      "id": "belgium",
+      "name": {
+        "ru": "Бельгия",
+        "en": "Belgium"
+      },
+      "capital": {
+        "ru": "Брюссель",
+        "en": "Brussels"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/belgium.png",
+      "outlineImage": "images/outline/belgium.png",
+      "languageAudio": "sounds/languages/belgium.mp3"
+    },
+    {
+      "id": "benin",
+      "name": {
+        "ru": "Бенин",
+        "en": "Benin"
+      },
+      "capital": {
+        "ru": "Порто-Ново",
+        "en": "Porto-Novo"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/benin.png",
+      "outlineImage": "images/outline/benin.png",
+      "languageAudio": "sounds/languages/benin.mp3"
+    },
+    {
+      "id": "bulgaria",
+      "name": {
+        "ru": "Болгария",
+        "en": "Bulgaria"
+      },
+      "capital": {
+        "ru": "София",
+        "en": "Sofia"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/bulgaria.png",
+      "outlineImage": "images/outline/bulgaria.png",
+      "languageAudio": "sounds/languages/bulgaria.mp3"
+    },
+    {
+      "id": "bolivia",
+      "name": {
+        "ru": "Боливия",
+        "en": "Bolivia"
+      },
+      "capital": {
+        "ru": "Сукре",
+        "en": "Sucre"
+      },
+      "region": "Южная Америка",
+      "flagImage": "images/flags/bolivia.png",
+      "outlineImage": "images/outline/bolivia.png",
+      "languageAudio": "sounds/languages/bolivia.mp3"
+    },
+    {
+      "id": "bosnia_and_herzegovina",
+      "name": {
+        "ru": "Босния и Герцеговина",
+        "en": "Bosnia and Herzegovina"
+      },
+      "capital": {
+        "ru": "Сараево",
+        "en": "Sarajevo"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/bosnia_herzegovina.png",
+      "outlineImage": "images/outline/bosnia_herzegovina.png",
+      "languageAudio": "sounds/languages/bosnia_and_herzegovina.mp3"
+    },
+    {
+      "id": "botswana",
+      "name": {
+        "ru": "Ботсвана",
+        "en": "Botswana"
+      },
+      "capital": {
+        "ru": "Габороне",
+        "en": "Gaborone"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/botswana.png",
+      "outlineImage": "images/outline/botswana.png",
+      "languageAudio": "sounds/languages/botswana.mp3"
+    },
+    {
+      "id": "brazil",
+      "name": {
+        "ru": "Бразилия",
+        "en": "Brazil"
+      },
+      "capital": {
+        "ru": "Бразилиа",
+        "en": "Brasília"
+      },
+      "region": "Южная Америка",
+      "flagImage": "images/flags/brazil.png",
+      "outlineImage": "images/outline/brazil.png",
+      "languageAudio": "sounds/languages/brazil.mp3"
+    },
+    {
+      "id": "brunei",
+      "name": {
+        "ru": "Бруней",
+        "en": "Brunei"
+      },
+      "capital": {
+        "ru": "Бандар-Сери-Бегаван",
+        "en": "Bandar Seri Begawan"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/brunei.png",
+      "outlineImage": "images/outline/brunei.png",
+      "languageAudio": "sounds/languages/brunei.mp3"
+    },
+    {
+      "id": "burkina_faso",
+      "name": {
+        "ru": "Буркина-Фасо",
+        "en": "Burkina Faso"
+      },
+      "capital": {
+        "ru": "Уагадугу",
+        "en": "Ouagadougou"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/burkina_faso.png",
+      "outlineImage": "images/outline/burkina_faso.png",
+      "languageAudio": "sounds/languages/burkina_faso.mp3"
+    },
+    {
+      "id": "burundi",
+      "name": {
+        "ru": "Бурунди",
+        "en": "Burundi"
+      },
+      "capital": {
+        "ru": "Гитега",
+        "en": "Gitega"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/burundi.png",
+      "outlineImage": "images/outline/burundi.png",
+      "languageAudio": "sounds/languages/burundi.mp3"
+    },
+    {
+      "id": "bhutan",
+      "name": {
+        "ru": "Бутан",
+        "en": "Bhutan"
+      },
+      "capital": {
+        "ru": "Тхимпху",
+        "en": "Thimphu"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/bhutan.png",
+      "outlineImage": "images/outline/bhutan.png",
+      "languageAudio": "sounds/languages/bhutan.mp3"
+    },
+    {
+      "id": "vanuatu",
+      "name": {
+        "ru": "Вануату",
+        "en": "Vanuatu"
+      },
+      "capital": {
+        "ru": "Порт-Вила",
+        "en": "Port Vila"
+      },
+      "region": "Океания",
+      "flagImage": "images/flags/vanuatu.png",
+      "outlineImage": "images/outline/vanuatu.png",
+      "languageAudio": "sounds/languages/vanuatu.mp3"
+    },
+    {
+      "id": "vatican_city",
+      "name": {
+        "ru": "Ватикан",
+        "en": "Vatican City"
+      },
+      "capital": {
+        "ru": "Ватикан",
+        "en": "Vatican City"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/vatican.png",
+      "outlineImage": "images/outline/vatican.png",
+      "languageAudio": "sounds/languages/vatican_city.mp3"
+    },
+    {
+      "id": "united_kingdom",
+      "name": {
+        "ru": "Великобритания",
+        "en": "United Kingdom"
+      },
+      "capital": {
+        "ru": "Лондон",
+        "en": "London"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/uk.png",
+      "outlineImage": "images/outline/uk.png",
+      "languageAudio": "sounds/languages/united_kingdom.mp3"
+    },
+    {
+      "id": "hungary",
+      "name": {
+        "ru": "Венгрия",
+        "en": "Hungary"
+      },
+      "capital": {
+        "ru": "Будапешт",
+        "en": "Budapest"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/hungary.png",
+      "outlineImage": "images/outline/hungary.png",
+      "languageAudio": "sounds/languages/hungary.mp3"
+    },
+    {
+      "id": "venezuela",
+      "name": {
+        "ru": "Венесуэла",
+        "en": "Venezuela"
+      },
+      "capital": {
+        "ru": "Каракас",
+        "en": "Caracas"
+      },
+      "region": "Южная Америка",
+      "flagImage": "images/flags/venezuela.png",
+      "outlineImage": "images/outline/venezuela.png",
+      "languageAudio": "sounds/languages/venezuela.mp3"
+    },
+    {
+      "id": "timor-leste",
+      "name": {
+        "ru": "Восточный Тимор",
+        "en": "Timor-Leste"
+      },
+      "capital": {
+        "ru": "Дили",
+        "en": "Dili"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/timor_leste.png",
+      "outlineImage": "images/outline/timor_leste.png",
+      "languageAudio": "sounds/languages/timor-leste.mp3"
+    },
+    {
+      "id": "vietnam",
+      "name": {
+        "ru": "Вьетнам",
+        "en": "Vietnam"
+      },
+      "capital": {
+        "ru": "Ханой",
+        "en": "Hanoi"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/vietnam.png",
+      "outlineImage": "images/outline/vietnam.png",
+      "languageAudio": "sounds/languages/vietnam.mp3"
+    },
+    {
+      "id": "gabon",
+      "name": {
+        "ru": "Габон",
+        "en": "Gabon"
+      },
+      "capital": {
+        "ru": "Либревиль",
+        "en": "Libreville"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/gabon.png",
+      "outlineImage": "images/outline/gabon.png",
+      "languageAudio": "sounds/languages/gabon.mp3"
+    },
+    {
+      "id": "haiti",
+      "name": {
+        "ru": "Гаити",
+        "en": "Haiti"
+      },
+      "capital": {
+        "ru": "Порт-о-Пренс",
+        "en": "Port-au-Prince"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/haiti.png",
+      "outlineImage": "images/outline/haiti.png",
+      "languageAudio": "sounds/languages/haiti.mp3"
+    },
+    {
+      "id": "guyana",
+      "name": {
+        "ru": "Гайана",
+        "en": "Guyana"
+      },
+      "capital": {
+        "ru": "Джорджтаун",
+        "en": "Georgetown"
+      },
+      "region": "Южная Америка",
+      "flagImage": "images/flags/guyana.png",
+      "outlineImage": "images/outline/guyana.png",
+      "languageAudio": "sounds/languages/guyana.mp3"
+    },
+    {
+      "id": "gambia",
+      "name": {
+        "ru": "Гамбия",
+        "en": "Gambia"
+      },
+      "capital": {
+        "ru": "Банжул",
+        "en": "Banjul"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/gambia.png",
+      "outlineImage": "images/outline/gambia.png",
+      "languageAudio": "sounds/languages/gambia.mp3"
+    },
+    {
+      "id": "ghana",
+      "name": {
+        "ru": "Гана",
+        "en": "Ghana"
+      },
+      "capital": {
+        "ru": "Аккра",
+        "en": "Accra"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/ghana.png",
+      "outlineImage": "images/outline/ghana.png",
+      "languageAudio": "sounds/languages/ghana.mp3"
+    },
+    {
+      "id": "guatemala",
+      "name": {
+        "ru": "Гватемала",
+        "en": "Guatemala"
+      },
+      "capital": {
+        "ru": "Гватемала",
+        "en": "Guatemala City"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/guatemala.png",
+      "outlineImage": "images/outline/guatemala.png",
+      "languageAudio": "sounds/languages/guatemala.mp3"
+    },
+    {
+      "id": "guinea",
+      "name": {
+        "ru": "Гвинея",
+        "en": "Guinea"
+      },
+      "capital": {
+        "ru": "Конакри",
+        "en": "Conakry"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/guinea.png",
+      "outlineImage": "images/outline/guinea.png",
+      "languageAudio": "sounds/languages/guinea.mp3"
+    },
+    {
+      "id": "guinea-bissau",
+      "name": {
+        "ru": "Гвинея-Бисау",
+        "en": "Guinea-Bissau"
+      },
+      "capital": {
+        "ru": "Бисау",
+        "en": "Bissau"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/guinea_bissau.png",
+      "outlineImage": "images/outline/guinea_bissau.png",
+      "languageAudio": "sounds/languages/guinea-bissau.mp3"
+    },
+    {
+      "id": "germany",
+      "name": {
+        "ru": "Германия",
+        "en": "Germany"
+      },
+      "capital": {
+        "ru": "Берлин",
+        "en": "Berlin"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/germany.png",
+      "outlineImage": "images/outline/germany.png",
+      "languageAudio": "sounds/languages/germany.mp3"
+    },
+    {
+      "id": "honduras",
+      "name": {
+        "ru": "Гондурас",
+        "en": "Honduras"
+      },
+      "capital": {
+        "ru": "Тегусигальпа",
+        "en": "Tegucigalpa"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/honduras.png",
+      "outlineImage": "images/outline/honduras.png",
+      "languageAudio": "sounds/languages/honduras.mp3"
+    },
+    {
+      "id": "grenada",
+      "name": {
+        "ru": "Гренада",
+        "en": "Grenada"
+      },
+      "capital": {
+        "ru": "Сент-Джорджес",
+        "en": "St. George's"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/grenada.png",
+      "outlineImage": "images/outline/grenada.png",
+      "languageAudio": "sounds/languages/grenada.mp3"
+    },
+    {
+      "id": "greece",
+      "name": {
+        "ru": "Греция",
+        "en": "Greece"
+      },
+      "capital": {
+        "ru": "Афины",
+        "en": "Athens"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/greece.png",
+      "outlineImage": "images/outline/greece.png",
+      "languageAudio": "sounds/languages/greece.mp3"
+    },
+    {
+      "id": "georgia",
+      "name": {
+        "ru": "Грузия",
+        "en": "Georgia"
+      },
+      "capital": {
+        "ru": "Тбилиси",
+        "en": "Tbilisi"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/georgia.png",
+      "outlineImage": "images/outline/georgia.png",
+      "languageAudio": "sounds/languages/georgia.mp3"
+    },
+    {
+      "id": "denmark",
+      "name": {
+        "ru": "Дания",
+        "en": "Denmark"
+      },
+      "capital": {
+        "ru": "Копенгаген",
+        "en": "Copenhagen"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/denmark.png",
+      "outlineImage": "images/outline/denmark.png",
+      "languageAudio": "sounds/languages/denmark.mp3"
+    },
+    {
+      "id": "djibouti",
+      "name": {
+        "ru": "Джибути",
+        "en": "Djibouti"
+      },
+      "capital": {
+        "ru": "Джибути",
+        "en": "Djibouti"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/djibouti.png",
+      "outlineImage": "images/outline/djibouti.png",
+      "languageAudio": "sounds/languages/djibouti.mp3"
+    },
+    {
+      "id": "dominica",
+      "name": {
+        "ru": "Доминика",
+        "en": "Dominica"
+      },
+      "capital": {
+        "ru": "Розо",
+        "en": "Roseau"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/dominica.png",
+      "outlineImage": "images/outline/dominica.png",
+      "languageAudio": "sounds/languages/dominica.mp3"
+    },
+    {
+      "id": "dominican_republic",
+      "name": {
+        "ru": "Доминиканская Республика",
+        "en": "Dominican Republic"
+      },
+      "capital": {
+        "ru": "Санто-Доминго",
+        "en": "Santo Domingo"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/dominican_republic.png",
+      "outlineImage": "images/outline/dominican_republic.png",
+      "languageAudio": "sounds/languages/dominican_republic.mp3"
+    },
+    {
+      "id": "egypt",
+      "name": {
+        "ru": "Египет",
+        "en": "Egypt"
+      },
+      "capital": {
+        "ru": "Каир",
+        "en": "Cairo"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/egypt.png",
+      "outlineImage": "images/outline/egypt.png",
+      "languageAudio": "sounds/languages/egypt.mp3"
+    },
+    {
+      "id": "zambia",
+      "name": {
+        "ru": "Замбия",
+        "en": "Zambia"
+      },
+      "capital": {
+        "ru": "Лусака",
+        "en": "Lusaka"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/zambia.png",
+      "outlineImage": "images/outline/zambia.png",
+      "languageAudio": "sounds/languages/zambia.mp3"
+    },
+    {
+      "id": "zimbabwe",
+      "name": {
+        "ru": "Зимбабве",
+        "en": "Zimbabwe"
+      },
+      "capital": {
+        "ru": "Хараре",
+        "en": "Harare"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/zimbabwe.png",
+      "outlineImage": "images/outline/zimbabwe.png",
+      "languageAudio": "sounds/languages/zimbabwe.mp3"
+    },
+    {
+      "id": "israel",
+      "name": {
+        "ru": "Израиль",
+        "en": "Israel"
+      },
+      "capital": {
+        "ru": "Иерусалим",
+        "en": "Jerusalem"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/israel.png",
+      "outlineImage": "images/outline/israel.png",
+      "languageAudio": "sounds/languages/israel.mp3"
+    },
+    {
+      "id": "india",
+      "name": {
+        "ru": "Индия",
+        "en": "India"
+      },
+      "capital": {
+        "ru": "Нью-Дели",
+        "en": "New Delhi"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/india.png",
+      "outlineImage": "images/outline/india.png",
+      "languageAudio": "sounds/languages/india.mp3"
+    },
+    {
+      "id": "indonesia",
+      "name": {
+        "ru": "Индонезия",
+        "en": "Indonesia"
+      },
+      "capital": {
+        "ru": "Джакарта",
+        "en": "Jakarta"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/indonesia.png",
+      "outlineImage": "images/outline/indonesia.png",
+      "languageAudio": "sounds/languages/indonesia.mp3"
+    },
+    {
+      "id": "jordan",
+      "name": {
+        "ru": "Иордания",
+        "en": "Jordan"
+      },
+      "capital": {
+        "ru": "Амман",
+        "en": "Amman"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/jordan.png",
+      "outlineImage": "images/outline/jordan.png",
+      "languageAudio": "sounds/languages/jordan.mp3"
+    },
+    {
+      "id": "iraq",
+      "name": {
+        "ru": "Ирак",
+        "en": "Iraq"
+      },
+      "capital": {
+        "ru": "Багдад",
+        "en": "Baghdad"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/iraq.png",
+      "outlineImage": "images/outline/iraq.png",
+      "languageAudio": "sounds/languages/iraq.mp3"
+    },
+    {
+      "id": "iran",
+      "name": {
+        "ru": "Иран",
+        "en": "Iran"
+      },
+      "capital": {
+        "ru": "Тегеран",
+        "en": "Tehran"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/iran.png",
+      "outlineImage": "images/outline/iran.png",
+      "languageAudio": "sounds/languages/iran.mp3"
+    },
+    {
+      "id": "ireland",
+      "name": {
+        "ru": "Ирландия",
+        "en": "Ireland"
+      },
+      "capital": {
+        "ru": "Дублин",
+        "en": "Dublin"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/ireland.png",
+      "outlineImage": "images/outline/ireland.png",
+      "languageAudio": "sounds/languages/ireland.mp3"
+    },
+    {
+      "id": "iceland",
+      "name": {
+        "ru": "Исландия",
+        "en": "Iceland"
+      },
+      "capital": {
+        "ru": "Рейкьявик",
+        "en": "Reykjavík"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/iceland.png",
+      "outlineImage": "images/outline/iceland.png",
+      "languageAudio": "sounds/languages/iceland.mp3"
+    },
+    {
+      "id": "spain",
+      "name": {
+        "ru": "Испания",
+        "en": "Spain"
+      },
+      "capital": {
+        "ru": "Мадрид",
+        "en": "Madrid"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/spain.png",
+      "outlineImage": "images/outline/spain.png",
+      "languageAudio": "sounds/languages/spain.mp3"
+    },
+    {
+      "id": "italy",
+      "name": {
+        "ru": "Италия",
+        "en": "Italy"
+      },
+      "capital": {
+        "ru": "Рим",
+        "en": "Rome"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/italy.png",
+      "outlineImage": "images/outline/italy.png",
+      "languageAudio": "sounds/languages/italy.mp3"
+    },
+    {
+      "id": "yemen",
+      "name": {
+        "ru": "Йемен",
+        "en": "Yemen"
+      },
+      "capital": {
+        "ru": "Сана",
+        "en": "Sana'a"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/yemen.png",
+      "outlineImage": "images/outline/yemen.png",
+      "languageAudio": "sounds/languages/yemen.mp3"
+    },
+    {
+      "id": "cape_verde",
+      "name": {
+        "ru": "Кабо-Верде",
+        "en": "Cape Verde"
+      },
+      "capital": {
+        "ru": "Прая",
+        "en": "Praia"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/cape_verde.png",
+      "outlineImage": "images/outline/cape_verde.png",
+      "languageAudio": "sounds/languages/cape_verde.mp3"
+    },
+    {
+      "id": "kazakhstan",
+      "name": {
+        "ru": "Казахстан",
+        "en": "Kazakhstan"
+      },
+      "capital": {
+        "ru": "Нур-Султан",
+        "en": "Nur-Sultan"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/kazakhstan.png",
+      "outlineImage": "images/outline/kazakhstan.png",
+      "languageAudio": "sounds/languages/kazakhstan.mp3"
+    },
+    {
+      "id": "cambodia",
+      "name": {
+        "ru": "Камбоджа",
+        "en": "Cambodia"
+      },
+      "capital": {
+        "ru": "Пномпень",
+        "en": "Phnom Penh"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/cambodia.png",
+      "outlineImage": "images/outline/cambodia.png",
+      "languageAudio": "sounds/languages/cambodia.mp3"
+    },
+    {
+      "id": "cameroon",
+      "name": {
+        "ru": "Камерун",
+        "en": "Cameroon"
+      },
+      "capital": {
+        "ru": "Яунде",
+        "en": "Yaoundé"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/cameroon.png",
+      "outlineImage": "images/outline/cameroon.png",
+      "languageAudio": "sounds/languages/cameroon.mp3"
+    },
+    {
+      "id": "canada",
+      "name": {
+        "ru": "Канада",
+        "en": "Canada"
+      },
+      "capital": {
+        "ru": "Оттава",
+        "en": "Ottawa"
+      },
+      "region": "Северная Америка",
+      "flagImage": "images/flags/canada.png",
+      "outlineImage": "images/outline/canada.png",
+      "languageAudio": "sounds/languages/canada.mp3"
+    },
+    {
+      "id": "qatar",
+      "name": {
+        "ru": "Катар",
+        "en": "Qatar"
+      },
+      "capital": {
+        "ru": "Доха",
+        "en": "Doha"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/qatar.png",
+      "outlineImage": "images/outline/qatar.png",
+      "languageAudio": "sounds/languages/qatar.mp3"
+    },
+    {
+      "id": "kenya",
+      "name": {
+        "ru": "Кения",
+        "en": "Kenya"
+      },
+      "capital": {
+        "ru": "Найроби",
+        "en": "Nairobi"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/kenya.png",
+      "outlineImage": "images/outline/kenya.png",
+      "languageAudio": "sounds/languages/kenya.mp3"
+    },
+    {
+      "id": "cyprus",
+      "name": {
+        "ru": "Кипр",
+        "en": "Cyprus"
+      },
+      "capital": {
+        "ru": "Никосия",
+        "en": "Nicosia"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/cyprus.png",
+      "outlineImage": "images/outline/cyprus.png",
+      "languageAudio": "sounds/languages/cyprus.mp3"
+    },
+    {
+      "id": "kyrgyzstan",
+      "name": {
+        "ru": "Киргизия",
+        "en": "Kyrgyzstan"
+      },
+      "capital": {
+        "ru": "Бишкек",
+        "en": "Bishkek"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/kyrgyzstan.png",
+      "outlineImage": "images/outline/kyrgyzstan.png",
+      "languageAudio": "sounds/languages/kyrgyzstan.mp3"
+    },
+    {
+      "id": "kiribati",
+      "name": {
+        "ru": "Кирибати",
+        "en": "Kiribati"
+      },
+      "capital": {
+        "ru": "Южная Тарава",
+        "en": "South Tarawa"
+      },
+      "region": "Океания",
+      "flagImage": "images/flags/kiribati.png",
+      "outlineImage": "images/outline/kiribati.png",
+      "languageAudio": "sounds/languages/kiribati.mp3"
+    },
+    {
+      "id": "china",
+      "name": {
+        "ru": "Китай",
+        "en": "China"
+      },
+      "capital": {
+        "ru": "Пекин",
+        "en": "Beijing"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/china.png",
+      "outlineImage": "images/outline/china.png",
+      "languageAudio": "sounds/languages/china.mp3"
+    },
+    {
+      "id": "colombia",
+      "name": {
+        "ru": "Колумбия",
+        "en": "Colombia"
+      },
+      "capital": {
+        "ru": "Богота",
+        "en": "Bogotá"
+      },
+      "region": "Южная Америка",
+      "flagImage": "images/flags/colombia.png",
+      "outlineImage": "images/outline/colombia.png",
+      "languageAudio": "sounds/languages/colombia.mp3"
+    },
+    {
+      "id": "comoros",
+      "name": {
+        "ru": "Коморы",
+        "en": "Comoros"
+      },
+      "capital": {
+        "ru": "Морони",
+        "en": "Moroni"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/comoros.png",
+      "outlineImage": "images/outline/comoros.png",
+      "languageAudio": "sounds/languages/comoros.mp3"
+    },
+    {
+      "id": "congo",
+      "name": {
+        "ru": "Конго",
+        "en": "Congo"
+      },
+      "capital": {
+        "ru": "Браззавиль",
+        "en": "Brazzaville"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/congo.png",
+      "outlineImage": "images/outline/congo.png",
+      "languageAudio": "sounds/languages/congo.mp3"
+    },
+    {
+      "id": "dr_congo",
+      "name": {
+        "ru": "Демократическая Республика Конго",
+        "en": "DR Congo"
+      },
+      "capital": {
+        "ru": "Киншаса",
+        "en": "Kinshasa"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/dr_congo.png",
+      "outlineImage": "images/outline/dr_congo.png",
+      "languageAudio": "sounds/languages/dr_congo.mp3"
+    },
+    {
+      "id": "north_korea",
+      "name": {
+        "ru": "Корейская Народно-Демократическая Республика",
+        "en": "North Korea"
+      },
+      "capital": {
+        "ru": "Пхеньян",
+        "en": "Pyongyang"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/north_korea.png",
+      "outlineImage": "images/outline/north_korea.png",
+      "languageAudio": "sounds/languages/north_korea.mp3"
+    },
+    {
+      "id": "south_korea",
+      "name": {
+        "ru": "Республика Корея",
+        "en": "South Korea"
+      },
+      "capital": {
+        "ru": "Сеул",
+        "en": "Seoul"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/south_korea.png",
+      "outlineImage": "images/outline/south_korea.png",
+      "languageAudio": "sounds/languages/south_korea.mp3"
+    },
+    {
+      "id": "costa_rica",
+      "name": {
+        "ru": "Коста-Рика",
+        "en": "Costa Rica"
+      },
+      "capital": {
+        "ru": "Сан-Хосе",
+        "en": "San José"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/costa_rica.png",
+      "outlineImage": "images/outline/costa_rica.png",
+      "languageAudio": "sounds/languages/costa_rica.mp3"
+    },
+    {
+      "id": "ivory_coast",
+      "name": {
+        "ru": "Кот-д'Ивуар",
+        "en": "Ivory Coast"
+      },
+      "capital": {
+        "ru": "Ямусукро",
+        "en": "Yamoussoukro"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/ivory_coast.png",
+      "outlineImage": "images/outline/ivory_coast.png",
+      "languageAudio": "sounds/languages/ivory_coast.mp3"
+    },
+    {
+      "id": "cuba",
+      "name": {
+        "ru": "Куба",
+        "en": "Cuba"
+      },
+      "capital": {
+        "ru": "Гавана",
+        "en": "Havana"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/cuba.png",
+      "outlineImage": "images/outline/cuba.png",
+      "languageAudio": "sounds/languages/cuba.mp3"
+    },
+    {
+      "id": "kuwait",
+      "name": {
+        "ru": "Кувейт",
+        "en": "Kuwait"
+      },
+      "capital": {
+        "ru": "Эль-Кувейт",
+        "en": "Kuwait City"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/kuwait.png",
+      "outlineImage": "images/outline/kuwait.png",
+      "languageAudio": "sounds/languages/kuwait.mp3"
+    },
+    {
+      "id": "laos",
+      "name": {
+        "ru": "Лаос",
+        "en": "Laos"
+      },
+      "capital": {
+        "ru": "Вьентьян",
+        "en": "Vientiane"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/laos.png",
+      "outlineImage": "images/outline/laos.png",
+      "languageAudio": "sounds/languages/laos.mp3"
+    },
+    {
+      "id": "latvia",
+      "name": {
+        "ru": "Латвия",
+        "en": "Latvia"
+      },
+      "capital": {
+        "ru": "Рига",
+        "en": "Riga"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/latvia.png",
+      "outlineImage": "images/outline/latvia.png",
+      "languageAudio": "sounds/languages/latvia.mp3"
+    },
+    {
+      "id": "lesotho",
+      "name": {
+        "ru": "Лесото",
+        "en": "Lesotho"
+      },
+      "capital": {
+        "ru": "Масеру",
+        "en": "Maseru"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/lesotho.png",
+      "outlineImage": "images/outline/lesotho.png",
+      "languageAudio": "sounds/languages/lesotho.mp3"
+    },
+    {
+      "id": "lebanon",
+      "name": {
+        "ru": "Ливан",
+        "en": "Lebanon"
+      },
+      "capital": {
+        "ru": "Бейрут",
+        "en": "Beirut"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/lebanon.png",
+      "outlineImage": "images/outline/lebanon.png",
+      "languageAudio": "sounds/languages/lebanon.mp3"
+    },
+    {
+      "id": "libya",
+      "name": {
+        "ru": "Ливия",
+        "en": "Libya"
+      },
+      "capital": {
+        "ru": "Триполи",
+        "en": "Tripoli"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/libya.png",
+      "outlineImage": "images/outline/libya.png",
+      "languageAudio": "sounds/languages/libya.mp3"
+    },
+    {
+      "id": "liberia",
+      "name": {
+        "ru": "Либерия",
+        "en": "Liberia"
+      },
+      "capital": {
+        "ru": "Монровия",
+        "en": "Monrovia"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/liberia.png",
+      "outlineImage": "images/outline/liberia.png",
+      "languageAudio": "sounds/languages/liberia.mp3"
+    },
+    {
+      "id": "liechtenstein",
+      "name": {
+        "ru": "Лихтенштейн",
+        "en": "Liechtenstein"
+      },
+      "capital": {
+        "ru": "Вадуц",
+        "en": "Vaduz"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/liechtenstein.png",
+      "outlineImage": "images/outline/liechtenstein.png",
+      "languageAudio": "sounds/languages/liechtenstein.mp3"
+    },
+    {
+      "id": "lithuania",
+      "name": {
+        "ru": "Литва",
+        "en": "Lithuania"
+      },
+      "capital": {
+        "ru": "Вильнюс",
+        "en": "Vilnius"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/lithuania.png",
+      "outlineImage": "images/outline/lithuania.png",
+      "languageAudio": "sounds/languages/lithuania.mp3"
+    },
+    {
+      "id": "luxembourg",
+      "name": {
+        "ru": "Люксембург",
+        "en": "Luxembourg"
+      },
+      "capital": {
+        "ru": "Люксембург",
+        "en": "Luxembourg"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/luxembourg.png",
+      "outlineImage": "images/outline/luxembourg.png",
+      "languageAudio": "sounds/languages/luxembourg.mp3"
+    },
+    {
+      "id": "mauritius",
+      "name": {
+        "ru": "Маврикий",
+        "en": "Mauritius"
+      },
+      "capital": {
+        "ru": "Порт-Луи",
+        "en": "Port Louis"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/mauritius.png",
+      "outlineImage": "images/outline/mauritius.png",
+      "languageAudio": "sounds/languages/mauritius.mp3"
+    },
+    {
+      "id": "mauritania",
+      "name": {
+        "ru": "Мавритания",
+        "en": "Mauritania"
+      },
+      "capital": {
+        "ru": "Нуакшот",
+        "en": "Nouakchott"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/mauritania.png",
+      "outlineImage": "images/outline/mauritania.png",
+      "languageAudio": "sounds/languages/mauritania.mp3"
+    },
+    {
+      "id": "madagascar",
+      "name": {
+        "ru": "Мадагаскар",
+        "en": "Madagascar"
+      },
+      "capital": {
+        "ru": "Антананариву",
+        "en": "Antananarivo"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/madagascar.png",
+      "outlineImage": "images/outline/madagascar.png",
+      "languageAudio": "sounds/languages/madagascar.mp3"
+    },
+    {
+      "id": "malawi",
+      "name": {
+        "ru": "Малави",
+        "en": "Malawi"
+      },
+      "capital": {
+        "ru": "Лилонгве",
+        "en": "Lilongwe"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/malawi.png",
+      "outlineImage": "images/outline/malawi.png",
+      "languageAudio": "sounds/languages/malawi.mp3"
+    },
+    {
+      "id": "malaysia",
+      "name": {
+        "ru": "Малайзия",
+        "en": "Malaysia"
+      },
+      "capital": {
+        "ru": "Куала-Лумпур",
+        "en": "Kuala Lumpur"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/malaysia.png",
+      "outlineImage": "images/outline/malaysia.png",
+      "languageAudio": "sounds/languages/malaysia.mp3"
+    },
+    {
+      "id": "mali",
+      "name": {
+        "ru": "Мали",
+        "en": "Mali"
+      },
+      "capital": {
+        "ru": "Бамако",
+        "en": "Bamako"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/mali.png",
+      "outlineImage": "images/outline/mali.png",
+      "languageAudio": "sounds/languages/mali.mp3"
+    },
+    {
+      "id": "maldives",
+      "name": {
+        "ru": "Мальдивы",
+        "en": "Maldives"
+      },
+      "capital": {
+        "ru": "Мале",
+        "en": "Malé"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/maldives.png",
+      "outlineImage": "images/outline/maldives.png",
+      "languageAudio": "sounds/languages/maldives.mp3"
+    },
+    {
+      "id": "malta",
+      "name": {
+        "ru": "Мальта",
+        "en": "Malta"
+      },
+      "capital": {
+        "ru": "Валлетта",
+        "en": "Valletta"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/malta.png",
+      "outlineImage": "images/outline/malta.png",
+      "languageAudio": "sounds/languages/malta.mp3"
+    },
+    {
+      "id": "morocco",
+      "name": {
+        "ru": "Марокко",
+        "en": "Morocco"
+      },
+      "capital": {
+        "ru": "Рабат",
+        "en": "Rabat"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/morocco.png",
+      "outlineImage": "images/outline/morocco.png",
+      "languageAudio": "sounds/languages/morocco.mp3"
+    },
+    {
+      "id": "marshall_islands",
+      "name": {
+        "ru": "Маршалловы Острова",
+        "en": "Marshall Islands"
+      },
+      "capital": {
+        "ru": "Маджуро",
+        "en": "Majuro"
+      },
+      "region": "Океания",
+      "flagImage": "images/flags/marshall_islands.png",
+      "outlineImage": "images/outline/marshall_islands.png",
+      "languageAudio": "sounds/languages/marshall_islands.mp3"
+    },
+    {
+      "id": "mexico",
+      "name": {
+        "ru": "Мексика",
+        "en": "Mexico"
+      },
+      "capital": {
+        "ru": "Мехико",
+        "en": "Mexico City"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/mexico.png",
+      "outlineImage": "images/outline/mexico.png",
+      "languageAudio": "sounds/languages/mexico.mp3"
+    },
+    {
+      "id": "micronesia",
+      "name": {
+        "ru": "Микронезия",
+        "en": "Micronesia"
+      },
+      "capital": {
+        "ru": "Паликир",
+        "en": "Palikir"
+      },
+      "region": "Океания",
+      "flagImage": "images/flags/micronesia.png",
+      "outlineImage": "images/outline/micronesia.png",
+      "languageAudio": "sounds/languages/micronesia.mp3"
+    },
+    {
+      "id": "mozambique",
+      "name": {
+        "ru": "Мозамбик",
+        "en": "Mozambique"
+      },
+      "capital": {
+        "ru": "Мапуту",
+        "en": "Maputo"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/mozambique.png",
+      "outlineImage": "images/outline/mozambique.png",
+      "languageAudio": "sounds/languages/mozambique.mp3"
+    },
+    {
+      "id": "moldova",
+      "name": {
+        "ru": "Молдавия",
+        "en": "Moldova"
+      },
+      "capital": {
+        "ru": "Кишинёв",
+        "en": "Chișinău"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/moldova.png",
+      "outlineImage": "images/outline/moldova.png",
+      "languageAudio": "sounds/languages/moldova.mp3"
+    },
+    {
+      "id": "monaco",
+      "name": {
+        "ru": "Монако",
+        "en": "Monaco"
+      },
+      "capital": {
+        "ru": "Монако",
+        "en": "Monaco"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/monaco.png",
+      "outlineImage": "images/outline/monaco.png",
+      "languageAudio": "sounds/languages/monaco.mp3"
+    },
+    {
+      "id": "mongolia",
+      "name": {
+        "ru": "Монголия",
+        "en": "Mongolia"
+      },
+      "capital": {
+        "ru": "Улан-Батор",
+        "en": "Ulaanbaatar"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/mongolia.png",
+      "outlineImage": "images/outline/mongolia.png",
+      "languageAudio": "sounds/languages/mongolia.mp3"
+    },
+    {
+      "id": "myanmar",
+      "name": {
+        "ru": "Мьянма",
+        "en": "Myanmar"
+      },
+      "capital": {
+        "ru": "Нейпьидо",
+        "en": "Naypyidaw"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/myanmar.png",
+      "outlineImage": "images/outline/myanmar.png",
+      "languageAudio": "sounds/languages/myanmar.mp3"
+    },
+    {
+      "id": "namibia",
+      "name": {
+        "ru": "Намибия",
+        "en": "Namibia"
+      },
+      "capital": {
+        "ru": "Виндхук",
+        "en": "Windhoek"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/namibia.png",
+      "outlineImage": "images/outline/namibia.png",
+      "languageAudio": "sounds/languages/namibia.mp3"
+    },
+    {
+      "id": "nauru",
+      "name": {
+        "ru": "Науру",
+        "en": "Nauru"
+      },
+      "capital": {
+        "ru": "Ярен",
+        "en": "Yaren"
+      },
+      "region": "Океания",
+      "flagImage": "images/flags/nauru.png",
+      "outlineImage": "images/outline/nauru.png",
+      "languageAudio": "sounds/languages/nauru.mp3"
+    },
+    {
+      "id": "nepal",
+      "name": {
+        "ru": "Непал",
+        "en": "Nepal"
+      },
+      "capital": {
+        "ru": "Катманду",
+        "en": "Kathmandu"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/nepal.png",
+      "outlineImage": "images/outline/nepal.png",
+      "languageAudio": "sounds/languages/nepal.mp3"
+    },
+    {
+      "id": "niger",
+      "name": {
+        "ru": "Нигер",
+        "en": "Niger"
+      },
+      "capital": {
+        "ru": "Ниамей",
+        "en": "Niamey"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/niger.png",
+      "outlineImage": "images/outline/niger.png",
+      "languageAudio": "sounds/languages/niger.mp3"
+    },
+    {
+      "id": "nigeria",
+      "name": {
+        "ru": "Нигерия",
+        "en": "Nigeria"
+      },
+      "capital": {
+        "ru": "Абуджа",
+        "en": "Abuja"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/nigeria.png",
+      "outlineImage": "images/outline/nigeria.png",
+      "languageAudio": "sounds/languages/nigeria.mp3"
+    },
+    {
+      "id": "netherlands",
+      "name": {
+        "ru": "Нидерланды",
+        "en": "Netherlands"
+      },
+      "capital": {
+        "ru": "Амстердам",
+        "en": "Amsterdam"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/netherlands.png",
+      "outlineImage": "images/outline/netherlands.png",
+      "languageAudio": "sounds/languages/netherlands.mp3"
+    },
+    {
+      "id": "nicaragua",
+      "name": {
+        "ru": "Никарагуа",
+        "en": "Nicaragua"
+      },
+      "capital": {
+        "ru": "Манагуа",
+        "en": "Managua"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/nicaragua.png",
+      "outlineImage": "images/outline/nicaragua.png",
+      "languageAudio": "sounds/languages/nicaragua.mp3"
+    },
+    {
+      "id": "new_zealand",
+      "name": {
+        "ru": "Новая Зеландия",
+        "en": "New Zealand"
+      },
+      "capital": {
+        "ru": "Веллингтон",
+        "en": "Wellington"
+      },
+      "region": "Океания",
+      "flagImage": "images/flags/new_zealand.png",
+      "outlineImage": "images/outline/new_zealand.png",
+      "languageAudio": "sounds/languages/new_zealand.mp3"
+    },
+    {
+      "id": "norway",
+      "name": {
+        "ru": "Норвегия",
+        "en": "Norway"
+      },
+      "capital": {
+        "ru": "Осло",
+        "en": "Oslo"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/norway.png",
+      "outlineImage": "images/outline/norway.png",
+      "languageAudio": "sounds/languages/norway.mp3"
+    },
+    {
+      "id": "united_arab_emirates",
+      "name": {
+        "ru": "Объединённые Арабские Эмираты",
+        "en": "United Arab Emirates"
+      },
+      "capital": {
+        "ru": "Абу-Даби",
+        "en": "Abu Dhabi"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/uae.png",
+      "outlineImage": "images/outline/uae.png",
+      "languageAudio": "sounds/languages/united_arab_emirates.mp3"
+    },
+    {
+      "id": "oman",
+      "name": {
+        "ru": "Оман",
+        "en": "Oman"
+      },
+      "capital": {
+        "ru": "Маскат",
+        "en": "Muscat"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/oman.png",
+      "outlineImage": "images/outline/oman.png",
+      "languageAudio": "sounds/languages/oman.mp3"
+    },
+    {
+      "id": "pakistan",
+      "name": {
+        "ru": "Пакистан",
+        "en": "Pakistan"
+      },
+      "capital": {
+        "ru": "Исламабад",
+        "en": "Islamabad"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/pakistan.png",
+      "outlineImage": "images/outline/pakistan.png",
+      "languageAudio": "sounds/languages/pakistan.mp3"
+    },
+    {
+      "id": "palau",
+      "name": {
+        "ru": "Палау",
+        "en": "Palau"
+      },
+      "capital": {
+        "ru": "Нгерулмуд",
+        "en": "Ngerulmud"
+      },
+      "region": "Океания",
+      "flagImage": "images/flags/palau.png",
+      "outlineImage": "images/outline/palau.png",
+      "languageAudio": "sounds/languages/palau.mp3"
+    },
+    {
+      "id": "panama",
+      "name": {
+        "ru": "Панама",
+        "en": "Panama"
+      },
+      "capital": {
+        "ru": "Панама",
+        "en": "Panama City"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/panama.png",
+      "outlineImage": "images/outline/panama.png",
+      "languageAudio": "sounds/languages/panama.mp3"
+    },
+    {
+      "id": "papua_new_guinea",
+      "name": {
+        "ru": "Папуа — Новая Гвинея",
+        "en": "Papua New Guinea"
+      },
+      "capital": {
+        "ru": "Порт-Морсби",
+        "en": "Port Moresby"
+      },
+      "region": "Океания",
+      "flagImage": "images/flags/papua_new_guinea.png",
+      "outlineImage": "images/outline/papua_new_guinea.png",
+      "languageAudio": "sounds/languages/papua_new_guinea.mp3"
+    },
+    {
+      "id": "palestine",
+      "name": {
+        "ru": "Палестина",
+        "en": "Palestine"
+      },
+      "capital": {
+        "ru": "Рамалла",
+        "en": "Ramallah"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/palestine.png",
+      "outlineImage": "images/outline/palestine.png",
+      "languageAudio": "sounds/languages/palestine.mp3"
+    },
+    {
+      "id": "paraguay",
+      "name": {
+        "ru": "Парагвай",
+        "en": "Paraguay"
+      },
+      "capital": {
+        "ru": "Асунсьон",
+        "en": "Asunción"
+      },
+      "region": "Южная Америка",
+      "flagImage": "images/flags/paraguay.png",
+      "outlineImage": "images/outline/paraguay.png",
+      "languageAudio": "sounds/languages/paraguay.mp3"
+    },
+    {
+      "id": "peru",
+      "name": {
+        "ru": "Перу",
+        "en": "Peru"
+      },
+      "capital": {
+        "ru": "Лима",
+        "en": "Lima"
+      },
+      "region": "Южная Америка",
+      "flagImage": "images/flags/peru.png",
+      "outlineImage": "images/outline/peru.png",
+      "languageAudio": "sounds/languages/peru.mp3"
+    },
+    {
+      "id": "poland",
+      "name": {
+        "ru": "Польша",
+        "en": "Poland"
+      },
+      "capital": {
+        "ru": "Варшава",
+        "en": "Warsaw"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/poland.png",
+      "outlineImage": "images/outline/poland.png",
+      "languageAudio": "sounds/languages/poland.mp3"
+    },
+    {
+      "id": "portugal",
+      "name": {
+        "ru": "Португалия",
+        "en": "Portugal"
+      },
+      "capital": {
+        "ru": "Лиссабон",
+        "en": "Lisbon"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/portugal.png",
+      "outlineImage": "images/outline/portugal.png",
+      "languageAudio": "sounds/languages/portugal.mp3"
+    },
+    {
+      "id": "russia",
+      "name": {
+        "ru": "Россия",
+        "en": "Russia"
+      },
+      "capital": {
+        "ru": "Москва",
+        "en": "Moscow"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/russia.png",
+      "outlineImage": "images/outline/russia.png",
+      "languageAudio": "sounds/languages/russia.mp3"
+    },
+    {
+      "id": "rwanda",
+      "name": {
+        "ru": "Руанда",
+        "en": "Rwanda"
+      },
+      "capital": {
+        "ru": "Кигали",
+        "en": "Kigali"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/rwanda.png",
+      "outlineImage": "images/outline/rwanda.png",
+      "languageAudio": "sounds/languages/rwanda.mp3"
+    },
+    {
+      "id": "romania",
+      "name": {
+        "ru": "Румыния",
+        "en": "Romania"
+      },
+      "capital": {
+        "ru": "Бухарест",
+        "en": "Bucharest"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/romania.png",
+      "outlineImage": "images/outline/romania.png",
+      "languageAudio": "sounds/languages/romania.mp3"
+    },
+    {
+      "id": "el_salvador",
+      "name": {
+        "ru": "Сальвадор",
+        "en": "El Salvador"
+      },
+      "capital": {
+        "ru": "Сан-Сальвадор",
+        "en": "San Salvador"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/el_salvador.png",
+      "outlineImage": "images/outline/el_salvador.png",
+      "languageAudio": "sounds/languages/el_salvador.mp3"
+    },
+    {
+      "id": "samoa",
+      "name": {
+        "ru": "Самоа",
+        "en": "Samoa"
+      },
+      "capital": {
+        "ru": "Апиа",
+        "en": "Apia"
+      },
+      "region": "Океания",
+      "flagImage": "images/flags/samoa.png",
+      "outlineImage": "images/outline/samoa.png",
+      "languageAudio": "sounds/languages/samoa.mp3"
+    },
+    {
+      "id": "san_marino",
+      "name": {
+        "ru": "Сан-Марино",
+        "en": "San Marino"
+      },
+      "capital": {
+        "ru": "Сан-Марино",
+        "en": "San Marino"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/san_marino.png",
+      "outlineImage": "images/outline/san_marino.png",
+      "languageAudio": "sounds/languages/san_marino.mp3"
+    },
+    {
+      "id": "sao_tome_and_principe",
+      "name": {
+        "ru": "Сан-Томе и Принсипи",
+        "en": "Sao Tome and Principe"
+      },
+      "capital": {
+        "ru": "Сан-Томе",
+        "en": "São Tomé"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/sao_tome.png",
+      "outlineImage": "images/outline/sao_tome.png",
+      "languageAudio": "sounds/languages/sao_tome_and_principe.mp3"
+    },
+    {
+      "id": "saudi_arabia",
+      "name": {
+        "ru": "Саудовская Аравия",
+        "en": "Saudi Arabia"
+      },
+      "capital": {
+        "ru": "Эр-Рияд",
+        "en": "Riyadh"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/saudi_arabia.png",
+      "outlineImage": "images/outline/saudi_arabia.png",
+      "languageAudio": "sounds/languages/saudi_arabia.mp3"
+    },
+    {
+      "id": "north_macedonia",
+      "name": {
+        "ru": "Северная Македония",
+        "en": "North Macedonia"
+      },
+      "capital": {
+        "ru": "Скопье",
+        "en": "Skopje"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/north_macedonia.png",
+      "outlineImage": "images/outline/north_macedonia.png",
+      "languageAudio": "sounds/languages/north_macedonia.mp3"
+    },
+    {
+      "id": "seychelles",
+      "name": {
+        "ru": "Сейшельские Острова",
+        "en": "Seychelles"
+      },
+      "capital": {
+        "ru": "Виктория",
+        "en": "Victoria"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/seychelles.png",
+      "outlineImage": "images/outline/seychelles.png",
+      "languageAudio": "sounds/languages/seychelles.mp3"
+    },
+    {
+      "id": "senegal",
+      "name": {
+        "ru": "Сенегал",
+        "en": "Senegal"
+      },
+      "capital": {
+        "ru": "Дакар",
+        "en": "Dakar"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/senegal.png",
+      "outlineImage": "images/outline/senegal.png",
+      "languageAudio": "sounds/languages/senegal.mp3"
+    },
+    {
+      "id": "saint_vincent_and_the_grenadines",
+      "name": {
+        "ru": "Сент-Винсент и Гренадины",
+        "en": "Saint Vincent and the Grenadines"
+      },
+      "capital": {
+        "ru": "Кингстаун",
+        "en": "Kingstown"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/st_vincent.png",
+      "outlineImage": "images/outline/st_vincent.png",
+      "languageAudio": "sounds/languages/saint_vincent_and_the_grenadines.mp3"
+    },
+    {
+      "id": "saint_kitts_and_nevis",
+      "name": {
+        "ru": "Сент-Китс и Невис",
+        "en": "Saint Kitts and Nevis"
+      },
+      "capital": {
+        "ru": "Бастер",
+        "en": "Basseterre"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/st_kitts.png",
+      "outlineImage": "images/outline/st_kitts.png",
+      "languageAudio": "sounds/languages/saint_kitts_and_nevis.mp3"
+    },
+    {
+      "id": "saint_lucia",
+      "name": {
+        "ru": "Сент-Люсия",
+        "en": "Saint Lucia"
+      },
+      "capital": {
+        "ru": "Кастри",
+        "en": "Castries"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/st_lucia.png",
+      "outlineImage": "images/outline/st_lucia.png",
+      "languageAudio": "sounds/languages/saint_lucia.mp3"
+    },
+    {
+      "id": "serbia",
+      "name": {
+        "ru": "Сербия",
+        "en": "Serbia"
+      },
+      "capital": {
+        "ru": "Белград",
+        "en": "Belgrade"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/serbia.png",
+      "outlineImage": "images/outline/serbia.png",
+      "languageAudio": "sounds/languages/serbia.mp3"
+    },
+    {
+      "id": "singapore",
+      "name": {
+        "ru": "Сингапур",
+        "en": "Singapore"
+      },
+      "capital": {
+        "ru": "Сингапур",
+        "en": "Singapore"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/singapore.png",
+      "outlineImage": "images/outline/singapore.png",
+      "languageAudio": "sounds/languages/singapore.mp3"
+    },
+    {
+      "id": "syria",
+      "name": {
+        "ru": "Сирия",
+        "en": "Syria"
+      },
+      "capital": {
+        "ru": "Дамаск",
+        "en": "Damascus"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/syria.png",
+      "outlineImage": "images/outline/syria.png",
+      "languageAudio": "sounds/languages/syria.mp3"
+    },
+    {
+      "id": "slovakia",
+      "name": {
+        "ru": "Словакия",
+        "en": "Slovakia"
+      },
+      "capital": {
+        "ru": "Братислава",
+        "en": "Bratislava"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/slovakia.png",
+      "outlineImage": "images/outline/slovakia.png",
+      "languageAudio": "sounds/languages/slovakia.mp3"
+    },
+    {
+      "id": "slovenia",
+      "name": {
+        "ru": "Словения",
+        "en": "Slovenia"
+      },
+      "capital": {
+        "ru": "Любляна",
+        "en": "Ljubljana"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/slovenia.png",
+      "outlineImage": "images/outline/slovenia.png",
+      "languageAudio": "sounds/languages/slovenia.mp3"
+    },
+    {
+      "id": "united_states",
+      "name": {
+        "ru": "Соединённые Штаты Америки",
+        "en": "United States"
+      },
+      "capital": {
+        "ru": "Вашингтон",
+        "en": "Washington, D.C."
+      },
+      "region": "Северная Америка",
+      "flagImage": "images/flags/usa.png",
+      "outlineImage": "images/outline/usa.png",
+      "languageAudio": "sounds/languages/united_states.mp3"
+    },
+    {
+      "id": "solomon_islands",
+      "name": {
+        "ru": "Соломоновы Острова",
+        "en": "Solomon Islands"
+      },
+      "capital": {
+        "ru": "Хониара",
+        "en": "Honiara"
+      },
+      "region": "Океания",
+      "flagImage": "images/flags/solomon_islands.png",
+      "outlineImage": "images/outline/solomon_islands.png",
+      "languageAudio": "sounds/languages/solomon_islands.mp3"
+    },
+    {
+      "id": "somalia",
+      "name": {
+        "ru": "Сомали",
+        "en": "Somalia"
+      },
+      "capital": {
+        "ru": "Могадишо",
+        "en": "Mogadishu"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/somalia.png",
+      "outlineImage": "images/outline/somalia.png",
+      "languageAudio": "sounds/languages/somalia.mp3"
+    },
+    {
+      "id": "sudan",
+      "name": {
+        "ru": "Судан",
+        "en": "Sudan"
+      },
+      "capital": {
+        "ru": "Хартум",
+        "en": "Khartoum"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/sudan.png",
+      "outlineImage": "images/outline/sudan.png",
+      "languageAudio": "sounds/languages/sudan.mp3"
+    },
+    {
+      "id": "suriname",
+      "name": {
+        "ru": "Суринам",
+        "en": "Suriname"
+      },
+      "capital": {
+        "ru": "Парамарибо",
+        "en": "Paramaribo"
+      },
+      "region": "Южная Америка",
+      "flagImage": "images/flags/suriname.png",
+      "outlineImage": "images/outline/suriname.png",
+      "languageAudio": "sounds/languages/suriname.mp3"
+    },
+    {
+      "id": "sierra_leone",
+      "name": {
+        "ru": "Сьерра-Леоне",
+        "en": "Sierra Leone"
+      },
+      "capital": {
+        "ru": "Фритаун",
+        "en": "Freetown"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/sierra_leone.png",
+      "outlineImage": "images/outline/sierra_leone.png",
+      "languageAudio": "sounds/languages/sierra_leone.mp3"
+    },
+    {
+      "id": "tajikistan",
+      "name": {
+        "ru": "Таджикистан",
+        "en": "Tajikistan"
+      },
+      "capital": {
+        "ru": "Душанбе",
+        "en": "Dushanbe"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/tajikistan.png",
+      "outlineImage": "images/outline/tajikistan.png",
+      "languageAudio": "sounds/languages/tajikistan.mp3"
+    },
+    {
+      "id": "thailand",
+      "name": {
+        "ru": "Таиланд",
+        "en": "Thailand"
+      },
+      "capital": {
+        "ru": "Бангкок",
+        "en": "Bangkok"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/thailand.png",
+      "outlineImage": "images/outline/thailand.png",
+      "languageAudio": "sounds/languages/thailand.mp3"
+    },
+    {
+      "id": "tanzania",
+      "name": {
+        "ru": "Танзания",
+        "en": "Tanzania"
+      },
+      "capital": {
+        "ru": "Додома",
+        "en": "Dodoma"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/tanzania.png",
+      "outlineImage": "images/outline/tanzania.png",
+      "languageAudio": "sounds/languages/tanzania.mp3"
+    },
+    {
+      "id": "togo",
+      "name": {
+        "ru": "Того",
+        "en": "Togo"
+      },
+      "capital": {
+        "ru": "Ломе",
+        "en": "Lomé"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/togo.png",
+      "outlineImage": "images/outline/togo.png",
+      "languageAudio": "sounds/languages/togo.mp3"
+    },
+    {
+      "id": "tonga",
+      "name": {
+        "ru": "Тонга",
+        "en": "Tonga"
+      },
+      "capital": {
+        "ru": "Нукуалофа",
+        "en": "Nukuʻalofa"
+      },
+      "region": "Океания",
+      "flagImage": "images/flags/tonga.png",
+      "outlineImage": "images/outline/tonga.png",
+      "languageAudio": "sounds/languages/tonga.mp3"
+    },
+    {
+      "id": "trinidad_and_tobago",
+      "name": {
+        "ru": "Тринидад и Тобаго",
+        "en": "Trinidad and Tobago"
+      },
+      "capital": {
+        "ru": "Порт-оф-Спейн",
+        "en": "Port of Spain"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/trinidad_tobago.png",
+      "outlineImage": "images/outline/trinidad_tobago.png",
+      "languageAudio": "sounds/languages/trinidad_and_tobago.mp3"
+    },
+    {
+      "id": "tuvalu",
+      "name": {
+        "ru": "Тувалу",
+        "en": "Tuvalu"
+      },
+      "capital": {
+        "ru": "Фунафути",
+        "en": "Funafuti"
+      },
+      "region": "Океания",
+      "flagImage": "images/flags/tuvalu.png",
+      "outlineImage": "images/outline/tuvalu.png",
+      "languageAudio": "sounds/languages/tuvalu.mp3"
+    },
+    {
+      "id": "tunisia",
+      "name": {
+        "ru": "Тунис",
+        "en": "Tunisia"
+      },
+      "capital": {
+        "ru": "Тунис",
+        "en": "Tunis"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/tunisia.png",
+      "outlineImage": "images/outline/tunisia.png",
+      "languageAudio": "sounds/languages/tunisia.mp3"
+    },
+    {
+      "id": "turkmenistan",
+      "name": {
+        "ru": "Туркмения",
+        "en": "Turkmenistan"
+      },
+      "capital": {
+        "ru": "Ашхабад",
+        "en": "Ashgabat"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/turkmenistan.png",
+      "outlineImage": "images/outline/turkmenistan.png",
+      "languageAudio": "sounds/languages/turkmenistan.mp3"
+    },
+    {
+      "id": "turkey",
+      "name": {
+        "ru": "Турция",
+        "en": "Turkey"
+      },
+      "capital": {
+        "ru": "Анкара",
+        "en": "Ankara"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/turkey.png",
+      "outlineImage": "images/outline/turkey.png",
+      "languageAudio": "sounds/languages/turkey.mp3"
+    },
+    {
+      "id": "uganda",
+      "name": {
+        "ru": "Уганда",
+        "en": "Uganda"
+      },
+      "capital": {
+        "ru": "Кампала",
+        "en": "Kampala"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/uganda.png",
+      "outlineImage": "images/outline/uganda.png",
+      "languageAudio": "sounds/languages/uganda.mp3"
+    },
+    {
+      "id": "uzbekistan",
+      "name": {
+        "ru": "Узбекистан",
+        "en": "Uzbekistan"
+      },
+      "capital": {
+        "ru": "Ташкент",
+        "en": "Tashkent"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/uzbekistan.png",
+      "outlineImage": "images/outline/uzbekistan.png",
+      "languageAudio": "sounds/languages/uzbekistan.mp3"
+    },
+    {
+      "id": "ukraine",
+      "name": {
+        "ru": "Украина",
+        "en": "Ukraine"
+      },
+      "capital": {
+        "ru": "Киев",
+        "en": "Kyiv"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/ukraine.png",
+      "outlineImage": "images/outline/ukraine.png",
+      "languageAudio": "sounds/languages/ukraine.mp3"
+    },
+    {
+      "id": "uruguay",
+      "name": {
+        "ru": "Уругвай",
+        "en": "Uruguay"
+      },
+      "capital": {
+        "ru": "Монтевидео",
+        "en": "Montevideo"
+      },
+      "region": "Южная Америка",
+      "flagImage": "images/flags/uruguay.png",
+      "outlineImage": "images/outline/uruguay.png",
+      "languageAudio": "sounds/languages/uruguay.mp3"
+    },
+    {
+      "id": "fiji",
+      "name": {
+        "ru": "Фиджи",
+        "en": "Fiji"
+      },
+      "capital": {
+        "ru": "Сува",
+        "en": "Suva"
+      },
+      "region": "Океания",
+      "flagImage": "images/flags/fiji.png",
+      "outlineImage": "images/outline/fiji.png",
+      "languageAudio": "sounds/languages/fiji.mp3"
+    },
+    {
+      "id": "philippines",
+      "name": {
+        "ru": "Филиппины",
+        "en": "Philippines"
+      },
+      "capital": {
+        "ru": "Манила",
+        "en": "Manila"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/philippines.png",
+      "outlineImage": "images/outline/philippines.png",
+      "languageAudio": "sounds/languages/philippines.mp3"
+    },
+    {
+      "id": "finland",
+      "name": {
+        "ru": "Финляндия",
+        "en": "Finland"
+      },
+      "capital": {
+        "ru": "Хельсинки",
+        "en": "Helsinki"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/finland.png",
+      "outlineImage": "images/outline/finland.png",
+      "languageAudio": "sounds/languages/finland.mp3"
+    },
+    {
+      "id": "france",
+      "name": {
+        "ru": "Франция",
+        "en": "France"
+      },
+      "capital": {
+        "ru": "Париж",
+        "en": "Paris"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/france.png",
+      "outlineImage": "images/outline/france.png",
+      "languageAudio": "sounds/languages/france.mp3"
+    },
+    {
+      "id": "croatia",
+      "name": {
+        "ru": "Хорватия",
+        "en": "Croatia"
+      },
+      "capital": {
+        "ru": "Загреб",
+        "en": "Zagreb"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/croatia.png",
+      "outlineImage": "images/outline/croatia.png",
+      "languageAudio": "sounds/languages/croatia.mp3"
+    },
+    {
+      "id": "central_african_republic",
+      "name": {
+        "ru": "Центральноафриканская Республика",
+        "en": "Central African Republic"
+      },
+      "capital": {
+        "ru": "Банги",
+        "en": "Bangui"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/car.png",
+      "outlineImage": "images/outline/car.png",
+      "languageAudio": "sounds/languages/central_african_republic.mp3"
+    },
+    {
+      "id": "chad",
+      "name": {
+        "ru": "Чад",
+        "en": "Chad"
+      },
+      "capital": {
+        "ru": "Нджамена",
+        "en": "N'Djamena"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/chad.png",
+      "outlineImage": "images/outline/chad.png",
+      "languageAudio": "sounds/languages/chad.mp3"
+    },
+    {
+      "id": "montenegro",
+      "name": {
+        "ru": "Черногория",
+        "en": "Montenegro"
+      },
+      "capital": {
+        "ru": "Подгорица",
+        "en": "Podgorica"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/montenegro.png",
+      "outlineImage": "images/outline/montenegro.png",
+      "languageAudio": "sounds/languages/montenegro.mp3"
+    },
+    {
+      "id": "czech_republic",
+      "name": {
+        "ru": "Чехия",
+        "en": "Czech Republic"
+      },
+      "capital": {
+        "ru": "Прага",
+        "en": "Prague"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/czech_republic.png",
+      "outlineImage": "images/outline/czech_republic.png",
+      "languageAudio": "sounds/languages/czech_republic.mp3"
+    },
+    {
+      "id": "chile",
+      "name": {
+        "ru": "Чили",
+        "en": "Chile"
+      },
+      "capital": {
+        "ru": "Сантьяго",
+        "en": "Santiago"
+      },
+      "region": "Южная Америка",
+      "flagImage": "images/flags/chile.png",
+      "outlineImage": "images/outline/chile.png",
+      "languageAudio": "sounds/languages/chile.mp3"
+    },
+    {
+      "id": "switzerland",
+      "name": {
+        "ru": "Швейцария",
+        "en": "Switzerland"
+      },
+      "capital": {
+        "ru": "Берн",
+        "en": "Bern"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/switzerland.png",
+      "outlineImage": "images/outline/switzerland.png",
+      "languageAudio": "sounds/languages/switzerland.mp3"
+    },
+    {
+      "id": "sweden",
+      "name": {
+        "ru": "Швеция",
+        "en": "Sweden"
+      },
+      "capital": {
+        "ru": "Стокгольм",
+        "en": "Stockholm"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/sweden.png",
+      "outlineImage": "images/outline/sweden.png",
+      "languageAudio": "sounds/languages/sweden.mp3"
+    },
+    {
+      "id": "sri_lanka",
+      "name": {
+        "ru": "Шри-Ланка",
+        "en": "Sri Lanka"
+      },
+      "capital": {
+        "ru": "Шри-Джаяварденепура-Котте",
+        "en": "Sri Jayawardenepura Kotte"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/sri_lanka.png",
+      "outlineImage": "images/outline/sri_lanka.png",
+      "languageAudio": "sounds/languages/sri_lanka.mp3"
+    },
+    {
+      "id": "ecuador",
+      "name": {
+        "ru": "Эквадор",
+        "en": "Ecuador"
+      },
+      "capital": {
+        "ru": "Кито",
+        "en": "Quito"
+      },
+      "region": "Южная Америка",
+      "flagImage": "images/flags/ecuador.png",
+      "outlineImage": "images/outline/ecuador.png",
+      "languageAudio": "sounds/languages/ecuador.mp3"
+    },
+    {
+      "id": "equatorial_guinea",
+      "name": {
+        "ru": "Экваториальная Гвинея",
+        "en": "Equatorial Guinea"
+      },
+      "capital": {
+        "ru": "Малабо",
+        "en": "Malabo"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/equatorial_guinea.png",
+      "outlineImage": "images/outline/equatorial_guinea.png",
+      "languageAudio": "sounds/languages/equatorial_guinea.mp3"
+    },
+    {
+      "id": "eritrea",
+      "name": {
+        "ru": "Эритрея",
+        "en": "Eritrea"
+      },
+      "capital": {
+        "ru": "Асмэра",
+        "en": "Asmara"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/eritrea.png",
+      "outlineImage": "images/outline/eritrea.png",
+      "languageAudio": "sounds/languages/eritrea.mp3"
+    },
+    {
+      "id": "eswatini",
+      "name": {
+        "ru": "Эсватини",
+        "en": "Eswatini"
+      },
+      "capital": {
+        "ru": "Мбабане",
+        "en": "Mbabane"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/eswatini.png",
+      "outlineImage": "images/outline/eswatini.png",
+      "languageAudio": "sounds/languages/eswatini.mp3"
+    },
+    {
+      "id": "estonia",
+      "name": {
+        "ru": "Эстония",
+        "en": "Estonia"
+      },
+      "capital": {
+        "ru": "Таллин",
+        "en": "Tallinn"
+      },
+      "region": "Европа",
+      "flagImage": "images/flags/estonia.png",
+      "outlineImage": "images/outline/estonia.png",
+      "languageAudio": "sounds/languages/estonia.mp3"
+    },
+    {
+      "id": "ethiopia",
+      "name": {
+        "ru": "Эфиопия",
+        "en": "Ethiopia"
+      },
+      "capital": {
+        "ru": "Аддис-Абеба",
+        "en": "Addis Ababa"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/ethiopia.png",
+      "outlineImage": "images/outline/ethiopia.png",
+      "languageAudio": "sounds/languages/ethiopia.mp3"
+    },
+    {
+      "id": "south_africa",
+      "name": {
+        "ru": "Южно-Африканская Республика",
+        "en": "South Africa"
+      },
+      "capital": {
+        "ru": "Претория",
+        "en": "Pretoria"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/south_africa.png",
+      "outlineImage": "images/outline/south_africa.png",
+      "languageAudio": "sounds/languages/south_africa.mp3"
+    },
+    {
+      "id": "south_sudan",
+      "name": {
+        "ru": "Южный Судан",
+        "en": "South Sudan"
+      },
+      "capital": {
+        "ru": "Джуба",
+        "en": "Juba"
+      },
+      "region": "Африка",
+      "flagImage": "images/flags/south_sudan.png",
+      "outlineImage": "images/outline/south_sudan.png",
+      "languageAudio": "sounds/languages/south_sudan.mp3"
+    },
+    {
+      "id": "jamaica",
+      "name": {
+        "ru": "Ямайка",
+        "en": "Jamaica"
+      },
+      "capital": {
+        "ru": "Кингстон",
+        "en": "Kingston"
+      },
+      "region": "Центральная Америка",
+      "flagImage": "images/flags/jamaica.png",
+      "outlineImage": "images/outline/jamaica.png",
+      "languageAudio": "sounds/languages/jamaica.mp3"
+    },
+    {
+      "id": "japan",
+      "name": {
+        "ru": "Япония",
+        "en": "Japan"
+      },
+      "capital": {
+        "ru": "Токио",
+        "en": "Tokyo"
+      },
+      "region": "Азия",
+      "flagImage": "images/flags/japan.png",
+      "outlineImage": "images/outline/japan.png",
+      "languageAudio": "sounds/languages/japan.mp3"
+    }
+  ],
+  "questions": [
+    {
+      "id": "australia_capital",
+      "countryId": "australia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "australia_flag",
+      "countryId": "australia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "australia_outline",
+      "countryId": "australia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "australia_language",
+      "countryId": "australia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "austria_capital",
+      "countryId": "austria",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "austria_flag",
+      "countryId": "austria",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "austria_outline",
+      "countryId": "austria",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "austria_language",
+      "countryId": "austria",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "azerbaijan_capital",
+      "countryId": "azerbaijan",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "azerbaijan_flag",
+      "countryId": "azerbaijan",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "azerbaijan_outline",
+      "countryId": "azerbaijan",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "azerbaijan_language",
+      "countryId": "azerbaijan",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "albania_capital",
+      "countryId": "albania",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "albania_flag",
+      "countryId": "albania",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "albania_outline",
+      "countryId": "albania",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "albania_language",
+      "countryId": "albania",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "algeria_capital",
+      "countryId": "algeria",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "algeria_flag",
+      "countryId": "algeria",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "algeria_outline",
+      "countryId": "algeria",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "algeria_language",
+      "countryId": "algeria",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "angola_capital",
+      "countryId": "angola",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "angola_flag",
+      "countryId": "angola",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "angola_outline",
+      "countryId": "angola",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "angola_language",
+      "countryId": "angola",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "andorra_capital",
+      "countryId": "andorra",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "andorra_flag",
+      "countryId": "andorra",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "andorra_outline",
+      "countryId": "andorra",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "andorra_language",
+      "countryId": "andorra",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "antigua_and_barbuda_capital",
+      "countryId": "antigua_and_barbuda",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "antigua_and_barbuda_flag",
+      "countryId": "antigua_and_barbuda",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "antigua_and_barbuda_outline",
+      "countryId": "antigua_and_barbuda",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "antigua_and_barbuda_language",
+      "countryId": "antigua_and_barbuda",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "argentina_capital",
+      "countryId": "argentina",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "argentina_flag",
+      "countryId": "argentina",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "argentina_outline",
+      "countryId": "argentina",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "argentina_language",
+      "countryId": "argentina",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "armenia_capital",
+      "countryId": "armenia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "armenia_flag",
+      "countryId": "armenia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "armenia_outline",
+      "countryId": "armenia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "armenia_language",
+      "countryId": "armenia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "afghanistan_capital",
+      "countryId": "afghanistan",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "afghanistan_flag",
+      "countryId": "afghanistan",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "afghanistan_outline",
+      "countryId": "afghanistan",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "afghanistan_language",
+      "countryId": "afghanistan",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "bahamas_capital",
+      "countryId": "bahamas",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "bahamas_flag",
+      "countryId": "bahamas",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "bahamas_outline",
+      "countryId": "bahamas",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "bahamas_language",
+      "countryId": "bahamas",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "bangladesh_capital",
+      "countryId": "bangladesh",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "bangladesh_flag",
+      "countryId": "bangladesh",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "bangladesh_outline",
+      "countryId": "bangladesh",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "bangladesh_language",
+      "countryId": "bangladesh",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "barbados_capital",
+      "countryId": "barbados",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "barbados_flag",
+      "countryId": "barbados",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "barbados_outline",
+      "countryId": "barbados",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "barbados_language",
+      "countryId": "barbados",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "bahrain_capital",
+      "countryId": "bahrain",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "bahrain_flag",
+      "countryId": "bahrain",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "bahrain_outline",
+      "countryId": "bahrain",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "bahrain_language",
+      "countryId": "bahrain",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "belize_capital",
+      "countryId": "belize",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "belize_flag",
+      "countryId": "belize",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "belize_outline",
+      "countryId": "belize",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "belize_language",
+      "countryId": "belize",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "belarus_capital",
+      "countryId": "belarus",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "belarus_flag",
+      "countryId": "belarus",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "belarus_outline",
+      "countryId": "belarus",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "belarus_language",
+      "countryId": "belarus",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "belgium_capital",
+      "countryId": "belgium",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "belgium_flag",
+      "countryId": "belgium",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "belgium_outline",
+      "countryId": "belgium",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "belgium_language",
+      "countryId": "belgium",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "benin_capital",
+      "countryId": "benin",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "benin_flag",
+      "countryId": "benin",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "benin_outline",
+      "countryId": "benin",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "benin_language",
+      "countryId": "benin",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "bulgaria_capital",
+      "countryId": "bulgaria",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "bulgaria_flag",
+      "countryId": "bulgaria",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "bulgaria_outline",
+      "countryId": "bulgaria",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "bulgaria_language",
+      "countryId": "bulgaria",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "bolivia_capital",
+      "countryId": "bolivia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "bolivia_flag",
+      "countryId": "bolivia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "bolivia_outline",
+      "countryId": "bolivia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "bolivia_language",
+      "countryId": "bolivia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "bosnia_and_herzegovina_capital",
+      "countryId": "bosnia_and_herzegovina",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "bosnia_and_herzegovina_flag",
+      "countryId": "bosnia_and_herzegovina",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "bosnia_and_herzegovina_outline",
+      "countryId": "bosnia_and_herzegovina",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "bosnia_and_herzegovina_language",
+      "countryId": "bosnia_and_herzegovina",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "botswana_capital",
+      "countryId": "botswana",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "botswana_flag",
+      "countryId": "botswana",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "botswana_outline",
+      "countryId": "botswana",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "botswana_language",
+      "countryId": "botswana",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "brazil_capital",
+      "countryId": "brazil",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "brazil_flag",
+      "countryId": "brazil",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "brazil_outline",
+      "countryId": "brazil",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "brazil_language",
+      "countryId": "brazil",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "brunei_capital",
+      "countryId": "brunei",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "brunei_flag",
+      "countryId": "brunei",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "brunei_outline",
+      "countryId": "brunei",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "brunei_language",
+      "countryId": "brunei",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "burkina_faso_capital",
+      "countryId": "burkina_faso",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "burkina_faso_flag",
+      "countryId": "burkina_faso",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "burkina_faso_outline",
+      "countryId": "burkina_faso",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "burkina_faso_language",
+      "countryId": "burkina_faso",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "burundi_capital",
+      "countryId": "burundi",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "burundi_flag",
+      "countryId": "burundi",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "burundi_outline",
+      "countryId": "burundi",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "burundi_language",
+      "countryId": "burundi",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "bhutan_capital",
+      "countryId": "bhutan",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "bhutan_flag",
+      "countryId": "bhutan",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "bhutan_outline",
+      "countryId": "bhutan",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "bhutan_language",
+      "countryId": "bhutan",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "vanuatu_capital",
+      "countryId": "vanuatu",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "vanuatu_flag",
+      "countryId": "vanuatu",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "vanuatu_outline",
+      "countryId": "vanuatu",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "vanuatu_language",
+      "countryId": "vanuatu",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "vatican_city_capital",
+      "countryId": "vatican_city",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "vatican_city_flag",
+      "countryId": "vatican_city",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "vatican_city_outline",
+      "countryId": "vatican_city",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "vatican_city_language",
+      "countryId": "vatican_city",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "united_kingdom_capital",
+      "countryId": "united_kingdom",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "united_kingdom_flag",
+      "countryId": "united_kingdom",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "united_kingdom_outline",
+      "countryId": "united_kingdom",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "united_kingdom_language",
+      "countryId": "united_kingdom",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "hungary_capital",
+      "countryId": "hungary",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "hungary_flag",
+      "countryId": "hungary",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "hungary_outline",
+      "countryId": "hungary",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "hungary_language",
+      "countryId": "hungary",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "venezuela_capital",
+      "countryId": "venezuela",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "venezuela_flag",
+      "countryId": "venezuela",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "venezuela_outline",
+      "countryId": "venezuela",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "venezuela_language",
+      "countryId": "venezuela",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "timor-leste_capital",
+      "countryId": "timor-leste",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "timor-leste_flag",
+      "countryId": "timor-leste",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "timor-leste_outline",
+      "countryId": "timor-leste",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "timor-leste_language",
+      "countryId": "timor-leste",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "vietnam_capital",
+      "countryId": "vietnam",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "vietnam_flag",
+      "countryId": "vietnam",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "vietnam_outline",
+      "countryId": "vietnam",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "vietnam_language",
+      "countryId": "vietnam",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "gabon_capital",
+      "countryId": "gabon",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "gabon_flag",
+      "countryId": "gabon",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "gabon_outline",
+      "countryId": "gabon",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "gabon_language",
+      "countryId": "gabon",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "haiti_capital",
+      "countryId": "haiti",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "haiti_flag",
+      "countryId": "haiti",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "haiti_outline",
+      "countryId": "haiti",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "haiti_language",
+      "countryId": "haiti",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "guyana_capital",
+      "countryId": "guyana",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "guyana_flag",
+      "countryId": "guyana",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "guyana_outline",
+      "countryId": "guyana",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "guyana_language",
+      "countryId": "guyana",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "gambia_capital",
+      "countryId": "gambia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "gambia_flag",
+      "countryId": "gambia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "gambia_outline",
+      "countryId": "gambia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "gambia_language",
+      "countryId": "gambia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "ghana_capital",
+      "countryId": "ghana",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "ghana_flag",
+      "countryId": "ghana",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "ghana_outline",
+      "countryId": "ghana",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "ghana_language",
+      "countryId": "ghana",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "guatemala_capital",
+      "countryId": "guatemala",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "guatemala_flag",
+      "countryId": "guatemala",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "guatemala_outline",
+      "countryId": "guatemala",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "guatemala_language",
+      "countryId": "guatemala",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "guinea_capital",
+      "countryId": "guinea",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "guinea_flag",
+      "countryId": "guinea",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "guinea_outline",
+      "countryId": "guinea",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "guinea_language",
+      "countryId": "guinea",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "guinea-bissau_capital",
+      "countryId": "guinea-bissau",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "guinea-bissau_flag",
+      "countryId": "guinea-bissau",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "guinea-bissau_outline",
+      "countryId": "guinea-bissau",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "guinea-bissau_language",
+      "countryId": "guinea-bissau",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "germany_capital",
+      "countryId": "germany",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "germany_flag",
+      "countryId": "germany",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "germany_outline",
+      "countryId": "germany",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "germany_language",
+      "countryId": "germany",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "honduras_capital",
+      "countryId": "honduras",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "honduras_flag",
+      "countryId": "honduras",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "honduras_outline",
+      "countryId": "honduras",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "honduras_language",
+      "countryId": "honduras",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "grenada_capital",
+      "countryId": "grenada",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "grenada_flag",
+      "countryId": "grenada",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "grenada_outline",
+      "countryId": "grenada",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "grenada_language",
+      "countryId": "grenada",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "greece_capital",
+      "countryId": "greece",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "greece_flag",
+      "countryId": "greece",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "greece_outline",
+      "countryId": "greece",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "greece_language",
+      "countryId": "greece",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "georgia_capital",
+      "countryId": "georgia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "georgia_flag",
+      "countryId": "georgia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "georgia_outline",
+      "countryId": "georgia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "georgia_language",
+      "countryId": "georgia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "denmark_capital",
+      "countryId": "denmark",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "denmark_flag",
+      "countryId": "denmark",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "denmark_outline",
+      "countryId": "denmark",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "denmark_language",
+      "countryId": "denmark",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "djibouti_capital",
+      "countryId": "djibouti",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "djibouti_flag",
+      "countryId": "djibouti",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "djibouti_outline",
+      "countryId": "djibouti",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "djibouti_language",
+      "countryId": "djibouti",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "dominica_capital",
+      "countryId": "dominica",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "dominica_flag",
+      "countryId": "dominica",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "dominica_outline",
+      "countryId": "dominica",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "dominica_language",
+      "countryId": "dominica",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "dominican_republic_capital",
+      "countryId": "dominican_republic",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "dominican_republic_flag",
+      "countryId": "dominican_republic",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "dominican_republic_outline",
+      "countryId": "dominican_republic",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "dominican_republic_language",
+      "countryId": "dominican_republic",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "egypt_capital",
+      "countryId": "egypt",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "egypt_flag",
+      "countryId": "egypt",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "egypt_outline",
+      "countryId": "egypt",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "egypt_language",
+      "countryId": "egypt",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "zambia_capital",
+      "countryId": "zambia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "zambia_flag",
+      "countryId": "zambia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "zambia_outline",
+      "countryId": "zambia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "zambia_language",
+      "countryId": "zambia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "zimbabwe_capital",
+      "countryId": "zimbabwe",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "zimbabwe_flag",
+      "countryId": "zimbabwe",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "zimbabwe_outline",
+      "countryId": "zimbabwe",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "zimbabwe_language",
+      "countryId": "zimbabwe",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "israel_capital",
+      "countryId": "israel",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "israel_flag",
+      "countryId": "israel",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "israel_outline",
+      "countryId": "israel",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "israel_language",
+      "countryId": "israel",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "india_capital",
+      "countryId": "india",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "india_flag",
+      "countryId": "india",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "india_outline",
+      "countryId": "india",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "india_language",
+      "countryId": "india",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "indonesia_capital",
+      "countryId": "indonesia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "indonesia_flag",
+      "countryId": "indonesia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "indonesia_outline",
+      "countryId": "indonesia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "indonesia_language",
+      "countryId": "indonesia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "jordan_capital",
+      "countryId": "jordan",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "jordan_flag",
+      "countryId": "jordan",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "jordan_outline",
+      "countryId": "jordan",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "jordan_language",
+      "countryId": "jordan",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "iraq_capital",
+      "countryId": "iraq",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "iraq_flag",
+      "countryId": "iraq",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "iraq_outline",
+      "countryId": "iraq",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "iraq_language",
+      "countryId": "iraq",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "iran_capital",
+      "countryId": "iran",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "iran_flag",
+      "countryId": "iran",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "iran_outline",
+      "countryId": "iran",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "iran_language",
+      "countryId": "iran",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "ireland_capital",
+      "countryId": "ireland",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "ireland_flag",
+      "countryId": "ireland",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "ireland_outline",
+      "countryId": "ireland",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "ireland_language",
+      "countryId": "ireland",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "iceland_capital",
+      "countryId": "iceland",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "iceland_flag",
+      "countryId": "iceland",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "iceland_outline",
+      "countryId": "iceland",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "iceland_language",
+      "countryId": "iceland",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "spain_capital",
+      "countryId": "spain",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "spain_flag",
+      "countryId": "spain",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "spain_outline",
+      "countryId": "spain",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "spain_language",
+      "countryId": "spain",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "italy_capital",
+      "countryId": "italy",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "italy_flag",
+      "countryId": "italy",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "italy_outline",
+      "countryId": "italy",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "italy_language",
+      "countryId": "italy",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "yemen_capital",
+      "countryId": "yemen",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "yemen_flag",
+      "countryId": "yemen",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "yemen_outline",
+      "countryId": "yemen",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "yemen_language",
+      "countryId": "yemen",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "cape_verde_capital",
+      "countryId": "cape_verde",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "cape_verde_flag",
+      "countryId": "cape_verde",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "cape_verde_outline",
+      "countryId": "cape_verde",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "cape_verde_language",
+      "countryId": "cape_verde",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "kazakhstan_capital",
+      "countryId": "kazakhstan",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "kazakhstan_flag",
+      "countryId": "kazakhstan",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "kazakhstan_outline",
+      "countryId": "kazakhstan",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "kazakhstan_language",
+      "countryId": "kazakhstan",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "cambodia_capital",
+      "countryId": "cambodia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "cambodia_flag",
+      "countryId": "cambodia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "cambodia_outline",
+      "countryId": "cambodia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "cambodia_language",
+      "countryId": "cambodia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "cameroon_capital",
+      "countryId": "cameroon",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "cameroon_flag",
+      "countryId": "cameroon",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "cameroon_outline",
+      "countryId": "cameroon",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "cameroon_language",
+      "countryId": "cameroon",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "canada_capital",
+      "countryId": "canada",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "canada_flag",
+      "countryId": "canada",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "canada_outline",
+      "countryId": "canada",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "canada_language",
+      "countryId": "canada",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "qatar_capital",
+      "countryId": "qatar",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "qatar_flag",
+      "countryId": "qatar",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "qatar_outline",
+      "countryId": "qatar",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "qatar_language",
+      "countryId": "qatar",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "kenya_capital",
+      "countryId": "kenya",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "kenya_flag",
+      "countryId": "kenya",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "kenya_outline",
+      "countryId": "kenya",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "kenya_language",
+      "countryId": "kenya",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "cyprus_capital",
+      "countryId": "cyprus",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "cyprus_flag",
+      "countryId": "cyprus",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "cyprus_outline",
+      "countryId": "cyprus",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "cyprus_language",
+      "countryId": "cyprus",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "kyrgyzstan_capital",
+      "countryId": "kyrgyzstan",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "kyrgyzstan_flag",
+      "countryId": "kyrgyzstan",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "kyrgyzstan_outline",
+      "countryId": "kyrgyzstan",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "kyrgyzstan_language",
+      "countryId": "kyrgyzstan",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "kiribati_capital",
+      "countryId": "kiribati",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "kiribati_flag",
+      "countryId": "kiribati",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "kiribati_outline",
+      "countryId": "kiribati",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "kiribati_language",
+      "countryId": "kiribati",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "china_capital",
+      "countryId": "china",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "china_flag",
+      "countryId": "china",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "china_outline",
+      "countryId": "china",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "china_language",
+      "countryId": "china",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "colombia_capital",
+      "countryId": "colombia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "colombia_flag",
+      "countryId": "colombia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "colombia_outline",
+      "countryId": "colombia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "colombia_language",
+      "countryId": "colombia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "comoros_capital",
+      "countryId": "comoros",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "comoros_flag",
+      "countryId": "comoros",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "comoros_outline",
+      "countryId": "comoros",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "comoros_language",
+      "countryId": "comoros",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "congo_capital",
+      "countryId": "congo",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "congo_flag",
+      "countryId": "congo",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "congo_outline",
+      "countryId": "congo",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "congo_language",
+      "countryId": "congo",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "dr_congo_capital",
+      "countryId": "dr_congo",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "dr_congo_flag",
+      "countryId": "dr_congo",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "dr_congo_outline",
+      "countryId": "dr_congo",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "dr_congo_language",
+      "countryId": "dr_congo",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "north_korea_capital",
+      "countryId": "north_korea",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "north_korea_flag",
+      "countryId": "north_korea",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "north_korea_outline",
+      "countryId": "north_korea",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "north_korea_language",
+      "countryId": "north_korea",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "south_korea_capital",
+      "countryId": "south_korea",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "south_korea_flag",
+      "countryId": "south_korea",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "south_korea_outline",
+      "countryId": "south_korea",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "south_korea_language",
+      "countryId": "south_korea",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "costa_rica_capital",
+      "countryId": "costa_rica",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "costa_rica_flag",
+      "countryId": "costa_rica",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "costa_rica_outline",
+      "countryId": "costa_rica",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "costa_rica_language",
+      "countryId": "costa_rica",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "ivory_coast_capital",
+      "countryId": "ivory_coast",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "ivory_coast_flag",
+      "countryId": "ivory_coast",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "ivory_coast_outline",
+      "countryId": "ivory_coast",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "ivory_coast_language",
+      "countryId": "ivory_coast",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "cuba_capital",
+      "countryId": "cuba",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "cuba_flag",
+      "countryId": "cuba",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "cuba_outline",
+      "countryId": "cuba",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "cuba_language",
+      "countryId": "cuba",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "kuwait_capital",
+      "countryId": "kuwait",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "kuwait_flag",
+      "countryId": "kuwait",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "kuwait_outline",
+      "countryId": "kuwait",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "kuwait_language",
+      "countryId": "kuwait",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "laos_capital",
+      "countryId": "laos",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "laos_flag",
+      "countryId": "laos",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "laos_outline",
+      "countryId": "laos",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "laos_language",
+      "countryId": "laos",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "latvia_capital",
+      "countryId": "latvia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "latvia_flag",
+      "countryId": "latvia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "latvia_outline",
+      "countryId": "latvia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "latvia_language",
+      "countryId": "latvia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "lesotho_capital",
+      "countryId": "lesotho",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "lesotho_flag",
+      "countryId": "lesotho",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "lesotho_outline",
+      "countryId": "lesotho",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "lesotho_language",
+      "countryId": "lesotho",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "lebanon_capital",
+      "countryId": "lebanon",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "lebanon_flag",
+      "countryId": "lebanon",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "lebanon_outline",
+      "countryId": "lebanon",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "lebanon_language",
+      "countryId": "lebanon",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "libya_capital",
+      "countryId": "libya",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "libya_flag",
+      "countryId": "libya",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "libya_outline",
+      "countryId": "libya",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "libya_language",
+      "countryId": "libya",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "liberia_capital",
+      "countryId": "liberia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "liberia_flag",
+      "countryId": "liberia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "liberia_outline",
+      "countryId": "liberia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "liberia_language",
+      "countryId": "liberia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "liechtenstein_capital",
+      "countryId": "liechtenstein",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "liechtenstein_flag",
+      "countryId": "liechtenstein",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "liechtenstein_outline",
+      "countryId": "liechtenstein",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "liechtenstein_language",
+      "countryId": "liechtenstein",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "lithuania_capital",
+      "countryId": "lithuania",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "lithuania_flag",
+      "countryId": "lithuania",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "lithuania_outline",
+      "countryId": "lithuania",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "lithuania_language",
+      "countryId": "lithuania",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "luxembourg_capital",
+      "countryId": "luxembourg",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "luxembourg_flag",
+      "countryId": "luxembourg",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "luxembourg_outline",
+      "countryId": "luxembourg",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "luxembourg_language",
+      "countryId": "luxembourg",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "mauritius_capital",
+      "countryId": "mauritius",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "mauritius_flag",
+      "countryId": "mauritius",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "mauritius_outline",
+      "countryId": "mauritius",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "mauritius_language",
+      "countryId": "mauritius",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "mauritania_capital",
+      "countryId": "mauritania",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "mauritania_flag",
+      "countryId": "mauritania",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "mauritania_outline",
+      "countryId": "mauritania",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "mauritania_language",
+      "countryId": "mauritania",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "madagascar_capital",
+      "countryId": "madagascar",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "madagascar_flag",
+      "countryId": "madagascar",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "madagascar_outline",
+      "countryId": "madagascar",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "madagascar_language",
+      "countryId": "madagascar",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "malawi_capital",
+      "countryId": "malawi",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "malawi_flag",
+      "countryId": "malawi",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "malawi_outline",
+      "countryId": "malawi",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "malawi_language",
+      "countryId": "malawi",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "malaysia_capital",
+      "countryId": "malaysia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "malaysia_flag",
+      "countryId": "malaysia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "malaysia_outline",
+      "countryId": "malaysia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "malaysia_language",
+      "countryId": "malaysia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "mali_capital",
+      "countryId": "mali",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "mali_flag",
+      "countryId": "mali",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "mali_outline",
+      "countryId": "mali",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "mali_language",
+      "countryId": "mali",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "maldives_capital",
+      "countryId": "maldives",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "maldives_flag",
+      "countryId": "maldives",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "maldives_outline",
+      "countryId": "maldives",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "maldives_language",
+      "countryId": "maldives",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "malta_capital",
+      "countryId": "malta",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "malta_flag",
+      "countryId": "malta",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "malta_outline",
+      "countryId": "malta",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "malta_language",
+      "countryId": "malta",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "morocco_capital",
+      "countryId": "morocco",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "morocco_flag",
+      "countryId": "morocco",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "morocco_outline",
+      "countryId": "morocco",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "morocco_language",
+      "countryId": "morocco",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "marshall_islands_capital",
+      "countryId": "marshall_islands",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "marshall_islands_flag",
+      "countryId": "marshall_islands",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "marshall_islands_outline",
+      "countryId": "marshall_islands",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "marshall_islands_language",
+      "countryId": "marshall_islands",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "mexico_capital",
+      "countryId": "mexico",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "mexico_flag",
+      "countryId": "mexico",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "mexico_outline",
+      "countryId": "mexico",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "mexico_language",
+      "countryId": "mexico",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "micronesia_capital",
+      "countryId": "micronesia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "micronesia_flag",
+      "countryId": "micronesia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "micronesia_outline",
+      "countryId": "micronesia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "micronesia_language",
+      "countryId": "micronesia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "mozambique_capital",
+      "countryId": "mozambique",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "mozambique_flag",
+      "countryId": "mozambique",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "mozambique_outline",
+      "countryId": "mozambique",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "mozambique_language",
+      "countryId": "mozambique",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "moldova_capital",
+      "countryId": "moldova",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "moldova_flag",
+      "countryId": "moldova",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "moldova_outline",
+      "countryId": "moldova",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "moldova_language",
+      "countryId": "moldova",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "monaco_capital",
+      "countryId": "monaco",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "monaco_flag",
+      "countryId": "monaco",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "monaco_outline",
+      "countryId": "monaco",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "monaco_language",
+      "countryId": "monaco",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "mongolia_capital",
+      "countryId": "mongolia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "mongolia_flag",
+      "countryId": "mongolia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "mongolia_outline",
+      "countryId": "mongolia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "mongolia_language",
+      "countryId": "mongolia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "myanmar_capital",
+      "countryId": "myanmar",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "myanmar_flag",
+      "countryId": "myanmar",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "myanmar_outline",
+      "countryId": "myanmar",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "myanmar_language",
+      "countryId": "myanmar",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "namibia_capital",
+      "countryId": "namibia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "namibia_flag",
+      "countryId": "namibia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "namibia_outline",
+      "countryId": "namibia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "namibia_language",
+      "countryId": "namibia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "nauru_capital",
+      "countryId": "nauru",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "nauru_flag",
+      "countryId": "nauru",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "nauru_outline",
+      "countryId": "nauru",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "nauru_language",
+      "countryId": "nauru",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "nepal_capital",
+      "countryId": "nepal",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "nepal_flag",
+      "countryId": "nepal",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "nepal_outline",
+      "countryId": "nepal",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "nepal_language",
+      "countryId": "nepal",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "niger_capital",
+      "countryId": "niger",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "niger_flag",
+      "countryId": "niger",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "niger_outline",
+      "countryId": "niger",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "niger_language",
+      "countryId": "niger",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "nigeria_capital",
+      "countryId": "nigeria",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "nigeria_flag",
+      "countryId": "nigeria",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "nigeria_outline",
+      "countryId": "nigeria",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "nigeria_language",
+      "countryId": "nigeria",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "netherlands_capital",
+      "countryId": "netherlands",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "netherlands_flag",
+      "countryId": "netherlands",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "netherlands_outline",
+      "countryId": "netherlands",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "netherlands_language",
+      "countryId": "netherlands",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "nicaragua_capital",
+      "countryId": "nicaragua",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "nicaragua_flag",
+      "countryId": "nicaragua",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "nicaragua_outline",
+      "countryId": "nicaragua",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "nicaragua_language",
+      "countryId": "nicaragua",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "new_zealand_capital",
+      "countryId": "new_zealand",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "new_zealand_flag",
+      "countryId": "new_zealand",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "new_zealand_outline",
+      "countryId": "new_zealand",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "new_zealand_language",
+      "countryId": "new_zealand",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "norway_capital",
+      "countryId": "norway",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "norway_flag",
+      "countryId": "norway",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "norway_outline",
+      "countryId": "norway",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "norway_language",
+      "countryId": "norway",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "united_arab_emirates_capital",
+      "countryId": "united_arab_emirates",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "united_arab_emirates_flag",
+      "countryId": "united_arab_emirates",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "united_arab_emirates_outline",
+      "countryId": "united_arab_emirates",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "united_arab_emirates_language",
+      "countryId": "united_arab_emirates",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "oman_capital",
+      "countryId": "oman",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "oman_flag",
+      "countryId": "oman",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "oman_outline",
+      "countryId": "oman",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "oman_language",
+      "countryId": "oman",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "pakistan_capital",
+      "countryId": "pakistan",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "pakistan_flag",
+      "countryId": "pakistan",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "pakistan_outline",
+      "countryId": "pakistan",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "pakistan_language",
+      "countryId": "pakistan",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "palau_capital",
+      "countryId": "palau",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "palau_flag",
+      "countryId": "palau",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "palau_outline",
+      "countryId": "palau",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "palau_language",
+      "countryId": "palau",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "panama_capital",
+      "countryId": "panama",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "panama_flag",
+      "countryId": "panama",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "panama_outline",
+      "countryId": "panama",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "panama_language",
+      "countryId": "panama",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "papua_new_guinea_capital",
+      "countryId": "papua_new_guinea",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "papua_new_guinea_flag",
+      "countryId": "papua_new_guinea",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "papua_new_guinea_outline",
+      "countryId": "papua_new_guinea",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "papua_new_guinea_language",
+      "countryId": "papua_new_guinea",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "palestine_capital",
+      "countryId": "palestine",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "palestine_flag",
+      "countryId": "palestine",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "palestine_outline",
+      "countryId": "palestine",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "palestine_language",
+      "countryId": "palestine",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "paraguay_capital",
+      "countryId": "paraguay",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "paraguay_flag",
+      "countryId": "paraguay",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "paraguay_outline",
+      "countryId": "paraguay",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "paraguay_language",
+      "countryId": "paraguay",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "peru_capital",
+      "countryId": "peru",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "peru_flag",
+      "countryId": "peru",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "peru_outline",
+      "countryId": "peru",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "peru_language",
+      "countryId": "peru",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "poland_capital",
+      "countryId": "poland",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "poland_flag",
+      "countryId": "poland",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "poland_outline",
+      "countryId": "poland",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "poland_language",
+      "countryId": "poland",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "portugal_capital",
+      "countryId": "portugal",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "portugal_flag",
+      "countryId": "portugal",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "portugal_outline",
+      "countryId": "portugal",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "portugal_language",
+      "countryId": "portugal",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "russia_capital",
+      "countryId": "russia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "russia_flag",
+      "countryId": "russia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "russia_outline",
+      "countryId": "russia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "russia_language",
+      "countryId": "russia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "rwanda_capital",
+      "countryId": "rwanda",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "rwanda_flag",
+      "countryId": "rwanda",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "rwanda_outline",
+      "countryId": "rwanda",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "rwanda_language",
+      "countryId": "rwanda",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "romania_capital",
+      "countryId": "romania",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "romania_flag",
+      "countryId": "romania",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "romania_outline",
+      "countryId": "romania",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "romania_language",
+      "countryId": "romania",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "el_salvador_capital",
+      "countryId": "el_salvador",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "el_salvador_flag",
+      "countryId": "el_salvador",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "el_salvador_outline",
+      "countryId": "el_salvador",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "el_salvador_language",
+      "countryId": "el_salvador",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "samoa_capital",
+      "countryId": "samoa",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "samoa_flag",
+      "countryId": "samoa",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "samoa_outline",
+      "countryId": "samoa",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "samoa_language",
+      "countryId": "samoa",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "san_marino_capital",
+      "countryId": "san_marino",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "san_marino_flag",
+      "countryId": "san_marino",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "san_marino_outline",
+      "countryId": "san_marino",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "san_marino_language",
+      "countryId": "san_marino",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "sao_tome_and_principe_capital",
+      "countryId": "sao_tome_and_principe",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "sao_tome_and_principe_flag",
+      "countryId": "sao_tome_and_principe",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "sao_tome_and_principe_outline",
+      "countryId": "sao_tome_and_principe",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "sao_tome_and_principe_language",
+      "countryId": "sao_tome_and_principe",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "saudi_arabia_capital",
+      "countryId": "saudi_arabia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "saudi_arabia_flag",
+      "countryId": "saudi_arabia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "saudi_arabia_outline",
+      "countryId": "saudi_arabia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "saudi_arabia_language",
+      "countryId": "saudi_arabia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "north_macedonia_capital",
+      "countryId": "north_macedonia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "north_macedonia_flag",
+      "countryId": "north_macedonia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "north_macedonia_outline",
+      "countryId": "north_macedonia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "north_macedonia_language",
+      "countryId": "north_macedonia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "seychelles_capital",
+      "countryId": "seychelles",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "seychelles_flag",
+      "countryId": "seychelles",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "seychelles_outline",
+      "countryId": "seychelles",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "seychelles_language",
+      "countryId": "seychelles",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "senegal_capital",
+      "countryId": "senegal",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "senegal_flag",
+      "countryId": "senegal",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "senegal_outline",
+      "countryId": "senegal",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "senegal_language",
+      "countryId": "senegal",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "saint_vincent_and_the_grenadines_capital",
+      "countryId": "saint_vincent_and_the_grenadines",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "saint_vincent_and_the_grenadines_flag",
+      "countryId": "saint_vincent_and_the_grenadines",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "saint_vincent_and_the_grenadines_outline",
+      "countryId": "saint_vincent_and_the_grenadines",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "saint_vincent_and_the_grenadines_language",
+      "countryId": "saint_vincent_and_the_grenadines",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "saint_kitts_and_nevis_capital",
+      "countryId": "saint_kitts_and_nevis",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "saint_kitts_and_nevis_flag",
+      "countryId": "saint_kitts_and_nevis",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "saint_kitts_and_nevis_outline",
+      "countryId": "saint_kitts_and_nevis",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "saint_kitts_and_nevis_language",
+      "countryId": "saint_kitts_and_nevis",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "saint_lucia_capital",
+      "countryId": "saint_lucia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "saint_lucia_flag",
+      "countryId": "saint_lucia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "saint_lucia_outline",
+      "countryId": "saint_lucia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "saint_lucia_language",
+      "countryId": "saint_lucia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "serbia_capital",
+      "countryId": "serbia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "serbia_flag",
+      "countryId": "serbia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "serbia_outline",
+      "countryId": "serbia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "serbia_language",
+      "countryId": "serbia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "singapore_capital",
+      "countryId": "singapore",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "singapore_flag",
+      "countryId": "singapore",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "singapore_outline",
+      "countryId": "singapore",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "singapore_language",
+      "countryId": "singapore",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "syria_capital",
+      "countryId": "syria",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "syria_flag",
+      "countryId": "syria",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "syria_outline",
+      "countryId": "syria",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "syria_language",
+      "countryId": "syria",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "slovakia_capital",
+      "countryId": "slovakia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "slovakia_flag",
+      "countryId": "slovakia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "slovakia_outline",
+      "countryId": "slovakia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "slovakia_language",
+      "countryId": "slovakia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "slovenia_capital",
+      "countryId": "slovenia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "slovenia_flag",
+      "countryId": "slovenia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "slovenia_outline",
+      "countryId": "slovenia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "slovenia_language",
+      "countryId": "slovenia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "united_states_capital",
+      "countryId": "united_states",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "united_states_flag",
+      "countryId": "united_states",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "united_states_outline",
+      "countryId": "united_states",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "united_states_language",
+      "countryId": "united_states",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "solomon_islands_capital",
+      "countryId": "solomon_islands",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "solomon_islands_flag",
+      "countryId": "solomon_islands",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "solomon_islands_outline",
+      "countryId": "solomon_islands",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "solomon_islands_language",
+      "countryId": "solomon_islands",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "somalia_capital",
+      "countryId": "somalia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "somalia_flag",
+      "countryId": "somalia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "somalia_outline",
+      "countryId": "somalia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "somalia_language",
+      "countryId": "somalia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "sudan_capital",
+      "countryId": "sudan",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "sudan_flag",
+      "countryId": "sudan",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "sudan_outline",
+      "countryId": "sudan",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "sudan_language",
+      "countryId": "sudan",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "suriname_capital",
+      "countryId": "suriname",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "suriname_flag",
+      "countryId": "suriname",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "suriname_outline",
+      "countryId": "suriname",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "suriname_language",
+      "countryId": "suriname",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "sierra_leone_capital",
+      "countryId": "sierra_leone",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "sierra_leone_flag",
+      "countryId": "sierra_leone",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "sierra_leone_outline",
+      "countryId": "sierra_leone",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "sierra_leone_language",
+      "countryId": "sierra_leone",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "tajikistan_capital",
+      "countryId": "tajikistan",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "tajikistan_flag",
+      "countryId": "tajikistan",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "tajikistan_outline",
+      "countryId": "tajikistan",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "tajikistan_language",
+      "countryId": "tajikistan",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "thailand_capital",
+      "countryId": "thailand",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "thailand_flag",
+      "countryId": "thailand",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "thailand_outline",
+      "countryId": "thailand",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "thailand_language",
+      "countryId": "thailand",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "tanzania_capital",
+      "countryId": "tanzania",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "tanzania_flag",
+      "countryId": "tanzania",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "tanzania_outline",
+      "countryId": "tanzania",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "tanzania_language",
+      "countryId": "tanzania",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "togo_capital",
+      "countryId": "togo",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "togo_flag",
+      "countryId": "togo",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "togo_outline",
+      "countryId": "togo",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "togo_language",
+      "countryId": "togo",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "tonga_capital",
+      "countryId": "tonga",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "tonga_flag",
+      "countryId": "tonga",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "tonga_outline",
+      "countryId": "tonga",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "tonga_language",
+      "countryId": "tonga",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "trinidad_and_tobago_capital",
+      "countryId": "trinidad_and_tobago",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "trinidad_and_tobago_flag",
+      "countryId": "trinidad_and_tobago",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "trinidad_and_tobago_outline",
+      "countryId": "trinidad_and_tobago",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "trinidad_and_tobago_language",
+      "countryId": "trinidad_and_tobago",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "tuvalu_capital",
+      "countryId": "tuvalu",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "tuvalu_flag",
+      "countryId": "tuvalu",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "tuvalu_outline",
+      "countryId": "tuvalu",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "tuvalu_language",
+      "countryId": "tuvalu",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "tunisia_capital",
+      "countryId": "tunisia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "tunisia_flag",
+      "countryId": "tunisia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "tunisia_outline",
+      "countryId": "tunisia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "tunisia_language",
+      "countryId": "tunisia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "turkmenistan_capital",
+      "countryId": "turkmenistan",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "turkmenistan_flag",
+      "countryId": "turkmenistan",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "turkmenistan_outline",
+      "countryId": "turkmenistan",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "turkmenistan_language",
+      "countryId": "turkmenistan",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "turkey_capital",
+      "countryId": "turkey",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "turkey_flag",
+      "countryId": "turkey",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "turkey_outline",
+      "countryId": "turkey",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "turkey_language",
+      "countryId": "turkey",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "uganda_capital",
+      "countryId": "uganda",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "uganda_flag",
+      "countryId": "uganda",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "uganda_outline",
+      "countryId": "uganda",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "uganda_language",
+      "countryId": "uganda",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "uzbekistan_capital",
+      "countryId": "uzbekistan",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "uzbekistan_flag",
+      "countryId": "uzbekistan",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "uzbekistan_outline",
+      "countryId": "uzbekistan",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "uzbekistan_language",
+      "countryId": "uzbekistan",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "ukraine_capital",
+      "countryId": "ukraine",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "ukraine_flag",
+      "countryId": "ukraine",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "ukraine_outline",
+      "countryId": "ukraine",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "ukraine_language",
+      "countryId": "ukraine",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "uruguay_capital",
+      "countryId": "uruguay",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "uruguay_flag",
+      "countryId": "uruguay",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "uruguay_outline",
+      "countryId": "uruguay",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "uruguay_language",
+      "countryId": "uruguay",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "fiji_capital",
+      "countryId": "fiji",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "fiji_flag",
+      "countryId": "fiji",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "fiji_outline",
+      "countryId": "fiji",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "fiji_language",
+      "countryId": "fiji",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "philippines_capital",
+      "countryId": "philippines",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "philippines_flag",
+      "countryId": "philippines",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "philippines_outline",
+      "countryId": "philippines",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "philippines_language",
+      "countryId": "philippines",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "finland_capital",
+      "countryId": "finland",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "finland_flag",
+      "countryId": "finland",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "finland_outline",
+      "countryId": "finland",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "finland_language",
+      "countryId": "finland",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "france_capital",
+      "countryId": "france",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "france_flag",
+      "countryId": "france",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "france_outline",
+      "countryId": "france",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "france_language",
+      "countryId": "france",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "croatia_capital",
+      "countryId": "croatia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "croatia_flag",
+      "countryId": "croatia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "croatia_outline",
+      "countryId": "croatia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "croatia_language",
+      "countryId": "croatia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "central_african_republic_capital",
+      "countryId": "central_african_republic",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "central_african_republic_flag",
+      "countryId": "central_african_republic",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "central_african_republic_outline",
+      "countryId": "central_african_republic",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "central_african_republic_language",
+      "countryId": "central_african_republic",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "chad_capital",
+      "countryId": "chad",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "chad_flag",
+      "countryId": "chad",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "chad_outline",
+      "countryId": "chad",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "chad_language",
+      "countryId": "chad",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "montenegro_capital",
+      "countryId": "montenegro",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "montenegro_flag",
+      "countryId": "montenegro",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "montenegro_outline",
+      "countryId": "montenegro",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "montenegro_language",
+      "countryId": "montenegro",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "czech_republic_capital",
+      "countryId": "czech_republic",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "czech_republic_flag",
+      "countryId": "czech_republic",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "czech_republic_outline",
+      "countryId": "czech_republic",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "czech_republic_language",
+      "countryId": "czech_republic",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "chile_capital",
+      "countryId": "chile",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "chile_flag",
+      "countryId": "chile",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "chile_outline",
+      "countryId": "chile",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "chile_language",
+      "countryId": "chile",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "switzerland_capital",
+      "countryId": "switzerland",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "switzerland_flag",
+      "countryId": "switzerland",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "switzerland_outline",
+      "countryId": "switzerland",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "switzerland_language",
+      "countryId": "switzerland",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "sweden_capital",
+      "countryId": "sweden",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "sweden_flag",
+      "countryId": "sweden",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "sweden_outline",
+      "countryId": "sweden",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "sweden_language",
+      "countryId": "sweden",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "sri_lanka_capital",
+      "countryId": "sri_lanka",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "sri_lanka_flag",
+      "countryId": "sri_lanka",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "sri_lanka_outline",
+      "countryId": "sri_lanka",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "sri_lanka_language",
+      "countryId": "sri_lanka",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "ecuador_capital",
+      "countryId": "ecuador",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "ecuador_flag",
+      "countryId": "ecuador",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "ecuador_outline",
+      "countryId": "ecuador",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "ecuador_language",
+      "countryId": "ecuador",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "equatorial_guinea_capital",
+      "countryId": "equatorial_guinea",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "equatorial_guinea_flag",
+      "countryId": "equatorial_guinea",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "equatorial_guinea_outline",
+      "countryId": "equatorial_guinea",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "equatorial_guinea_language",
+      "countryId": "equatorial_guinea",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "eritrea_capital",
+      "countryId": "eritrea",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "eritrea_flag",
+      "countryId": "eritrea",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "eritrea_outline",
+      "countryId": "eritrea",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "eritrea_language",
+      "countryId": "eritrea",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "eswatini_capital",
+      "countryId": "eswatini",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "eswatini_flag",
+      "countryId": "eswatini",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "eswatini_outline",
+      "countryId": "eswatini",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "eswatini_language",
+      "countryId": "eswatini",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "estonia_capital",
+      "countryId": "estonia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "estonia_flag",
+      "countryId": "estonia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "estonia_outline",
+      "countryId": "estonia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "estonia_language",
+      "countryId": "estonia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "ethiopia_capital",
+      "countryId": "ethiopia",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "ethiopia_flag",
+      "countryId": "ethiopia",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "ethiopia_outline",
+      "countryId": "ethiopia",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "ethiopia_language",
+      "countryId": "ethiopia",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "south_africa_capital",
+      "countryId": "south_africa",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "south_africa_flag",
+      "countryId": "south_africa",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "south_africa_outline",
+      "countryId": "south_africa",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "south_africa_language",
+      "countryId": "south_africa",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "south_sudan_capital",
+      "countryId": "south_sudan",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "south_sudan_flag",
+      "countryId": "south_sudan",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "south_sudan_outline",
+      "countryId": "south_sudan",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "south_sudan_language",
+      "countryId": "south_sudan",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "jamaica_capital",
+      "countryId": "jamaica",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "jamaica_flag",
+      "countryId": "jamaica",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "jamaica_outline",
+      "countryId": "jamaica",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "jamaica_language",
+      "countryId": "jamaica",
+      "difficulty": 2,
+      "type": 4
+    },
+    {
+      "id": "japan_capital",
+      "countryId": "japan",
+      "difficulty": 1,
+      "type": 1
+    },
+    {
+      "id": "japan_flag",
+      "countryId": "japan",
+      "difficulty": 1,
+      "type": 2
+    },
+    {
+      "id": "japan_outline",
+      "countryId": "japan",
+      "difficulty": 2,
+      "type": 3
+    },
+    {
+      "id": "japan_language",
+      "countryId": "japan",
+      "difficulty": 2,
+      "type": 4
+    }
+  ]
+}

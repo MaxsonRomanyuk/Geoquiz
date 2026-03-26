@@ -19,12 +19,16 @@ import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -44,7 +48,8 @@ import retrofit2.Response;
 
 public class GameRepository {
     private static final String TAG = "GameRepository";
-    private static final String PENDING_GAMES_FILE = "pending_games.dat";
+    private static final String PENDING_GAMES_FILE = "pending_games.json";
+    private static final String BOOTSTRAP_ASSETS_FILE = "bootstrap_data.json";
 
     private final Context context;
     private final PreferencesHelper preferencesHelper;
@@ -87,16 +92,14 @@ public class GameRepository {
                 return;
             }
 
-            if (!isNetworkAvailable()) {
-                Log.e(TAG, "Нет интернета и нет локальных данных");
-                new Handler(Looper.getMainLooper()).post(() ->
-                        callback.onError("Нет интернета. Подключитесь к сети для первого запуска.")
-                );
+            if (isNetworkAvailable()) {
+                Log.d(TAG, "Есть интернет, загружаем с сервера");
+                loadDataFromServer(callback);
                 return;
             }
 
-            Log.d(TAG, "Загрузка данных с сервера");
-            loadDataFromServer(callback);
+            Log.d(TAG, "Нет интернета, загружаем из assets");
+            loadDataFromAssets(callback);
         });
     }
 
@@ -110,59 +113,104 @@ public class GameRepository {
 
                 if (response.isSuccessful() && response.body() != null) {
                     BootstrapResponse data = response.body();
-
-                    Log.d(TAG, "Получено стран: " +(data.getCountries() != null ? data.getCountries().size() : 0));
-                    Log.d(TAG, "Получено вопросов: " + (data.getQuestions() != null ? data.getQuestions().size() : 0));
-
-                    if (data.getCountries() == null || data.getCountries().isEmpty()) {
-                        Log.e(TAG, "СЕРВЕР ВЕРНУЛ ПУСТОЙ СПИСОК СТРАН!");
-                    }
-
-                    if (data.getQuestions() == null || data.getQuestions().isEmpty()) {
-                        Log.e(TAG, "СЕРВЕР ВЕРНУЛ ПУСТОЙ СПИСОК ВОПРОСОВ!");
-                    }
-
-                    executorService.execute(() -> {
-                        try {
-                            dbHelper.saveBootstrapData(data);
-                            loadDataFromDatabase();
-
-                            new Handler(Looper.getMainLooper()).post(() ->
-                                    callback.onSuccess(data)
-                            );
-                        } catch (Exception e) {
-                            Log.e(TAG, "Ошибка сохранения в БД", e);
-                            new Handler(Looper.getMainLooper()).post(() ->
-                                    callback.onError("Ошибка сохранения: " + e.getMessage())
-                            );
-                        }
-                    });
+                    saveBootstrapData(data, callback);
                 } else {
                     Log.e(TAG, "Ошибка сервера. Код: " + response.code());
-                    try {
-                        String errorBody = response.errorBody() != null ?
-                                response.errorBody().string() : "null";
-                        Log.e(TAG, "Тело ошибки: " + errorBody);
-                    } catch (Exception e) {
-                        Log.e(TAG, "Не удалось прочитать тело ошибки");
-                    }
-
-                    new Handler(Looper.getMainLooper()).post(() ->
-                            callback.onError("Ошибка загрузки: " + response.code())
-                    );
+                    loadDataFromAssets(callback);
                 }
             }
 
             @Override
             public void onFailure(Call<BootstrapResponse> call, Throwable t) {
                 Log.e(TAG, "Сетевая ошибка", t);
+                loadDataFromAssets(callback);
+            }
+        });
+    }
+    private void loadDataFromAssets(BootstrapCallback callback) {
+        executorService.execute(() -> {
+            try {
+                Log.d(TAG, "Загрузка данных из assets...");
+
+                if (!hasBootstrapAssets()) {
+                    Log.e(TAG, "Файл bootstrap_data.json не найден в assets");
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            callback.onError("Нет интернета и нет встроенных данных. Подключитесь к сети.")
+                    );
+                    return;
+                }
+
+                String json = loadJsonFromAssets(BOOTSTRAP_ASSETS_FILE);
+                if (json == null || json.isEmpty()) {
+                    Log.e(TAG, "Файл bootstrap_data.json пуст или не может быть прочитан");
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            callback.onError("Ошибка чтения встроенных данных")
+                    );
+                    return;
+                }
+
+                BootstrapResponse data = gson.fromJson(json, BootstrapResponse.class);
+                if (data == null) {
+                    Log.e(TAG, "Ошибка парсинга bootstrap_data.json");
+                    new Handler(Looper.getMainLooper()).post(() ->
+                            callback.onError("Ошибка парсинга встроенных данных")
+                    );
+                    return;
+                }
+
+                Log.d(TAG, "Загружено из assets: " +
+                        (data.getCountries() != null ? data.getCountries().size() : 0) + " стран, " +
+                        (data.getQuestions() != null ? data.getQuestions().size() : 0) + " вопросов");
+
+                saveBootstrapData(data, callback);
+
+            } catch (Exception e) {
+                Log.e(TAG, "Ошибка загрузки из assets", e);
                 new Handler(Looper.getMainLooper()).post(() ->
-                        callback.onError("Ошибка сети: " + t.getMessage())
+                        callback.onError("Ошибка загрузки встроенных данных: " + e.getMessage())
                 );
             }
         });
     }
+    private void saveBootstrapData(BootstrapResponse data, BootstrapCallback callback) {
+        executorService.execute(() -> {
+            try {
+                Log.d(TAG, "Сохранение данных в БД...");
+                dbHelper.saveBootstrapData(data);
+                loadDataFromDatabase();
 
+                Log.d(TAG, "Данные успешно сохранены");
+                new Handler(Looper.getMainLooper()).post(() ->
+                        callback.onSuccess(data)
+                );
+            } catch (Exception e) {
+                Log.e(TAG, "Ошибка сохранения в БД", e);
+                new Handler(Looper.getMainLooper()).post(() ->
+                        callback.onError("Ошибка сохранения: " + e.getMessage())
+                );
+            }
+        });
+    }
+    private boolean hasBootstrapAssets() {
+        try {
+            context.getAssets().open(BOOTSTRAP_ASSETS_FILE).close();
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+    private String loadJsonFromAssets(String fileName) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        try (InputStream is = context.getAssets().open(fileName);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+        }
+        return sb.toString();
+    }
     private void loadDataFromDatabase() {
         countriesCache.clear();
         questionsCache.clear();
@@ -436,13 +484,16 @@ public class GameRepository {
         executorService.execute(() -> {
             try {
                 File file = new File(context.getFilesDir(), PENDING_GAMES_FILE);
-                FileOutputStream fos = new FileOutputStream(file);
-                ObjectOutputStream oos = new ObjectOutputStream(fos);
-                oos.writeObject(gson.toJson(pendingGames));
-                oos.close();
-                Log.d(TAG, "Сохранено " + pendingGames.size() + " игр в кэш");
+                String json = gson.toJson(pendingGames);
+
+                try (FileOutputStream fos = new FileOutputStream(file);
+                     OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8")) {
+                    osw.write(json);
+                }
+
+                Log.d(TAG, "Сохранено " + pendingGames.size() + " игр в JSON файл");
             } catch (Exception e) {
-                Log.e(TAG, "Ошибка сохранения игр", e);
+                Log.e(TAG, "Ошибка сохранения игр в JSON", e);
             }
         });
     }
@@ -450,17 +501,14 @@ public class GameRepository {
         pendingGames.clear();
         try {
             File file = new File(context.getFilesDir(), PENDING_GAMES_FILE);
-            FileOutputStream fos = new FileOutputStream(file);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(gson.toJson(new ArrayList<>()));
-            oos.close();
-            Log.d(TAG, "Файл очищен");
+            try (FileOutputStream fos = new FileOutputStream(file);
+                 OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8")) {
+                 osw.write(gson.toJson(new ArrayList<>()));
+            }
+            Log.d(TAG, "JSON файл очищен");
         } catch (Exception e) {
-            Log.e(TAG, "Ошибка очистки", e);
+            Log.e(TAG, "Ошибка очистки JSON файла", e);
         }
-
-
-        //pendingGames = loadPendingGames();
     }
     private List<PendingGame> loadPendingGames() {
         try {
@@ -469,17 +517,24 @@ public class GameRepository {
                 return new ArrayList<>();
             }
 
-            FileInputStream fis = new FileInputStream(file);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            String json = (String) ois.readObject();
-            ois.close();
+            StringBuilder json = new StringBuilder();
+            try (FileInputStream fis = new FileInputStream(file);
+                 InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+                 BufferedReader reader = new BufferedReader(isr)) {
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    json.append(line);
+                }
+            }
 
             Type listType = new TypeToken<List<PendingGame>>(){}.getType();
-            List<PendingGame> list = gson.fromJson(json, listType);
-            Log.d(TAG, "Загружено " + (list != null ? list.size() : 0) + " игр из кэша");
+            List<PendingGame> list = gson.fromJson(json.toString(), listType);
+
+            Log.d(TAG, "Загружено " + (list != null ? list.size() : 0) + " игр из JSON файла");
             return list != null ? list : new ArrayList<>();
         } catch (Exception e) {
-            Log.e(TAG, "Ошибка загрузки игр", e);
+            Log.e(TAG, "Ошибка загрузки игр из JSON", e);
             return new ArrayList<>();
         }
     }
