@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GeoQuiz_backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260205162230_AddPvPAnswer")]
-    partial class AddPvPAnswer
+    [Migration("20260329184847_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,7 +74,13 @@ namespace GeoQuiz_backend.Migrations
                     b.Property<bool>("IsOnline")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<Guid?>("KothMatchId")
+                        .HasColumnType("char(36)");
+
                     b.Property<int>("Mode")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Place")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PlayedAt")
@@ -82,6 +88,9 @@ namespace GeoQuiz_backend.Migrations
 
                     b.Property<Guid?>("PvPMatchId")
                         .HasColumnType("char(36)");
+
+                    b.Property<int?>("RoundsSurvived")
+                        .HasColumnType("int");
 
                     b.Property<int>("Score")
                         .HasColumnType("int");
@@ -94,11 +103,133 @@ namespace GeoQuiz_backend.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("KothMatchId");
+
                     b.HasIndex("PvPMatchId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("gamesessions", (string)null);
+                });
+
+            modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.KothAnswer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("AnsweredAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<Guid>("MatchId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("QuestionId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("RoundNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ScoreGained")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TimeSpentMs")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("MatchId", "RoundNumber");
+
+                    b.ToTable("kothanswers", (string)null);
+                });
+
+            modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.KothMatch", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("CurrentRound")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<int>("CurrentRoundType")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<DateTime?>("FinishedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("SelectedMode")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("StartedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("WinnerId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WinnerId");
+
+                    b.ToTable("kothmatches", (string)null);
+                });
+
+            modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.KothPlayer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTime>("JoinedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("MatchId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int?>("Place")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoundEliminated")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("MatchId", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("kothplayers", (string)null);
                 });
 
             modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.ModeDraft", b =>
@@ -217,13 +348,16 @@ namespace GeoQuiz_backend.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<Guid?>("KothMatchId")
+                        .HasColumnType("char(36)");
+
                     b.Property<int>("Language")
                         .HasColumnType("int");
 
                     b.Property<int>("Mode")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("PvPMatchId")
+                    b.Property<Guid?>("PvPMatchId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("QuestionIds")
@@ -234,6 +368,8 @@ namespace GeoQuiz_backend.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("KothMatchId");
 
                     b.HasIndex("PvPMatchId")
                         .IsUnique();
@@ -373,6 +509,21 @@ namespace GeoQuiz_backend.Migrations
                     b.Property<int>("FlagsCorrect")
                         .HasColumnType("int");
 
+                    b.Property<int>("KothGamesPlayed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<int>("KothGamesWon")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<int>("KothTop3Finishes")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
                     b.Property<int>("LanguagesCorrect")
                         .HasColumnType("int");
 
@@ -423,6 +574,11 @@ namespace GeoQuiz_backend.Migrations
 
             modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.GameSession", b =>
                 {
+                    b.HasOne("GeoQuiz_backend.Domain.Entities.KothMatch", "KothMatch")
+                        .WithMany()
+                        .HasForeignKey("KothMatchId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("GeoQuiz_backend.Domain.Entities.PvPMatch", "PvPMatch")
                         .WithMany()
                         .HasForeignKey("PvPMatchId")
@@ -434,7 +590,57 @@ namespace GeoQuiz_backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("KothMatch");
+
                     b.Navigation("PvPMatch");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.KothAnswer", b =>
+                {
+                    b.HasOne("GeoQuiz_backend.Domain.Entities.KothMatch", "Match")
+                        .WithMany("Answers")
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GeoQuiz_backend.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Match");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.KothMatch", b =>
+                {
+                    b.HasOne("GeoQuiz_backend.Domain.Entities.User", "Winner")
+                        .WithMany()
+                        .HasForeignKey("WinnerId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Winner");
+                });
+
+            modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.KothPlayer", b =>
+                {
+                    b.HasOne("GeoQuiz_backend.Domain.Entities.KothMatch", "Match")
+                        .WithMany("Players")
+                        .HasForeignKey("MatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GeoQuiz_backend.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Match");
 
                     b.Navigation("User");
                 });
@@ -497,11 +703,17 @@ namespace GeoQuiz_backend.Migrations
 
             modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.QuestionSet", b =>
                 {
+                    b.HasOne("GeoQuiz_backend.Domain.Entities.KothMatch", "KothMatch")
+                        .WithOne("QuestionSet")
+                        .HasForeignKey("GeoQuiz_backend.Domain.Entities.QuestionSet", "KothMatchId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("GeoQuiz_backend.Domain.Entities.PvPMatch", "PvPMatch")
                         .WithOne("QuestionSet")
                         .HasForeignKey("GeoQuiz_backend.Domain.Entities.QuestionSet", "PvPMatchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("KothMatch");
 
                     b.Navigation("PvPMatch");
                 });
@@ -550,6 +762,15 @@ namespace GeoQuiz_backend.Migrations
             modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.Achievement", b =>
                 {
                     b.Navigation("UserAchievements");
+                });
+
+            modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.KothMatch", b =>
+                {
+                    b.Navigation("Answers");
+
+                    b.Navigation("Players");
+
+                    b.Navigation("QuestionSet");
                 });
 
             modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.PvPMatch", b =>

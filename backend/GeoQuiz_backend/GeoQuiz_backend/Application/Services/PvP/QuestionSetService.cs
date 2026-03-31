@@ -18,7 +18,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
             _questionRepo = questionRepo;
         }
 
-        public async Task<QuestionSet> CreateForMatchAsync(Guid matchId, AppLanguage lang)
+        public async Task<QuestionSet> CreateForMatchAsync(Guid matchId)
         {
             var match = await _db.PvPMatches
                 .Include(m => m.QuestionSet)
@@ -44,14 +44,13 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 Id = Guid.NewGuid(),
                 PvPMatchId = matchId,
                 Mode = match.SelectedMode.Value,
-                Language = lang,
+                Language = AppLanguage.En,
                 Seed = seed,
                 CreatedAt = DateTime.UtcNow,
                 QuestionIds = selected.Select(q => q.Id).ToList()
             };
 
             _db.QuestionSets.Add(questionSet);
-            match.Status = PvPMatchStatus.Ready;
 
             await _db.SaveChangesAsync();
             return questionSet;

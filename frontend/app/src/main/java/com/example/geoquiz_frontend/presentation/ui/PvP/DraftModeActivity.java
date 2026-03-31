@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerResponse;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
@@ -223,7 +224,7 @@ public class DraftModeActivity extends BaseActivity {
                 runOnUiThread(() -> handleGameReady(gameData));
             }
             @Override
-            public void onQuestionResult(QuestionResultData resultData) {
+            public void onQuestionResult(SubmitAnswerResponse resultData) {
             }
             @Override
             public void onTimerUpdate(TimerUpdateData timerData) {
@@ -308,13 +309,13 @@ public class DraftModeActivity extends BaseActivity {
                 Toast.makeText(this, getString(R.string.not_your_turn), Toast.LENGTH_SHORT).show();
                 return;
             }
-            signalRManager.banMode(matchId, mode, getLanguageCode());
+            signalRManager.banMode(matchId, mode, getLanguageCode(), bannedModes.size());
 
-            MaterialCardView card = getCardByMode(mode);
-            if (card != null) {
-                card.setEnabled(false);
-                card.setAlpha(0.5f);
-            }
+//            MaterialCardView card = getCardByMode(mode);
+//            if (card != null) {
+//                card.setEnabled(false);
+//                card.setAlpha(0.5f);
+//            }
 
             Log.d(TAG, "Ban mode sent: " + mode);
         } else {
@@ -385,7 +386,8 @@ public class DraftModeActivity extends BaseActivity {
 
                     timerHandler.postDelayed(this, 1000);
                 } else if (timeLeft == 0 && isPlayerTurn && isDraftActive) {
-                    onPlayerTimeout();
+                    //onPlayerTimeout();
+                    stopTimer();
                 }
             }
         };

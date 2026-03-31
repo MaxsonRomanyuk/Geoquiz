@@ -24,7 +24,7 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class KothSignalRClientManager {
     private static final String TAG = "KothSignalRClient";
-    private static final String HUB_URL = "http://192.168.100.49:5238/kothHub";
+    private static final String HUB_URL = "http://192.168.100.40:5238/kothHub";
 
     private static KothSignalRClientManager instance;
     private HubConnection hubConnection;

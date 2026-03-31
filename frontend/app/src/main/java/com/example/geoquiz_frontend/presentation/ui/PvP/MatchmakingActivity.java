@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerResponse;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
@@ -166,7 +167,7 @@ public class MatchmakingActivity extends BaseActivity {
             public void onGameReady(GameReadyData gameData) {
             }
             @Override
-            public void onQuestionResult(QuestionResultData resultData) {
+            public void onQuestionResult(SubmitAnswerResponse resultData) {
             }
             @Override
             public void onTimerUpdate(TimerUpdateData timerData) {

@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
     private static final String EMULATOR_URL = "http://10.0.2.2:5238/";
 
-    private static final String DEVICE_URL = "http://192.168.100.49:5238/";
+    private static final String DEVICE_URL = "http://192.168.100.40:5238/";
     private static final boolean IS_EMULATOR = false;
 
     private static final String BASE_URL = IS_EMULATOR ? EMULATOR_URL : DEVICE_URL;

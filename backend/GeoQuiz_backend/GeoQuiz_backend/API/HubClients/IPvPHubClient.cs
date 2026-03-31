@@ -9,7 +9,7 @@ namespace GeoQuiz_backend.API.HubClients
 
 
         Task GameReady(GameReadyData gameData);
-        Task QuestionResult(QuestionResultData resultData);
+        Task QuestionResult(SubmitAnswerResponse resultData);
         Task TimerUpdate(TimerUpdateData timerData);
 
 

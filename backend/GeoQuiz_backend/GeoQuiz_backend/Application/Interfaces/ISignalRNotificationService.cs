@@ -11,7 +11,7 @@ namespace GeoQuiz_backend.Application.Interfaces
 
         Task NotifyGameReady(Guid matchId, GameReadyData gameData);
 
-        Task NotifyQuestionResult(Guid userId, QuestionResultData resultData);
+        Task NotifyQuestionResult(Guid userId, SubmitAnswerResponse resultData);
 
         Task NotifyTimerUpdate(Guid matchId, TimerUpdateData timerData);
 

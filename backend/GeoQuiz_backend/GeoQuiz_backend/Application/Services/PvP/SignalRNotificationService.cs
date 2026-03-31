@@ -32,9 +32,10 @@ namespace GeoQuiz_backend.Application.Services.PvP
             await _pvpHub.Clients.Group($"match_{matchId}").GameReady(gameData);
         }
 
-        public async Task NotifyQuestionResult(Guid userId, QuestionResultData resultData)
+        public async Task NotifyQuestionResult(Guid userId, SubmitAnswerResponse resultData)
         {
-            await _pvpHub.Clients.User(userId.ToString()).QuestionResult(resultData);
+            await _pvpHub.Clients.Group($"match_{userId}").QuestionResult(resultData);
+            //await _pvpHub.Clients.User(userId.ToString()).QuestionResult(resultData);
         }
 
         public async Task NotifyTimerUpdate(Guid matchId, TimerUpdateData timerData)

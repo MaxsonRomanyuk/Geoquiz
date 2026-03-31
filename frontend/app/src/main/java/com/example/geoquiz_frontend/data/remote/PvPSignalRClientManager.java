@@ -9,6 +9,7 @@ import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameReadyData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.MatchFoundData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.QuestionResultData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerRequest;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.TimerUpdateData;
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
@@ -20,7 +21,7 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class PvPSignalRClientManager {
     private static final String TAG = "SignalRClientManager";
-    private static final String HUB_URL = "http://192.168.100.49:5238/pvpHub";
+    private static final String HUB_URL = "http://192.168.100.40:5238/pvpHub";
 
     private static PvPSignalRClientManager instance;
     private HubConnection hubConnection;
@@ -39,7 +40,7 @@ public class PvPSignalRClientManager {
         void onMatchFound(MatchFoundData matchData);
         void onDraftUpdated(DraftUpdateData draftData);
         void onGameReady(GameReadyData gameData);
-        void onQuestionResult(QuestionResultData resultData);
+        void onQuestionResult(SubmitAnswerResponse resultData);
         void onTimerUpdate(TimerUpdateData timerData);
         void onGameFinished(GameFinishedData finishData);
         void onOpponentDisconnected(DisconnectData disconnectData);
@@ -96,7 +97,7 @@ public class PvPSignalRClientManager {
         hubConnection.on("QuestionResult", (resultData) -> {
             Log.d(TAG, "QuestionResult received for question " + resultData.getQuestionNumber());
             notifyListeners(listener -> listener.onQuestionResult(resultData));
-        }, QuestionResultData.class);
+        }, SubmitAnswerResponse.class);
 
         hubConnection.on("TimerUpdate", (timerData) -> {
             Log.d(TAG, "TimerUpdate received: " + timerData.getRemainingTimeSeconds() + "s");
@@ -168,7 +169,7 @@ public class PvPSignalRClientManager {
         }
     }
 
-    public void banMode(String matchId, String mode, String language) {
+    public void banMode(String matchId, String mode, String language, int expectedStep) {
         if (hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
             int modeValue = convertModeToInt(mode);
             int langValue = language.equals("ru") ? 0 : 1;
@@ -176,7 +177,7 @@ public class PvPSignalRClientManager {
             Log.d(TAG, "Sending BanMode with params: matchId=" + matchId +
                     ", mode=" + modeValue + ", lang=" + langValue);
 
-            hubConnection.send("BanMode", matchId, modeValue, langValue);
+            hubConnection.send("BanMode", matchId, modeValue, langValue, expectedStep);
             Log.d(TAG, "BanMode sent: " + mode + " for match " + matchId);
         }
     }

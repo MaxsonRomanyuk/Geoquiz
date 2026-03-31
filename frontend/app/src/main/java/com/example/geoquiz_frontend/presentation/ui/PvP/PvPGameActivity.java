@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerResponse;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
@@ -71,6 +72,7 @@ public class PvPGameActivity extends BaseActivity {
 
     private boolean isQuestionActive = true;
     private boolean hasAnswered = false;
+    private boolean allAnswered = false;
     private long questionStartTime;
 
     private Handler timerHandler = new Handler();
@@ -211,7 +213,7 @@ public class PvPGameActivity extends BaseActivity {
             }
 
             @Override
-            public void onQuestionResult(QuestionResultData data) {
+            public void onQuestionResult(SubmitAnswerResponse data) {
                 runOnUiThread(() -> handleQuestionResult(data));
             }
 
@@ -252,7 +254,10 @@ public class PvPGameActivity extends BaseActivity {
         tvQuestionNumber.setText(String.format(Locale.getDefault(),
                 "Question %d/%d", index + 1, totalQuestions));
 
-        tvQuestionTitle.setText(question.getQuestionText());
+        String questionText = preferencesHelper.getLanguage().equals("ru") ?
+                question.getQuestionText().getRu() :
+                question.getQuestionText().getEn();
+        tvQuestionTitle.setText(questionText);
 
         if (question.getImageUrl() != null && !question.getImageUrl().isEmpty()) {
             imageContainer.setVisibility(View.VISIBLE);
@@ -268,12 +273,14 @@ public class PvPGameActivity extends BaseActivity {
             btnPlayAudio.setVisibility(View.GONE);
         }
 
-
+        String lang = preferencesHelper.getLanguage();
         List<OptionData> options = question.getOptions();
         for (int i = 0; i < optionButtons.length && i < options.size(); i++) {
             if (optionButtons[i] != null) {
                 final int ind = i;
-                optionButtons[i].setText(options.get(i).getText());
+                optionButtons[i].setText(lang.equals("ru") ?
+                        options.get(i).getText().getRu() :
+                        options.get(i).getText().getEn());
                 optionButtons[i].setEnabled(true);
                 optionButtons[i].setBackgroundResource(R.drawable.option_button_normal);
                 optionButtons[i].setTextColor(getResources().getColor(android.R.color.black, null));
@@ -286,7 +293,7 @@ public class PvPGameActivity extends BaseActivity {
         hasAnswered = false;
         questionStartTime = SystemClock.elapsedRealtime();
 
-        updateCrown();
+        //updateCrown();
     }
     private void loadImageFromAssets(String imagePath, ImageView imageView) {
         try {
@@ -327,25 +334,32 @@ public class PvPGameActivity extends BaseActivity {
         selectedIndex = slcIndex;
     }
 
-    private void handleQuestionResult(QuestionResultData result) {
-        Log.d(TAG, "Question result: " + (result.getYourResult().isCorrect() ? "CORRECT" : "WRONG"));
+    private void handleQuestionResult(SubmitAnswerResponse result) {
+        if (hasAnswered && !isQuestionActive && !allAnswered) {
+            isQuestionActive = true;
+            hasAnswered = false;
 
-        yourCurrentScore = result.getYourTotalScore();
-        opponentCurrentScore = result.getOpponentTotalScore();
+            yourCurrentScore = result.getYourScore();
+            opponentCurrentScore = result.getOpponentScore();
+            highlightAnswers(result.getCorrectOptionIndex());
+
+            if (result.getQuestionNumber() < 10) {
+                new Handler().postDelayed(() -> {
+                    showQuestion(currentQuestionIndex + 1);
+                }, 1000);
+            }
+            else {
+                allAnswered = true;
+            }
+        }
+        else {
+            yourCurrentScore = result.getOpponentScore();
+            opponentCurrentScore = result.getYourScore();
+        }
 
         tvPlayer1Score.setText(String.valueOf(yourCurrentScore));
         tvPlayer2Score.setText(String.valueOf(opponentCurrentScore));
-
-        highlightAnswers(result.getCorrectOptionIndex());
-
-
         updateCrown();
-
-        if (!result.isLastQuestion()) {
-            new Handler().postDelayed(() -> {
-                showQuestion(currentQuestionIndex + 1);
-            }, 2000);
-        }
     }
 
     private void highlightAnswers(int correctIndex) {

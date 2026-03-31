@@ -5,7 +5,6 @@ import java.util.List;
 public class GameReadyData {
     private String matchId;
     private String selectedMode;
-    private String language;
     private int totalQuestions;
     private int totalGameTimeSeconds;
     private String gameStartTime;
@@ -15,7 +14,6 @@ public class GameReadyData {
 
     public String getMatchId() { return matchId; }
     public String getSelectedMode() { return selectedMode; }
-    public String getLanguage() { return language; }
     public int getTotalQuestions() { return totalQuestions; }
     public int getTotalGameTimeSeconds() { return totalGameTimeSeconds; }
     public String getGameStartTime() { return gameStartTime; }

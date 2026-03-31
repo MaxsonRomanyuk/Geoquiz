@@ -1,5 +1,6 @@
-﻿using GeoQuiz_backend.Domain.Enums;
-using GeoQuiz_backend.Domain.Entities;
+﻿using GeoQuiz_backend.Domain.Entities;
+using GeoQuiz_backend.Domain.Enums;
+using GeoQuiz_backend.Domain.Mongo;
 
 namespace GeoQuiz_backend.Application.DTOs.PvP
 {
@@ -43,7 +44,6 @@ namespace GeoQuiz_backend.Application.DTOs.PvP
     {
         public Guid MatchId { get; set; }
         public GameMode SelectedMode { get; set; }
-        public AppLanguage Language { get; set; }
         public int TotalQuestions { get; set; } = 10;
 
         public int TotalGameTimeSeconds { get; set; } = 60;
@@ -56,9 +56,9 @@ namespace GeoQuiz_backend.Application.DTOs.PvP
     public class QuestionData
     {
         public string QuestionId { get; set; } = null!;
-        public int QuestionNumber { get; set; }
-        public string QuestionText { get; set; } = null!;
+        public LocalizedText QuestionText { get; set; } = null!;
         public List<OptionData> Options { get; set; } = new();
+        public int QuestionNumber { get; set; }
 
         public string? ImageUrl { get; set; }
         public string? AudioUrl { get; set; }
@@ -66,7 +66,7 @@ namespace GeoQuiz_backend.Application.DTOs.PvP
     public class OptionData
     {
         public int Index { get; set; }
-        public string Text { get; set; }
+        public LocalizedText Text { get; set; } = null!;
     }
 
 

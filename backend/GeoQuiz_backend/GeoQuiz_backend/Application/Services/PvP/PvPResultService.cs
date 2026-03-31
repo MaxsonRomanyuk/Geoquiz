@@ -13,19 +13,44 @@ namespace GeoQuiz_backend.Application.Services.PvP
     {
         private readonly AppDbContext _db;
         private readonly IAchievementService _achievementService;
+        private readonly ISignalRNotificationService _notificationService;
 
-        public PvPResultService(AppDbContext db, IAchievementService achievementService)
+        public PvPResultService(AppDbContext db,
+            IAchievementService achievementService,
+            ISignalRNotificationService notificationService)
         {
             _db = db;
             _achievementService = achievementService;
+            _notificationService = notificationService;
         }
 
-        public async Task<PvPMatchResultDto> FinalizeMatchAsync(Guid matchId, GameFinishReason reason, Guid userId)
+        public async Task<PvPMatchResultDto> FinalizeMatchAsync(Guid matchId, GameFinishReason reason, Guid? userId)
         {
             var match = await _db.PvPMatches
                 .Include(m => m.Player1).ThenInclude(u => u.Stats)
                 .Include(m => m.Player2).ThenInclude(u => u.Stats)
                 .FirstAsync(m => m.Id == matchId);
+
+            //if (match.Status == PvPMatchStatus.Finished)
+            //    return new PvPMatchResultDto();
+
+            if (reason == GameFinishReason.OpponentDisconnected && match.Status == PvPMatchStatus.Drafting && userId != null)
+            {
+                var disconnectedPlayer = userId.Value;
+                var playerInDraft = match.Player1Id == disconnectedPlayer ? match.Player2Id : match.Player1Id;
+                await _notificationService.NotifyOpponentDisconnected(playerInDraft, new DisconnectData
+                {
+                    MatchId = matchId,
+                    Reason = DisconnectReason.ConnectionLost,
+                    YouWin = true,
+                    DisconnectedUserId = disconnectedPlayer,
+                    DisconnectedAtQuestion = 0,
+                    YourCurrentScore = 0,
+                    OpponentCurrentScore = 0
+                });
+
+                return new PvPMatchResultDto();
+            }
 
             var answers = await _db.PvPAnswers
                 .Where(a => a.MatchId == matchId)
@@ -33,9 +58,6 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
             var p1Answers = answers.Where(a => a.UserId == match.Player1Id).ToList();
             var p2Answers = answers.Where(a => a.UserId == match.Player2Id).ToList();
-
-            //if (p1Answers.Count < 10 || p2Answers.Count < 10)
-            //    throw new InvalidOperationException("Match not finished");
 
             var p1Score = p1Answers.Sum(a => a.ScoreGained);
             var p2Score = p2Answers.Sum(a => a.ScoreGained);
@@ -70,6 +92,47 @@ namespace GeoQuiz_backend.Application.Services.PvP
             {
                 throw new InvalidOperationException($"Match {matchId} has no game mode");
             }
+
+            var p1Stats = new PlayerFinalStats
+            {
+                UserId = match.Player1Id,
+                FinalScore = p1Score,
+                CorrectAnswers = p1Answers.Count(a => a.IsCorrect),
+                TotalQuestionsAnswered = p1Answers.Count,
+                AverageAnswerTimeMs = p1Answers.Any()
+                        ? (int)p1Answers.Average(a => a.TimeSpentMs)
+                        : 0
+            };
+
+            var p2Stats = new PlayerFinalStats
+            {
+                UserId = match.Player2Id,
+                FinalScore = p2Score,
+                CorrectAnswers = p2Answers.Count(a => a.IsCorrect),
+                TotalQuestionsAnswered = p2Answers.Count,
+                AverageAnswerTimeMs = p2Answers.Any()
+                    ? (int)p2Answers.Average(a => a.TimeSpentMs)
+                    : 0
+            };
+            await _notificationService.NotifyGameFinished(match.Player1Id, new GameFinishedData
+            {
+                MatchId = matchId,
+                WinnerId = winnerId,
+                FinishReason = reason,
+                YourStats = p1Stats,
+                OpponentStats = p2Stats,
+                ExperienceGained = winnerId == match.Player1Id ? p1Score : 0,
+            });
+
+            await _notificationService.NotifyGameFinished(match.Player2Id, new GameFinishedData
+            {
+                MatchId = matchId,
+                WinnerId = winnerId,
+                FinishReason = reason,
+                YourStats = p2Stats,
+                OpponentStats = p1Stats,
+                ExperienceGained = winnerId == match.Player2Id ? p2Score : 0,
+            });
 
             var s1 = CreateSession(match.Player1Id, matchId, p1Answers, p1Score, gameMode);
             var s2 = CreateSession(match.Player2Id, matchId, p2Answers, p2Score, gameMode);

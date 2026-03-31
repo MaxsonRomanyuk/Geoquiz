@@ -1,9 +1,11 @@
 package com.example.geoquiz_frontend.data.remote.dtos.pvp;
 
+import com.example.geoquiz_frontend.domain.enums.LocalizedText;
+
 public class OptionData {
     private int index;
-    private String text;
+    private LocalizedText text;
 
     public int getIndex() { return index; }
-    public String getText() { return text; }
+    public LocalizedText getText() { return text; }
 }

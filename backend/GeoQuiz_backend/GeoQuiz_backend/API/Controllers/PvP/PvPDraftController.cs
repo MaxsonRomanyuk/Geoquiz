@@ -42,18 +42,18 @@ namespace GeoQuiz_backend.API.Controllers.PvP
         }
 
         [HttpPost("{matchId}/ban")]
-        public async Task<IActionResult> BanMode(Guid matchId, [FromQuery] GameMode mode, [FromQuery] AppLanguage lang)
+        public async Task<IActionResult> BanMode(Guid matchId, [FromQuery] GameMode mode, [FromQuery] AppLanguage lang, int expectedStep)
         {
             var userId = Guid.Parse(
                 User.FindFirstValue(ClaimTypes.NameIdentifier)
                 ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub)!
             );
 
-            var draft = await _draftService.BanModeAsync(matchId, userId, mode);
+            var draft = await _draftService.BanModeAsync(matchId, userId, mode, expectedStep);
 
             if (draft.PvPMatch.Status == PvPMatchStatus.Ready)
             {
-                await _questionSetService.CreateForMatchAsync(matchId, lang);
+                await _questionSetService.CreateForMatchAsync(matchId);
             }
 
             var dto = new ModeDraftDto
