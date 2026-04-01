@@ -254,10 +254,6 @@ namespace GeoQuiz_backend.API.Hubs
                 var answerResult = await _gameSessionService.SubmitAnswerAsync(request.MatchId, userId, request);
 
                 await _notificationService.NotifyQuestionResult(request.MatchId, answerResult);
-                //if (yourAnswers.Count >= 10 && opponentAnswers.Count >= 10)
-                //{
-                //    await FinalizeGameAsync(request.MatchId, GameFinishReason.AllQuestionsAnswered);
-                //}
             }
             catch (Exception ex)
             {

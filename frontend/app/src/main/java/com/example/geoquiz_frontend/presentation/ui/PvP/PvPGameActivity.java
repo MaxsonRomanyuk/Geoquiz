@@ -76,7 +76,14 @@ public class PvPGameActivity extends BaseActivity {
     private long questionStartTime;
 
     private Handler timerHandler = new Handler();
-    private int timeLeft = 60;
+    private Runnable timerRunnable;
+    private long serverTime = 0;
+    private long serverTimeOffset = 0;
+    private long turnEndsAtMillis = 0;
+    private boolean isTimerRunning = false;
+
+
+
     private int yourCurrentScore = 0;
     private int opponentCurrentScore = 0;
 
@@ -109,6 +116,10 @@ public class PvPGameActivity extends BaseActivity {
 
         signalRManager = PvPSignalRClientManager.getInstance();
         connectToSignalR();
+
+        if (turnEndsAtMillis > 0) {
+            startTimerWithData(turnEndsAtMillis);
+        }
     }
 
     private void initViews() {
@@ -161,6 +172,8 @@ public class PvPGameActivity extends BaseActivity {
         yourId = preferencesHelper.getUserId();
         yourLvl = intent.getIntExtra("yourLevel", 1);
 
+        serverTimeOffset = intent.getLongExtra("serverTimeOffset", 0);
+        turnEndsAtMillis = intent.getLongExtra("turnEndsAtMillis", 0);
 
         yourTotalScore = yourLvl * 100 + 67; // temp
         opponentTotalScore = opponentLevel * 100 + 67; // temp
@@ -219,7 +232,15 @@ public class PvPGameActivity extends BaseActivity {
 
             @Override
             public void onTimerUpdate(TimerUpdateData data) {
-                runOnUiThread(() -> handleTimerUpdate(data));
+                runOnUiThread(() -> {
+                    long clientTime = System.currentTimeMillis();
+                    serverTime = data.getServerTime();
+                    serverTimeOffset = serverTime - clientTime;
+                    turnEndsAtMillis = data.getTimerEndsAt();
+                    if (isQuestionActive && !hasAnswered && !isTimerRunning && turnEndsAtMillis > 0) {
+                        startTimerWithData(turnEndsAtMillis);
+                    }
+                });
             }
 
             @Override
@@ -242,6 +263,7 @@ public class PvPGameActivity extends BaseActivity {
         this.questions = data.getQuestions();
         this.totalQuestions = data.getTotalQuestions();
         this.totalGameTime = data.getTotalGameTimeSeconds();
+
 
         showQuestion(0);
     }
@@ -293,7 +315,7 @@ public class PvPGameActivity extends BaseActivity {
         hasAnswered = false;
         questionStartTime = SystemClock.elapsedRealtime();
 
-        //updateCrown();
+
     }
     private void loadImageFromAssets(String imagePath, ImageView imageView) {
         try {
@@ -376,18 +398,91 @@ public class PvPGameActivity extends BaseActivity {
         }
     }
 
+    private void startTimerWithData(long endsAt) {
+        if (isTimerRunning) {
+            stopTimer();
+        }
 
-    private void handleTimerUpdate(TimerUpdateData data) {
-        timeLeft = data.getRemainingTimeSeconds();
+        turnEndsAtMillis = endsAt;
+        isTimerRunning = true;
+
+        tvTimer.setVisibility(View.VISIBLE);
+
+        timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+
+                updateTimerDisplay();
+
+                long now = System.currentTimeMillis() + serverTimeOffset;
+                if (turnEndsAtMillis <= now) {
+                    stopTimer();
+                    return;
+                }
+
+                timerHandler.postDelayed(this, 1000);
+            }
+        };
+
+        timerHandler.post(timerRunnable);
+    }
+    private void updateTimerDisplay() {
+        long now = System.currentTimeMillis() + serverTimeOffset;
+        long remainingMs = turnEndsAtMillis - now;
+        int timeLeft = (int) Math.ceil(remainingMs / 1000.0);
 
         int minutes = timeLeft / 60;
         int seconds = timeLeft % 60;
         String timeFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
         tvTimer.setText(timeFormatted);
 
-        if (timeLeft <= 10) {
-            tvTimer.setTextColor(ContextCompat.getColor(this, R.color.colorError));
+        if (remainingMs <= 0) {
+            return;
         }
+
+        if (timeLeft <= 10) {
+            tvTimer.setTextColor(ContextCompat.getColor(PvPGameActivity.this, R.color.colorError));
+        }
+    }
+
+    private void stopTimer() {
+        isTimerRunning = false;
+        timerHandler.removeCallbacks(timerRunnable);
+        tvTimer.setVisibility(View.GONE);
+    }
+    private void handleTimerUpdate(TimerUpdateData data) {
+        long clientTime = System.currentTimeMillis();
+        serverTime = data.getServerTime();
+        serverTimeOffset = serverTime - clientTime;
+        turnEndsAtMillis = data.getTimerEndsAt();
+
+
+//        timerRunnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                long now = System.currentTimeMillis() + serverTimeOffset;
+//                long remainingMs = turnEndsAtMillis - now;
+//
+//                int timeLeft = (int) Math.ceil(remainingMs / 1000.0);
+//                int minutes = timeLeft / 60;
+//                int seconds = timeLeft % 60;
+//
+//                if (remainingMs <= 0) {
+//                    tvTimer.setText("0 s");
+//                    return;
+//                }
+//
+//                String timeFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+//                tvTimer.setText(timeFormatted);
+//
+//                if (timeLeft <= 10) {
+//                    tvTimer.setTextColor(ContextCompat.getColor(PvPGameActivity.this, R.color.colorError));
+//                }
+//
+//                timerHandler.postDelayed(this, 100);
+//
+//            }
+//        };
     }
 
     private void updateCrown() {
@@ -404,6 +499,7 @@ public class PvPGameActivity extends BaseActivity {
     }
 
     private void handleGameFinished(GameFinishedData data) {
+        stopTimer();
         Log.d(TAG, "Game finished! Winner: " + data.getWinnerId());
 
         Intent intent = new Intent(this, PvPResultActivity.class);

@@ -44,7 +44,8 @@ public class MatchmakingActivity extends BaseActivity {
     private Handler timerHandler = new Handler();
     private Runnable timerRunnable;
     private int seconds = 0;
-
+    private long serverTime = 0;
+    private long timerEndsAt = 0;
 
 
     private PvPSignalRClientManager signalRManager;
@@ -171,6 +172,10 @@ public class MatchmakingActivity extends BaseActivity {
             }
             @Override
             public void onTimerUpdate(TimerUpdateData timerData) {
+                runOnUiThread(() -> {
+                    serverTime = timerData.getServerTime();
+                    timerEndsAt = timerData.getTimerEndsAt();
+                });
             }
             @Override
             public void onGameFinished(GameFinishedData finishData) {
@@ -254,6 +259,8 @@ public class MatchmakingActivity extends BaseActivity {
         intent.putExtra("yourId", data.getYourId());
         intent.putExtra("yourLevel", databaseHelper.getUserStats(preferencesHelper.getUserId()).getLevel());
         intent.putExtra("timePerTurn", data.getTimePerTurnSeconds());
+        intent.putExtra("serverTime", serverTime);
+        intent.putExtra("endsAt", timerEndsAt);
 
         intent.putExtra("connectionActive", true);
         startActivity(intent);

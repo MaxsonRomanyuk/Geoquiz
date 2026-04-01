@@ -153,45 +153,66 @@ namespace GeoQuiz_backend.Application.Services.PvP
         public void StartDraftTimer(Guid matchId, int step)
         {
             CancelDraftTimer(matchId);
+            const int COUNTDOWN_SECONDS = 10;
 
             var cts = new CancellationTokenSource();
-            _draftTimers[matchId] = cts;
+            lock (_matchLocks)
+            {
+                _draftTimers[matchId] = cts;
+            }
+
 
             Task.Run(async () =>
             {
                 try
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(10), cts.Token);
-
-                    if (cts.Token.IsCancellationRequested)
-                    {
-                        _logger.LogInformation("Timer cancelled after data load for match {MatchId}", matchId);
-                        return;
-                    }
                     using var scope = _scopeFactory.CreateScope();
-                    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                    var draftService = scope.ServiceProvider.GetRequiredService<IDraftService>();
+                    var notificationService = scope.ServiceProvider.GetRequiredService<ISignalRNotificationService>();
 
-                    var draft = await db.ModeDrafts
-                        .Include(d => d.PvPMatch)
-                        .FirstOrDefaultAsync(d => d.PvPMatchId == matchId, cts.Token);
+                    await notificationService.NotifyTimerUpdate(matchId, new TimerUpdateData
+                    {
+                        ServerTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                        TimerEndsAt = DateTimeOffset.UtcNow.AddSeconds(COUNTDOWN_SECONDS).ToUnixTimeMilliseconds()
+                    });
 
-                    if (draft == null)
-                    {
-                        _logger.LogWarning("Draft not found for match {MatchId}", matchId);
-                        return;
-                    }
-                    if (draft.Step != step)
-                    {
-                        _logger.LogInformation("Timer is outdated for match {MatchId}", matchId);
-                        return;
-                    }
 
-                    if (draft.PvPMatch.Status == PvPMatchStatus.Drafting && draft.AvailableModes.Count > 1)
+                    for (int i = COUNTDOWN_SECONDS; i > 0; i--)
                     {
-                        var currentUser = draft.CurrentTurnUserId;
-                        var modeToBan = draft.AvailableModes.First();
-                        await draftService.BanModeAsync(matchId, currentUser, modeToBan, step);
+                        if (cts.Token.IsCancellationRequested)
+                        {
+                            _logger.LogInformation("Timer cancelled after data load for match {MatchId}", matchId);
+                            return;
+                        }
+
+                        await Task.Delay(1000, cts.Token);
+
+                        if ( i==1 )
+                        {
+                            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                            var draftService = scope.ServiceProvider.GetRequiredService<IDraftService>();
+
+                            var draft = await db.ModeDrafts
+                                .Include(d => d.PvPMatch)
+                                .FirstOrDefaultAsync(d => d.PvPMatchId == matchId, cts.Token);
+
+                            if (draft == null)
+                            {
+                                _logger.LogWarning("Draft not found for match {MatchId}", matchId);
+                                return;
+                            }
+                            if (draft.Step != step)
+                            {
+                                _logger.LogInformation("Timer is outdated for match {MatchId}", matchId);
+                                return;
+                            }
+
+                            if (draft.PvPMatch.Status == PvPMatchStatus.Drafting && draft.AvailableModes.Count > 1)
+                            {
+                                var currentUser = draft.CurrentTurnUserId;
+                                var modeToBan = draft.AvailableModes.First();
+                                await draftService.BanModeAsync(matchId, currentUser, modeToBan, step);
+                            }
+                        }
                     }
                     
                 }

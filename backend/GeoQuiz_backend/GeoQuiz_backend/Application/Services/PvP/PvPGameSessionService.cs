@@ -61,6 +61,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
             if (match.SelectedMode != null)
             {
                 var gameQuestion = await GenerateQuestionsAsync(matchId, (GameMode)match.SelectedMode);
+
                 await _notificationService.NotifyGameReady(matchId, new GameReadyData
                 {
                     MatchId = matchId,
@@ -70,8 +71,8 @@ namespace GeoQuiz_backend.Application.Services.PvP
                     GameStartTime = DateTime.UtcNow,
                     Questions = gameQuestion
                 });
-                _ = Task.Run(() => MonitorGameTimeAsync(matchId));
-            }
+
+                _ = Task.Run(() => MonitorGameTimeAsync(matchId));            }
             else
             {
                 throw new Exception("Game mode not selected");
@@ -159,20 +160,19 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
             try
             {
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var notificationService = scope.ServiceProvider.GetRequiredService<ISignalRNotificationService>();
+                    await notificationService.NotifyTimerUpdate(matchId, new TimerUpdateData
+                    {
+                        ServerTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                        TimerEndsAt = DateTimeOffset.UtcNow.AddSeconds(COUNTDOWN_SECONDS).ToUnixTimeMilliseconds()
+                    });
+                }
+
                 for (int i = COUNTDOWN_SECONDS; i > 0; i--)
                 {
                     if (cts.Token.IsCancellationRequested) return;
-
-                    using (var scope = _serviceScopeFactory.CreateScope())
-                    {
-                        var notificationService = scope.ServiceProvider.GetRequiredService<ISignalRNotificationService>();
-                        await notificationService.NotifyTimerUpdate(matchId, new TimerUpdateData
-                        {
-                            MatchId = matchId,
-                            RemainingTimeSeconds = i,
-                            ServerTime = DateTime.UtcNow
-                        });
-                    }
 
                     await Task.Delay(1000, cts.Token);
 
@@ -188,7 +188,6 @@ namespace GeoQuiz_backend.Application.Services.PvP
                             var scopedDb = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
                             await scopedResultService.FinalizeMatchAsync(matchId, GameFinishReason.TimeOut);
-                            //await FinalizeGameAsync(matchId, GameFinishReason.TimeOut, scopedResultService, scopedDb);
                         }
                         break;
                     }
@@ -197,7 +196,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
             }
             catch (TaskCanceledException)
             {
-                //
+                return;
             }
         }
         public static void CancelMatchTimer(Guid matchId)

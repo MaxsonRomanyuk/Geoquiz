@@ -100,7 +100,7 @@ public class PvPSignalRClientManager {
         }, SubmitAnswerResponse.class);
 
         hubConnection.on("TimerUpdate", (timerData) -> {
-            Log.d(TAG, "TimerUpdate received: " + timerData.getRemainingTimeSeconds() + "s");
+            Log.d(TAG, "Timer end at: " + timerData.getTimerEndsAt() + "s");
             notifyListeners(listener -> listener.onTimerUpdate(timerData));
         }, TimerUpdateData.class);
 

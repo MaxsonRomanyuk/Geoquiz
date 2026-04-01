@@ -32,6 +32,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
 
 public class DraftModeActivity extends BaseActivity {
     private static final String TAG = "DraftModeActivity";
@@ -64,7 +65,11 @@ public class DraftModeActivity extends BaseActivity {
 
     private Handler timerHandler = new Handler();
     private Runnable timerRunnable;
-    private int timeLeft = 10;
+
+    private long serverTime = 0;
+    private long serverTimeOffset = 0;
+    private long turnEndsAtMillis = 0;
+    private boolean isTimerRunning = false;
 
     private String opponentName;
     private int opponentLevel;
@@ -90,6 +95,15 @@ public class DraftModeActivity extends BaseActivity {
         signalRManager = PvPSignalRClientManager.getInstance();
         signalRManager.setCurrentMatch(matchId);
         connectToSignalR();
+        updateTurnStatus();
+
+        if (isPlayerTurn && isDraftActive) {
+            if (turnEndsAtMillis > 0) {
+                startTimerWithData(turnEndsAtMillis);
+            }
+        } else {
+            stopTimer();
+        }
     }
 
     private void initViews() {
@@ -156,6 +170,8 @@ public class DraftModeActivity extends BaseActivity {
         yourId = intent.getStringExtra("yourId");
         yourLvl = intent.getIntExtra("yourLevel", 1);
         timePerTurn = intent.getIntExtra("timePerTurn", 10);
+        serverTime = intent.getLongExtra("serverTime", 0);
+        turnEndsAtMillis = intent.getLongExtra("endsAt", 0);
 
         String[] modesArray = intent.getStringArrayExtra("availableModes");
         if (modesArray != null) {
@@ -182,15 +198,14 @@ public class DraftModeActivity extends BaseActivity {
         tvPlayer2Level.setText(getString(R.string.level_prefix) + " " + level);
     }
     private void connectToSignalR() {
+        if (!signalRManager.isConnected()) {
+            signalRManager.start();
+        }
         signalRManager.addListener(activityId, new PvPSignalRClientManager.ConnectionListener() {
             @Override
             public void onConnected() {
                 runOnUiThread(() -> {
                     Log.d(TAG, "Connected to SignalR for draft");
-                    updateTurnStatus();
-                    if (isPlayerTurn) {
-                        startTimer();
-                    }
                 });
             }
 
@@ -228,6 +243,10 @@ public class DraftModeActivity extends BaseActivity {
             }
             @Override
             public void onTimerUpdate(TimerUpdateData timerData) {
+                long clientTime = System.currentTimeMillis();
+                serverTime = timerData.getServerTime();
+                serverTimeOffset = serverTime - clientTime;
+                turnEndsAtMillis = timerData.getTimerEndsAt();
             }
             @Override
             public void onGameFinished(GameFinishedData finishData) {
@@ -237,15 +256,72 @@ public class DraftModeActivity extends BaseActivity {
                 runOnUiThread(() -> handleOpponentDisconnected(disconnectData));
             }
         });
-
-        if (!signalRManager.isConnected()) {
-            signalRManager.start();
-        } else {
-            updateTurnStatus();
-            if (isPlayerTurn) {
-                startTimer();
-            }
+    }
+    private void startTimerWithData(long endsAt) {
+        if (isTimerRunning) {
+            stopTimer();
         }
+
+        turnEndsAtMillis = endsAt;
+        isTimerRunning = true;
+
+        progressTimer.setVisibility(View.VISIBLE);
+        tvTimer.setVisibility(View.VISIBLE);
+
+        timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (!isPlayerTurn || !isDraftActive) {
+                    stopTimer();
+                    return;
+                }
+
+                updateTimerDisplay();
+
+                long now = System.currentTimeMillis() + serverTimeOffset;
+                if (turnEndsAtMillis <= now) {
+                    stopTimer();
+                    return;
+                }
+
+                timerHandler.postDelayed(this, 1000);
+            }
+        };
+
+        timerHandler.post(timerRunnable);
+    }
+    private void updateTimerDisplay() {
+        long now = System.currentTimeMillis() + serverTimeOffset;
+        long remainingMs = turnEndsAtMillis - now;
+        int timeLeft = (int) Math.ceil(remainingMs / 1000.0);
+
+        if (remainingMs <= 0) {
+            tvTimer.setText("0 s");
+            progressTimer.setProgress(100);
+            return;
+        }
+
+        int progress = (timePerTurn - timeLeft) * 100 / timePerTurn;
+        progressTimer.setProgress(Math.max(0, Math.min(100, progress)));
+        tvTimer.setText(timeLeft + " s");
+
+        if (timeLeft <= 3) {
+            progressTimer.setIndicatorColor(ContextCompat.getColor(
+                    DraftModeActivity.this, R.color.colorError));
+            tvTimer.setTextColor(ContextCompat.getColor(
+                    DraftModeActivity.this, R.color.colorError));
+        } else {
+            progressTimer.setIndicatorColor(getColorFromAttr(R.attr.colorPrimary));
+            tvTimer.setTextColor(getColorFromAttr(R.attr.colorPrimary));
+        }
+    }
+
+    private void stopTimer() {
+        isTimerRunning = false;
+        timerHandler.removeCallbacks(timerRunnable);
+        progressTimer.setVisibility(View.GONE);
+        tvTimer.setVisibility(View.GONE);
+
     }
     private void handleDraftUpdate(DraftUpdateData data) {
         Log.d(TAG, "Draft updated: " + data.getBannedMode() + " banned by " + data.getBannedByUserId());
@@ -267,7 +343,9 @@ public class DraftModeActivity extends BaseActivity {
         updateTurnStatus();
 
         if (isPlayerTurn && isDraftActive) {
-            startTimer();
+            if (turnEndsAtMillis > 0) {
+                startTimerWithData(turnEndsAtMillis);
+            }
         } else {
             stopTimer();
         }
@@ -276,7 +354,6 @@ public class DraftModeActivity extends BaseActivity {
             tvTurnStatus.setText("Draft completed! Starting game...");
             isDraftActive = false;
             stopTimer();
-
         } else if (availableModes.size() == 1) {
             tvTurnStatus.setText("Final mode selected!");
         }
@@ -322,6 +399,51 @@ public class DraftModeActivity extends BaseActivity {
             Toast.makeText(this, getString(R.string.no_server), Toast.LENGTH_SHORT).show();
         }
     }
+    private void handleOpponentDisconnected(DisconnectData data) {
+        Toast.makeText(this, getString(R.string.opponent_disconnected_2), Toast.LENGTH_LONG).show();
+
+        new Handler().postDelayed(() -> {
+            finish();
+        }, 1000);
+    }
+    private void handleGameReady(GameReadyData data) {
+        Log.d(TAG, "Game ready! Mode: " + data.getSelectedMode());
+
+        Gson gson = new Gson();
+        String gameDataJson = gson.toJson(data);
+
+        Intent intent = new Intent(this, PvPGameActivity.class);
+        intent.putExtra("matchId", data.getMatchId());
+        intent.putExtra("opponentName", opponentName);
+        intent.putExtra("opponentLevel", opponentLevel);
+        intent.putExtra("yourLevel", yourLvl);
+        intent.putExtra("serverTimeOffset", serverTimeOffset);
+        intent.putExtra("turnEndsAtMillis", turnEndsAtMillis);
+        intent.putExtra("gameData", gameDataJson);
+        startActivity(intent);
+        finish();
+    }
+
+    private void updateTurnStatus() {
+        String lang = preferencesHelper.getLanguage();
+
+        if (!isDraftActive) {
+            tvTurnStatus.setText("Draft completed");
+            return;
+        }
+
+        if (isPlayerTurn) {
+            tvTurnStatus.setText(getString(R.string.your_turn_ban));
+            tvTurnStatus.setTextColor(getColorFromAttr(R.attr.colorPrimary));
+            tvTimer.setVisibility(View.VISIBLE);
+            progressTurn.setVisibility(View.GONE);
+        } else {
+            tvTurnStatus.setText(getString(R.string.opponent_selecting));
+            tvTurnStatus.setTextColor(getColorFromAttr(R.attr.colorTertiaryFixed));
+            tvTimer.setVisibility(View.GONE);
+            progressTurn.setVisibility(View.VISIBLE);
+        }
+    }
     private String getLanguageCode() {
         return "ru".equals(preferencesHelper.getLanguage()) ? "ru" : "en";
     }
@@ -357,83 +479,7 @@ public class DraftModeActivity extends BaseActivity {
         if (card == cardLanguages) return "languages";
         return "";
     }
-    private void startTimer() {
-        timeLeft = timePerTurn;
-        progressTimer.setProgress(0);
-        progressTimer.setMax(100);
-        progressTimer.setVisibility(View.VISIBLE);
-        tvTimer.setText(timeLeft + "s");
 
-        progressTimer.setIndicatorColor(getColorFromAttr(R.attr.colorPrimary));
-        tvTimer.setTextColor(getColorFromAttr(R.attr.colorPrimary));
-
-        timerRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (timeLeft > 0 && isPlayerTurn && isDraftActive) {
-                    timeLeft--;
-
-                    int progress = (timePerTurn - timeLeft) * 100 / timePerTurn;
-                    progressTimer.setProgress(progress);
-                    tvTimer.setText(timeLeft + "s");
-
-                    if (timeLeft <= 3) {
-                        progressTimer.setIndicatorColor(ContextCompat.getColor(
-                                DraftModeActivity.this, R.color.colorError));
-                        tvTimer.setTextColor(ContextCompat.getColor(
-                                DraftModeActivity.this, R.color.colorError));
-                    }
-
-                    timerHandler.postDelayed(this, 1000);
-                } else if (timeLeft == 0 && isPlayerTurn && isDraftActive) {
-                    //onPlayerTimeout();
-                    stopTimer();
-                }
-            }
-        };
-
-        timerHandler.post(timerRunnable);
-    }
-
-    private void stopTimer() {
-        timerHandler.removeCallbacks(timerRunnable);
-        progressTimer.setVisibility(View.GONE);
-        tvTimer.setVisibility(View.GONE);
-
-    }
-
-    private void onPlayerTimeout() {
-        stopTimer();
-
-        List<MaterialCardView> availableCards = new ArrayList<>();
-        for (MaterialCardView card : modeCards) {
-            if (card.isClickable()) {
-                availableCards.add(card);
-            }
-        }
-
-        if (!availableCards.isEmpty()) {
-            int randomIndex = (int) (Math.random() * availableCards.size());
-            MaterialCardView randomChoice = availableCards.get(randomIndex);
-
-            String modeName;
-            if (randomChoice == cardCapitals) modeName = "capitals";
-            else if (randomChoice == cardFlags) modeName = "flags";
-            else if (randomChoice == cardOutlines) modeName = "outlines";
-            else if (randomChoice == cardLanguages) modeName = "languages";
-            else {
-                modeName = "";
-            }
-
-            sendBanMode(modeName);
-
-            Toast.makeText(this,
-                    "ru".equals(preferencesHelper.getLanguage()) ?
-                            "Время вышло! Режим выбран случайно" :
-                            "Time's up! Mode selected randomly",
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
 
 
     private String getModeName(String mode) {
@@ -451,56 +497,12 @@ public class DraftModeActivity extends BaseActivity {
                 return mode;
         }
     }
-
-    private void updateTurnStatus() {
-        String lang = preferencesHelper.getLanguage();
-
-        if (!isDraftActive) {
-            tvTurnStatus.setText("Draft completed");
-            return;
-        }
-
-        if (isPlayerTurn) {
-            tvTurnStatus.setText(getString(R.string.your_turn_ban));
-            tvTurnStatus.setTextColor(getColorFromAttr(R.attr.colorPrimary));
-            tvTimer.setVisibility(View.VISIBLE);
-            progressTurn.setVisibility(View.GONE);
-        } else {
-            tvTurnStatus.setText(getString(R.string.opponent_selecting));
-            tvTurnStatus.setTextColor(getColorFromAttr(R.attr.colorTertiaryFixed));
-            tvTimer.setVisibility(View.GONE);
-            progressTurn.setVisibility(View.VISIBLE);
-        }
-    }
-
     private int getColorFromAttr(int attrResId) {
         TypedValue typedValue = new TypedValue();
         if (getTheme().resolveAttribute(attrResId, typedValue, true)) {
             return typedValue.data;
         }
         return ContextCompat.getColor(this, R.color.primary);
-    }
-    private void handleOpponentDisconnected(DisconnectData data) {
-        Toast.makeText(this, getString(R.string.opponent_disconnected_2), Toast.LENGTH_LONG).show();
-
-        new Handler().postDelayed(() -> {
-            finish();
-        }, 2000);
-    }
-    private void handleGameReady(GameReadyData data) {
-        Log.d(TAG, "Game ready! Mode: " + data.getSelectedMode());
-
-        Gson gson = new Gson();
-        String gameDataJson = gson.toJson(data);
-
-        Intent intent = new Intent(this, PvPGameActivity.class);
-        intent.putExtra("matchId", data.getMatchId());
-        intent.putExtra("opponentName", opponentName);
-        intent.putExtra("opponentLevel", opponentLevel);
-        intent.putExtra("yourLevel", yourLvl);
-        intent.putExtra("gameData", gameDataJson);
-        startActivity(intent);
-        finish();
     }
 
     @Override

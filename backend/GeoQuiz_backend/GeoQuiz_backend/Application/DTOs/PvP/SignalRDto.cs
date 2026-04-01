@@ -100,9 +100,12 @@ namespace GeoQuiz_backend.Application.DTOs.PvP
 
     public class TimerUpdateData
     {
-        public Guid MatchId { get; set; }
-        public int RemainingTimeSeconds { get; set; }
-        public DateTime ServerTime { get; set; } 
+        //public Guid MatchId { get; set; }
+        //public int RemainingTimeSeconds { get; set; }
+        //public DateTime ServerTime { get; set; }
+        //public DateTime TimerEndsAt { get; set; }
+        public long ServerTime { get; set; }
+        public long TimerEndsAt { get; set; }
     }
 
 
