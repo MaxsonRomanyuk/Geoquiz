@@ -170,33 +170,29 @@ namespace GeoQuiz_backend.Application.Services.PvP
                     });
                 }
 
-                for (int i = COUNTDOWN_SECONDS; i > 0; i--)
-                {
-                    if (cts.Token.IsCancellationRequested) return;
-
-                    await Task.Delay(1000, cts.Token);
-
-                    if (i == 1)
-                    {
-                        lock (_matchLock)
-                        {
-                            CancelMatchTimer(matchId);
-                        }
-                        using (var scope = _serviceScopeFactory.CreateScope())
-                        {
-                            var scopedResultService = scope.ServiceProvider.GetRequiredService<IPvPResultService>();
-                            var scopedDb = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-                            await scopedResultService.FinalizeMatchAsync(matchId, GameFinishReason.TimeOut);
-                        }
-                        break;
-                    }
+                await Task.Delay(TimeSpan.FromSeconds(COUNTDOWN_SECONDS), cts.Token);
+                
+                if (cts.Token.IsCancellationRequested) return;
                     
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var scopedResultService = scope.ServiceProvider.GetRequiredService<IPvPResultService>();
+                    var scopedDb = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+                    await scopedResultService.FinalizeMatchAsync(matchId, GameFinishReason.TimeOut);
                 }
             }
             catch (TaskCanceledException)
             {
                 return;
+            }
+            finally
+            {
+                lock (_matchLock)
+                {
+                    _gameTimers.TryRemove(matchId, out _);
+                }
+                cts.Dispose();
             }
         }
         public static void CancelMatchTimer(Guid matchId)
@@ -333,23 +329,6 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 YourAnswered = yourAnswers.Count(),
                 OpponentAnswered = opponentAnswers.Count()
             };
-        }
-
-        public async Task FinishAsync(Guid matchId, Guid userId)
-        {
-            //var match = await _db.PvPMatches.FirstAsync(m => m.Id == matchId);
-
-            //var answers = await _db.PvPAnswers
-            //    .Where(a => a.MatchId == matchId)
-            //    .ToListAsync();
-
-            //var p1 = answers.Count(a => a.UserId == match.Player1Id);
-            //var p2 = answers.Count(a => a.UserId == match.Player2Id);
-
-            //if (p1 >= 10 && p2 >= 10)
-            //{
-            //    await _resultService.FinalizeMatchAsync(matchId);
-            //}
         }
         private LocalizedText GetLocalizedTextForCountry(Country country, GameMode mode)
         {

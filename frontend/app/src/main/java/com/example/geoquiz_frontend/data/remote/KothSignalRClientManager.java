@@ -224,7 +224,7 @@ public class KothSignalRClientManager {
             SubmitAnswerRequest request = new SubmitAnswerRequest(
                     matchId, roundNumber, questionId, selectedOptionIndex, timeSpentMs
             );
-            hubConnection.send("SumbitAnswer", request);
+            hubConnection.send("SubmitAnswer", request);
             Log.d(TAG, "SubmitAnswer sent for round " + roundNumber);
         }
     }

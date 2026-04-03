@@ -54,7 +54,7 @@ namespace GeoQuiz_backend.API.Controllers.PvP
                 User.FindFirstValue(ClaimTypes.NameIdentifier)
                 ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub)!
             );
-            await _service.FinishAsync(matchId, userId);
+            //
             return Ok();
         }
     }

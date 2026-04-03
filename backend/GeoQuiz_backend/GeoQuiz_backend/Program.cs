@@ -3,7 +3,6 @@ using GeoQuiz_backend.Application.Services;
 using GeoQuiz_backend.Application.Services.KingOfTheHill;
 using GeoQuiz_backend.Application.Services.PvP;
 using GeoQuiz_backend.API.Hubs;
-using GeoQuiz_backend.Application.Services.PvP;
 using GeoQuiz_backend.Infrastructure.Persistence.Mongo;
 using GeoQuiz_backend.Infrastructure.Persistence.Mongo.Repositories;
 using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
@@ -108,6 +107,9 @@ builder.Services.AddScoped<IPvPResultService, PvPResultService>();
 
 //KingOfTheHill
 builder.Services.AddScoped<IKothMatchmakingService, KothMatchmakingService>();
+builder.Services.AddScoped<IKothGameServiceMain, KothGameServiceMain>();
+builder.Services.AddScoped<IKothRoundService, KothRoundService>();
+builder.Services.AddScoped<IKothResultService, KothResultService>();
 builder.Services.AddScoped<IKothGameService, KothGameService>();
 
 

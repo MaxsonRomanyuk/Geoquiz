@@ -127,15 +127,22 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
                 if (shouldStartImmediately && playersToStart != null)
                 {
-                    _ = Task.Run(async () =>
+                    //_ = Task.Run(async () =>
+                    //{
+                    //    using (var scope = _serviceScopeFactory.CreateScope())
+                    //    {
+                    //        var gameService = scope.ServiceProvider.GetRequiredService<IKothGameServiceMain>();
+                    //        var playersInfo = playersToStart.Select(p => PlayerInfo.FromPlayerLobby(p)).ToList();
+                    //        await gameService.StartMatchFromLobbyAsync(playersInfo, lobbyId);
+                    //    }
+                    //});
+                    using (var scope = _serviceScopeFactory.CreateScope())
                     {
-                        using (var scope = _serviceScopeFactory.CreateScope())
-                        {
-                            var gameService = scope.ServiceProvider.GetRequiredService<IKothGameService>();
-                            var playersInfo = playersToStart.Select(p => PlayerInfo.FromPlayerLobby(p)).ToList();
-                            await gameService.StartMatchFromLobbyAsync(playersInfo, lobbyId);
-                        }
-                    });
+                        var gameService = scope.ServiceProvider.GetRequiredService<IKothGameServiceMain>();
+                        var playersInfo = playersToStart.Select(p => PlayerInfo.FromPlayerLobby(p)).ToList();
+                        await gameService.StartMatchFromLobbyAsync(playersInfo, lobbyId);
+                    }
+                    return;
                 }
                 else if (shouldStartTimer)
                 {
@@ -201,7 +208,8 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
             if (shouldCancelTimer && lobbyId.HasValue)
             {
-                _ = Task.Run(async () => await CancelLobbyTimerAsync(lobbyId.Value));
+                //_ = Task.Run(async () => await CancelLobbyTimerAsync(lobbyId.Value));
+                await CancelLobbyTimerAsync(lobbyId.Value);
             }
         }
 
@@ -265,7 +273,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
                         using (var scope = _serviceScopeFactory.CreateScope())
                         {
-                            var gameService = scope.ServiceProvider.GetRequiredService<IKothGameService>();
+                            var gameService = scope.ServiceProvider.GetRequiredService<IKothGameServiceMain>();
                             var playersInfo = playersToStart.Select(p => PlayerInfo.FromPlayerLobby(p)).ToList();
                             await gameService.StartMatchFromLobbyAsync(playersInfo, lobbyId);
                         }

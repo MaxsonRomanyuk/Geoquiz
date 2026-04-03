@@ -14,7 +14,7 @@ namespace GeoQuiz_backend.API.Hubs
     public class KothHub : Hub<IKothHubClient>
     {
         private readonly IKothMatchmakingService _matchmaking;
-        private readonly IKothGameService _gameService;
+        private readonly IKothGameServiceMain _gameService;
         private readonly ISignalRNotificationService _notificationService;
         private readonly ILogger<KothHub> _logger;
 
@@ -24,7 +24,7 @@ namespace GeoQuiz_backend.API.Hubs
 
         public KothHub(
             IKothMatchmakingService matchmaking,
-            IKothGameService gameService,
+            IKothGameServiceMain gameService,
             ISignalRNotificationService notificationService,
             ILogger<KothHub> logger)
         {
@@ -164,7 +164,7 @@ namespace GeoQuiz_backend.API.Hubs
             _userCurrentLobby.TryRemove(userId, out _);
         }
 
-        public async Task SumbitAnswer(SubmitAnswerRequest request)
+        public async Task SubmitAnswer(SubmitAnswerRequest request)
         {
             var userId = GetUserId();
             _logger.LogInformation("User {UserId} submitting answer for round {RoundNumber} in match {MatchId}", userId, request.RoundNumber, request.MatchId);

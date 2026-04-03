@@ -78,6 +78,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
             try
             {
                 CancelDraftTimer(matchId);
+
                 var draft = await _db.ModeDrafts
                     .Include(d => d.PvPMatch)
                     .FirstAsync(d => d.PvPMatchId == matchId);
@@ -175,46 +176,38 @@ namespace GeoQuiz_backend.Application.Services.PvP
                         TimerEndsAt = DateTimeOffset.UtcNow.AddSeconds(COUNTDOWN_SECONDS).ToUnixTimeMilliseconds()
                     });
 
+                    await Task.Delay(COUNTDOWN_SECONDS, cts.Token);
 
-                    for (int i = COUNTDOWN_SECONDS; i > 0; i--)
+                    if (cts.Token.IsCancellationRequested)
                     {
-                        if (cts.Token.IsCancellationRequested)
-                        {
-                            _logger.LogInformation("Timer cancelled after data load for match {MatchId}", matchId);
-                            return;
-                        }
-
-                        await Task.Delay(1000, cts.Token);
-
-                        if ( i==1 )
-                        {
-                            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                            var draftService = scope.ServiceProvider.GetRequiredService<IDraftService>();
-
-                            var draft = await db.ModeDrafts
-                                .Include(d => d.PvPMatch)
-                                .FirstOrDefaultAsync(d => d.PvPMatchId == matchId, cts.Token);
-
-                            if (draft == null)
-                            {
-                                _logger.LogWarning("Draft not found for match {MatchId}", matchId);
-                                return;
-                            }
-                            if (draft.Step != step)
-                            {
-                                _logger.LogInformation("Timer is outdated for match {MatchId}", matchId);
-                                return;
-                            }
-
-                            if (draft.PvPMatch.Status == PvPMatchStatus.Drafting && draft.AvailableModes.Count > 1)
-                            {
-                                var currentUser = draft.CurrentTurnUserId;
-                                var modeToBan = draft.AvailableModes.First();
-                                await draftService.BanModeAsync(matchId, currentUser, modeToBan, step);
-                            }
-                        }
+                        _logger.LogInformation("Timer cancelled after data load for match {MatchId}", matchId);
+                        return;
                     }
-                    
+
+                    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    var draftService = scope.ServiceProvider.GetRequiredService<IDraftService>();
+
+                    var draft = await db.ModeDrafts
+                        .Include(d => d.PvPMatch)
+                        .FirstOrDefaultAsync(d => d.PvPMatchId == matchId, cts.Token);
+
+                    if (draft == null)
+                    {
+                        _logger.LogWarning("Draft not found for match {MatchId}", matchId);
+                        return;
+                    }
+                    if (draft.Step != step)
+                    {
+                        _logger.LogInformation("Timer is outdated for match {MatchId}", matchId);
+                        return;
+                    }
+
+                    if (draft.PvPMatch.Status == PvPMatchStatus.Drafting && draft.AvailableModes.Count > 1)
+                    {
+                        var currentUser = draft.CurrentTurnUserId;
+                        var modeToBan = draft.AvailableModes.First();
+                        await draftService.BanModeAsync(matchId, currentUser, modeToBan, step);
+                    }
                 }
                 catch (OperationCanceledException)
                 {
@@ -226,7 +219,11 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 }
                 finally
                 {
-                    _draftTimers.TryRemove(matchId, out _);
+                    lock (_matchLocks)
+                    {
+                        _draftTimers.TryRemove(matchId, out _);
+                    }
+                    cts.Dispose();
                 }
             }, cts.Token);
         }
