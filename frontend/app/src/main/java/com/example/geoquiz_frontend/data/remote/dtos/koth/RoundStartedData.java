@@ -14,16 +14,15 @@ public class RoundStartedData {
     @SerializedName("question")
     private QuestionData question;
 
-    @SerializedName("roundStartTime")
-    private String roundStartTime;
-
-    @SerializedName("timeLimitSeconds")
-    private int timeLimitSeconds;
+    @SerializedName("serverTime")
+    private long serverTime;
+    @SerializedName("roundEndAt")
+    private long roundEndAt;
 
     public int getRoundNumber() { return roundNumber; }
     public int getRoundTypeValue() { return roundType; }
     public RoundType getRoundType() { return RoundType.fromValue(roundType); }
     public QuestionData getQuestion() { return question; }
-    public String getRoundStartTime() { return roundStartTime; }
-    public int getTimeLimitSeconds() { return timeLimitSeconds; }
+    public long getServerTime() { return serverTime; }
+    public long getRoundEndAt() { return roundEndAt; }
 }

@@ -26,7 +26,6 @@ import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameReadyData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.MatchFoundData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.OptionData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.QuestionData;
-import com.example.geoquiz_frontend.data.remote.dtos.pvp.QuestionResultData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.TimerUpdateData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.UnlockedAchievement;
 import com.google.gson.Gson;
@@ -116,10 +115,7 @@ public class PvPGameActivity extends BaseActivity {
 
         signalRManager = PvPSignalRClientManager.getInstance();
         connectToSignalR();
-
-        if (turnEndsAtMillis > 0) {
-            startTimerWithData(turnEndsAtMillis);
-        }
+        sendReadyForGame(matchId);
     }
 
     private void initViews() {
@@ -172,8 +168,8 @@ public class PvPGameActivity extends BaseActivity {
         yourId = preferencesHelper.getUserId();
         yourLvl = intent.getIntExtra("yourLevel", 1);
 
-        serverTimeOffset = intent.getLongExtra("serverTimeOffset", 0);
-        turnEndsAtMillis = intent.getLongExtra("turnEndsAtMillis", 0);
+        //serverTimeOffset = intent.getLongExtra("serverTimeOffset", 0);
+        //turnEndsAtMillis = intent.getLongExtra("turnEndsAtMillis", 0);
 
         yourTotalScore = yourLvl * 100 + 67; // temp
         opponentTotalScore = opponentLevel * 100 + 67; // temp
@@ -192,10 +188,15 @@ public class PvPGameActivity extends BaseActivity {
     }
 
     private void connectToSignalR() {
+        if (!signalRManager.isConnected()) {
+            signalRManager.start();
+        }
         signalRManager.addListener(activityId, new PvPSignalRClientManager.ConnectionListener() {
             @Override
             public void onConnected() {
-                Log.d(TAG, "Connected to SignalR for game");
+                runOnUiThread(() -> {
+                    Log.d(TAG, "SignalR connected, now sending readyForGame");
+                });
             }
 
             @Override
@@ -233,13 +234,7 @@ public class PvPGameActivity extends BaseActivity {
             @Override
             public void onTimerUpdate(TimerUpdateData data) {
                 runOnUiThread(() -> {
-                    long clientTime = System.currentTimeMillis();
-                    serverTime = data.getServerTime();
-                    serverTimeOffset = serverTime - clientTime;
-                    turnEndsAtMillis = data.getTimerEndsAt();
-                    if (isQuestionActive && !hasAnswered && !isTimerRunning && turnEndsAtMillis > 0) {
-                        startTimerWithData(turnEndsAtMillis);
-                    }
+                    handleTimerUpdate(data);
                 });
             }
 
@@ -253,10 +248,14 @@ public class PvPGameActivity extends BaseActivity {
                 runOnUiThread(() -> handleOpponentDisconnected(data));
             }
         });
-
-        signalRManager.start();
     }
-
+    private void sendReadyForGame(String matchId)
+    {
+        if (signalRManager != null && signalRManager.isConnected()) {
+            signalRManager.playerReadyForGame(matchId);
+            Toast.makeText(this, "EZ", Toast.LENGTH_SHORT).show();
+        }
+    }
     private void handleGameReady(GameReadyData data) {
         Log.d(TAG, "Game ready! Mode: " + data.getSelectedMode());
 
@@ -267,7 +266,15 @@ public class PvPGameActivity extends BaseActivity {
 
         showQuestion(0);
     }
-
+    private void handleTimerUpdate(TimerUpdateData timerData) {
+        long clientTime = System.currentTimeMillis();
+        serverTime = timerData.getServerTime();
+        serverTimeOffset = serverTime - clientTime;
+        turnEndsAtMillis = timerData.getTimerEndsAt();
+        if (!isTimerRunning && turnEndsAtMillis > 0) {
+            startTimerWithData();
+        }
+    }
     private void showQuestion(int index) {
         if (questions == null || index >= questions.size()) return;
 
@@ -398,12 +405,10 @@ public class PvPGameActivity extends BaseActivity {
         }
     }
 
-    private void startTimerWithData(long endsAt) {
+    private void startTimerWithData() {
         if (isTimerRunning) {
             stopTimer();
         }
-
-        turnEndsAtMillis = endsAt;
         isTimerRunning = true;
 
         tvTimer.setVisibility(View.VISIBLE);
@@ -450,40 +455,7 @@ public class PvPGameActivity extends BaseActivity {
         timerHandler.removeCallbacks(timerRunnable);
         tvTimer.setVisibility(View.GONE);
     }
-    private void handleTimerUpdate(TimerUpdateData data) {
-        long clientTime = System.currentTimeMillis();
-        serverTime = data.getServerTime();
-        serverTimeOffset = serverTime - clientTime;
-        turnEndsAtMillis = data.getTimerEndsAt();
 
-
-//        timerRunnable = new Runnable() {
-//            @Override
-//            public void run() {
-//                long now = System.currentTimeMillis() + serverTimeOffset;
-//                long remainingMs = turnEndsAtMillis - now;
-//
-//                int timeLeft = (int) Math.ceil(remainingMs / 1000.0);
-//                int minutes = timeLeft / 60;
-//                int seconds = timeLeft % 60;
-//
-//                if (remainingMs <= 0) {
-//                    tvTimer.setText("0 s");
-//                    return;
-//                }
-//
-//                String timeFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
-//                tvTimer.setText(timeFormatted);
-//
-//                if (timeLeft <= 10) {
-//                    tvTimer.setTextColor(ContextCompat.getColor(PvPGameActivity.this, R.color.colorError));
-//                }
-//
-//                timerHandler.postDelayed(this, 100);
-//
-//            }
-//        };
-    }
 
     private void updateCrown() {
         if (yourCurrentScore > opponentCurrentScore) {

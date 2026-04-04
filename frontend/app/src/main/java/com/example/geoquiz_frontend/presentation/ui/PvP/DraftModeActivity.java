@@ -23,7 +23,6 @@ import com.example.geoquiz_frontend.data.remote.dtos.pvp.DraftUpdateData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameFinishedData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameReadyData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.MatchFoundData;
-import com.example.geoquiz_frontend.data.remote.dtos.pvp.QuestionResultData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.TimerUpdateData;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -32,7 +31,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
 
 public class DraftModeActivity extends BaseActivity {
     private static final String TAG = "DraftModeActivity";
@@ -95,15 +93,16 @@ public class DraftModeActivity extends BaseActivity {
         signalRManager = PvPSignalRClientManager.getInstance();
         signalRManager.setCurrentMatch(matchId);
         connectToSignalR();
+        sendReadyForDraft(matchId);
         updateTurnStatus();
 
-        if (isPlayerTurn && isDraftActive) {
-            if (turnEndsAtMillis > 0) {
-                startTimerWithData(turnEndsAtMillis);
-            }
-        } else {
-            stopTimer();
-        }
+//        if (isPlayerTurn && isDraftActive) {
+//            if (turnEndsAtMillis > 0) {
+//                startTimerWithData(turnEndsAtMillis);
+//            }
+//        } else {
+//            stopTimer();
+//        }
     }
 
     private void initViews() {
@@ -170,8 +169,9 @@ public class DraftModeActivity extends BaseActivity {
         yourId = intent.getStringExtra("yourId");
         yourLvl = intent.getIntExtra("yourLevel", 1);
         timePerTurn = intent.getIntExtra("timePerTurn", 10);
-        serverTime = intent.getLongExtra("serverTime", 0);
-        turnEndsAtMillis = intent.getLongExtra("endsAt", 0);
+
+//        serverTime = intent.getLongExtra("serverTime", 0);
+//        turnEndsAtMillis = intent.getLongExtra("endsAt", 0);
 
         String[] modesArray = intent.getStringArrayExtra("availableModes");
         if (modesArray != null) {
@@ -243,10 +243,7 @@ public class DraftModeActivity extends BaseActivity {
             }
             @Override
             public void onTimerUpdate(TimerUpdateData timerData) {
-                long clientTime = System.currentTimeMillis();
-                serverTime = timerData.getServerTime();
-                serverTimeOffset = serverTime - clientTime;
-                turnEndsAtMillis = timerData.getTimerEndsAt();
+                runOnUiThread(() -> handleTimerUpdate(timerData));
             }
             @Override
             public void onGameFinished(GameFinishedData finishData) {
@@ -257,12 +254,24 @@ public class DraftModeActivity extends BaseActivity {
             }
         });
     }
-    private void startTimerWithData(long endsAt) {
+    private void handleTimerUpdate(TimerUpdateData timerData) {
+        long clientTime = System.currentTimeMillis();
+        serverTime = timerData.getServerTime();
+        serverTimeOffset = serverTime - clientTime;
+        turnEndsAtMillis = timerData.getTimerEndsAt();
+
+        Log.d(TAG, "onTimerUpdate: endsAt=" + turnEndsAtMillis + ", offset=" + serverTimeOffset);
+
+        if (isPlayerTurn && isDraftActive && !isTimerRunning && turnEndsAtMillis > 0) {
+            Log.d(TAG, "Starting timer from onTimerUpdate");
+            startTimerWithData();
+        }
+    }
+    private void startTimerWithData() {
         if (isTimerRunning) {
             stopTimer();
         }
 
-        turnEndsAtMillis = endsAt;
         isTimerRunning = true;
 
         progressTimer.setVisibility(View.VISIBLE);
@@ -342,13 +351,13 @@ public class DraftModeActivity extends BaseActivity {
 
         updateTurnStatus();
 
-        if (isPlayerTurn && isDraftActive) {
-            if (turnEndsAtMillis > 0) {
-                startTimerWithData(turnEndsAtMillis);
-            }
-        } else {
-            stopTimer();
-        }
+//        if (isPlayerTurn && isDraftActive) {
+//            if (turnEndsAtMillis > 0) {
+//                startTimerWithData(turnEndsAtMillis);
+//            }
+//        } else {
+//            stopTimer();
+//        }
 
         if (data.isDraftCompleted()) {
             tvTurnStatus.setText("Draft completed! Starting game...");
@@ -374,6 +383,12 @@ public class DraftModeActivity extends BaseActivity {
                 message = getString(R.string.opponent_banned) + getModeName(mode);
             }
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void sendReadyForDraft(String matchId)
+    {
+        if (signalRManager != null && signalRManager.isConnected()) {
+            signalRManager.playerReadyForDraft(matchId);
         }
     }
     private void sendBanMode(String mode) {
@@ -417,9 +432,11 @@ public class DraftModeActivity extends BaseActivity {
         intent.putExtra("opponentName", opponentName);
         intent.putExtra("opponentLevel", opponentLevel);
         intent.putExtra("yourLevel", yourLvl);
-        intent.putExtra("serverTimeOffset", serverTimeOffset);
-        intent.putExtra("turnEndsAtMillis", turnEndsAtMillis);
         intent.putExtra("gameData", gameDataJson);
+
+//        new Handler().postDelayed(() -> {
+//            startActivity(intent);
+//        }, 5000);
         startActivity(intent);
         finish();
     }

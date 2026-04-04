@@ -29,6 +29,8 @@ namespace GeoQuiz_backend.API.Hubs
 
         private static readonly ConcurrentDictionary<Guid, string> _userConnections = new();
         private static readonly ConcurrentDictionary<Guid, Guid> _userCurrentMatch = new();
+        private static readonly ConcurrentDictionary<Guid, MatchState> _activeMatches = new();
+
         private class GameTimer
         {
             public DateTime StartTime { get; set; }
@@ -87,7 +89,7 @@ namespace GeoQuiz_backend.API.Hubs
                     await Groups.RemoveFromGroupAsync(connectionId, $"match_{matchId}");
                     DraftService.CancelDraftTimer(matchId);
                     PvPGameSessionService.CancelMatchTimer(matchId);
-                    _logger.LogInformation("User {UserId} removed from group match_{MatchId}", userId, matchId);
+                    _logger.LogError("User {UserId} removed from group match_{MatchId}", userId, matchId);
 
                     using (var scope = _serviceScopeFactory.CreateScope())
                     {
@@ -97,6 +99,7 @@ namespace GeoQuiz_backend.API.Hubs
                         await scopedResultService.FinalizeMatchAsync(matchId, GameFinishReason.OpponentDisconnected, userId);
                     }
                 }
+                _activeMatches.TryRemove(userId, out var _);
             }
 
             await _matchmaking.LeaveQueueAsync(userId);
@@ -132,6 +135,14 @@ namespace GeoQuiz_backend.API.Hubs
 
                 _userCurrentMatch[match.Player1Id] = match.Id;
                 _userCurrentMatch[match.Player2Id] = match.Id;
+                _activeMatches[match.Id] = new MatchState
+                {
+                    Match = match,
+                    Player1ReadyForDraft = false,
+                    Player2ReadyForDraft = false,
+                    Player1ReadyForGame = false,
+                    Player2ReadyForGame = false
+                };
 
                 if (_userConnections.TryGetValue(match.Player1Id, out var conn1))
                 {
@@ -153,7 +164,7 @@ namespace GeoQuiz_backend.API.Hubs
                     _logger.LogWarning("Player2 {UserId} not connected when adding to group", match.Player2Id);
                 }
 
-                _draftService.StartDraftTimer(match.Id, 0);
+                //_draftService.StartDraftTimer(match.Id, 0, true);
             }
             catch (Exception ex)
             {
@@ -210,7 +221,25 @@ namespace GeoQuiz_backend.API.Hubs
             await _notificationService.NotifyMatchFound(player1.Id, player1Data);
             await _notificationService.NotifyMatchFound(player2.Id, player2Data);
         }
-        
+        public async Task PlayerReadyForDraft(Guid matchId)
+        {
+            var userId = GetUserId();
+            if (!_activeMatches.TryGetValue(matchId, out var matchState))
+            {
+                _logger.LogWarning("Match {MatchId} not found in active matches for user {UserId}", matchId, userId);
+                return;
+            }
+
+            if (matchState.Match.Player1Id == userId)
+                matchState.Player1ReadyForDraft = true;
+            else if (matchState.Match.Player2Id == userId)
+                matchState.Player2ReadyForDraft = true;
+
+            if (matchState.Player1ReadyForDraft && matchState.Player2ReadyForDraft)
+            {
+                _draftService.StartDraftTimer(matchId, 0);
+            }
+        }
         public async Task LeaveMatch(Guid matchId)
         {
             var userId = GetUserId();
@@ -242,11 +271,30 @@ namespace GeoQuiz_backend.API.Hubs
             }
         }
 
+        public async Task PlayerReadyForGame(Guid matchId)
+        {
+            var userId = GetUserId();
+            if (!_activeMatches.TryGetValue(matchId, out var matchState))
+            {
+                _logger.LogWarning("Match {MatchId} not found in active matches for user {UserId}", matchId, userId);
+                return;
+            }
+
+            if (matchState.Match.Player1Id == userId)
+                matchState.Player1ReadyForGame = true;
+            else if (matchState.Match.Player2Id == userId)
+                matchState.Player2ReadyForGame = true;
+
+            if (matchState.Player1ReadyForGame && matchState.Player2ReadyForGame)
+            {
+                _ = Task.Run(() => _gameSessionService.MonitorGameTimeAsync(matchId));
+            }
+        }
 
         public async Task SubmitAnswer(SubmitAnswerRequest request) 
         {
             var userId = GetUserId();
-            _logger.LogInformation("User {UserId} submitting answer for question {QuestionNumber} in match {MatchId}",
+            _logger.LogError("User {UserId} submitting answer for question {QuestionNumber} in match {MatchId}",
                 userId, request.QuestionNumber, request.MatchId);
 
             try
@@ -261,5 +309,14 @@ namespace GeoQuiz_backend.API.Hubs
                 throw new HubException(ex.Message);
             }
         }
+    }
+
+    public class MatchState
+    {
+        public PvPMatch Match {  get; set; }
+        public bool Player1ReadyForDraft { get; set; }
+        public bool Player2ReadyForDraft { get; set; }
+        public bool Player1ReadyForGame { get; set; }
+        public bool Player2ReadyForGame { get; set; }
     }
 }

@@ -22,7 +22,6 @@ import com.example.geoquiz_frontend.data.remote.dtos.pvp.DraftUpdateData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameFinishedData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameReadyData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.MatchFoundData;
-import com.example.geoquiz_frontend.data.remote.dtos.pvp.QuestionResultData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.TimerUpdateData;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
 import com.google.android.material.button.MaterialButton;
@@ -259,8 +258,10 @@ public class MatchmakingActivity extends BaseActivity {
         intent.putExtra("yourId", data.getYourId());
         intent.putExtra("yourLevel", databaseHelper.getUserStats(preferencesHelper.getUserId()).getLevel());
         intent.putExtra("timePerTurn", data.getTimePerTurnSeconds());
-        intent.putExtra("serverTime", serverTime);
-        intent.putExtra("endsAt", timerEndsAt);
+
+
+        //intent.putExtra("serverTime", serverTime);
+        //intent.putExtra("endsAt", timerEndsAt);
 
         intent.putExtra("connectionActive", true);
         startActivity(intent);

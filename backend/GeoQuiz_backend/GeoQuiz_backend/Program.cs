@@ -107,10 +107,9 @@ builder.Services.AddScoped<IPvPResultService, PvPResultService>();
 
 //KingOfTheHill
 builder.Services.AddScoped<IKothMatchmakingService, KothMatchmakingService>();
-builder.Services.AddScoped<IKothGameServiceMain, KothGameServiceMain>();
+builder.Services.AddScoped<IKothGameService, KothGameService>();
 builder.Services.AddScoped<IKothRoundService, KothRoundService>();
 builder.Services.AddScoped<IKothResultService, KothResultService>();
-builder.Services.AddScoped<IKothGameService, KothGameService>();
 
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");

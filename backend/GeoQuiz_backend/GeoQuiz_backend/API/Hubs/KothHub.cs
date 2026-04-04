@@ -14,7 +14,7 @@ namespace GeoQuiz_backend.API.Hubs
     public class KothHub : Hub<IKothHubClient>
     {
         private readonly IKothMatchmakingService _matchmaking;
-        private readonly IKothGameServiceMain _gameService;
+        private readonly IKothGameService _gameService;
         private readonly ISignalRNotificationService _notificationService;
         private readonly ILogger<KothHub> _logger;
 
@@ -24,7 +24,7 @@ namespace GeoQuiz_backend.API.Hubs
 
         public KothHub(
             IKothMatchmakingService matchmaking,
-            IKothGameServiceMain gameService,
+            IKothGameService gameService,
             ISignalRNotificationService notificationService,
             ILogger<KothHub> logger)
         {

@@ -49,8 +49,8 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     RoundNumber = gameState.CurrentRound,
                     RoundType = gameState.CurrentRoundType == RoundType.Classic ? 1 : 2,
                     Question = MapToQuestionData(question),
-                    RoundStartTime = gameState.RoundStartTime,
-                    TimeLimitSeconds = 10
+                    ServerTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                    RoundEndAt = DateTimeOffset.UtcNow.AddSeconds(10).ToUnixTimeMilliseconds()
                 };
             }
         }

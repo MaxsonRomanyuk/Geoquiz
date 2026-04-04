@@ -176,7 +176,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
                         TimerEndsAt = DateTimeOffset.UtcNow.AddSeconds(COUNTDOWN_SECONDS).ToUnixTimeMilliseconds()
                     });
 
-                    await Task.Delay(COUNTDOWN_SECONDS, cts.Token);
+                    await Task.Delay(TimeSpan.FromSeconds(COUNTDOWN_SECONDS), cts.Token);
 
                     if (cts.Token.IsCancellationRequested)
                     {
@@ -207,6 +207,9 @@ namespace GeoQuiz_backend.Application.Services.PvP
                         var currentUser = draft.CurrentTurnUserId;
                         var modeToBan = draft.AvailableModes.First();
                         await draftService.BanModeAsync(matchId, currentUser, modeToBan, step);
+
+                        var now = DateTime.UtcNow;
+                        _logger.LogInformation("Server banned  {modeToBat} at {now}", modeToBan, now);
                     }
                 }
                 catch (OperationCanceledException)

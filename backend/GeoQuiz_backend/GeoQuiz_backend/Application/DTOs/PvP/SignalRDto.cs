@@ -69,35 +69,6 @@ namespace GeoQuiz_backend.Application.DTOs.PvP
         public LocalizedText Text { get; set; } = null!;
     }
 
-
-
-    public class QuestionResultData
-    {
-        public Guid MatchId { get; set; }
-        public int QuestionNumber { get; set; }
-        public int CorrectOptionIndex { get; set; }
-
-        public PlayerRoundResult YourResult { get; set; }
-        public PlayerRoundResult OpponentResult { get; set; }
-
-        public int YourTotalScore { get; set; }
-        public int OpponentTotalScore { get; set; }
-        public int YourCorrectCount { get; set; }
-        public int OpponentCorrectCount { get; set; }
-
-        public int RemainingTimeSeconds { get; set; }
-        public bool IsLastQuestion { get; set; }
-    }
-    public class PlayerRoundResult
-    {
-        public bool HasAnswered { get; set; } 
-        public bool IsCorrect { get; set; } 
-        public int TimeSpentMs { get; set; } 
-        public int ScoreGained { get; set; }
-    }
-
-
-
     public class TimerUpdateData
     {
         //public Guid MatchId { get; set; }

@@ -138,7 +138,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     //});
                     using (var scope = _serviceScopeFactory.CreateScope())
                     {
-                        var gameService = scope.ServiceProvider.GetRequiredService<IKothGameServiceMain>();
+                        var gameService = scope.ServiceProvider.GetRequiredService<IKothGameService>();
                         var playersInfo = playersToStart.Select(p => PlayerInfo.FromPlayerLobby(p)).ToList();
                         await gameService.StartMatchFromLobbyAsync(playersInfo, lobbyId);
                     }
@@ -273,7 +273,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
                         using (var scope = _serviceScopeFactory.CreateScope())
                         {
-                            var gameService = scope.ServiceProvider.GetRequiredService<IKothGameServiceMain>();
+                            var gameService = scope.ServiceProvider.GetRequiredService<IKothGameService>();
                             var playersInfo = playersToStart.Select(p => PlayerInfo.FromPlayerLobby(p)).ToList();
                             await gameService.StartMatchFromLobbyAsync(playersInfo, lobbyId);
                         }

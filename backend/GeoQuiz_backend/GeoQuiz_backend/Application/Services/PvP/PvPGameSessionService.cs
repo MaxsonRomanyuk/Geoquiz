@@ -72,12 +72,13 @@ namespace GeoQuiz_backend.Application.Services.PvP
                     Questions = gameQuestion
                 });
 
-                _ = Task.Run(() => MonitorGameTimeAsync(matchId));            }
+            }
             else
             {
                 throw new Exception("Game mode not selected");
             }
-            //await _db.SaveChangesAsync();  сохраняем в CreateForMatchAsync
+
+            await _db.SaveChangesAsync(); 
 
         }
         private async Task<List<QuestionData>> GenerateQuestionsAsync(Guid matchId, GameMode mode)
@@ -147,7 +148,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
             }
             return input;
         }
-        private async Task MonitorGameTimeAsync(Guid matchId)
+        public async Task MonitorGameTimeAsync(Guid matchId)
         {
             const int COUNTDOWN_SECONDS = 60;
 
@@ -160,6 +161,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
             try
             {
+
                 using (var scope = _serviceScopeFactory.CreateScope())
                 {
                     var notificationService = scope.ServiceProvider.GetRequiredService<ISignalRNotificationService>();

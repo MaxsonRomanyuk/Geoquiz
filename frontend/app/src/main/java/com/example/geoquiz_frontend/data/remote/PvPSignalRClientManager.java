@@ -7,7 +7,6 @@ import com.example.geoquiz_frontend.data.remote.dtos.pvp.DraftUpdateData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameFinishedData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameReadyData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.MatchFoundData;
-import com.example.geoquiz_frontend.data.remote.dtos.pvp.QuestionResultData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerRequest;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.TimerUpdateData;
@@ -133,6 +132,7 @@ public class PvPSignalRClientManager {
     public void removeListener(String key) {
         listeners.remove(key);
     }
+
     public void start() {
         if (hubConnection.getConnectionState() == HubConnectionState.DISCONNECTED && !isConnecting) {
             isConnecting = true;
@@ -168,17 +168,26 @@ public class PvPSignalRClientManager {
             hubConnection.send("LeaveQueue");
         }
     }
+    public void playerReadyForDraft(String matchId)
+    {
+        if (hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
+            hubConnection.send("PlayerReadyForDraft", matchId);
+        }
+    }
 
     public void banMode(String matchId, String mode, String language, int expectedStep) {
         if (hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
             int modeValue = convertModeToInt(mode);
             int langValue = language.equals("ru") ? 0 : 1;
 
-            Log.d(TAG, "Sending BanMode with params: matchId=" + matchId +
-                    ", mode=" + modeValue + ", lang=" + langValue);
-
             hubConnection.send("BanMode", matchId, modeValue, langValue, expectedStep);
             Log.d(TAG, "BanMode sent: " + mode + " for match " + matchId);
+        }
+    }
+    public void playerReadyForGame(String matchId)
+    {
+        if (hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
+            hubConnection.send("PlayerReadyForGame", matchId);
         }
     }
     public void submitAnswer(String matchId, String questionId, int selectedIndex,

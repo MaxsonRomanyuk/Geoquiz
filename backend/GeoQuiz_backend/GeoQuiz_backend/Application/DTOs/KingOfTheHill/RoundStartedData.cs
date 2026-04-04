@@ -8,8 +8,10 @@ namespace GeoQuiz_backend.Application.DTOs.KingOfTheHill
         public int RoundNumber { get; set; }
         public int RoundType { get; set; } 
         public QuestionData Question { get; set; } = null!;
-        public DateTime RoundStartTime { get; set; }
-        public int TimeLimitSeconds { get; set; } = 10;
+        //public DateTime RoundStartTime { get; set; }
+        //public int TimeLimitSeconds { get; set; } = 10;
+        public long ServerTime { get; set; }
+        public long RoundEndAt { get; set; }
     }
 
     public class QuestionData

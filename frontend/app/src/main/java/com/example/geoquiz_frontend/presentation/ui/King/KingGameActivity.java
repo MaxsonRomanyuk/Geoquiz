@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -270,7 +271,7 @@ public class KingGameActivity extends BaseActivity {
             }
         }
         if (isEliminated) setOptionsEnabled(false);
-        startTimer(data.getTimeLimitSeconds());
+        startTimer(data.getServerTime(), data.getRoundEndAt());
     }
 
     private void handleRoundFinished(RoundFinishedData data) {
@@ -434,24 +435,29 @@ public class KingGameActivity extends BaseActivity {
         signalRManager.submitAnswer(matchId, currentRound, currentQuestion.getQuestionId(), index,  (int) answerTime);
     }
 
-    private void startTimer(int seconds) {
+    private void startTimer(long serverTime, long endAt) {
         stopTimer();
-        timeLeft = seconds;
+
+        long clientTime = System.currentTimeMillis();
+        long offset = serverTime - clientTime;
 
         timerRunnable = new Runnable() {
             @Override
             public void run() {
-                if (timeLeft > 0) {
-                    updateTimerDisplay();
-                    timeLeft--;
-                    timerHandler.postDelayed(this, 1000);
-                } else {
-                    updateTimerDisplay();
+                long now = System.currentTimeMillis() + offset;
+                long remainingMs = endAt - now;
+                timeLeft = (int)Math.ceil(remainingMs/1000.0);
+
+                updateTimerDisplay();
+
+                if (timeLeft < 0)
+                {
                     if (isQuestionActive && !hasAnswered && !isEliminated) {
                         setOptionsEnabled(false);
                         isQuestionActive = false;
                     }
                 }
+                timerHandler.postDelayed(this, 1000);
             }
         };
         timerHandler.post(timerRunnable);

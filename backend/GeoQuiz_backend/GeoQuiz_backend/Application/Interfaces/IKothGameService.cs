@@ -1,17 +1,11 @@
 ﻿using GeoQuiz_backend.Application.DTOs.KingOfTheHill;
-using GeoQuiz_backend.Application.Payloads.Koth;
-using GeoQuiz_backend.Domain.Entities;
 
 namespace GeoQuiz_backend.Application.Interfaces
 {
     public interface IKothGameService
     {
-        Task<KothMatch> StartMatchFromLobbyAsync(List<PlayerInfo> players, Guid lobbyId);
-        Task LeaveMatchAsync(Guid userId, Guid matchId);
-        Task<RoundStartedData?> StartNextRoundAsync(Guid matchId);
+        Task StartMatchFromLobbyAsync(List<PlayerInfo> realPlayers, Guid lobbyId);
         Task<AnswerResultData> SubmitAnswerAsync(Guid matchId, Guid userId, SubmitAnswerRequest request);
-        Task<RoundFinishedData> FinishRoundAsync(Guid matchId);
-        Task<MatchFinishedData> FinishMatchAsync(Guid matchId);
-        Task<KothGameState?> GetGameStateAsync(Guid matchId);
+        Task LeaveMatchAsync(Guid userId, Guid matchId);
     }
 }
