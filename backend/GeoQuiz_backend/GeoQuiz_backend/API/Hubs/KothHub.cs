@@ -21,6 +21,7 @@ namespace GeoQuiz_backend.API.Hubs
         private static readonly ConcurrentDictionary<Guid, string> _userConnections = new();
         private static readonly ConcurrentDictionary<Guid, Guid> _userCurrentLobby = new();
         private static readonly ConcurrentDictionary<Guid, Guid> _userCurrentMatch = new();
+        private static readonly ConcurrentDictionary<Guid, ConcurrentDictionary<Guid, bool>> _activeMatches = new();
 
         public KothHub(
             IKothMatchmakingService matchmaking,
@@ -134,6 +135,26 @@ namespace GeoQuiz_backend.API.Hubs
                 throw new HubException("Failed to leave lobby");
             }
         }
+        public async Task PlayerReadyForGame(Guid matchId)
+        {
+            var userId = GetUserId();
+            if (!_activeMatches.TryGetValue(matchId, out var matchState))
+            {
+                _logger.LogWarning("Match {MatchId} not found in active matches for user {UserId}", matchId, userId);
+                return;
+            }
+            matchState[userId] = true;
+
+            var gameReady = matchState.Values.All(ready => ready);
+            
+            if (gameReady)
+            {
+                _ = Task.Run(async () =>
+                {
+                    await _gameService.StartNextRoundAsync(matchId);
+                });
+            }
+        }
         public async Task JoinMatch(Guid matchId)
         {
             var userId = GetUserId();
@@ -149,8 +170,16 @@ namespace GeoQuiz_backend.API.Hubs
             await Groups.AddToGroupAsync(Context.ConnectionId, $"match_{matchId}");
             _userCurrentMatch[userId] = matchId;
 
+            if (!_activeMatches.ContainsKey(matchId))
+            {
+                _activeMatches[matchId] = new ConcurrentDictionary<Guid, bool>();
+            }
+            _activeMatches[matchId][userId] = false;
+
+
             _logger.LogInformation("User {UserId} moved from lobby {LobbyId} to match {MatchId}", userId, lobbyId, matchId);
         }
+
         public async Task LeaveMatch(Guid matchId)
         {
             var userId = GetUserId();
@@ -191,4 +220,5 @@ namespace GeoQuiz_backend.API.Hubs
             return userId;
         }
     }
+
 }

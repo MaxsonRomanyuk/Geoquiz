@@ -95,6 +95,7 @@ public class KingGameActivity extends BaseActivity {
 
         signalRManager = KothSignalRClientManager.getInstance();
         connectToSignalR();
+        sendReadyForGame(matchId);
     }
 
     private void initViews() {
@@ -217,7 +218,12 @@ public class KingGameActivity extends BaseActivity {
 
         signalRManager.start();
     }
-
+    private void sendReadyForGame(String matchId)
+    {
+        if (signalRManager != null && signalRManager.isConnected()) {
+            signalRManager.playerReadyForGame(matchId);
+        }
+    }
     private void handleRoundStarted(RoundStartedData data) {
         Log.d(TAG, "Round " + data.getRoundNumber() + " started, type: " + data.getRoundType());
 

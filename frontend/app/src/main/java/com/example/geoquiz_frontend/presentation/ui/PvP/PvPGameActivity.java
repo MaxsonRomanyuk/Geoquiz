@@ -253,7 +253,6 @@ public class PvPGameActivity extends BaseActivity {
     {
         if (signalRManager != null && signalRManager.isConnected()) {
             signalRManager.playerReadyForGame(matchId);
-            Toast.makeText(this, "EZ", Toast.LENGTH_SHORT).show();
         }
     }
     private void handleGameReady(GameReadyData data) {

@@ -29,7 +29,7 @@ namespace GeoQuiz_backend.API.Hubs
 
         private static readonly ConcurrentDictionary<Guid, string> _userConnections = new();
         private static readonly ConcurrentDictionary<Guid, Guid> _userCurrentMatch = new();
-        private static readonly ConcurrentDictionary<Guid, MatchState> _activeMatches = new();
+        private static readonly ConcurrentDictionary<Guid, PvPMatchState> _activeMatches = new();
 
         private class GameTimer
         {
@@ -135,7 +135,7 @@ namespace GeoQuiz_backend.API.Hubs
 
                 _userCurrentMatch[match.Player1Id] = match.Id;
                 _userCurrentMatch[match.Player2Id] = match.Id;
-                _activeMatches[match.Id] = new MatchState
+                _activeMatches[match.Id] = new PvPMatchState
                 {
                     Match = match,
                     Player1ReadyForDraft = false,
@@ -311,7 +311,7 @@ namespace GeoQuiz_backend.API.Hubs
         }
     }
 
-    public class MatchState
+    public class PvPMatchState
     {
         public PvPMatch Match {  get; set; }
         public bool Player1ReadyForDraft { get; set; }

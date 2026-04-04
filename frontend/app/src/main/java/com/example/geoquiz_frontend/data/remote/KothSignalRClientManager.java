@@ -212,6 +212,12 @@ public class KothSignalRClientManager {
             this.currentMatchId = matchId;
         }
     }
+    public void playerReadyForGame(String matchId)
+    {
+        if (hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
+            hubConnection.send("PlayerReadyForGame", matchId);
+        }
+    }
     public void leaveMatch(String matchId) {
         if (hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
             hubConnection.send("LeaveMatch", matchId);

@@ -69,11 +69,11 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
             await _notificationService.NotifyMatchStarted(lobbyId, matchStartedData);
 
-            _ = Task.Run(async () =>
-            {
-                await Task.Delay(250);
-                await StartNextRoundAsync(matchId);
-            });
+            //_ = Task.Run(async () =>
+            //{
+            //    await Task.Delay(250);
+            //    await StartNextRoundAsync(matchId);
+            //});
         }
 
         public async Task LeaveMatchAsync(Guid userId, Guid matchId)
