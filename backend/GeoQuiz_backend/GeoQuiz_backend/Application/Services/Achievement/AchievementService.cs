@@ -1,0 +1,163 @@
+﻿using GeoQuiz_backend.Application.DTOs.User;
+using GeoQuiz_backend.Application.Interfaces;
+using GeoQuiz_backend.Application.Services.Achievement;
+using GeoQuiz_backend.Domain.Entities;
+using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
+using Microsoft.EntityFrameworkCore;
+
+namespace GeoQuiz_backend.Application.Services
+{
+    public class AchievementService : IAchievementService
+    {
+        private readonly AppDbContext _db;
+        private readonly ILogger<AchievementService> _logger;
+
+        private readonly IAchievementProgressService _progressService;
+        private readonly ISignalRNotificationService _notificationService;
+        private readonly Dictionary<string, Func<UserStats, int>> _statSelectors = new()
+        {
+            ["GAMES_PLAYED"] = s => s.TotalGamesPlayed,
+            ["GAMES_WON"] = s => s.TotalGamesWon,
+            ["FLAGS"] = s => s.FlagsCorrect,
+            ["CAPITALS"] = s => s.CapitalsCorrect,
+            ["OUTLINES"] = s => s.OutlinesCorrect,
+            ["LANGUAGES"] = s => s.LanguagesCorrect,
+            ["EUROPE"] = s => s.EuropeCorrect,
+            ["ASIA"] = s => s.AsiaCorrect,
+            ["AFRICA"] = s => s.AfricaCorrect,
+            ["AMERICA"] = s => s.AmericaCorrect,
+            ["OCEANIA"] = s => s.OceaniaCorrect,
+            ["WIN_STREAK"] = s => s.MaxWinStreak,
+            ["DAILY_LOGIN"] = s => s.DailyLoginStreak,
+            ["PVP_GAMES_PLAYED"] = s => s.PvPGamesPlayed,
+            ["PVP_GAMES_WON"] = s => s.PvPGamesWon,
+            ["PVP_WIN_STREAK"] = s => s.CurrentPvPStreak,
+            ["KOTH_GAMES_PLAYED"] = s => s.KothGamesPlayed,
+            ["KOTH_GAMES_WON"] = s => s.KothGamesWon,
+            ["KOTH_TOP3"] = s => s.KothTop3Finishes,
+            ["TOTAL_CORRECT"] = s => s.TotalCorrectAnswers,
+            ["LEVEL"] = s => s.Level
+        };
+
+        public AchievementService(AppDbContext db,
+            ILogger<AchievementService> logger,
+            ISignalRNotificationService notificationService,
+            IAchievementProgressService progressService)
+        {
+            _db = db;
+            _logger = logger;
+            _notificationService = notificationService;
+            _progressService = progressService;
+        }
+        public async Task CheckAndGrantAsync(Guid userId, UserStats oldStats, UserStats newStats, GameSession? session = null)
+        {
+            await HandleProgressAchievements(userId, oldStats, newStats);
+            await HandleSingleAchievements(userId, oldStats, newStats);
+            await HandleCompositeAchievements(userId, newStats);
+            await HandleSessionBasedAchievements(userId, session);
+        }
+        private async Task HandleProgressAchievements(Guid userId, UserStats oldStats, UserStats newStats)
+        {
+            foreach (var (code, selector) in _statSelectors)
+            {
+                var oldVal = selector(oldStats);
+                var newVal = selector(newStats);
+
+                var levels = _progressService.GetNewlyReachedLevels(code, oldVal, newVal);
+
+                foreach (var level in levels)
+                {
+                    await Unlock(userId, code, level.Target, level.Title, level.Rarity);
+                }
+            }
+        }
+        private async Task HandleSingleAchievements(Guid userId, UserStats oldStats, UserStats newStats)
+        {
+            if (oldStats.TotalGamesPlayed < 1 && newStats.TotalGamesPlayed >= 1)
+                await Unlock(userId, "FIRST_GAME");
+
+            if (oldStats.TotalGamesWon < 1 && newStats.TotalGamesWon >= 1)
+                await Unlock(userId, "FIRST_WIN");
+
+            if (oldStats.PvPGamesPlayed < 1 && newStats.PvPGamesPlayed >= 1)
+                await Unlock(userId, "PVP_FIRST_GAME");
+
+            if (oldStats.PvPGamesWon < 1 && newStats.PvPGamesWon >= 1)
+                await Unlock(userId, "PVP_FIRST_WIN");
+
+            if (oldStats.KothGamesPlayed < 1 && newStats.KothGamesPlayed >= 1)
+                await Unlock(userId, "KOTH_FIRST_GAME");
+
+            if (oldStats.KothGamesWon < 1 && newStats.KothGamesWon >= 1)
+                await Unlock(userId, "KOTH_FIRST_WIN");
+        }
+        private async Task HandleCompositeAchievements(Guid userId, UserStats s)
+        {
+            if (s.EuropeCorrect >= 1000 &&
+                s.AsiaCorrect >= 1000 &&
+                s.AfricaCorrect >= 1000 &&
+                s.AmericaCorrect >= 1000 &&
+                s.OceaniaCorrect >= 1000)
+            {
+                await Unlock(userId, "WORLD_TRAVELER", 1000);
+            }
+
+            if (s.FlagsCorrect >= 1000 &&
+                s.CapitalsCorrect >= 1000 &&
+                s.OutlinesCorrect >= 1000 &&
+                s.LanguagesCorrect >= 1000)
+            {
+                await Unlock(userId, "ALL_ROUNDER", 1000);
+            }
+        }
+        private async Task HandleSessionBasedAchievements(Guid userId, GameSession? session)
+        {
+            if (session == null) return;
+
+            if (session.CorrectAnswers == session.TotalQuestions && session.TotalQuestions > 0)
+            {
+                await Unlock(userId, "PERFECT_GAME");
+            }
+            if (session.PvPMatch != null && session.CorrectAnswers == session.TotalQuestions && session.TotalQuestions > 0)
+            {
+                await Unlock(userId, "PERFECT_GAME_PVP");
+            }
+            
+            // PVP_UNDERDOG
+        }
+        private async Task Unlock(Guid userId, string code, int progress = 1, string? title = null, AchievementRarity? rarity = null)
+        {
+            var achievement = await _db.Achievements.FirstOrDefaultAsync(a => a.Code == code);
+            if (achievement == null) return;
+
+            var exists = await _db.UserAchievements.AnyAsync(x =>
+                x.UserId == userId &&
+                x.AchievementId == achievement.Id &&
+                x.Progress == progress);
+
+            if (exists) return;
+
+            var ua = new UserAchievement
+            {
+                UserId = userId,
+                AchievementId = achievement.Id,
+                Progress = progress,
+                IsUnlocked = true,
+                UnlockedAt = DateTime.UtcNow
+            };
+
+            _db.UserAchievements.Add(ua);
+            await _db.SaveChangesAsync();
+
+            await _notificationService.NotifyAchievementUnlocked(userId, new AchievementDto
+            {
+                Code = code,
+                Progress = progress,
+                Rarity = (int)(rarity ?? achievement.Rarity),
+                IsUnlocked = true,
+                UnlockedAt = DateTime.UtcNow
+            });
+        }
+        
+    }
+}

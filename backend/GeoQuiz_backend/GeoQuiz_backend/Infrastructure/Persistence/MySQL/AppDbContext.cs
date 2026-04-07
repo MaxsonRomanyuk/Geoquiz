@@ -1,6 +1,5 @@
 ﻿using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Domain.Enums;
-using GeoQuiz_backend.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 

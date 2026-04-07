@@ -1,10 +1,13 @@
 ﻿using GeoQuiz_backend.Application.DTOs.KingOfTheHill;
 using GeoQuiz_backend.Application.DTOs.PvP;
+using GeoQuiz_backend.Application.DTOs.User;
 
 namespace GeoQuiz_backend.Application.Interfaces
 {
     public interface ISignalRNotificationService
     {
+        Task NotifyAchievementUnlocked(Guid userId, AchievementDto data);
+
         Task NotifyMatchFound(Guid userId, MatchFoundWithDraftData matchData);
 
         Task NotifyDraftUpdated(Guid matchId, DraftUpdateData updateData);

@@ -4,6 +4,7 @@ using GeoQuiz_backend.API.Hubs;
 using GeoQuiz_backend.Application.DTOs.KingOfTheHill;
 using GeoQuiz_backend.Application.DTOs.PvP;
 using Microsoft.AspNetCore.SignalR;
+using GeoQuiz_backend.Application.DTOs.User;
 
 namespace GeoQuiz_backend.Application.Services.PvP
 {
@@ -11,12 +12,19 @@ namespace GeoQuiz_backend.Application.Services.PvP
     {
         private readonly IHubContext<PvPHub, IPvPHubClient> _pvpHub;
         private readonly IHubContext<KothHub, IKothHubClient> _kothHub;
+        private readonly IHubContext<NotificationHub, INotificationClient> _notificationHub;
 
-        public SignalRNotificationService(IHubContext<PvPHub, IPvPHubClient> pvpHub, IHubContext<KothHub, IKothHubClient> kothHub)
+        public SignalRNotificationService(IHubContext<PvPHub, IPvPHubClient> pvpHub,
+            IHubContext<KothHub, IKothHubClient> kothHub,
+            IHubContext<NotificationHub, INotificationClient> notificationHub)
         {
             _pvpHub = pvpHub;
             _kothHub = kothHub;
-
+            _notificationHub = notificationHub;
+        }
+        public async Task NotifyAchievementUnlocked(Guid userId, AchievementDto data)
+        {
+            await _notificationHub.Clients.User(userId.ToString()).AchievementUnlocked(data);
         }
 
         public async Task NotifyMatchFound(Guid userId, MatchFoundWithDraftData matchData)

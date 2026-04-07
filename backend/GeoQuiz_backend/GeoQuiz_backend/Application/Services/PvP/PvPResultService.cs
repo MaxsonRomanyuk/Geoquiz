@@ -2,10 +2,10 @@
 using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Domain.Enums;
 using GeoQuiz_backend.Application.DTOs.PvP;
-using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 using Microsoft.EntityFrameworkCore;
 using static GeoQuiz_backend.Application.Payloads.AchievementsPayloads;
+using GeoQuiz_backend.Application.Services.Achievement;
 
 namespace GeoQuiz_backend.Application.Services.PvP
 {
@@ -158,6 +158,8 @@ namespace GeoQuiz_backend.Application.Services.PvP
         private async Task UpdateUserStats(PvPMatch match, User user, GameSession self, GameSession opponentSession, User opponentUser, Guid? winnerId)
         {
             var stats = user.Stats;
+            var oldStats = stats.Clone();
+
             var correctAnswers = self.CorrectAnswers;
 
             stats.TotalGamesPlayed++;
@@ -186,21 +188,9 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 case GameMode.Language: stats.LanguagesCorrect += correctAnswers; break;
             }
 
-            await _achievementService.CheckAndGrantAsync(
-                new AchievementContext
-                {
-                    User = user,
-                    Stats = stats,
-                    Match = match,
-                    Session = self,
-                    Payload = new PvPResultData
-                    {
-                        UserLevel = user.Stats.Level,
-                        OpponentLevel = opponentUser.Stats.Level,
-                        UserWon = winnerId == user.Id
-                    }
-                }
-            );
+            var newStats = stats;
+            await _achievementService.CheckAndGrantAsync(user.Id, oldStats, newStats, self);
+               
         }
         private GameSession CreateSession(Guid userId, Guid matchId, List<PvPAnswer> answers, int score, GameMode gameMode)
         {

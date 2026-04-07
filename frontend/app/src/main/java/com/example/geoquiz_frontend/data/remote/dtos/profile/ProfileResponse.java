@@ -145,20 +145,20 @@ public class ProfileResponse {
 
     public static class AchievementDto {
         private String code;
-        private String title;
-        private String icon;
         private int progress;
+        private int rarity;
+        private boolean isUnlocked;
         private Date unlockedAt;
         public String getCode() { return code; }
-        public String getTitle() { return title; }
-        public String getIcon() { return icon; }
         public int getProgress() { return progress; }
+        public int getRarity() { return rarity; }
+        public boolean isUnlocked() { return isUnlocked; }
         public Date getUnlockedAt() { return unlockedAt; }
 
         public void setCode(String code) { this.code = code; }
-        public void setTitle(String title) { this.title = title; }
-        public void setIcon(String icon) { this.icon = icon; }
         public void setProgress(int progress) { this.progress = progress; }
+        public void setRarity(int rarity) { this.rarity = rarity; }
+        public void setUnlocked(boolean isUnlocked) { this.isUnlocked = isUnlocked; }
         public void setUnlockedAt(Date unlockedAt) { this.unlockedAt = unlockedAt; }
     }
 }

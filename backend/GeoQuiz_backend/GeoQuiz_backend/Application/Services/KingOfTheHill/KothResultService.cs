@@ -12,13 +12,16 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger<KothResultService> _logger;
+        private readonly IAchievementService _achievementService;
 
         public KothResultService(
             IServiceScopeFactory serviceScopeFactory,
-            ILogger<KothResultService> logger)
+            ILogger<KothResultService> logger,
+            IAchievementService achievementService)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _logger = logger;
+            _achievementService = achievementService;
         }
         public async Task<MatchFinishedData> FinalizeMatchAsync(KothGameState gameState)
         {
@@ -30,7 +33,6 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             await UpdateMatchAsync(db, gameState);
             var gameSessions = await CreateGameSessionsAsync(db, gameState);
             await UpdateUserStatsAsync(db, gameState, gameSessions);
-            //await CheckAchievementsAsync(gameState, gameSessions);
             return CreateMatchFinishedData(gameState);
         }
         private async Task UpdateMatchAsync(AppDbContext db, KothGameState gameState)
@@ -125,6 +127,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 if (user?.Stats == null) continue;
 
                 var stats = user.Stats;
+                var oldStats = stats.Clone();
                 var isWinner = session.Place == 1;
                 var isTop3 = session.Place <= 3;
 
@@ -173,14 +176,17 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                         stats.LanguagesCorrect += session.CorrectAnswers;
                         break;
                 }
+
+                var newStats = stats;
+                await CheckAchievementsAsync(user.Id, oldStats, newStats, session);
             }
 
             await db.SaveChangesAsync();
             _logger.LogInformation("User stats updated for match {MatchId}", gameState.MatchId);
         }
-        private async Task CheckAchievementsAsync(KothGameState gameState, List<GameSession> gameSessions)
+        private async Task CheckAchievementsAsync(Guid userId, UserStats oldStats, UserStats newStats, GameSession session)
         {
-            //
+            await _achievementService.CheckAndGrantAsync(userId, oldStats, newStats, session);
         }
 
         private MatchFinishedData CreateMatchFinishedData(KothGameState gameState)

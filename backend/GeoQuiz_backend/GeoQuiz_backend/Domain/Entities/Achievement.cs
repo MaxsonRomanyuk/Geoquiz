@@ -16,12 +16,13 @@ namespace GeoQuiz_backend.Domain.Entities
     }
     public enum AchievementCategory
     {
-        General = 1,     
-        Gameplay = 2,    
-        Speed = 3,       
-        Knowledge = 4,   
-        PvP = 5,         
-        Streaks = 6     
+        General = 1,
+        Gameplay = 2,
+        Knowledge = 3,
+        Streaks = 4,
+        PvP = 5,
+        Koth = 6,
+        Special = 7
     }
 
     public enum AchievementRarity

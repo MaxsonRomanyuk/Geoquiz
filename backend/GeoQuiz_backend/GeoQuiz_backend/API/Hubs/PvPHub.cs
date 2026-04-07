@@ -31,11 +31,6 @@ namespace GeoQuiz_backend.API.Hubs
         private static readonly ConcurrentDictionary<Guid, Guid> _userCurrentMatch = new();
         private static readonly ConcurrentDictionary<Guid, PvPMatchState> _activeMatches = new();
 
-        private class GameTimer
-        {
-            public DateTime StartTime { get; set; }
-            public CancellationTokenSource Cts { get; set; } = new();
-        }
         public PvPHub(
                     ISignalRNotificationService notificationService,
                     IMatchmakingService matchmaking,

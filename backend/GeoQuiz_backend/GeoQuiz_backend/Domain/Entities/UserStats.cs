@@ -47,5 +47,38 @@ namespace GeoQuiz_backend.Domain.Entities
         public int KothTop3Finishes { get; set; }
 
         public User User { get; set; } = null!;
+        public UserStats Clone()
+        {
+            return new UserStats
+            {
+                UserId = this.UserId,
+                Level = this.Level,
+                Experience = this.Experience,
+                TotalGamesPlayed = this.TotalGamesPlayed,
+                TotalGamesWon = this.TotalGamesWon,
+                TotalCorrectAnswers = this.TotalCorrectAnswers,
+                TotalQuickAnswers = this.TotalQuickAnswers,
+                TotalLastSecondWins = this.TotalLastSecondWins,
+                CurrentWinStreak = this.CurrentWinStreak,
+                MaxWinStreak = this.MaxWinStreak,
+                DailyLoginStreak = this.DailyLoginStreak,
+                LastLoginDate = this.LastLoginDate,
+                EuropeCorrect = this.EuropeCorrect,
+                AsiaCorrect = this.AsiaCorrect,
+                AfricaCorrect = this.AfricaCorrect,
+                AmericaCorrect = this.AmericaCorrect,
+                OceaniaCorrect = this.OceaniaCorrect,
+                FlagsCorrect = this.FlagsCorrect,
+                CapitalsCorrect = this.CapitalsCorrect,
+                OutlinesCorrect = this.OutlinesCorrect,
+                LanguagesCorrect = this.LanguagesCorrect,
+                PvPGamesPlayed = this.PvPGamesPlayed,
+                PvPGamesWon = this.PvPGamesWon,
+                CurrentPvPStreak = this.CurrentPvPStreak,
+                KothGamesPlayed = this.KothGamesPlayed,
+                KothGamesWon = this.KothGamesWon,
+                KothTop3Finishes = this.KothTop3Finishes
+            };
+        }
     }
 }

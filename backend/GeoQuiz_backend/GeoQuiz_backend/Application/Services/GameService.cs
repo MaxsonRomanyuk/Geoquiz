@@ -5,6 +5,7 @@ using GeoQuiz_backend.Application.DTOs.Game;
 using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 using Microsoft.EntityFrameworkCore;
 using static GeoQuiz_backend.Application.Payloads.AchievementsPayloads;
+using GeoQuiz_backend.Application.Services.Achievement;
 
 namespace GeoQuiz_backend.Application.Services
 {
@@ -39,20 +40,11 @@ namespace GeoQuiz_backend.Application.Services
 
             _db.GameSessions.Add(session);
 
+            var oldStats = user.Stats.Clone();
             UpdateStats(user.Stats, request);
+            var newStats = user.Stats;
 
-            await _achievementService.CheckAndGrantAsync(new AchievementContext
-            {
-                User = user,
-                Stats = user.Stats,
-                Session = session,
-                Payload = new GameCompletedData
-                {
-                    CorrectAnswers = request.CorrectAnswers,
-                    TimeSpent = request.TimeSpent,
-                    GameMode = request.Mode.ToString()
-                }
-            });
+            await _achievementService.CheckAndGrantAsync(userId, oldStats, newStats, session);
 
             await _db.SaveChangesAsync();
         }
@@ -113,6 +105,7 @@ namespace GeoQuiz_backend.Application.Services
                 case GameMode.Outline: stats.OutlinesCorrect += r.CorrectAnswers; break;
                 case GameMode.Language: stats.LanguagesCorrect += r.CorrectAnswers; break;
             }
+
         }
         private static void AddExperience(UserStats stats, int gainedXp)
         {

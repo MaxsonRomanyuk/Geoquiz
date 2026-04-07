@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json.Serialization;
+using GeoQuiz_backend.Application.Services.Achievement;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -95,6 +96,7 @@ builder.Services.AddScoped<GameService>();
 
 
 // Achievement
+builder.Services.AddScoped<IAchievementProgressService, AchievementProgressService>();
 builder.Services.AddScoped<IAchievementService, AchievementService>();
 
 //PVP
@@ -154,6 +156,11 @@ app.MapHub<PvPHub>("/pvpHub", options =>
                          HttpTransportType.LongPolling;
 });
 app.MapHub<KothHub>("/kothHub", options =>
+{
+    options.Transports = HttpTransportType.WebSockets |
+                         HttpTransportType.LongPolling;
+});
+app.MapHub<NotificationHub>("/notificationHub", options =>
 {
     options.Transports = HttpTransportType.WebSockets |
                          HttpTransportType.LongPolling;
