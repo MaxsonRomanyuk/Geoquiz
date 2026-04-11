@@ -10,4 +10,11 @@ public class LocalizedText {
 
     public String getRu() { return ru; }
     public String getEn() { return en; }
+    public LocalizedText() {};
+    public LocalizedText(String ru, String en)
+    {
+        this.ru = ru;
+        this.en = en;
+    }
+
 }

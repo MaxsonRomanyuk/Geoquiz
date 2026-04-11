@@ -1,21 +1,69 @@
 ﻿using GeoQuiz_backend.Application.DTOs.User;
 using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Application.Services.Achievement;
+using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
+using Humanizer;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Mono.TextTemplating;
+using System;
+using System.Collections.Generic;
+using System.Runtime.Intrinsics.X86;
+using System.Threading;
 
 namespace GeoQuiz_backend.Application.Services
 {
     public class ProfileService : IProfileService
     {
         private readonly IAchievementProgressService _progressService;
+        private readonly IAchievementService _achievementService;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly AppDbContext _db;
-        public ProfileService(IAchievementProgressService progressService, AppDbContext db)
+        private readonly ILogger<ProfileService> _logger;
+        public ProfileService(IAchievementProgressService progressService,
+            AppDbContext db,
+            IServiceScopeFactory serviceScopeFactory,
+            IAchievementService achievementService,
+            ILogger<ProfileService> logger)
         {
             _progressService = progressService;
             _db = db;
+            _serviceScopeFactory = serviceScopeFactory;
+            _achievementService = achievementService;
+            _logger = logger;
         }
         public async Task<object?> GetProfile(Guid userId)
+        {
+            await LazyCheckNeeded(userId);
+
+            var profile = await LoadProfile(userId);
+            return profile;
+        }
+        private async Task LazyCheckNeeded(Guid userId)
+        {
+            var lastCheck = await _db.UserStats
+                .Where(s => s.UserId == userId)
+                .Select(s => s.LastAchievementSync)
+                .FirstOrDefaultAsync();
+
+            if (DateTime.UtcNow - lastCheck < TimeSpan.FromDays(1))
+                return;
+
+            _ = Task.Run(async () =>
+            {
+                using var scope = _serviceScopeFactory.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                var stats = await db.UserStats.FirstAsync(s => s.UserId == userId);
+
+                await _achievementService.CheckAndGrantMissingAchievements(db, userId, stats);
+
+                stats.LastAchievementSync = DateTime.UtcNow;
+                await db.SaveChangesAsync();
+            });
+        }
+        private async Task<object?> LoadProfile(Guid userId)
         {
             var data = await _db.Users
                 .Where(u => u.Id == userId)
@@ -98,17 +146,20 @@ namespace GeoQuiz_backend.Application.Services
 
                     return new
                     {
+                        UserId = userId,
                         x.Code,
                         x.Progress,
                         Rarity = (int)(level?.Rarity ?? x.Rarity),
                         x.IsUnlocked,
-                        UnlockedAt = x.UnlockedAt != null
-                            ? new DateTimeOffset(x.UnlockedAt.Value).ToUniversalTime()
-                            : (DateTimeOffset?)null
+                        UnlockedAt = x.UnlockedAt != null ? x.UnlockedAt : (DateTime?)null
                     };
                 })
                 .ToList();
-
+            foreach (var achievement in achievements)
+            {
+                _logger.LogError("{Code} ,progress {Progress}, rarity: {Rarity}, isUnlocked {IsUnlocked} : {UnlockedAt}",
+                    achievement.Code, achievement.Progress, achievement.Rarity, achievement.IsUnlocked, achievement.UnlockedAt);
+            }
             return new
             {
                 data.User,

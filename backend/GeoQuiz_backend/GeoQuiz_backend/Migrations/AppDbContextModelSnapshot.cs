@@ -524,6 +524,9 @@ namespace GeoQuiz_backend.Migrations
                     b.Property<int>("LanguagesCorrect")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("LastAchievementSync")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<DateTime>("LastLoginDate")
                         .HasColumnType("datetime(6)");
 

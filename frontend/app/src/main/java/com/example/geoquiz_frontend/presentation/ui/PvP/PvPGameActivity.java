@@ -191,7 +191,7 @@ public class PvPGameActivity extends BaseActivity {
         if (!signalRManager.isConnected()) {
             signalRManager.start();
         }
-        signalRManager.addListener(activityId, new PvPSignalRClientManager.ConnectionListener() {
+        signalRManager.addListener(activityId, new PvPSignalRClientManager.PvPConnectionListener() {
             @Override
             public void onConnected() {
                 runOnUiThread(() -> {

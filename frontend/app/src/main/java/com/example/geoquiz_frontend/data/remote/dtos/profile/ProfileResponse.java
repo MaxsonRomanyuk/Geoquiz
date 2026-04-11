@@ -144,17 +144,23 @@ public class ProfileResponse {
     }
 
     public static class AchievementDto {
+        private String userId;
         private String code;
         private int progress;
         private int rarity;
         private boolean isUnlocked;
         private Date unlockedAt;
+
+        public AchievementDto() {}
+
+        public String getUserId() { return userId; }
         public String getCode() { return code; }
         public int getProgress() { return progress; }
         public int getRarity() { return rarity; }
         public boolean isUnlocked() { return isUnlocked; }
         public Date getUnlockedAt() { return unlockedAt; }
 
+        public void setUserId(String userId) { this.userId = userId; }
         public void setCode(String code) { this.code = code; }
         public void setProgress(int progress) { this.progress = progress; }
         public void setRarity(int rarity) { this.rarity = rarity; }

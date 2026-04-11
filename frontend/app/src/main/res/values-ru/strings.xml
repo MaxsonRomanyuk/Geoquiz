@@ -205,6 +205,10 @@
     <string name="correct_short">Верно</string>
     <string name="score_short">Очки</string>
 
+    <!--Achievements-->
+    <string name="unlocked">Разблокировано</string>
+    <string name="total_achievements">Всего достижений</string>
+
     <!--Errors-->
     <string name="connection_lost">Соединение потеряно</string>
     <string name="error">Ошибка: </string>

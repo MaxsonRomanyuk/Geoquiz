@@ -27,12 +27,12 @@ public class PvPSignalRClientManager {
     private String jwtToken;
     private boolean isConnecting = false;
 
-    private final ConcurrentHashMap<String, ConnectionListener> listeners = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, PvPConnectionListener> listeners = new ConcurrentHashMap<>();
 
     private String currentMatchId;
     private String currentUserId;
 
-    public interface ConnectionListener {
+    public interface PvPConnectionListener {
         void onConnected();
         void onDisconnected();
         void onError(String error);
@@ -115,17 +115,17 @@ public class PvPSignalRClientManager {
     }
 
     private interface ListenerAction {
-        void execute(ConnectionListener listener);
+        void execute(PvPConnectionListener listener);
     }
 
     private void notifyListeners(ListenerAction action) {
-        for (ConnectionListener listener : listeners.values()) {
+        for (PvPConnectionListener listener : listeners.values()) {
             if (listener != null) {
                 action.execute(listener);
             }
         }
     }
-    public void addListener(String key, ConnectionListener listener) {
+    public void addListener(String key, PvPConnectionListener listener) {
         listeners.put(key, listener);
     }
 

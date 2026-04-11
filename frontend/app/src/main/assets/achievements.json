@@ -1,0 +1,420 @@
+{
+  "achievements": [
+    {
+      "code": "FIRST_GAME",
+      "title": {
+        "ru": "Первый шаг",
+        "en": "First Step"
+      },
+      "description": {
+        "ru": "Начни своё географическое приключение! Сыграй свою первую игру",
+        "en": "Start your geographic adventure! Play your first game"
+      },
+      "icon": "icon_first_game",
+      "category": 1
+    },
+    {
+      "code": "FIRST_WIN",
+      "title": {
+        "ru": "Первая победа",
+        "en": "First Victory"
+      },
+      "description": {
+        "ru": "Вкус победы сладок! Одержи свою первую победу",
+        "en": "Victory tastes sweet! Win your first game"
+      },
+      "icon": "icon_first_win",
+      "category": 1
+    },
+    {
+      "code": "GAMES_PLAYED",
+      "title": {
+        "ru": "Ветеран",
+        "en": "Veteran"
+      },
+      "description": {
+        "ru": "Прокачай свои знания! Сыграй больше игр",
+        "en": "Level up your knowledge! Play more games"
+      },
+      "icon": "icon_games_played",
+      "category": 1
+    },
+    {
+      "code": "GAMES_WON",
+      "title": {
+        "ru": "Завоеватель",
+        "en": "Conqueror"
+      },
+      "description": {
+        "ru": "Покоряй вершины! Одерживай победы",
+        "en": "Conquer the peaks! Achieve victories"
+      },
+      "icon": "icon_games_won",
+      "category": 1
+    },
+    {
+      "code": "FLAGS",
+      "title": {
+        "ru": "Король флагов",
+        "en": "King of Flags"
+      },
+      "description": {
+        "ru": "Изучай цвета народов мира! Отвечай правильно о флагах",
+        "en": "Learn the colors of the world! Get flag answers right"
+      },
+      "icon": "icon_flags",
+      "category": 2
+    },
+    {
+      "code": "CAPITALS",
+      "title": {
+        "ru": "Король столиц",
+        "en": "King of Capitals"
+      },
+      "description": {
+        "ru": "Путешествуй по главным городам! Отвечай правильно о столицах",
+        "en": "Travel through capitals! Get capital answers right"
+      },
+      "icon": "icon_capitals",
+      "category": 2
+    },
+    {
+      "code": "OUTLINES",
+      "title": {
+        "ru": "Король контуров",
+        "en": "King of Outlines"
+      },
+      "description": {
+        "ru": "Узнавай страны по силуэту! Отвечай правильно о контурах",
+        "en": "Recognize countries by shape! Get outline answers right"
+      },
+      "icon": "icon_outlines",
+      "category": 2
+    },
+    {
+      "code": "LANGUAGES",
+      "title": {
+        "ru": "Король языков",
+        "en": "King of Languages"
+      },
+      "description": {
+        "ru": "Говори на языке географии! Отвечай правильно о языках",
+        "en": "Speak the language of geography! Get language answers right"
+      },
+      "icon": "icon_languages",
+      "category": 2
+    },
+    {
+      "code": "EUROPE",
+      "title": {
+        "ru": "Король Европы",
+        "en": "Master of Europe"
+      },
+      "description": {
+        "ru": "Покори Старый Свет! Отвечай правильно о Европе",
+        "en": "Conquer the Old World! Get Europe answers right"
+      },
+      "icon": "icon_europe",
+      "category": 3
+    },
+    {
+      "code": "ASIA",
+      "title": {
+        "ru": "Король Азии",
+        "en": "Master of Asia"
+      },
+      "description": {
+        "ru": "Открой тайны Востока! Отвечай правильно об Азии",
+        "en": "Unlock the secrets of the East! Get Asia answers right"
+      },
+      "icon": "icon_asia",
+      "category": 3
+    },
+    {
+      "code": "AFRICA",
+      "title": {
+        "ru": "Король Африки",
+        "en": "Master of Africa"
+      },
+      "description": {
+        "ru": "Исследуй жаркий континент! Отвечай правильно об Африке",
+        "en": "Explore the Hot Continent! Get Africa answers right"
+      },
+      "icon": "icon_africa",
+      "category": 3
+    },
+    {
+      "code": "AMERICA",
+      "title": {
+        "ru": "Король Америки",
+        "en": "Master of America"
+      },
+      "description": {
+        "ru": "Покори Новый Свет! Отвечай правильно об Америке",
+        "en": "Conquer the New World! Get America answers right"
+      },
+      "icon": "icon_america",
+      "category": 3
+    },
+    {
+      "code": "OCEANIA",
+      "title": {
+        "ru": "Король Океании",
+        "en": "Master of Oceania"
+      },
+      "description": {
+        "ru": "Открой райские острова! Отвечай правильно об Океании",
+        "en": "Discover paradise islands! Get Oceania answers right"
+      },
+      "icon": "icon_oceania",
+      "category": 3
+    },
+    {
+      "code": "WIN_STREAK",
+      "title": {
+        "ru": "Божественный",
+        "en": "Godlike"
+      },
+      "description": {
+        "ru": "Покажи характер! Побеждай снова и снова",
+        "en": "Show your spirit! Win again and again"
+      },
+      "icon": "icon_win_streak",
+      "category": 4
+    },
+    {
+      "code": "DAILY_LOGIN",
+      "title": {
+        "ru": "Одержимый",
+        "en": "Obsessed"
+      },
+      "description": {
+        "ru": "Стань частью MindMap! Заходи в игру каждый день",
+        "en": "Become part of MindMap! Log in every day"
+      },
+      "icon": "icon_daily_login",
+      "category": 4
+    },
+    {
+      "code": "PVP_FIRST_GAME",
+      "title": {
+        "ru": "Претендент",
+        "en": "Contender"
+      },
+      "description": {
+        "ru": "Выходи на арену! Сыграй свою первую PvP битву",
+        "en": "Step into the arena! Play your first PvP battle"
+      },
+      "icon": "icon_pvp_first",
+      "category": 5
+    },
+    {
+      "code": "PVP_FIRST_WIN",
+      "title": {
+        "ru": "Победитель",
+        "en": "Victor"
+      },
+      "description": {
+        "ru": "Докажи своё превосходство! Победи в PvP матче",
+        "en": "Prove your superiority! Win a PvP match"
+      },
+      "icon": "icon_pvp_first_win",
+      "category": 5
+    },
+    {
+      "code": "PVP_GAMES_PLAYED",
+      "title": {
+        "ru": "Легенда арены",
+        "en": "Arena Legend"
+      },
+      "description": {
+        "ru": "Закаляйся в боях! Сражайся в PvP чаще",
+        "en": "Forge yourself in battle! Fight in PvP more often"
+      },
+      "icon": "icon_pvp_games",
+      "category": 5
+    },
+    {
+      "code": "PVP_GAMES_WON",
+      "title": {
+        "ru": "Легенда PvP",
+        "en": "PvP Legend"
+      },
+      "description": {
+        "ru": "Восходи на трон! Побеждай в PvP битвах",
+        "en": "Ascend the throne! Win PvP battles"
+      },
+      "icon": "icon_pvp_wins",
+      "category": 5
+    },
+    {
+      "code": "PVP_WIN_STREAK",
+      "title": {
+        "ru": "Неприкасаемый",
+        "en": "Untouchable"
+      },
+      "description": {
+        "ru": "Не оставляй шансов соперникам! Побеждай в PvP подряд",
+        "en": "Leave no chance to opponents! Win PvP in a row"
+      },
+      "icon": "icon_pvp_streak",
+      "category": 5
+    },
+    {
+      "code": "PVP_UNDERDOG",
+      "title": {
+        "ru": "Андердог",
+        "en": "Underdog"
+      },
+      "description": {
+        "ru": "Бросай вызов сильным! Победи соперника с уровнем выше на 5+",
+        "en": "Challenge the strong! Beat an opponent 5+ levels higher"
+      },
+      "icon": "icon_underdog",
+      "category": 5
+    },
+    {
+      "code": "PERFECT_GAME_PVP",
+      "title": {
+        "ru": "Безупречная дуэль",
+        "en": "Perfect Duel"
+      },
+      "description": {
+        "ru": "Достигни совершенства! Выиграй PvP матч без ошибок",
+        "en": "Achieve perfection! Win a PvP match with no mistakes"
+      },
+      "icon": "icon_perfect_pvp",
+      "category": 5
+    },
+    {
+      "code": "KOTH_FIRST_GAME",
+      "title": {
+        "ru": "Претендент",
+        "en": "Challenger"
+      },
+      "description": {
+        "ru": "Взойди на холм! Сыграй свою первую битву в Царе горы",
+        "en": "Climb the hill! Play your first King of the Hill battle"
+      },
+      "icon": "icon_koth_first",
+      "category": 6
+    },
+    {
+      "code": "KOTH_FIRST_WIN",
+      "title": {
+        "ru": "Король холма",
+        "en": "King of the Hill"
+      },
+      "description": {
+        "ru": "Захвати трон! Победи в Царе горы",
+        "en": "Seize the throne! Win King of the Hill"
+      },
+      "icon": "icon_koth_first_win",
+      "category": 6
+    },
+    {
+      "code": "KOTH_GAMES_PLAYED",
+      "title": {
+        "ru": "Король горы",
+        "en": "Mountain King"
+      },
+      "description": {
+        "ru": "Покоряй вершины! Сражайся в Царе горы чаще",
+        "en": "Conquer the peaks! Fight in King of the Hill more often"
+      },
+      "icon": "icon_koth_games",
+      "category": 6
+    },
+    {
+      "code": "KOTH_GAMES_WON",
+      "title": {
+        "ru": "Император",
+        "en": "Emperor"
+      },
+      "description": {
+        "ru": "Властвуй над всеми! Побеждай в Царе горы",
+        "en": "Rule over all! Win King of the Hill"
+      },
+      "icon": "icon_koth_wins",
+      "category": 6
+    },
+    {
+      "code": "KOTH_TOP3",
+      "title": {
+        "ru": "Золотой воин",
+        "en": "Golden Warrior"
+      },
+      "description": {
+        "ru": "Будь среди лучших! Попадай в топ-3 в Царе горы",
+        "en": "Be among the best! Finish in top 3 in King of the Hill"
+      },
+      "icon": "icon_koth_top3",
+      "category": 6
+    },
+    {
+      "code": "PERFECT_GAME",
+      "title": {
+        "ru": "Безупречная победа",
+        "en": "Perfect Game"
+      },
+      "description": {
+        "ru": "Достигни идеала! Пройди игру без единой ошибки",
+        "en": "Reach perfection! Complete a game with no mistakes"
+      },
+      "icon": "icon_perfect",
+      "category": 7
+    },
+    {
+      "code": "WORLD_TRAVELER",
+      "title": {
+        "ru": "Путешественник",
+        "en": "World Traveler"
+      },
+      "description": {
+        "ru": "Объезди всю планету! Отвечай правильно на каждом континенте",
+        "en": "Travel the whole planet! Get answers right on every continent"
+      },
+      "icon": "icon_world",
+      "category": 7
+    },
+    {
+      "code": "ALL_ROUNDER",
+      "title": {
+        "ru": "Универсал",
+        "en": "All-Rounder"
+      },
+      "description": {
+        "ru": "Освой все режимы! Отвечай правильно в каждом режиме игры",
+        "en": "Master all genres! Get answers right in every game mode"
+      },
+      "icon": "icon_allrounder",
+      "category": 7
+    },
+    {
+      "code": "TOTAL_CORRECT",
+      "title": {
+        "ru": "Энциклопедия",
+        "en": "Encyclopedia"
+      },
+      "description": {
+        "ru": "Копи знания! Отвечай правильно на больше вопросов",
+        "en": "Hoard knowledge! Get more correct answers"
+      },
+      "icon": "icon_total",
+      "category": 7
+    },
+    {
+      "code": "LEVEL",
+      "title": {
+        "ru": "Великий мастер",
+        "en": "Grandmaster"
+      },
+      "description": {
+        "ru": "Расти над собой! Достигай новых уровней",
+        "en": "Grow beyond yourself! Reach new levels"
+      },
+      "icon": "icon_level",
+      "category": 7
+    }
+  ]
+}

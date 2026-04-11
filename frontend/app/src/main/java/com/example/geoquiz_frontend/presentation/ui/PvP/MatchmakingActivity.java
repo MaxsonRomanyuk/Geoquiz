@@ -124,7 +124,7 @@ public class MatchmakingActivity extends BaseActivity {
         tvCurrentPlayerLevel.setText(language.equals("ru") ? "Ур " + (level > 0 ? level : 1) : "Lvl " + (level > 0 ? level : 1));
     }
     private void connectToSignalR() {
-        signalRManager.addListener(activityId, new PvPSignalRClientManager.ConnectionListener() {
+        signalRManager.addListener(activityId, new PvPSignalRClientManager.PvPConnectionListener() {
             @Override
             public void onConnected() {
                 runOnUiThread(() -> {

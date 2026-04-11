@@ -12,4 +12,33 @@
 
     <color name="white">#ffffff</color>
     <color name="premium">#f0ea19</color>
+
+
+    <color name="text_primary">#1C1C1E</color>
+    <color name="text_secondary">#6B6F76</color>
+    <color name="text_hint">#8E8E93</color>
+
+
+    <color name="common_rarity">#808080</color>
+    <color name="common_rarity_light">#A0A0A0</color>
+    <color name="common_rarity_dark">#606060</color>
+
+    <color name="rare_rarity">#4CAF50</color>
+    <color name="rare_rarity_light">#81C784</color>
+    <color name="rare_rarity_dark">#388E3C</color>
+
+    <color name="epic_rarity">#9C27B0</color>
+    <color name="epic_rarity_light">#CE93D8</color>
+    <color name="epic_rarity_dark">#7B1FA2</color>
+
+    <color name="legendary_rarity">#FF9800</color>
+    <color name="legendary_rarity_light">#FFB74D</color>
+    <color name="legendary_rarity_dark">#F57C00</color>
+
+    <color name="legendary_glow">#FF980080</color>
+    <color name="epic_glow">#9C27B080</color>
+    <color name="rare_glow">#4CAF5080</color>
+
+    <color name="card_bg_dark">#1E1E2E</color>
+    <color name="card_bg_light">#2D2D3D</color>
 </resources>

@@ -207,6 +207,10 @@
     <string name="correct_short">Correct</string>
     <string name="score_short">Score</string>
 
+
+    <!--Achievements-->
+    <string name="unlocked">Unlocked</string>
+    <string name="total_achievements">Total achievements</string>
     <!--Errors-->
     <string name="connection_lost">Connection lost</string>
     <string name="error">Error: </string>

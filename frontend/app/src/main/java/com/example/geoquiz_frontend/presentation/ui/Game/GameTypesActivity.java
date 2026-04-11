@@ -15,6 +15,7 @@ import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
 import com.example.geoquiz_frontend.presentation.ui.King.KingLobbyActivity;
 import com.example.geoquiz_frontend.presentation.ui.Profile.ProfileActivity;
 import com.example.geoquiz_frontend.presentation.ui.PvP.MatchmakingActivity;
+import com.example.geoquiz_frontend.presentation.ui.achievements.AchievementsActivity;
 import com.example.geoquiz_frontend.presentation.utils.AuthManager;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -146,7 +147,8 @@ public class GameTypesActivity extends BaseActivity {
             } else if (itemId == R.id.nav_play) {
                 return true;
             } else if (itemId == R.id.nav_achievements) {
-                return true;
+                Intent intent = new Intent(this, AchievementsActivity.class);
+                startActivity(intent);
             } else if (itemId == R.id.nav_leaderboard) {
                 return true;
             } else if (itemId == R.id.nav_profile) {

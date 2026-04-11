@@ -1,13 +1,20 @@
 package com.example.geoquiz_frontend.presentation.ui.Game;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.geoquiz_frontend.R;
+import com.example.geoquiz_frontend.data.remote.NotificationManager;
+import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
+import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.google.android.material.button.MaterialButton;
 
 public class GameResultActivity extends BaseActivity {
@@ -15,6 +22,10 @@ public class GameResultActivity extends BaseActivity {
     private TextView tvMessage, tvTime, tvAccuracy;
     private MaterialButton btnRestart, btnMainMenu;
     private int score, correctAnswers, totalQuestions, timeSpent, gameMode;
+    private PreferencesHelper preferencesHelper;
+    private NotificationManager notificationManager;
+    private UserRepository userRepository;
+    private String activityId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +42,18 @@ public class GameResultActivity extends BaseActivity {
         setupClickListeners();
         updateUI();
         updateStats();
+
+        preferencesHelper = new PreferencesHelper(this);
+        activityId = "matchmaking_" + System.currentTimeMillis();
+        notificationManager = NotificationManager.getInstance();
+        userRepository = UserRepository.getInstance(this);
+        String token = preferencesHelper.getAuthToken();
+        String userId = preferencesHelper.getUserId();
+
+        if (token != null && !token.isEmpty()) {
+            notificationManager.init(token, userId);
+        }
+        connectToSignalR();
     }
 
     private void initViews() {
@@ -56,9 +79,40 @@ public class GameResultActivity extends BaseActivity {
             finish();
         });
     }
+    private void connectToSignalR() {
+        notificationManager.addListener(activityId, new NotificationManager.ConnectionListener() {
+            @Override
+            public void onConnected() {
+                runOnUiThread(() -> {
+                    Log.d(TAG, "Connected, joining queue");
+                });
+            }
+
+            @Override
+            public void onDisconnected() {
+                runOnUiThread(() -> {
+                    Log.d(TAG, "Disconnected");
+                });
+            }
+
+            @Override
+            public void onAchievementUnlocked(ProfileResponse.AchievementDto data) {
+                runOnUiThread(() -> {
+                    Toast.makeText(GameResultActivity.this, data.getCode(), Toast.LENGTH_SHORT).show();
+                    userRepository.unlockAchievements(data);
+                });
+            }
+
+            @Override
+            public void onConnectionFailed(String reason) {
+
+            }
+        });
+
+        notificationManager.start();
+    }
     private void updateStats()
     {
-        UserRepository userRepository = UserRepository.getInstance(this);
         userRepository.loadUserData(false);
     }
     private void updateUI() {
@@ -92,5 +146,11 @@ public class GameResultActivity extends BaseActivity {
             accuracy = (int) ((correctAnswers * 100f) / totalQuestions);
         }
         tvAccuracy.setText(accuracy + "%");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        notificationManager.removeListener(activityId);
     }
 }

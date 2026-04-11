@@ -14,6 +14,7 @@ import com.example.geoquiz_frontend.domain.entities.UserStats;
 import com.example.geoquiz_frontend.presentation.ui.King.KingLobbyActivity;
 import com.example.geoquiz_frontend.data.remote.ApiClient;
 import com.example.geoquiz_frontend.data.remote.ApiService;
+import com.example.geoquiz_frontend.presentation.ui.achievements.AchievementsActivity;
 import com.example.geoquiz_frontend.presentation.utils.AuthManager;
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
@@ -52,7 +53,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         authManager = new AuthManager(this);
-        initViews();
         preferencesHelper = new PreferencesHelper(this);
 
         boolean isGuest = preferencesHelper.getUserId().equals("uid");
@@ -61,12 +61,12 @@ public class MainActivity extends BaseActivity {
             //redirectToLogin();
             return;
         }
+
+        initViews();
         if (isGuest)
         {
             showLockedBadge();
         }
-        userRepository = UserRepository.getInstance(this);
-
         setupClickListeners();
         setupBottomNavigation();
         observeUserData();
@@ -141,7 +141,8 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_achievements) {
-                // Navigate to achievements
+                Intent intent = new Intent(this, AchievementsActivity.class);
+                startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_leaderboard) {
                 // Navigate to leaderboard
@@ -169,6 +170,7 @@ public class MainActivity extends BaseActivity {
         cardKing.setEnabled(false);
     }
     private void observeUserData() {
+        userRepository = UserRepository.getInstance(this);
         userRepository.getUserData().observe(this, profileData -> {
             if (profileData != null) {
                 updateUI(profileData);
@@ -184,6 +186,10 @@ public class MainActivity extends BaseActivity {
         userRepository.getErrorMessage().observe(this, error -> {
             if (error != null) {
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+            }
+        });
+        userRepository.getAchievements().observe(this, achievements -> {
+            if (achievements != null) {
             }
         });
     }

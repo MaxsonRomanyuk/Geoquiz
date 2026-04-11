@@ -52,7 +52,6 @@ namespace GeoQuiz_backend.Application.Services
                         CurrentWinStreak = request.Stats.WinStreak,
                         MaxWinStreak = request.Stats.WinStreak,
                         DailyLoginStreak = request.Stats.DailyStreak,
-                        LastLoginDate = DateTime.UtcNow,
                         EuropeCorrect = request.Stats.EuropeCorrect,
                         AsiaCorrect = request.Stats.AsiaCorrect,
                         AfricaCorrect = request.Stats.AfricaCorrect,
@@ -70,7 +69,9 @@ namespace GeoQuiz_backend.Application.Services
                         CurrentPvPStreak = 0,
                         KothGamesPlayed = 0,
                         KothGamesWon = 0,
-                        KothTop3Finishes = 0
+                        KothTop3Finishes = 0,
+                        LastLoginDate = DateTime.UtcNow,
+                        LastAchievementSync = new DateTime()
                     }
             };
             _db.Users.Add(user);

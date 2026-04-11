@@ -2,6 +2,7 @@
 {
     public class AchievementDto
     {
+        public Guid UserId { get; set; }
         public string Code { get; set; } = null!;
         public int Progress { get; set; }
         public int Rarity { get; set; }

@@ -94,6 +94,8 @@ builder.Services.AddScoped<AuthService>();
 // Game
 builder.Services.AddScoped<GameService>();
 
+//Profile
+builder.Services.AddScoped<IProfileService, ProfileService>();
 
 // Achievement
 builder.Services.AddScoped<IAchievementProgressService, AchievementProgressService>();

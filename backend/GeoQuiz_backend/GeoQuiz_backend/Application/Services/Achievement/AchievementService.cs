@@ -56,6 +56,12 @@ namespace GeoQuiz_backend.Application.Services
             await HandleCompositeAchievements(userId, newStats);
             await HandleSessionBasedAchievements(userId, session);
         }
+        public async Task CheckAndGrantMissingAchievements(AppDbContext db, Guid userId, UserStats newStats)
+        {
+            await HandleProgressAchievements(db, userId, newStats);
+            await HandleSingleAchievements(db, userId, newStats);
+            await HandleCompositeAchievements(db, userId, newStats);
+        }
         private async Task HandleProgressAchievements(Guid userId, UserStats oldStats, UserStats newStats)
         {
             foreach (var (code, selector) in _statSelectors)
@@ -69,6 +75,17 @@ namespace GeoQuiz_backend.Application.Services
                 {
                     await Unlock(userId, code, level.Target, level.Title, level.Rarity);
                 }
+            }
+        }
+        private async Task HandleProgressAchievements(AppDbContext db ,Guid userId, UserStats currentStats)
+        {
+            foreach (var (code, selector) in _statSelectors)
+            {
+                var currentVal = selector(currentStats);
+
+                var lastLevel = _progressService.GetCurrentProgressLevel(code, currentVal);
+
+                if (lastLevel != null) await UnlockDirect(db, userId, code, lastLevel.Target);
             }
         }
         private async Task HandleSingleAchievements(Guid userId, UserStats oldStats, UserStats newStats)
@@ -91,6 +108,26 @@ namespace GeoQuiz_backend.Application.Services
             if (oldStats.KothGamesWon < 1 && newStats.KothGamesWon >= 1)
                 await Unlock(userId, "KOTH_FIRST_WIN");
         }
+        private async Task HandleSingleAchievements(AppDbContext db, Guid userId, UserStats currentStats)
+        {
+            if (currentStats.TotalGamesPlayed >= 1)
+                await UnlockDirect(db, userId, "FIRST_GAME");
+
+            if (currentStats.TotalGamesWon >= 1)
+                await UnlockDirect(db, userId, "FIRST_WIN");
+
+            if (currentStats.PvPGamesPlayed >= 1)
+                await UnlockDirect(db, userId, "PVP_FIRST_GAME");
+
+            if (currentStats.PvPGamesWon >= 1)
+                await UnlockDirect(db, userId, "PVP_FIRST_WIN");
+
+            if (currentStats.KothGamesPlayed >= 1)
+                await UnlockDirect(db, userId, "KOTH_FIRST_GAME");
+
+            if (currentStats.KothGamesWon >= 1)
+                await UnlockDirect(db, userId, "KOTH_FIRST_WIN");
+        }
         private async Task HandleCompositeAchievements(Guid userId, UserStats s)
         {
             if (s.EuropeCorrect >= 1000 &&
@@ -108,6 +145,25 @@ namespace GeoQuiz_backend.Application.Services
                 s.LanguagesCorrect >= 1000)
             {
                 await Unlock(userId, "ALL_ROUNDER", 1000);
+            }
+        }
+        private async Task HandleCompositeAchievements(AppDbContext db, Guid userId, UserStats s)
+        {
+            if (s.EuropeCorrect >= 1000 &&
+                s.AsiaCorrect >= 1000 &&
+                s.AfricaCorrect >= 1000 &&
+                s.AmericaCorrect >= 1000 &&
+                s.OceaniaCorrect >= 1000)
+            {
+                await UnlockDirect(db, userId, "WORLD_TRAVELER", 1000);
+            }
+
+            if (s.FlagsCorrect >= 1000 &&
+                s.CapitalsCorrect >= 1000 &&
+                s.OutlinesCorrect >= 1000 &&
+                s.LanguagesCorrect >= 1000)
+            {
+                await UnlockDirect(db, userId, "ALL_ROUNDER", 1000);
             }
         }
         private async Task HandleSessionBasedAchievements(Guid userId, GameSession? session)
@@ -130,27 +186,33 @@ namespace GeoQuiz_backend.Application.Services
             var achievement = await _db.Achievements.FirstOrDefaultAsync(a => a.Code == code);
             if (achievement == null) return;
 
-            var exists = await _db.UserAchievements.AnyAsync(x =>
-                x.UserId == userId &&
-                x.AchievementId == achievement.Id &&
-                x.Progress == progress);
+            var existing = await _db.UserAchievements.FirstOrDefaultAsync(x => x.UserId == userId && x.AchievementId == achievement.Id);
 
-            if (exists) return;
-
-            var ua = new UserAchievement
+            if (existing != null)
             {
-                UserId = userId,
-                AchievementId = achievement.Id,
-                Progress = progress,
-                IsUnlocked = true,
-                UnlockedAt = DateTime.UtcNow
-            };
+                if (existing.Progress == progress) return;
 
-            _db.UserAchievements.Add(ua);
+                existing.Progress = progress;
+            }
+
+            else
+            {
+                existing = new UserAchievement
+                {
+                    UserId = userId,
+                    AchievementId = achievement.Id,
+                    Progress = progress,
+                    IsUnlocked = true,
+                    UnlockedAt = DateTime.UtcNow
+                };
+                _db.UserAchievements.Add(existing);
+            }
+
             await _db.SaveChangesAsync();
 
             await _notificationService.NotifyAchievementUnlocked(userId, new AchievementDto
             {
+                UserId = userId,
                 Code = code,
                 Progress = progress,
                 Rarity = (int)(rarity ?? achievement.Rarity),
@@ -158,6 +220,34 @@ namespace GeoQuiz_backend.Application.Services
                 UnlockedAt = DateTime.UtcNow
             });
         }
-        
+        public async Task UnlockDirect(AppDbContext db, Guid userId, string code, int progress = 1)
+        {
+            var achievement = await db.Achievements.FirstOrDefaultAsync(a => a.Code == code);
+            if (achievement == null) return;
+
+            var existing = await db.UserAchievements
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.AchievementId == achievement.Id);
+
+            if (existing != null)
+            {
+                if (existing.Progress >= progress) return;
+
+                existing.Progress = progress;
+            }
+            else
+            {
+                existing = new UserAchievement
+                {
+                    UserId = userId,
+                    AchievementId = achievement.Id,
+                    Progress = progress,
+                    IsUnlocked = true,
+                    UnlockedAt = DateTime.UtcNow
+                };
+                db.UserAchievements.Add(existing);
+            }
+
+            await db.SaveChangesAsync();
+        }
     }
 }

@@ -3,6 +3,8 @@ package com.example.geoquiz_frontend.presentation.utils;
 import android.content.Context;
 
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
+import com.example.geoquiz_frontend.data.remote.NotificationManager;
+import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.repositories.GameRepository;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.domain.engine.GameManager;
@@ -28,16 +30,26 @@ public class AuthManager {
                 "Guest"
         );
         preferencesHelper.setCurrentUser(guestUser);
-        databaseHelper.saveUserStats(new UserStats(preferencesHelper.getUserId()));
+        String uid = preferencesHelper.getUserId();
+        databaseHelper.saveUserStats(new UserStats(uid));
+        databaseHelper.saveAllEmptyAchievements(uid);
+
     }
 
     public void logout() {
-        databaseHelper.deleteUserStats(preferencesHelper.getUserId());
-        //preferencesHelper.clearCurrentUser();
+        NotificationManager notificationManager = NotificationManager.getInstance();
+        String token = preferencesHelper.getAuthToken();
+        String userId = preferencesHelper.getUserId();
+
+        if (token != null && !token.isEmpty()) {
+            notificationManager.init(token, userId);
+            notificationManager.stop();
+        }
+
+        databaseHelper.deleteUserStats(userId);
+        databaseHelper.deleteUserAchievements(userId);
         gameRepository.clearPendingGames();
-
         preferencesHelper.clearCurrentUser();
-
         UserRepository.reset();
     }
 

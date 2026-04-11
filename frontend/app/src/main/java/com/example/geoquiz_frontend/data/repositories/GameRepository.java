@@ -100,6 +100,7 @@ public class GameRepository {
 
             Log.d(TAG, "Нет интернета, загружаем из assets");
             loadDataFromAssets(callback);
+            Log.d(TAG, "Загрузили");
         });
     }
 

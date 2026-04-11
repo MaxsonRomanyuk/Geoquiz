@@ -11,8 +11,26 @@ import com.example.geoquiz_frontend.data.remote.ApiClient;
 import com.example.geoquiz_frontend.data.remote.ApiService;
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
+import com.example.geoquiz_frontend.domain.entities.Achievement;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
+import com.example.geoquiz_frontend.domain.enums.LocalizedText;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,16 +38,24 @@ import retrofit2.Response;
 public class UserRepository {
     private static UserRepository instance;
     private MutableLiveData<ProfileResponse> userData = new MutableLiveData<>();
+    private MutableLiveData<List<Achievement>> userAchievements = new MutableLiveData<>();
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
     private MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
     private ApiService apiService;
     private PreferencesHelper preferencesHelper;
     private DatabaseHelper databaseHelper;
+    private static final String ACHIEVEMENTS_FILE = "achievements.json";
+    private static Map<String, JSONObject> achievementsCache;
+    private final Context context;
 
     private UserRepository(Context context) {
+        this.context = context.getApplicationContext();
         preferencesHelper = new PreferencesHelper(context);
         databaseHelper = new DatabaseHelper(context);
+
+        initAchievementsCache();
+
         if (preferencesHelper.hasValidToken()) {
             apiService = ApiClient.getApiWithAuth(preferencesHelper);
         }
@@ -50,7 +76,9 @@ public class UserRepository {
     public LiveData<ProfileResponse> getUserData() {
         return userData;
     }
-
+    public LiveData<List<Achievement>> getAchievements() {
+        return userAchievements;
+    }
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
     }
@@ -60,7 +88,7 @@ public class UserRepository {
     }
 
     public void loadUserData(boolean forceRefresh) {
-        if (!forceRefresh && userData.getValue() != null) {
+        if (!forceRefresh && userData.getValue() != null && userAchievements.getValue() != null) {
             return;
         }
 
@@ -75,9 +103,11 @@ public class UserRepository {
 
         if (!forceRefresh) {
             UserStats cachedStats = databaseHelper.getUserStats(userId);
-            if (cachedStats != null) {
+            List<Achievement> achievements = getFullAchievements(userId); // for empty saved datenow
+            if (cachedStats != null && achievements!= null) {
                 ProfileResponse profileResponse = convertStatsToProfile(cachedStats);
                 userData.setValue(profileResponse);
+                userAchievements.setValue(achievements);
                 isLoading.setValue(false);
                 return;
             }
@@ -100,6 +130,12 @@ public class UserRepository {
                         UserStats stats = convertProfileToStats(profile, userId);
                         databaseHelper.saveUserStats(stats);
 
+                        List<ProfileResponse.AchievementDto> achievements = profile.getAchievements();
+                        for (ProfileResponse.AchievementDto achievement : achievements) {
+                            databaseHelper.saveUserAchievements(achievement, userId);
+                        }
+
+                        userAchievements.setValue(getFullAchievements(userId));
                         userData.setValue(profile);
                     } else {
                         errorMessage.setValue("Error loading data: " + response.code());
@@ -156,6 +192,7 @@ public class UserRepository {
     }
     public void clearData() {
         userData.setValue(null);
+        userAchievements.setValue(null);
         isLoading.setValue(false);
         errorMessage.setValue(null);
     }
@@ -188,5 +225,110 @@ public class UserRepository {
         }
 
         return stats;
+    }
+    public void unlockAchievements(ProfileResponse.AchievementDto achievementDto)
+    {
+        databaseHelper.updateUserAchievement(achievementDto);
+        List<Achievement> achievements = getFullAchievements(achievementDto.getUserId());
+        userAchievements.setValue(achievements);
+    }
+    public List<Achievement> getFullAchievements(String userId) {
+        List<ProfileResponse.AchievementDto> dtos = databaseHelper.getUserAchievements(userId);
+        if (dtos == null) return null;
+        List<Achievement> fullAchievements = new ArrayList<>();
+
+        for (ProfileResponse.AchievementDto dto : dtos) {
+            fullAchievements.add(convertDtoToAchievement(dto));
+        }
+
+        return fullAchievements;
+    }
+    private void initAchievementsCache() {
+        if (achievementsCache != null) return;
+
+        achievementsCache = new HashMap<>();
+        try {
+            String jsonString = readJsonFromAssets(ACHIEVEMENTS_FILE);
+            JSONObject root = new JSONObject(jsonString);
+            JSONArray achievements = root.getJSONArray("achievements");
+
+            for (int i = 0; i < achievements.length(); i++) {
+                JSONObject achievement = achievements.getJSONObject(i);
+                String code = achievement.getString("code");
+                achievementsCache.put(code, achievement);
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to init achievements cache", e);
+        }
+    }
+    private String readJsonFromAssets(String fileName) throws IOException {
+        InputStream is = context.getAssets().open(fileName);
+        int size = is.available();
+        byte[] buffer = new byte[size];
+        is.read(buffer);
+        is.close();
+        return new String(buffer, "UTF-8");
+    }
+    private Achievement convertDtoToAchievement(ProfileResponse.AchievementDto achievementDto)
+    {
+        Achievement achievement = new Achievement(
+                achievementDto.getCode(),
+                null,
+                null,
+                0,
+                achievementDto.getRarity(),
+                achievementDto.getProgress(),
+                achievementDto.isUnlocked(),
+                dateToString(achievementDto.getUnlockedAt()),
+                null
+        );
+
+        fillFromCache(achievement);
+        return achievement;
+    }
+    private void fillFromCache(Achievement achievement) {
+        if (achievementsCache == null) {
+            Log.d(TAG, "Achievements cache not initialized");
+            return;
+        }
+
+        JSONObject json = achievementsCache.get(achievement.code);
+        if (json == null) {
+            Log.d(TAG, "Achievement not found in cache: " + achievement.code);
+            return;
+        }
+
+        try {
+            achievement.category = json.optInt("category", 0);
+            achievement.icon = json.optString("icon", "");
+
+            JSONObject titleJson = json.optJSONObject("title");
+            if (titleJson != null) {
+                achievement.title = new LocalizedText(
+                        titleJson.optString("ru", ""),
+                        titleJson.optString("en", "")
+                );
+            }
+
+            JSONObject descJson = json.optJSONObject("description");
+            if (descJson != null) {
+                achievement.description = new LocalizedText(
+                        descJson.optString("ru", ""),
+                        descJson.optString("en", "")
+                );
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error filling achievement from cache: " + achievement.code, e);
+        }
+    }
+    private String dateToString(Date unlockedAt)
+    {
+        if (unlockedAt != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+            return sdf.format(unlockedAt);
+        } else {
+            return  "";
+        }
     }
 }

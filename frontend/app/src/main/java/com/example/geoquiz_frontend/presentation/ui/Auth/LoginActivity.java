@@ -1,8 +1,11 @@
 package com.example.geoquiz_frontend.presentation.ui.Auth;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,10 +14,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import androidx.annotation.NonNull;
-
-import com.example.geoquiz_frontend.data.local.DatabaseHelper;
 import com.example.geoquiz_frontend.data.remote.ApiClient;
 import com.example.geoquiz_frontend.data.remote.ApiService;
+import com.example.geoquiz_frontend.data.remote.NotificationManager;
+import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
 import com.example.geoquiz_frontend.presentation.utils.AuthManager;
 import com.example.geoquiz_frontend.data.remote.dtos.auth.AuthResponse;
@@ -53,6 +56,8 @@ public class LoginActivity extends BaseActivity {
     private GameManager gameManager;
 
     private UserStats userStats;
+    private NotificationManager notificationManager;
+    private String activityId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +69,20 @@ public class LoginActivity extends BaseActivity {
         authManager = new AuthManager(this);
 
         if (authManager.isLoggedIn()) {
-            gameManager = GameManager.getInstance(this);
-            loadData();
+            loadBoostrapData();
 
             userRepository = UserRepository.getInstance(this);
             userRepository.loadUserData(false);
 
+            activityId = "login_" + System.currentTimeMillis();
+            notificationManager = NotificationManager.getInstance();
+            String token = preferencesHelper.getAuthToken();
+            String userId = preferencesHelper.getUserId();
+
+            if (token != null && !token.isEmpty()) {
+                notificationManager.init(token, userId);
+                connectToSignalR();
+            }
             startMainActivity();
             return;
         }
@@ -83,8 +96,9 @@ public class LoginActivity extends BaseActivity {
             userStats.getExperience();
         }
     }
-    private void loadData()
+    private void loadBoostrapData()
     {
+        gameManager = GameManager.getInstance(this);
         gameManager.loadBootstrapData(new GameRepository.BootstrapCallback() {
             @Override
             public void onSuccess(BootstrapResponse data) {
@@ -124,6 +138,33 @@ public class LoginActivity extends BaseActivity {
         btnAuth.setOnClickListener(v -> performAuth());
         tvForgotPassword.setOnClickListener(v -> showForgotPasswordDialog());
         btnGuest.setOnClickListener(v -> loginAsGuest());
+    }
+    private void connectToSignalR() {
+        notificationManager.addListener(activityId, new NotificationManager.ConnectionListener() {
+            @Override
+            public void onConnected() {
+                runOnUiThread(() -> {
+                    Log.d(TAG, "Connected, joining queue");
+                });
+            }
+
+            @Override
+            public void onDisconnected() {
+                runOnUiThread(() -> {
+                    Log.d(TAG, "Disconnected");
+                });
+            }
+
+            @Override
+            public void onAchievementUnlocked(ProfileResponse.AchievementDto data) {
+            }
+
+            @Override
+            public void onConnectionFailed(String reason) {
+            }
+        });
+
+        notificationManager.start();
     }
     private void updateAuthMode() {
         if (isLoginMode) {
@@ -248,8 +289,8 @@ public class LoginActivity extends BaseActivity {
         if (preferencesHelper == null) {
             preferencesHelper = new PreferencesHelper(LoginActivity.this);
         }
-        saveAuthToken(token);
 
+        saveAuthToken(token);
         User user = new User();
         user.setId(uid);
         user.setEmail(email);
@@ -257,11 +298,18 @@ public class LoginActivity extends BaseActivity {
         user.setPremium(false);
         authManager.LoginWithEmail(user);
 
-        UserRepository userRepository = UserRepository.getInstance(this);
+        loadBoostrapData();
+
+        userRepository = UserRepository.getInstance(this);
         userRepository.loadUserData(true);
 
-        gameManager = GameManager.getInstance(this);
-        loadData();
+        activityId = "login_" + System.currentTimeMillis();
+        notificationManager = NotificationManager.getInstance();
+
+        if (token != null && !token.isEmpty()) {
+            notificationManager.init(token, uid);
+        }
+        connectToSignalR();
 
         startMainActivity();
     }
@@ -272,8 +320,7 @@ public class LoginActivity extends BaseActivity {
 
     private void loginAsGuest() {
         authManager.loginAsGuest();
-        gameManager = GameManager.getInstance(this);
-        loadData();
+        loadBoostrapData();
 
         userRepository = UserRepository.getInstance(this);
         userRepository.loadUserData(false);
@@ -297,5 +344,13 @@ public class LoginActivity extends BaseActivity {
     private void showLoading(boolean show) {
         btnAuth.setEnabled(!show);
         btnAuth.setText(show ? "Загрузка..." : (isLoginMode ? "Вход" : "Регистрация"));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (notificationManager != null) {
+            notificationManager.removeListener(activityId);
+        }
     }
 }

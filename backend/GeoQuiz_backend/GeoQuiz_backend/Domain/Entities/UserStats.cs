@@ -45,6 +45,7 @@ namespace GeoQuiz_backend.Domain.Entities
         public int KothGamesPlayed { get; set; }
         public int KothGamesWon { get; set; }
         public int KothTop3Finishes { get; set; }
+        public DateTime LastAchievementSync { get; set; }
 
         public User User { get; set; } = null!;
         public UserStats Clone()
@@ -77,7 +78,8 @@ namespace GeoQuiz_backend.Domain.Entities
                 CurrentPvPStreak = this.CurrentPvPStreak,
                 KothGamesPlayed = this.KothGamesPlayed,
                 KothGamesWon = this.KothGamesWon,
-                KothTop3Finishes = this.KothTop3Finishes
+                KothTop3Finishes = this.KothTop3Finishes,
+                LastAchievementSync = this.LastAchievementSync,
             };
         }
     }

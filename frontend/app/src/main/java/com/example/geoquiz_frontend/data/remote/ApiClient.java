@@ -2,7 +2,12 @@ package com.example.geoquiz_frontend.data.remote;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -27,7 +32,7 @@ public class ApiClient {
 
     private static ApiService createApi() {
         Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                .registerTypeAdapter(Date.class, dateDeserializer)
                 .create();
 
         OkHttpClient client = new OkHttpClient.Builder()
@@ -46,7 +51,7 @@ public class ApiClient {
 
     public static ApiService getApiWithAuth(PreferencesHelper preferencesHelper) {
         Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                .registerTypeAdapter(Date.class, dateDeserializer)
                 .create();
 
         OkHttpClient client = new OkHttpClient.Builder()
@@ -63,4 +68,21 @@ public class ApiClient {
                 .build()
                 .create(ApiService.class);
     }
+
+    static JsonDeserializer<Date> dateDeserializer = (json, typeOfT, context) -> {
+        String dateStr = json.getAsString();
+        try {
+            dateStr = dateStr.replaceAll("(\\.\\d{3})\\d*", "$1");
+
+            if (!dateStr.endsWith("Z") && !dateStr.contains("+")) {
+                dateStr += "Z";
+            }
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+            return sdf.parse(dateStr);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to parse date: " + dateStr, e);
+        }
+    };
 }
