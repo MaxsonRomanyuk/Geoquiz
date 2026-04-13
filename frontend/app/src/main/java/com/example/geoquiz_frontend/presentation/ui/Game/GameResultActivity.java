@@ -17,12 +17,13 @@ import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.google.android.material.button.MaterialButton;
 
+import java.util.List;
+
 public class GameResultActivity extends BaseActivity {
     private TextView tvResultIcon, tvCorrectAnswers, tvScore;
     private TextView tvMessage, tvTime, tvAccuracy;
     private MaterialButton btnRestart, btnMainMenu;
     private int score, correctAnswers, totalQuestions, timeSpent, gameMode;
-    private PreferencesHelper preferencesHelper;
     private NotificationManager notificationManager;
     private UserRepository userRepository;
     private String activityId;
@@ -31,6 +32,8 @@ public class GameResultActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_solo_results);
+
+        userRepository = UserRepository.getInstance(this);
 
         score = getIntent().getIntExtra("SCORE", 0);
         correctAnswers = getIntent().getIntExtra("CORRECT", 0);
@@ -43,17 +46,16 @@ public class GameResultActivity extends BaseActivity {
         updateUI();
         updateStats();
 
-        preferencesHelper = new PreferencesHelper(this);
-        activityId = "matchmaking_" + System.currentTimeMillis();
-        notificationManager = NotificationManager.getInstance();
-        userRepository = UserRepository.getInstance(this);
-        String token = preferencesHelper.getAuthToken();
-        String userId = preferencesHelper.getUserId();
-
-        if (token != null && !token.isEmpty()) {
-            notificationManager.init(token, userId);
-        }
-        connectToSignalR();
+        //String token = preferencesHelper.getAuthToken();
+        //String userId = preferencesHelper.getUserId();
+//        if (!userId.equals("uid")) {
+//            activityId = "solo_result" + System.currentTimeMillis();
+//            notificationManager = NotificationManager.getInstance();
+//            if (token != null && !token.isEmpty()) {
+//                notificationManager.init(token, userId);
+//            }
+//            connectToSignalR();
+//        }
     }
 
     private void initViews() {
@@ -79,38 +81,38 @@ public class GameResultActivity extends BaseActivity {
             finish();
         });
     }
-    private void connectToSignalR() {
-        notificationManager.addListener(activityId, new NotificationManager.ConnectionListener() {
-            @Override
-            public void onConnected() {
-                runOnUiThread(() -> {
-                    Log.d(TAG, "Connected, joining queue");
-                });
-            }
-
-            @Override
-            public void onDisconnected() {
-                runOnUiThread(() -> {
-                    Log.d(TAG, "Disconnected");
-                });
-            }
-
-            @Override
-            public void onAchievementUnlocked(ProfileResponse.AchievementDto data) {
-                runOnUiThread(() -> {
-                    Toast.makeText(GameResultActivity.this, data.getCode(), Toast.LENGTH_SHORT).show();
-                    userRepository.unlockAchievements(data);
-                });
-            }
-
-            @Override
-            public void onConnectionFailed(String reason) {
-
-            }
-        });
-
-        notificationManager.start();
-    }
+//    private void connectToSignalR() {
+//        notificationManager.addListener(activityId, new NotificationManager.ConnectionListener() {
+//            @Override
+//            public void onConnected() {
+//                runOnUiThread(() -> {
+//                    Log.d(TAG, "Connected, joining queue");
+//                });
+//            }
+//
+//            @Override
+//            public void onDisconnected() {
+//                runOnUiThread(() -> {
+//                    Log.d(TAG, "Disconnected");
+//                });
+//            }
+//
+//            @Override
+//            public void onAchievementUnlocked(List<ProfileResponse.AchievementDto> data) {
+//                runOnUiThread(() -> {
+//                    //Toast.makeText(GameResultActivity.this, data.getCode(), Toast.LENGTH_SHORT).show();
+//                    //userRepository.unlockAchievement(data);
+//                });
+//            }
+//
+//            @Override
+//            public void onConnectionFailed(String reason) {
+//
+//            }
+//        });
+//
+//        notificationManager.start();
+//    }
     private void updateStats()
     {
         userRepository.loadUserData(false);
@@ -151,6 +153,6 @@ public class GameResultActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        notificationManager.removeListener(activityId);
+        if (notificationManager!=null)notificationManager.removeListener(activityId);
     }
 }

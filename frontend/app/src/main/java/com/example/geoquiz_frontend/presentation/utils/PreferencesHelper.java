@@ -20,6 +20,9 @@ public class PreferencesHelper {
     private static final String KEY_APP_LANG = "app_language";
     private static final String KEY_APP_THEME = "app_theme";
     private static final String KEY_IS_PREMIUM = "is_premium";
+    private static final String KEY_HIDE_CONNECTION_BANNER = "hide_connection_banner";
+    private static final String KEY_BANNER_DISMISSED_TIME = "banner_dismissed_time";
+    private static final long BANNER_COOLDOWN_MS = 24 * 60 * 60 * 1000;
     private SharedPreferences sharedPreferences;
 
     public PreferencesHelper(Context context) {
@@ -112,8 +115,28 @@ public class PreferencesHelper {
     public void setPremium(boolean isPremium) {
         sharedPreferences.edit().putBoolean(KEY_IS_PREMIUM, isPremium).apply();
     }
-
     public boolean isPremium() {
         return sharedPreferences.getBoolean(KEY_IS_PREMIUM, false);
+    }
+    public void hideConnectionBannerPermanently() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_HIDE_CONNECTION_BANNER, true);
+        editor.apply();
+    }
+
+    public void hideConnectionBannerTemporarily() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(KEY_BANNER_DISMISSED_TIME, System.currentTimeMillis());
+        editor.apply();
+    }
+
+    public boolean isConnectionBannerPermanentlyHidden() {
+        return sharedPreferences.getBoolean(KEY_HIDE_CONNECTION_BANNER, false);
+    }
+
+    public boolean shouldShowBannerAfterCooldown() {
+        long dismissedTime = sharedPreferences.getLong(KEY_BANNER_DISMISSED_TIME, 0);
+        if (dismissedTime == 0) return true;
+        return System.currentTimeMillis() - dismissedTime > BANNER_COOLDOWN_MS;
     }
 }

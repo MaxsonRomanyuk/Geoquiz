@@ -8,6 +8,8 @@
     android:background="@drawable/background_gradient"
     tools:context=".presentation.ui.Home.MainActivity">
 
+    <include layout="@layout/include_connection_banner"/>
+
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"

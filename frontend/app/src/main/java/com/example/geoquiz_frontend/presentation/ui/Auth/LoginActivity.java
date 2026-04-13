@@ -40,6 +40,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.List;
 
 public class LoginActivity extends BaseActivity {
     private MaterialButtonToggleGroup toggleGroup;
@@ -156,7 +157,7 @@ public class LoginActivity extends BaseActivity {
             }
 
             @Override
-            public void onAchievementUnlocked(ProfileResponse.AchievementDto data) {
+            public void onAchievementUnlocked(List<ProfileResponse.AchievementDto> data) {
             }
 
             @Override

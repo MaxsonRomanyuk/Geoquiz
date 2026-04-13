@@ -302,12 +302,16 @@ public class SoloGameActivity extends BaseActivity {
 
     private void checkAnswer(int selectedIndex) {
         GameQuestion question = questions.get(currentQuestionIndex);
+        currentQuestionIndex++;
         if (question == null || question.isAnswered()) return;
 
         long timeSpent = System.currentTimeMillis() - questionStartTime;
 
         question.setSelectedAnswerIndex(selectedIndex);
         question.setTimeSpent((int) timeSpent);
+
+        setButtonsEnabled(false);
+        highlightAnswers(question, selectedIndex);
 
         if (question.isCorrect()) {
             correctAnswers++;
@@ -341,19 +345,14 @@ public class SoloGameActivity extends BaseActivity {
         }
         else {
             wrongAnswers++;
-            if(wrongAnswers >=3)
+            if (wrongAnswers >=3)
             {
                 endGame();
                 return;
             }
         }
 
-        setButtonsEnabled(false);
-
-        highlightAnswers(question, selectedIndex);
-
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            currentQuestionIndex++;
             if (currentQuestionIndex < questions.size()) {
                 showQuestion();
             } else {

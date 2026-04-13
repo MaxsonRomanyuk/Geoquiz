@@ -3,7 +3,12 @@ import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -31,9 +36,7 @@ public class ApiClient {
     }
 
     private static ApiService createApi() {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Date.class, dateDeserializer)
-                .create();
+        Gson gson = createGsonWithDateAdapter();
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -50,9 +53,7 @@ public class ApiClient {
     }
 
     public static ApiService getApiWithAuth(PreferencesHelper preferencesHelper) {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Date.class, dateDeserializer)
-                .create();
+        Gson gson = createGsonWithDateAdapter();
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -68,7 +69,21 @@ public class ApiClient {
                 .build()
                 .create(ApiService.class);
     }
-
+    private static Gson createGsonWithDateAdapter() {
+        return new GsonBuilder()
+                .registerTypeAdapter(Date.class, dateSerializer)
+                .registerTypeAdapter(Date.class, dateDeserializer)
+                .create();
+    }
+    static JsonSerializer<Date> dateSerializer = new JsonSerializer<Date>() {
+        @Override
+        public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+            String formattedDate = sdf.format(src);
+            return new JsonPrimitive(formattedDate);
+        }
+    };
     static JsonDeserializer<Date> dateDeserializer = (json, typeOfT, context) -> {
         String dateStr = json.getAsString();
         try {

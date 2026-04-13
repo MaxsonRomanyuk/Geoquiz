@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.example.geoquiz_frontend.data.remote.dtos.profile.AchievementUnlockedMessage;
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
@@ -12,6 +13,7 @@ import com.microsoft.signalr.HubConnectionState;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.reactivex.rxjava3.core.Completable;
@@ -35,10 +37,10 @@ public class NotificationManager {
     public interface ConnectionListener {
         void onConnected();
         void onDisconnected();
-        void onAchievementUnlocked(ProfileResponse.AchievementDto data);
+        void onAchievementUnlocked(List<ProfileResponse.AchievementDto> data);
         void onConnectionFailed(String reason);
     }
-    private final ConcurrentHashMap<String, NotificationManager.ConnectionListener> listeners = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, ConnectionListener> listeners = new ConcurrentHashMap<>();
     private NotificationManager() {}
 
     public static synchronized NotificationManager getInstance() {
@@ -72,10 +74,11 @@ public class NotificationManager {
     }
     private void registerHandlers() {
         if (hubConnection == null) return;
+
         hubConnection.on("AchievementUnlocked", (data) -> {
-            Log.d(TAG, "Achievement unlocked");
-            notifyListeners(listener -> listener.onAchievementUnlocked(data));
-        }, ProfileResponse.AchievementDto.class);
+            AchievementUnlockedMessage message = (AchievementUnlockedMessage) data;
+            notifyListeners(listener -> listener.onAchievementUnlocked(message.getAchievements()));
+        }, AchievementUnlockedMessage.class);
 
         hubConnection.onClosed(exception -> {
             Log.d(TAG, "Connection closed: " + (exception != null ? exception.getMessage() : "normal"));
@@ -87,9 +90,9 @@ public class NotificationManager {
         });
     }
     private interface ListenerAction {
-        void execute(NotificationManager.ConnectionListener listener);
+        void execute(ConnectionListener listener);
     }
-    private void notifyListeners(NotificationManager.ListenerAction action) {
+    private void notifyListeners(ListenerAction action) {
         for (ConnectionListener listener : listeners.values()) {
             if (listener != null) {
                 try {

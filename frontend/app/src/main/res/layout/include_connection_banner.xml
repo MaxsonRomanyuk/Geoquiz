@@ -1,0 +1,35 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/connectionStatusBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="18dp"
+        android:background="@drawable/bg_connection_banner"
+        android:visibility="gone"
+        android:elevation="8dp">
+
+        <TextView
+            android:id="@+id/tvConnectionStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:drawablePadding="8dp"
+            android:maxLines="2"
+            android:ellipsize="end" />
+
+        <ImageView
+            android:id="@+id/ivCloseConnectionStatus"
+            android:layout_width="32dp"
+            android:layout_height="24dp"
+            android:contentDescription="ivClose"
+            android:src="@drawable/icon_close"
+            android:padding="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@android:color/white" />
+    </LinearLayout>
+</merge>

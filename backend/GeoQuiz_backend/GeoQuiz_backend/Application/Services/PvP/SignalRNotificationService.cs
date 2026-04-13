@@ -22,7 +22,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
             _kothHub = kothHub;
             _notificationHub = notificationHub;
         }
-        public async Task NotifyAchievementUnlocked(Guid userId, AchievementDto data)
+        public async Task NotifyAchievementUnlocked(Guid userId, AchievementUnlockedMessage data)
         {
             await _notificationHub.Clients.User(userId.ToString()).AchievementUnlocked(data);
         }

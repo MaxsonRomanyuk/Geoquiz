@@ -10,11 +10,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.geoquiz_frontend.domain.entities.Achievement;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
+import com.example.geoquiz_frontend.domain.enums.LocalizedText;
 import com.example.geoquiz_frontend.presentation.ui.King.KingLobbyActivity;
 import com.example.geoquiz_frontend.data.remote.ApiClient;
 import com.example.geoquiz_frontend.data.remote.ApiService;
 import com.example.geoquiz_frontend.presentation.ui.achievements.AchievementsActivity;
+import com.example.geoquiz_frontend.presentation.utils.AchievementDialogHelper;
 import com.example.geoquiz_frontend.presentation.utils.AuthManager;
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
@@ -30,6 +33,9 @@ import com.example.geoquiz_frontend.presentation.ui.PvP.MatchmakingActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends BaseActivity {
 

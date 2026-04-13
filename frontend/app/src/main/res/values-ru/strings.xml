@@ -208,6 +208,10 @@
     <!--Achievements-->
     <string name="unlocked">Разблокировано</string>
     <string name="total_achievements">Всего достижений</string>
+    <string name="previous">Предыдущее</string>
+    <string name="next">Следующее</string>
+    <string name="achievement_unlocked">Достижение разблокировано</string>
+    <string name="claim_reward">Получить вознаграждение</string>
 
     <!--Errors-->
     <string name="connection_lost">Соединение потеряно</string>

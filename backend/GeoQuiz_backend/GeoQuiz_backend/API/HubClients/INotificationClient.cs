@@ -4,6 +4,6 @@ namespace GeoQuiz_backend.API.HubClients
 {
     public interface INotificationClient
     {
-        Task AchievementUnlocked(AchievementDto data);
+        Task AchievementUnlocked(AchievementUnlockedMessage data);
     }
 }

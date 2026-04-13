@@ -226,11 +226,21 @@ public class UserRepository {
 
         return stats;
     }
-    public void unlockAchievements(ProfileResponse.AchievementDto achievementDto)
+    public void unlockAchievement(ProfileResponse.AchievementDto achievementDto)
     {
         databaseHelper.updateUserAchievement(achievementDto);
         List<Achievement> achievements = getFullAchievements(achievementDto.getUserId());
         userAchievements.setValue(achievements);
+    }
+    public List<Achievement> getFullAchievements(String userId, List<ProfileResponse.AchievementDto> achievements) {
+        if (achievements == null) return null;
+        List<Achievement> fullAchievements = new ArrayList<>();
+
+        for (ProfileResponse.AchievementDto dto : achievements) {
+            fullAchievements.add(convertDtoToAchievement(dto));
+        }
+
+        return fullAchievements;
     }
     public List<Achievement> getFullAchievements(String userId) {
         List<ProfileResponse.AchievementDto> dtos = databaseHelper.getUserAchievements(userId);

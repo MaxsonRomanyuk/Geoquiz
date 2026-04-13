@@ -48,8 +48,7 @@ namespace GeoQuiz_backend.Application.Services
                 .Select(s => s.LastAchievementSync)
                 .FirstOrDefaultAsync();
 
-            if (DateTime.UtcNow - lastCheck < TimeSpan.FromDays(1))
-                return;
+            if (DateTime.UtcNow - lastCheck < TimeSpan.FromDays(1)) return;
 
             _ = Task.Run(async () =>
             {

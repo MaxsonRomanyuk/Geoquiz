@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
     tools:context=".presentation.ui.King.KingResultActivity">
-
+    <include layout="@layout/include_connection_banner"/>
     <LinearLayout
         android:id="@+id/layoutTopBar"
         android:layout_width="match_parent"

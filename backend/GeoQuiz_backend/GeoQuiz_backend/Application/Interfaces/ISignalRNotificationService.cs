@@ -6,7 +6,7 @@ namespace GeoQuiz_backend.Application.Interfaces
 {
     public interface ISignalRNotificationService
     {
-        Task NotifyAchievementUnlocked(Guid userId, AchievementDto data);
+        Task NotifyAchievementUnlocked(Guid userId, AchievementUnlockedMessage data);
 
         Task NotifyMatchFound(Guid userId, MatchFoundWithDraftData matchData);
 

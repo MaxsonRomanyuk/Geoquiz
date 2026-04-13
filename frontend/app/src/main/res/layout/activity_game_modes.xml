@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
     tools:context=".presentation.ui.Game.GameModesActivity">
-
+    <include layout="@layout/include_connection_banner"/>
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
