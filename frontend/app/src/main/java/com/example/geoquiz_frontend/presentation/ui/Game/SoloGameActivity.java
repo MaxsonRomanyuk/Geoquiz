@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
+import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.domain.engine.GameManager;
 import com.example.geoquiz_frontend.domain.entities.GameQuestion;
@@ -45,15 +46,14 @@ public class SoloGameActivity extends BaseActivity {
     private FrameLayout imageContainer;
     private ImageView ivQuestionImage;
     private Button btnPlayAudio, btnEndGame;
-    private LinearLayout progressContainer, optionsContainer;
 
 
     private GameManager gameManager;
     private PreferencesHelper preferencesHelper;
     private DatabaseHelper databaseHelper;
+    private UserRepository userRepository;
     private GameSession currentSession;
     private List<GameQuestion> questions;
-    private UserRepository userRepository;
 
 
     private CountDownTimer timer;
@@ -85,13 +85,10 @@ public class SoloGameActivity extends BaseActivity {
         preferencesHelper = new PreferencesHelper(this);
         databaseHelper = new DatabaseHelper(this);
         gameManager = GameManager.getInstance(this);
-
         userRepository = UserRepository.getInstance(this);
 
         language = preferencesHelper.getLanguage();
-
         gameMode = getIntent().getIntExtra("GAME_MODE", 1);
-
 
         currentSession = new GameSession();
 
@@ -117,9 +114,6 @@ public class SoloGameActivity extends BaseActivity {
         btnPlayAudio = findViewById(R.id.btn_play_audio);
 
         btnEndGame = findViewById(R.id.btn_end_game);
-
-        progressContainer = findViewById(R.id.progress_container);
-        optionsContainer = findViewById(R.id.options_container);
     }
     private void setupClickListeners() {
         if (btnEndGame != null) {
@@ -403,7 +397,7 @@ public class SoloGameActivity extends BaseActivity {
 
         currentSession = createGameSession();
         gameManager.saveGameSession(currentSession);
-        databaseHelper.updateStatsAfterGame(preferencesHelper.getUserId(), gameMode, correctAnswers > 8, correctAnswers, score,
+        databaseHelper.updateStatsAfterGame(preferencesHelper.getUserId(), gameMode, correctAnswers >= 8, correctAnswers, score,
                                             correctEurope, correctAsia, correctAfrica , correctAmerica , correctOceania);
 
         Log.d(TAG, "Ending game. Score: " + score + ", Correct: " + correctAnswers);
@@ -427,6 +421,17 @@ public class SoloGameActivity extends BaseActivity {
         intent.putExtra("GAME_MODE", gameMode);
         startActivity(intent);
         finish();
+    }
+    @Override
+    protected void handleAchievementUnlocked(List<ProfileResponse.AchievementDto> achievements) {
+        runOnUiThread(() -> {
+            Log.d("NotificationManager", "AchievementUnlocked in solo game received! Count: " + achievements.size());
+            userRepository = UserRepository.getInstance(this);
+
+            for (ProfileResponse.AchievementDto achievement : achievements) {
+                userRepository.savePendingAchievements(achievement);
+            }
+        });
     }
     private GameSession createGameSession(){
         currentSession.setMode(gameMode);

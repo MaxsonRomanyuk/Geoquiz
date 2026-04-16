@@ -216,7 +216,7 @@
     <string name="achievement_unlocked">Achievement Unlocked</string>
     <string name="claim_reward">Claim Reward</string>
     <!--Errors-->
-    <string name="connection_lost">Connection lost</string>
+    <string name="connection_lost">Connection lost. Try again later</string>
     <string name="error">Error: </string>
     <string name="no_server">Not connected to server</string>
     <string name="no_game_data">Error: no game data</string>

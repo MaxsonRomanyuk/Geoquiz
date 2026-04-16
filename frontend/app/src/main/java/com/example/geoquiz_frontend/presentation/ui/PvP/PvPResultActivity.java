@@ -1,18 +1,24 @@
 package com.example.geoquiz_frontend.presentation.ui.PvP;
 
+import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
+import com.example.geoquiz_frontend.domain.entities.Achievement;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.widget.TextView;
 
 
 import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
+import com.example.geoquiz_frontend.presentation.utils.AchievementDialogHelper;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.remote.PvPSignalRClientManager;
 import com.google.android.material.button.MaterialButton;
 
+import java.util.List;
 import java.util.Objects;
 
 public class PvPResultActivity extends BaseActivity {
@@ -40,6 +46,7 @@ public class PvPResultActivity extends BaseActivity {
 
     private PreferencesHelper preferencesHelper;
     private PvPSignalRClientManager signalRManager;
+    private UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +54,24 @@ public class PvPResultActivity extends BaseActivity {
         setContentView(R.layout.activity_pvp_results);
 
         preferencesHelper = new PreferencesHelper(this);
+        userRepository = UserRepository.getInstance(this);
         signalRManager = PvPSignalRClientManager.getInstance();
+
         getIntentData();
         initViews();
         setupClickListeners();
         displayResults();
+        Log.d("NotificationManager", "update stats: ");
         updateStats();
+        Log.d("NotificationManager", "stats Updated: ");
+
+        new Handler().postDelayed(() -> {
+            List<ProfileResponse.AchievementDto> achievements = userRepository.consumePendingAchievements();
+            Log.d("NotificationManager", "AchievementUnlocked in RESULT CREATE from CONSUME received! Count: " + achievements.size());
+            if (!achievements.isEmpty()) {
+                handleAchievementUnlocked(achievements);
+            }
+        }, 100);
     }
 
     private void getIntentData() {
@@ -122,7 +141,20 @@ public class PvPResultActivity extends BaseActivity {
             finish();
         });
     }
+    @Override
+    protected void handleAchievementUnlocked(List<ProfileResponse.AchievementDto> achievements) {
+        Log.d("NotificationManager", "Achievement  handle unlocked in PvPResultActivity! Count: " + achievements.size());
+        runOnUiThread(() -> {
+            for (ProfileResponse.AchievementDto achievement : achievements) {
+                userRepository.unlockAchievement(achievement);
+            }
 
+            List<Achievement> achievementList = userRepository.getFullAchievements(preferencesHelper.getUserId(),achievements);
+            userRepository.clearPendingAchievements();
+            AchievementDialogHelper dialogHelper = new AchievementDialogHelper(this);
+            dialogHelper.showAchievements(achievementList);
+        });
+    }
     private void displayResults() {
         String currentLanguage = preferencesHelper.getLanguage();
 

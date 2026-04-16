@@ -81,6 +81,7 @@ public class LoginActivity extends BaseActivity {
             String userId = preferencesHelper.getUserId();
 
             if (token != null && !token.isEmpty()) {
+                notificationManager.reset();
                 notificationManager.init(token, userId);
                 connectToSignalR();
             }
@@ -164,7 +165,6 @@ public class LoginActivity extends BaseActivity {
             public void onConnectionFailed(String reason) {
             }
         });
-
         notificationManager.start();
     }
     private void updateAuthMode() {
@@ -308,6 +308,7 @@ public class LoginActivity extends BaseActivity {
         notificationManager = NotificationManager.getInstance();
 
         if (token != null && !token.isEmpty()) {
+            notificationManager.reset();
             notificationManager.init(token, uid);
         }
         connectToSignalR();

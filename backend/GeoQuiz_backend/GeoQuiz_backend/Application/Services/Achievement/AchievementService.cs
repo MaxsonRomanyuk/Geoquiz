@@ -62,7 +62,56 @@ namespace GeoQuiz_backend.Application.Services
             {
                 AchievementUnlockedMessage achievementUnlocked = new AchievementUnlockedMessage(unlockedAchievements);
                 await _notificationService.NotifyAchievementUnlocked(userId, achievementUnlocked);
+                _logger.LogError("achievement unlocked for {userId} at {date}", userId, DateTime.UtcNow.ToString());
             }
+            //else
+            //{
+            //    var test = new List<AchievementDto>();
+            //    test.Add(new AchievementDto
+            //    {
+            //        UserId = userId,
+            //        Code = "DAILY_LOGIN",
+            //        Progress = 25,
+            //        Rarity = 4,
+            //        IsUnlocked = true,
+            //        UnlockedAt = DateTime.UtcNow,
+            //    });
+            //    AchievementUnlockedMessage achievementUnlocked = new AchievementUnlockedMessage(test);
+            //    await _notificationService.NotifyAchievementUnlocked(userId, achievementUnlocked);
+            //    _logger.LogError("TEST FAKE NOTIFY  for {userId} at {date}", userId, DateTime.UtcNow.ToString());
+            //}
+        }
+        public async Task CheckAndGrantAsync(AppDbContext db, Guid userId, UserStats oldStats, UserStats newStats, GameSession? session = null)
+        {
+            var unlockedAchievements = new List<AchievementDto>();
+
+            await HandleProgressAchievements(db, userId, oldStats, newStats, unlockedAchievements);
+            await HandleSingleAchievements(db, userId, oldStats, newStats, unlockedAchievements);
+            await HandleCompositeAchievements(db, userId, newStats, unlockedAchievements);
+            await HandleSessionBasedAchievements(db, userId, session, unlockedAchievements);
+
+            if (unlockedAchievements.Any())
+            {
+                var achievementUnlocked = new AchievementUnlockedMessage(unlockedAchievements);
+                _logger.LogError("achievement unlocked for {userId} at {date}", userId, DateTime.UtcNow.ToString());
+                await _notificationService.NotifyAchievementUnlocked(userId, achievementUnlocked);
+            }
+            //else
+            //{
+            //    var test = new List<AchievementDto>();
+            //    test.Add(new AchievementDto
+            //    {
+            //        UserId = userId,
+            //        Code = "DAILY_LOGIN",
+            //        Progress = 25,
+            //        Rarity = 4,
+            //        IsUnlocked = true,
+            //        UnlockedAt = DateTime.UtcNow,
+            //    });
+            //    AchievementUnlockedMessage achievementUnlocked = new AchievementUnlockedMessage(test);
+            //    await _notificationService.NotifyAchievementUnlocked(userId, achievementUnlocked);
+            //    _logger.LogError("TEST FAKE NOTIFY  for {userId} at {date}", userId, DateTime.UtcNow.ToString());
+            //}
         }
         public async Task CheckAndGrantMissingAchievements(AppDbContext db, Guid userId, UserStats newStats)
         {
@@ -74,6 +123,7 @@ namespace GeoQuiz_backend.Application.Services
 
             if (unlockedAchievements.Any())
             {
+                _logger.LogError("CheckAndGrantMissingAchievements  for {userId} at {date}", userId, DateTime.UtcNow.ToString());
                 AchievementUnlockedMessage achievementUnlocked = new AchievementUnlockedMessage(unlockedAchievements);
                 await _notificationService.NotifyAchievementUnlocked(userId, achievementUnlocked);
             }
@@ -90,6 +140,21 @@ namespace GeoQuiz_backend.Application.Services
                 foreach (var level in levels)
                 {
                     await Unlock(userId, code, unlockedAchievements, level.Target, level.Title, level.Rarity);
+                }
+            }
+        }
+        private async Task HandleProgressAchievements(AppDbContext db, Guid userId, UserStats oldStats, UserStats newStats, List<AchievementDto> unlockedAchievements)
+        {
+            foreach (var (code, selector) in _statSelectors)
+            {
+                var oldVal = selector(oldStats);
+                var newVal = selector(newStats);
+
+                var levels = _progressService.GetNewlyReachedLevels(code, oldVal, newVal);
+
+                foreach (var level in levels)
+                {
+                    await UnlockDirect(db, userId, code, unlockedAchievements, level.Target, level.Title, level.Rarity);
                 }
             }
         }
@@ -123,6 +188,26 @@ namespace GeoQuiz_backend.Application.Services
 
             if (oldStats.KothGamesWon < 1 && newStats.KothGamesWon >= 1)
                 await Unlock(userId, "KOTH_FIRST_WIN", unlockedAchievements);
+        }
+        private async Task HandleSingleAchievements(AppDbContext db, Guid userId, UserStats oldStats, UserStats newStats, List<AchievementDto> unlockedAchievements)
+        {
+            if (oldStats.TotalGamesPlayed < 1 && newStats.TotalGamesPlayed >= 1)
+                await UnlockDirect(db, userId, "FIRST_GAME", unlockedAchievements);
+
+            if (oldStats.TotalGamesWon < 1 && newStats.TotalGamesWon >= 1)
+                await UnlockDirect(db, userId, "FIRST_WIN", unlockedAchievements);
+
+            if (oldStats.PvPGamesPlayed < 1 && newStats.PvPGamesPlayed >= 1)
+                await UnlockDirect(db, userId, "PVP_FIRST_GAME", unlockedAchievements);
+
+            if (oldStats.PvPGamesWon < 1 && newStats.PvPGamesWon >= 1)
+                await UnlockDirect(db, userId, "PVP_FIRST_WIN", unlockedAchievements);
+
+            if (oldStats.KothGamesPlayed < 1 && newStats.KothGamesPlayed >= 1)
+                await UnlockDirect(db, userId, "KOTH_FIRST_GAME", unlockedAchievements);
+
+            if (oldStats.KothGamesWon < 1 && newStats.KothGamesWon >= 1)
+                await UnlockDirect(db, userId, "KOTH_FIRST_WIN", unlockedAchievements);
         }
         private async Task HandleSingleAchievements(AppDbContext db, Guid userId, UserStats currentStats, List<AchievementDto> unlockedAchievements)
         {
@@ -180,6 +265,19 @@ namespace GeoQuiz_backend.Application.Services
                 s.LanguagesCorrect >= 1000)
             {
                 await UnlockDirect(db, userId, "ALL_ROUNDER", unlockedAchievements, 1000);
+            }
+        }
+        private async Task HandleSessionBasedAchievements(AppDbContext db, Guid userId, GameSession? session, List<AchievementDto> unlockedAchievements)
+        {
+            if (session == null) return;
+
+            if (session.CorrectAnswers == session.TotalQuestions && session.TotalQuestions > 0)
+            {
+                await UnlockDirect(db, userId, "PERFECT_GAME", unlockedAchievements);
+            }
+            if (session.PvPMatch != null && session.CorrectAnswers == session.TotalQuestions && session.TotalQuestions > 0)
+            {
+                await UnlockDirect(db, userId, "PERFECT_GAME_PVP", unlockedAchievements);
             }
         }
         private async Task HandleSessionBasedAchievements(Guid userId, GameSession? session, List<AchievementDto> unlockedAchievements)

@@ -24,14 +24,15 @@ public class NotificationManager {
     private static final String TAG = "NotificationManager";
     private static final int MAX_RECONNECT_ATTEMPTS = 3;
     private static final long RECONNECT_DELAY_MS = 5000;
-    private static final String HUB_URL = "http://192.168.100.40:5238/notificationHub";
+    private static final String HUB_URL = "http://192.168.100.49:5238/notificationHub";
 
     private static NotificationManager instance;
     private HubConnection hubConnection;
-    private String jwtToken;
     private boolean isConnecting = false;
+    private boolean isManualDisconnect = false;
     private int reconnectAttempts = 0;
     private String currentUserId;
+    private String jwtToken;
     private Handler handler = new Handler(Looper.getMainLooper());
 
     public interface ConnectionListener {
@@ -76,8 +77,11 @@ public class NotificationManager {
         if (hubConnection == null) return;
 
         hubConnection.on("AchievementUnlocked", (data) -> {
-            AchievementUnlockedMessage message = (AchievementUnlockedMessage) data;
-            notifyListeners(listener -> listener.onAchievementUnlocked(message.getAchievements()));
+            Log.d(TAG, "AchievementUnlocked received! Count: " + data.getAchievements().size());
+            for (var a : data.getAchievements()) {
+                Log.d(TAG, "  - " + a.getCode() + " (progress: " + a.getProgress() + ")");
+            }
+            notifyListeners(listener -> listener.onAchievementUnlocked(data.getAchievements()));
         }, AchievementUnlockedMessage.class);
 
         hubConnection.onClosed(exception -> {
@@ -93,13 +97,21 @@ public class NotificationManager {
         void execute(ConnectionListener listener);
     }
     private void notifyListeners(ListenerAction action) {
-        for (ConnectionListener listener : listeners.values()) {
-            if (listener != null) {
-                try {
-                    action.execute(listener);
-                } catch (Exception e) {
-                    Log.e(TAG, "Error notifying listener", e);
-                }
+//        for (ConnectionListener listener : listeners.values()) {
+//            if (listener != null) {
+//                try {
+//                    action.execute(listener);
+//                } catch (Exception e) {
+//                    Log.e(TAG, "Error notifying listener", e);
+//                }
+//            }
+//        }
+        if (!listeners.isEmpty()) {
+            ConnectionListener firstListener = listeners.values().iterator().next();
+            try {
+                action.execute(firstListener);
+            } catch (Exception e) {
+                Log.e(TAG, "Error notifying listener", e);
             }
         }
     }
@@ -110,11 +122,15 @@ public class NotificationManager {
         listeners.remove(key);
     }
 
+
     public void start() {
         if (hubConnection == null || currentUserId.equals("uid")) {
             return;
         }
-
+        if (isManualDisconnect) {
+            Log.d(TAG, "Manual disconnect flag is set, skipping auto-reconnect");
+            return;
+        }
         if (hubConnection.getConnectionState() == HubConnectionState.DISCONNECTED && !isConnecting) {
             isConnecting = true;
             Log.d(TAG, "Starting connection to " + HUB_URL);
@@ -146,6 +162,10 @@ public class NotificationManager {
         }
     }
     private void scheduleReconnect() {
+        if (isManualDisconnect) {
+            Log.d(TAG, "Manual disconnect, not scheduling reconnect");
+            return;
+        }
         if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
             Log.w(TAG, "Max reconnect attempts (" + MAX_RECONNECT_ATTEMPTS + ") spent.");
             notifyListeners(listener ->
@@ -178,6 +198,7 @@ public class NotificationManager {
         }
     }
     public void stop() {
+        isManualDisconnect = true;
         handler.removeCallbacksAndMessages(null);
 
         if (connectionDisposable != null && !connectionDisposable.isDisposed()) {
@@ -200,5 +221,14 @@ public class NotificationManager {
     public boolean isConnected() {
         return hubConnection != null &&
                 hubConnection.getConnectionState() == HubConnectionState.CONNECTED;
+    }
+    public void reset() {
+        Log.d(TAG, "Resetting NotificationManager");
+        hubConnection = null;
+        jwtToken = null;
+        currentUserId = null;
+        isManualDisconnect = false;
+        reconnectAttempts = 0;
+        isConnecting = false;
     }
 }

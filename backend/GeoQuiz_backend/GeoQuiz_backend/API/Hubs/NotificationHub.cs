@@ -27,7 +27,7 @@ namespace GeoQuiz_backend.API.Hubs
 
             _connections[userId] = connectionId;
 
-            _logger.LogInformation("User {UserId} connected to NotificationHub ({ConnectionId})",userId, connectionId);
+            _logger.LogInformation("User {UserId} connected to NotificationHub ({ConnectionId}) at {date}",userId, connectionId, DateTime.UtcNow.ToString());
 
             await base.OnConnectedAsync();
         }
@@ -38,7 +38,7 @@ namespace GeoQuiz_backend.API.Hubs
 
             if (_connections.TryRemove(userId, out var connectionId))
             {
-                _logger.LogInformation("User {UserId} disconnected from NotificationHub ({ConnectionId})", userId, connectionId);
+                _logger.LogInformation("User {UserId} disconnected from NotificationHub ({ConnectionId}) at {date}", userId, connectionId, DateTime.UtcNow.ToString());
             }
 
             await base.OnDisconnectedAsync(exception);

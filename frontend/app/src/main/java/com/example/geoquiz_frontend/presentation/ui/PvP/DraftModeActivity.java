@@ -41,11 +41,7 @@ public class DraftModeActivity extends BaseActivity {
     private TextView tvTurnStatus, tvTimer;
     private ProgressBar progressTurn;
     private LinearProgressIndicator progressTimer;
-
-
     private MaterialCardView cardCapitals, cardFlags, cardOutlines, cardLanguages;
-    private List<MaterialCardView> modeCards;
-    private List<String> bannedModes;
 
     private PvPSignalRClientManager signalRManager;
     private PreferencesHelper preferencesHelper;
@@ -57,6 +53,7 @@ public class DraftModeActivity extends BaseActivity {
     private Integer yourLvl;
     private String currentTurnUserId;
     private List<String> availableModes;
+    private List<String> bannedModes;
     private int timePerTurn;
     private boolean isPlayerTurn = false;
     private boolean isDraftActive = true;
@@ -87,8 +84,6 @@ public class DraftModeActivity extends BaseActivity {
 
 
         bannedModes = new ArrayList<>();
-        modeCards = Arrays.asList(cardCapitals, cardFlags, cardOutlines, cardLanguages);
-
 
         signalRManager = PvPSignalRClientManager.getInstance();
         signalRManager.setCurrentMatch(matchId);
@@ -96,13 +91,6 @@ public class DraftModeActivity extends BaseActivity {
         sendReadyForDraft(matchId);
         updateTurnStatus();
 
-//        if (isPlayerTurn && isDraftActive) {
-//            if (turnEndsAtMillis > 0) {
-//                startTimerWithData(turnEndsAtMillis);
-//            }
-//        } else {
-//            stopTimer();
-//        }
     }
 
     private void initViews() {
@@ -170,8 +158,6 @@ public class DraftModeActivity extends BaseActivity {
         yourLvl = intent.getIntExtra("yourLevel", 1);
         timePerTurn = intent.getIntExtra("timePerTurn", 10);
 
-//        serverTime = intent.getLongExtra("serverTime", 0);
-//        turnEndsAtMillis = intent.getLongExtra("endsAt", 0);
 
         String[] modesArray = intent.getStringArrayExtra("availableModes");
         if (modesArray != null) {
@@ -351,14 +337,6 @@ public class DraftModeActivity extends BaseActivity {
 
         updateTurnStatus();
 
-//        if (isPlayerTurn && isDraftActive) {
-//            if (turnEndsAtMillis > 0) {
-//                startTimerWithData(turnEndsAtMillis);
-//            }
-//        } else {
-//            stopTimer();
-//        }
-
         if (data.isDraftCompleted()) {
             tvTurnStatus.setText("Draft completed! Starting game...");
             isDraftActive = false;
@@ -403,12 +381,6 @@ public class DraftModeActivity extends BaseActivity {
             }
             signalRManager.banMode(matchId, mode, getLanguageCode(), bannedModes.size());
 
-//            MaterialCardView card = getCardByMode(mode);
-//            if (card != null) {
-//                card.setEnabled(false);
-//                card.setAlpha(0.5f);
-//            }
-
             Log.d(TAG, "Ban mode sent: " + mode);
         } else {
             Toast.makeText(this, getString(R.string.no_server), Toast.LENGTH_SHORT).show();
@@ -434,16 +406,11 @@ public class DraftModeActivity extends BaseActivity {
         intent.putExtra("yourLevel", yourLvl);
         intent.putExtra("gameData", gameDataJson);
 
-//        new Handler().postDelayed(() -> {
-//            startActivity(intent);
-//        }, 5000);
         startActivity(intent);
         finish();
     }
 
     private void updateTurnStatus() {
-        String lang = preferencesHelper.getLanguage();
-
         if (!isDraftActive) {
             tvTurnStatus.setText("Draft completed");
             return;
@@ -496,8 +463,6 @@ public class DraftModeActivity extends BaseActivity {
         if (card == cardLanguages) return "languages";
         return "";
     }
-
-
 
     private String getModeName(String mode) {
         String lang = preferencesHelper.getLanguage();

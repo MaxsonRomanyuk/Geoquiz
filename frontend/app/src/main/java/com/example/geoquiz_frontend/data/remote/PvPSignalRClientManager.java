@@ -17,11 +17,12 @@ import com.microsoft.signalr.HubConnectionState;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 public class PvPSignalRClientManager {
     private static final String TAG = "SignalRClientManager";
-    private static final String HUB_URL = "http://192.168.100.40:5238/pvpHub";
-
+    private static final String HUB_URL = "http://192.168.100.49:5238/pvpHub";
+    private Disposable connectionDisposable;
     private static PvPSignalRClientManager instance;
     private HubConnection hubConnection;
     private String jwtToken;
@@ -136,7 +137,7 @@ public class PvPSignalRClientManager {
     public void start() {
         if (hubConnection.getConnectionState() == HubConnectionState.DISCONNECTED && !isConnecting) {
             isConnecting = true;
-            hubConnection.start().doOnComplete(() -> {
+            connectionDisposable = hubConnection.start().doOnComplete(() -> {
                 Log.d(TAG, "Connected to SignalR hub");
                 isConnecting = false;
                 notifyListeners(listener -> listener.onConnected());
@@ -144,15 +145,30 @@ public class PvPSignalRClientManager {
                 Log.e(TAG, "Failed to connect: " + error);
                 isConnecting = false;
                 notifyListeners(listener -> listener.onError(error.getMessage()));
-            }).subscribe();
+            }).subscribe(
+                    () -> {
+                    },
+                    throwable -> {
+                        Log.e(TAG, "Unexpected subscribe error: " + throwable);
+                        isConnecting = false;
+                    }
+            );
         }
     }
 
     public void stop() {
+        if (connectionDisposable != null && !connectionDisposable.isDisposed()) {
+            connectionDisposable.dispose();
+            connectionDisposable = null;
+        }
+
         if (hubConnection != null && hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
-            hubConnection.stop().doOnComplete(() -> {
+            try {
+                hubConnection.stop().blockingAwait();
                 Log.d(TAG, "Disconnected from SignalR hub");
-            }).subscribe();
+            } catch (Exception e) {
+                Log.e(TAG, "Error stopping connection: " + e);
+            }
         }
     }
 
@@ -216,5 +232,12 @@ public class PvPSignalRClientManager {
     public boolean isConnected() {
         return hubConnection != null &&
                 hubConnection.getConnectionState() == HubConnectionState.CONNECTED;
+    }
+    public void reset() {
+        Log.d(TAG, "Resetting NotificationManager");
+        hubConnection = null;
+        jwtToken = null;
+        currentUserId = null;
+        isConnecting = false;
     }
 }

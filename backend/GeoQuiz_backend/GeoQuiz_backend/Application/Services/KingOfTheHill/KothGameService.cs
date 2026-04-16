@@ -79,7 +79,10 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
         public async Task LeaveMatchAsync(Guid userId, Guid matchId)
         {
             if (!_activeGames.TryGetValue(matchId, out var gameState))
-                throw new Exception("Game not found");
+            {
+                _logger.LogWarning("Game not found");
+                return;
+            }
 
             bool shouldFinishRoundEarly = false;
             bool shouldFinishMatch = false;
@@ -352,10 +355,10 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
             await SavePendingAnswersAsync(gameState);
 
-            var result = await _resultService.FinalizeMatchAsync(gameState);
+            await _resultService.FinalizeMatchAsync(gameState);
 
-            await _notificationService.NotifyMatchFinished(matchId, result);
-            _logger.LogInformation("Match {MatchId} finished. Winner: {WinnerId}", matchId, result.WinnerId);
+            //await _notificationService.NotifyMatchFinished(matchId, result);
+            //_logger.LogInformation("Match {MatchId} finished. Winner: {WinnerId}", matchId, result.WinnerId);
         }
 
         public Task<KothGameState?> GetGameStateAsync(Guid matchId)

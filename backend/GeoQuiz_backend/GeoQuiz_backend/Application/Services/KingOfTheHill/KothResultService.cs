@@ -1,6 +1,7 @@
 ﻿using GeoQuiz_backend.Application.DTOs.KingOfTheHill;
 using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Application.Payloads.Koth;
+using GeoQuiz_backend.Application.Services.PvP;
 using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Domain.Enums;
 using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
@@ -13,27 +14,38 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger<KothResultService> _logger;
         private readonly IAchievementService _achievementService;
-
+        private readonly ISignalRNotificationService _notificationService;
         public KothResultService(
             IServiceScopeFactory serviceScopeFactory,
             ILogger<KothResultService> logger,
-            IAchievementService achievementService)
+            IAchievementService achievementService,
+            ISignalRNotificationService notificationService)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _logger = logger;
             _achievementService = achievementService;
+            _notificationService = notificationService;
         }
-        public async Task<MatchFinishedData> FinalizeMatchAsync(KothGameState gameState)
+        public async Task FinalizeMatchAsync(KothGameState gameState)
         {
-            _logger.LogInformation("Finalizing match {MatchId}", gameState.MatchId);
+            var matchId = gameState.MatchId;
+            _logger.LogError("Finalizing match {MatchId}", matchId);
 
             using var scope = _serviceScopeFactory.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
             await UpdateMatchAsync(db, gameState);
+            _logger.LogError("Update kothmatch {MatchId}", matchId);
             var gameSessions = await CreateGameSessionsAsync(db, gameState);
+            _logger.LogError("Update gamesession {MatchId}", matchId);
+
+            var result = CreateMatchFinishedData(gameState);
+            await _notificationService.NotifyMatchFinished(matchId, result);
+            _logger.LogError("Ended match {MatchId}", matchId);
+
             await UpdateUserStatsAsync(db, gameState, gameSessions);
-            return CreateMatchFinishedData(gameState);
+            _logger.LogError("Update stats {MatchId}", matchId);
+            //return CreateMatchFinishedData(gameState);
         }
         private async Task UpdateMatchAsync(AppDbContext db, KothGameState gameState)
         {
@@ -186,7 +198,10 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
         }
         private async Task CheckAchievementsAsync(Guid userId, UserStats oldStats, UserStats newStats, GameSession session)
         {
-            await _achievementService.CheckAndGrantAsync(userId, oldStats, newStats, session);
+            using var scope = _serviceScopeFactory.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            //var notification = scope.ServiceProvider.GetRequiredService<SignalRNotificationService>();
+            await _achievementService.CheckAndGrantAsync(db, userId, oldStats, newStats, session);
         }
 
         private MatchFinishedData CreateMatchFinishedData(KothGameState gameState)

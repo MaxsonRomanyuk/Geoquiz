@@ -41,6 +41,7 @@ public class UserRepository {
     private MutableLiveData<List<Achievement>> userAchievements = new MutableLiveData<>();
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
     private MutableLiveData<String> errorMessage = new MutableLiveData<>();
+    private final List<ProfileResponse.AchievementDto> pendingAchievements = new ArrayList<>();
 
     private ApiService apiService;
     private PreferencesHelper preferencesHelper;
@@ -229,8 +230,21 @@ public class UserRepository {
     public void unlockAchievement(ProfileResponse.AchievementDto achievementDto)
     {
         databaseHelper.updateUserAchievement(achievementDto);
+        //pendingAchievements.add(achievementDto);
         List<Achievement> achievements = getFullAchievements(achievementDto.getUserId());
         userAchievements.setValue(achievements);
+    }
+    public void savePendingAchievements(ProfileResponse.AchievementDto achievementDto)
+    {
+        pendingAchievements.add(achievementDto);
+    }
+    public List<ProfileResponse.AchievementDto> consumePendingAchievements() {
+        List<ProfileResponse.AchievementDto> copy = new ArrayList<>(pendingAchievements);
+        clearPendingAchievements();
+        return copy;
+    }
+    public void clearPendingAchievements(){
+        pendingAchievements.clear();
     }
     public List<Achievement> getFullAchievements(String userId, List<ProfileResponse.AchievementDto> achievements) {
         if (achievements == null) return null;

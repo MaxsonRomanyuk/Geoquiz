@@ -21,11 +21,12 @@ import com.microsoft.signalr.HubConnectionState;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 public class KothSignalRClientManager {
     private static final String TAG = "KothSignalRClient";
-    private static final String HUB_URL = "http://192.168.100.40:5238/kothHub";
-
+    private static final String HUB_URL = "http://192.168.100.49:5238/kothHub";
+    private Disposable connectionDisposable;
     private static KothSignalRClientManager instance;
     private HubConnection hubConnection;
     private String jwtToken;
@@ -75,10 +76,6 @@ public class KothSignalRClientManager {
         if (hubConnection != null) {
             return;
         }
-
-        Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                .create();
 
         hubConnection = HubConnectionBuilder.create(HUB_URL)
                 .withAccessTokenProvider(Completable.complete().toSingleDefault(jwtToken))
@@ -172,7 +169,7 @@ public class KothSignalRClientManager {
     public void start() {
         if (hubConnection.getConnectionState() == HubConnectionState.DISCONNECTED && !isConnecting) {
             isConnecting = true;
-            hubConnection.start().doOnComplete(() -> {
+            connectionDisposable = hubConnection.start().doOnComplete(() -> {
                 Log.d(TAG, "Connected to KOTH SignalR hub");
                 isConnecting = false;
                 notifyListeners(listener -> listener.onConnected());
@@ -180,15 +177,29 @@ public class KothSignalRClientManager {
                 Log.e(TAG, "Failed to connect: " + error);
                 isConnecting = false;
                 notifyListeners(listener -> listener.onError(error.getMessage()));
-            }).subscribe();
+            }).subscribe(
+                    () -> {
+                    },
+                    throwable -> {
+                        Log.e(TAG, "Unexpected subscribe error: " + throwable);
+                        isConnecting = false;
+                    }
+            );
         }
     }
 
     public void stop() {
+        if (connectionDisposable != null && !connectionDisposable.isDisposed()) {
+            connectionDisposable.dispose();
+            connectionDisposable = null;
+        }
         if (hubConnection != null && hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
-            hubConnection.stop().doOnComplete(() -> {
+            try {
+                hubConnection.stop().blockingAwait();
                 Log.d(TAG, "Disconnected from KOTH SignalR hub");
-            }).subscribe();
+            } catch (Exception e) {
+                Log.e(TAG, "Error stopping connection: " + e);
+            }
         }
     }
 
@@ -253,11 +264,13 @@ public class KothSignalRClientManager {
     }
 
     public boolean isConnected() {
-        return hubConnection != null &&
-                hubConnection.getConnectionState() == HubConnectionState.CONNECTED;
+        return hubConnection != null && hubConnection.getConnectionState() == HubConnectionState.CONNECTED;
     }
-
-    public HubConnectionState getConnectionState() {
-        return hubConnection != null ? hubConnection.getConnectionState() : HubConnectionState.DISCONNECTED;
+    public void reset() {
+        Log.d(TAG, "Resetting NotificationManager");
+        hubConnection = null;
+        jwtToken = null;
+        currentUserId = null;
+        isConnecting = false;
     }
 }

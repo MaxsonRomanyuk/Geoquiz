@@ -7,6 +7,8 @@ namespace GeoQuiz_backend.Application.Interfaces
     public interface IAchievementService
     {
         Task CheckAndGrantAsync(Guid userId, UserStats oldStats, UserStats newStats, GameSession? session = null);
+        Task CheckAndGrantAsync(AppDbContext db, 
+            Guid userId, UserStats oldStats, UserStats newStats, GameSession? session = null);
         Task CheckAndGrantMissingAchievements(AppDbContext db, Guid userId, UserStats newStats);
     }
 }

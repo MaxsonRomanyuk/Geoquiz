@@ -22,6 +22,7 @@ namespace GeoQuiz_backend.API.Hubs
         private static readonly ConcurrentDictionary<Guid, Guid> _userCurrentLobby = new();
         private static readonly ConcurrentDictionary<Guid, Guid> _userCurrentMatch = new();
         private static readonly ConcurrentDictionary<Guid, ConcurrentDictionary<Guid, bool>> _activeMatches = new();
+        private static readonly ConcurrentDictionary<Guid, bool> _roundStarted = new();
 
         public KothHub(
             IKothMatchmakingService matchmaking,
@@ -143,16 +144,25 @@ namespace GeoQuiz_backend.API.Hubs
                 _logger.LogWarning("Match {MatchId} not found in active matches for user {UserId}", matchId, userId);
                 return;
             }
+
             matchState[userId] = true;
+            _logger.LogWarning("Start next round for user {UserId} at {date}", userId, DateTime.UtcNow.ToString());
+
+            if (_roundStarted.ContainsKey(matchId))
+                return;
 
             var gameReady = matchState.Values.All(ready => ready);
             
             if (gameReady)
             {
-                _ = Task.Run(async () =>
+                if (_roundStarted.TryAdd(matchId, true))
                 {
-                    await _gameService.StartNextRoundAsync(matchId);
-                });
+                    _logger.LogInformation("All players ready for match {MatchId}, starting round", matchId);
+                    _ = Task.Run(async () =>
+                    {
+                        await _gameService.StartNextRoundAsync(matchId);
+                    });
+                }
             }
         }
         public async Task JoinMatch(Guid matchId)

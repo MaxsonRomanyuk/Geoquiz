@@ -38,13 +38,10 @@ public class AuthManager {
 
     public void logout() {
         NotificationManager notificationManager = NotificationManager.getInstance();
-        String token = preferencesHelper.getAuthToken();
+        //String token = preferencesHelper.getAuthToken();
         String userId = preferencesHelper.getUserId();
 
-        if (token != null && !token.isEmpty()) {
-            notificationManager.init(token, userId);
-            notificationManager.stop();
-        }
+        notificationManager.stop();
 
         databaseHelper.deleteUserStats(userId);
         databaseHelper.deleteUserAchievements(userId);

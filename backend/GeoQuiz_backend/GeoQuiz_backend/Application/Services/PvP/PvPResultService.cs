@@ -31,8 +31,8 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 .Include(m => m.Player2).ThenInclude(u => u.Stats)
                 .FirstAsync(m => m.Id == matchId);
 
-            //if (match.Status == PvPMatchStatus.Finished)
-            //    return new PvPMatchResultDto();
+            if (match.Status == PvPMatchStatus.Finished)
+                return new PvPMatchResultDto();
 
             if (reason == GameFinishReason.OpponentDisconnected && match.Status == PvPMatchStatus.Drafting && userId != null)
             {
@@ -48,6 +48,9 @@ namespace GeoQuiz_backend.Application.Services.PvP
                     YourCurrentScore = 0,
                     OpponentCurrentScore = 0
                 });
+
+                _db.PvPMatches.Remove(match);
+                await _db.SaveChangesAsync();
 
                 return new PvPMatchResultDto();
             }
@@ -138,6 +141,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
             var s2 = CreateSession(match.Player2Id, matchId, p2Answers, p2Score, gameMode);
 
             _db.GameSessions.AddRange(s1, s2);
+            await _db.SaveChangesAsync();
 
             await UpdateUserStats(match, match.Player1, s1, s2, match.Player2, winnerId);
             await UpdateUserStats(match, match.Player2, s2, s1, match.Player1, winnerId);
@@ -189,6 +193,8 @@ namespace GeoQuiz_backend.Application.Services.PvP
             }
 
             var newStats = stats;
+            await _db.SaveChangesAsync();
+
             await _achievementService.CheckAndGrantAsync(user.Id, oldStats, newStats, self);
                
         }

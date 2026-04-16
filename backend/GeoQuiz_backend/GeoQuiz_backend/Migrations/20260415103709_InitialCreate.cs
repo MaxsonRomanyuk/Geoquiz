@@ -201,7 +201,8 @@ namespace GeoQuiz_backend.Migrations
                     CurrentPvPStreak = table.Column<int>(type: "int", nullable: false),
                     KothGamesPlayed = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     KothGamesWon = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    KothTop3Finishes = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
+                    KothTop3Finishes = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    LastAchievementSync = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {

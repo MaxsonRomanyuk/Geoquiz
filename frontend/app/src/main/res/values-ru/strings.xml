@@ -214,7 +214,7 @@
     <string name="claim_reward">Получить вознаграждение</string>
 
     <!--Errors-->
-    <string name="connection_lost">Соединение потеряно</string>
+    <string name="connection_lost">Соединение потеряно. Попробуйте позже</string>
     <string name="error">Ошибка: </string>
     <string name="no_server">Соединение с сервером не установлено</string>
     <string name="no_game_data">Ошибка: отстутствуют данные игры</string>

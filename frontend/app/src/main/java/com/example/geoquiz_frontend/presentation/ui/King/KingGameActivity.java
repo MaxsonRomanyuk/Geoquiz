@@ -17,6 +17,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
+import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
+import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
@@ -53,6 +55,7 @@ public class KingGameActivity extends BaseActivity {
     private LinearLayout layoutSpectatorLabel;
 
     private KothSignalRClientManager signalRManager;
+    private UserRepository userRepository;
     private PreferencesHelper preferencesHelper;
     private String activityId;
     private String matchId;
@@ -84,6 +87,7 @@ public class KingGameActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_king_game);
 
+        userRepository = UserRepository.getInstance(this);
         preferencesHelper = new PreferencesHelper(this);
         userId = preferencesHelper.getUserId();
         language = preferencesHelper.getLanguage();
@@ -161,6 +165,9 @@ public class KingGameActivity extends BaseActivity {
     }
 
     private void connectToSignalR() {
+        if (!signalRManager.isConnected()) {
+            signalRManager.start();
+        }
         signalRManager.addListener(activityId, new KothSignalRClientManager.KothConnectionListener() {
             @Override
             public void onConnected() {
@@ -215,8 +222,17 @@ public class KingGameActivity extends BaseActivity {
                 runOnUiThread(() -> handleMatchFinished(data));
             }
         });
+    }
+    @Override
+    protected void handleAchievementUnlocked(List<ProfileResponse.AchievementDto> achievements) {
+        runOnUiThread(() -> {
+            Log.d("NotificationManager", "AchievementUnlocked in solo game received! Count: " + achievements.size());
+            userRepository = UserRepository.getInstance(this);
 
-        signalRManager.start();
+            for (ProfileResponse.AchievementDto achievement : achievements) {
+                userRepository.savePendingAchievements(achievement);
+            }
+        });
     }
     private void sendReadyForGame(String matchId)
     {

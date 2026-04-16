@@ -42,9 +42,10 @@ public class KingLobbyActivity extends BaseActivity {
     private static final String TAG = "KingLobbyActivity";
 
     private ImageView ivClose;
-    private TextView tvPlayerCount, tvTimer;
+    private TextView tvPlayerCount, tvTimer, tvError;
     private GridLayout gridPlayers;
     private LinearLayout layoutTimer;
+    private LinearLayout layoutError;
     private MaterialButton btnLeave;
 
     private Handler timerHandler = new Handler();
@@ -60,11 +61,10 @@ public class KingLobbyActivity extends BaseActivity {
     private List<PlayerSlot> playerSlots = new ArrayList<>();
     private Map<String, PlayerSlot> playerSlotMap = new HashMap<>();
     private PreferencesHelper preferencesHelper;
+    private KothSignalRClientManager signalRManager;
     private DatabaseHelper databaseHelper;
     private String language;
     private String activityId;
-
-    private KothSignalRClientManager signalRClient;
     private String currentLobbyId;
 
     private class PlayerSlot {
@@ -107,6 +107,8 @@ public class KingLobbyActivity extends BaseActivity {
         tvTimer = findViewById(R.id.tvTimer);
         gridPlayers = findViewById(R.id.gridPlayers);
         layoutTimer = findViewById(R.id.layoutTimer);
+        layoutError = findViewById(R.id.layoutError);
+        tvError = findViewById(R.id.tvError);
         btnLeave = findViewById(R.id.btn_leave);
     }
 
@@ -241,19 +243,23 @@ public class KingLobbyActivity extends BaseActivity {
             return;
         }
 
-        signalRClient = KothSignalRClientManager.getInstance();
-        signalRClient.init(token, playerId);
-        signalRClient.removeListener(activityId);
+        signalRManager = KothSignalRClientManager.getInstance();
+        signalRManager.reset();
+        signalRManager.init(token, playerId);
+        signalRManager.removeListener(activityId);
         connectToSignalR();
     }
     private void connectToSignalR() {
-        signalRClient.addListener(activityId, new KothSignalRClientManager.KothConnectionListener() {
+        if (!signalRManager.isConnected()) {
+            signalRManager.start();
+        }
+        signalRManager.addListener(activityId, new KothSignalRClientManager.KothConnectionListener() {
             @Override
             public void onConnected() {
                 runOnUiThread(() -> {
                     Log.d(TAG, "Connected to KOTH, joining lobby...");
                     showStatus(getString(R.string.wait_players));
-                    signalRClient.joinLobby();
+                    signalRManager.joinLobby();
                 });
             }
 
@@ -269,7 +275,7 @@ public class KingLobbyActivity extends BaseActivity {
             public void onError(String error) {
                 runOnUiThread(() -> {
                     Log.e(TAG, "KOTH Error: " + error);
-                    showStatus(getString(R.string.error) + ": " + error);
+                    showStatus(getString(R.string.error) + " " + getString(R.string.connection_lost));
                 });
             }
 
@@ -280,7 +286,7 @@ public class KingLobbyActivity extends BaseActivity {
 
                     if (currentLobbyId == null) {
                         currentLobbyId = data.getLobbyId();
-                        signalRClient.setCurrentLobby(currentLobbyId);
+                        signalRManager.setCurrentLobby(currentLobbyId);
                     }
 
                     int slotIndex = findEmptySlot();
@@ -300,7 +306,7 @@ public class KingLobbyActivity extends BaseActivity {
 
                     if (currentLobbyId == null) {
                         currentLobbyId = data.getLobbyId();
-                        signalRClient.setCurrentLobby(currentLobbyId);
+                        signalRManager.setCurrentLobby(currentLobbyId);
                     }
 
                     List<PlayerLobby> dataPlayers = data.getPlayers();
@@ -357,7 +363,7 @@ public class KingLobbyActivity extends BaseActivity {
             }
             @Override
             public void onMatchStarted(MatchStartedData data) {
-                signalRClient.joinMatch(data.getMatchId());
+                signalRManager.joinMatch(data.getMatchId());
                 runOnUiThread(() -> handleMatchStarted(data));
             }
             @Override
@@ -376,8 +382,6 @@ public class KingLobbyActivity extends BaseActivity {
             public void onMatchFinished(MatchFinishedData data) {
             }
         });
-
-        signalRClient.start();
     }
     private void handleMatchStarted(MatchStartedData data) {
         Log.d(TAG, "Match started! Total players: " + data.getTotalPlayers() + ", rounds: " + data.getTotalRounds());
@@ -387,8 +391,19 @@ public class KingLobbyActivity extends BaseActivity {
         intent.putExtra("total_players", data.getTotalPlayers());
         intent.putExtra("total_rounds", data.getTotalRounds());
         intent.putExtra("all_players", new ArrayList<>(data.getAllPlayers()));
-        startActivity(intent);
-        finish();
+
+        View rootView = findViewById(android.R.id.content);
+        rootView.animate()
+                .alpha(0f)
+                .scaleX(0.9f)
+                .scaleY(0.9f)
+                .setDuration(1000)
+                .withEndAction(() -> {
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                    finish();
+                })
+                .start();
     }
     private void startSearch() {
         layoutTimer.setVisibility(View.VISIBLE);
@@ -401,14 +416,15 @@ public class KingLobbyActivity extends BaseActivity {
     }
 
     private void showStatus(String status) {
-        tvTimer.setText(status);
+        layoutError.setVisibility(View.VISIBLE);
+        tvError.setText(status);
     }
     private void cancelSearchAndExit() {
-        if (signalRClient != null && signalRClient.isConnected()) {
+        if (signalRManager != null && signalRManager.isConnected()) {
             if (currentLobbyId != null) {
-                signalRClient.leaveLobby();
+                signalRManager.leaveLobby();
             }
-            signalRClient.stop();
+            signalRManager.stop();
         }
 
         Intent intent = new Intent(this, MainActivity.class);
@@ -426,8 +442,8 @@ public class KingLobbyActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (signalRClient != null) {
-            signalRClient.removeListener(activityId);
+        if (signalRManager != null) {
+            signalRManager.removeListener(activityId);
         }
     }
 

@@ -2,15 +2,20 @@ package com.example.geoquiz_frontend.presentation.ui.King;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
+import com.example.geoquiz_frontend.domain.entities.Achievement;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
+import com.example.geoquiz_frontend.presentation.utils.AchievementDialogHelper;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.remote.KothSignalRClientManager;
@@ -30,12 +35,14 @@ public class KingResultActivity extends BaseActivity {
     private String currentUserId;
     private KothSignalRClientManager signalRManager;
     private PreferencesHelper preferencesHelper;
+    private UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_king_results);
 
+        userRepository = UserRepository.getInstance(this);
         preferencesHelper = new PreferencesHelper(this);
         signalRManager = KothSignalRClientManager.getInstance();
         currentUserId = preferencesHelper.getUserId();
@@ -45,6 +52,14 @@ public class KingResultActivity extends BaseActivity {
         setupClickListeners();
         displayResults();
         updateStats();
+
+        new Handler().postDelayed(() -> {
+            List<ProfileResponse.AchievementDto> achievements = userRepository.consumePendingAchievements();
+            Log.d("NotificationManager", "AchievementUnlocked in RESULT CREATE from CONSUME received! Count: " + achievements.size());
+            if (!achievements.isEmpty()) {
+                handleAchievementUnlocked(achievements);
+            }
+        }, 100);
     }
 
     private void initViews() {
@@ -140,6 +155,20 @@ public class KingResultActivity extends BaseActivity {
     {
         UserRepository userRepository = UserRepository.getInstance(this);
         userRepository.loadUserData(true);
+    }
+    @Override
+    protected void handleAchievementUnlocked(List<ProfileResponse.AchievementDto> achievements) {
+        Log.d("NotificationManager", "Achievement  handle unlocked in KothResultActivity! Count: " + achievements.size());
+        runOnUiThread(() -> {
+            for (ProfileResponse.AchievementDto achievement : achievements) {
+                userRepository.unlockAchievement(achievement);
+            }
+
+            List<Achievement> achievementList = userRepository.getFullAchievements(preferencesHelper.getUserId(),achievements);
+            userRepository.clearPendingAchievements();
+            AchievementDialogHelper dialogHelper = new AchievementDialogHelper(this);
+            dialogHelper.showAchievements(achievementList);
+        });
     }
     private void exitToMainMenu() {
         if (signalRManager != null) {

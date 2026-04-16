@@ -5,6 +5,6 @@ namespace GeoQuiz_backend.Application.Interfaces
 {
     public interface IKothResultService
     {
-        Task<MatchFinishedData> FinalizeMatchAsync(KothGameState gameState);
+        Task FinalizeMatchAsync(KothGameState gameState);
     }
 }

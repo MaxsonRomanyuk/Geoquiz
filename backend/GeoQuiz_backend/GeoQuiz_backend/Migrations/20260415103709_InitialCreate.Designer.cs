@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GeoQuiz_backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260409151552_upgradeUserStats")]
-    partial class upgradeUserStats
+    [Migration("20260415103709_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -14,7 +14,9 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerResponse;
+import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
@@ -39,7 +41,6 @@ public class PvPGameActivity extends BaseActivity {
     private static final String TAG = "PvPGameActivity";
 
     private ImageView ivClose;
-
     private TextView tvPlayer1Name, tvPlayer1TotalScore, tvPlayer1Score;
     private TextView tvPlayer2Name, tvPlayer2TotalScore, tvPlayer2Score;
     private TextView tvCrownPlayer1, tvCrownPlayer2;
@@ -52,6 +53,7 @@ public class PvPGameActivity extends BaseActivity {
 
     private PvPSignalRClientManager signalRManager;
     private PreferencesHelper preferencesHelper;
+    private UserRepository userRepository;
     private String activityId;
 
     private String matchId;
@@ -67,12 +69,11 @@ public class PvPGameActivity extends BaseActivity {
     private int currentQuestionIndex = 0;
     private int selectedIndex;
     private int totalQuestions = 10;
-    private int totalGameTime = 60;
+    private long questionStartTime;
 
     private boolean isQuestionActive = true;
     private boolean hasAnswered = false;
     private boolean allAnswered = false;
-    private long questionStartTime;
 
     private Handler timerHandler = new Handler();
     private Runnable timerRunnable;
@@ -80,7 +81,6 @@ public class PvPGameActivity extends BaseActivity {
     private long serverTimeOffset = 0;
     private long turnEndsAtMillis = 0;
     private boolean isTimerRunning = false;
-
 
 
     private int yourCurrentScore = 0;
@@ -92,7 +92,6 @@ public class PvPGameActivity extends BaseActivity {
         setContentView(R.layout.activity_pvp_game);
 
         preferencesHelper = new PreferencesHelper(this);
-
         activityId = "game_" + System.currentTimeMillis();
 
         initViews();
@@ -167,9 +166,6 @@ public class PvPGameActivity extends BaseActivity {
         opponentLevel = intent.getIntExtra("opponentLevel", 1);
         yourId = preferencesHelper.getUserId();
         yourLvl = intent.getIntExtra("yourLevel", 1);
-
-        //serverTimeOffset = intent.getLongExtra("serverTimeOffset", 0);
-        //turnEndsAtMillis = intent.getLongExtra("turnEndsAtMillis", 0);
 
         yourTotalScore = yourLvl * 100 + 67; // temp
         opponentTotalScore = opponentLevel * 100 + 67; // temp
@@ -260,8 +256,6 @@ public class PvPGameActivity extends BaseActivity {
 
         this.questions = data.getQuestions();
         this.totalQuestions = data.getTotalQuestions();
-        this.totalGameTime = data.getTotalGameTimeSeconds();
-
 
         showQuestion(0);
     }
@@ -409,13 +403,11 @@ public class PvPGameActivity extends BaseActivity {
             stopTimer();
         }
         isTimerRunning = true;
-
         tvTimer.setVisibility(View.VISIBLE);
 
         timerRunnable = new Runnable() {
             @Override
             public void run() {
-
                 updateTimerDisplay();
 
                 long now = System.currentTimeMillis() + serverTimeOffset;
@@ -501,12 +493,16 @@ public class PvPGameActivity extends BaseActivity {
         }, 2000);
     }
 
-    private void showAchievements(List<UnlockedAchievement> achievements) {
-        StringBuilder sb = new StringBuilder("Achievements unlocked:\n");
-        for (UnlockedAchievement achievement : achievements) {
-            sb.append("• ").append(achievement.getTitle()).append("\n");
-        }
-        Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
+    @Override
+    protected void handleAchievementUnlocked(List<ProfileResponse.AchievementDto> achievements) {
+        runOnUiThread(() -> {
+            Log.d("NotificationManager", "AchievementUnlocked in PvPGameActivity received! Count: " + achievements.size());
+            userRepository = UserRepository.getInstance(this);
+
+            for (ProfileResponse.AchievementDto achievement : achievements) {
+                userRepository.savePendingAchievements(achievement);
+            }
+        });
     }
 
     @Override

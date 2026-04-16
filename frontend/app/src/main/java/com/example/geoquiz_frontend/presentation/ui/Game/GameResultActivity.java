@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,8 +13,10 @@ import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.remote.NotificationManager;
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
+import com.example.geoquiz_frontend.domain.entities.Achievement;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
+import com.example.geoquiz_frontend.presentation.utils.AchievementDialogHelper;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.google.android.material.button.MaterialButton;
 
@@ -24,9 +27,7 @@ public class GameResultActivity extends BaseActivity {
     private TextView tvMessage, tvTime, tvAccuracy;
     private MaterialButton btnRestart, btnMainMenu;
     private int score, correctAnswers, totalQuestions, timeSpent, gameMode;
-    private NotificationManager notificationManager;
     private UserRepository userRepository;
-    private String activityId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +47,14 @@ public class GameResultActivity extends BaseActivity {
         updateUI();
         updateStats();
 
-        //String token = preferencesHelper.getAuthToken();
-        //String userId = preferencesHelper.getUserId();
-//        if (!userId.equals("uid")) {
-//            activityId = "solo_result" + System.currentTimeMillis();
-//            notificationManager = NotificationManager.getInstance();
-//            if (token != null && !token.isEmpty()) {
-//                notificationManager.init(token, userId);
-//            }
-//            connectToSignalR();
-//        }
+        new Handler().postDelayed(() -> {
+            List<ProfileResponse.AchievementDto> achievements = userRepository.consumePendingAchievements();
+            Log.d("NotificationManager", "AchievementUnlocked in RESULT CREATE from CONSUME received! Count: " + achievements.size());
+            if (!achievements.isEmpty()) {
+                handleAchievementUnlocked(achievements);
+            }
+        }, 100);
+
     }
 
     private void initViews() {
@@ -81,38 +80,21 @@ public class GameResultActivity extends BaseActivity {
             finish();
         });
     }
-//    private void connectToSignalR() {
-//        notificationManager.addListener(activityId, new NotificationManager.ConnectionListener() {
-//            @Override
-//            public void onConnected() {
-//                runOnUiThread(() -> {
-//                    Log.d(TAG, "Connected, joining queue");
-//                });
-//            }
-//
-//            @Override
-//            public void onDisconnected() {
-//                runOnUiThread(() -> {
-//                    Log.d(TAG, "Disconnected");
-//                });
-//            }
-//
-//            @Override
-//            public void onAchievementUnlocked(List<ProfileResponse.AchievementDto> data) {
-//                runOnUiThread(() -> {
-//                    //Toast.makeText(GameResultActivity.this, data.getCode(), Toast.LENGTH_SHORT).show();
-//                    //userRepository.unlockAchievement(data);
-//                });
-//            }
-//
-//            @Override
-//            public void onConnectionFailed(String reason) {
-//
-//            }
-//        });
-//
-//        notificationManager.start();
-//    }
+    @Override
+    protected void handleAchievementUnlocked(List<ProfileResponse.AchievementDto> achievements) {
+        Log.d("NotificationManager", "Achievement  handle unlocked in GameResultActivity! Count: " + achievements.size());
+        runOnUiThread(() -> {
+            for (ProfileResponse.AchievementDto achievement : achievements) {
+                userRepository.unlockAchievement(achievement);
+            }
+
+            List<Achievement> achievementList = userRepository.getFullAchievements(preferencesHelper.getUserId(),achievements);
+            userRepository.clearPendingAchievements();
+            AchievementDialogHelper dialogHelper = new AchievementDialogHelper(this);
+            dialogHelper.showAchievements(achievementList);
+        });
+    }
+
     private void updateStats()
     {
         userRepository.loadUserData(false);
@@ -153,6 +135,5 @@ public class GameResultActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (notificationManager!=null)notificationManager.removeListener(activityId);
     }
 }

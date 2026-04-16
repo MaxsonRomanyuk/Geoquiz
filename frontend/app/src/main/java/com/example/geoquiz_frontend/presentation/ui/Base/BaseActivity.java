@@ -2,6 +2,7 @@ package com.example.geoquiz_frontend.presentation.ui.Base;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -78,7 +79,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         setupConnectionListener();
     }
-    private void setupConnectionListener() {
+    protected void setupConnectionListener() {
         notificationManager = NotificationManager.getInstance();
         currentConnectionKey = getClass().getSimpleName() + "_" + System.currentTimeMillis();
         if (!notificationManager.isConnected())
@@ -105,16 +106,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             @Override
             public void onAchievementUnlocked(List<ProfileResponse.AchievementDto> achievements) {
-                runOnUiThread(() -> {
-                    userRepository = UserRepository.getInstance(BaseActivity.this);
-                    for (ProfileResponse.AchievementDto achievement : achievements)
-                    {
-                        userRepository.unlockAchievement(achievement);
-                    }
-                    List<Achievement> achievementList = userRepository.getFullAchievements(preferencesHelper.getUserId(), achievements);
-                    AchievementDialogHelper dialogHelper = new AchievementDialogHelper(BaseActivity.this);
-                    dialogHelper.showAchievements(achievementList);
-                });
+//                if (isFinishing() || isDestroyed()) {
+//                    Log.d("NotificationManager", "Ignoring achievement - activity is finishing/destroyed");
+//                    return;
+//                }
+                handleAchievementUnlocked(achievements);
             }
 
             @Override
@@ -128,7 +124,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         });
     }
-
+    protected void handleAchievementUnlocked(List<ProfileResponse.AchievementDto> achievements) {
+        Log.d("NotificationManager", "Achievement unlocked in BaseActivity - override this method to handle");
+    }
     private void showConnectionBanner(String message) {
         if (connectionStatusBanner == null) return;
 
@@ -236,6 +234,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (notificationManager != null && currentConnectionKey != null) {
+            notificationManager.removeListener(currentConnectionKey);
+        }
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
         if (notificationManager != null && currentConnectionKey != null) {
             notificationManager.removeListener(currentConnectionKey);
         }
