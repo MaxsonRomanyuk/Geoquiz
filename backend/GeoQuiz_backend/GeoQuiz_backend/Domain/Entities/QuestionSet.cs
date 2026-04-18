@@ -14,6 +14,7 @@ namespace GeoQuiz_backend.Domain.Entities
         public GameMode Mode { get; set; }
         public AppLanguage Language { get; set; }
         public List<string> QuestionIds { get; set; } = new();
+        public List<Region> Regions { get; set; } = new();
         public int Seed { get; set; }
 
         public DateTime CreatedAt { get; set; }

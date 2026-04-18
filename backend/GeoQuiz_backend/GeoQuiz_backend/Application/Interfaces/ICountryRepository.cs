@@ -6,6 +6,7 @@ namespace GeoQuiz_backend.Application.Interfaces
     {
         Task<List<Country>> GetAllAsync();
         Task<Country?> GetByIdAsync(string id);
+        Task<List<Country>> GetByIdsAsync(List<string> ids);
         Task CreateAsync(Country country);
     }
 }

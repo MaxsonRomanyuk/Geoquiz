@@ -245,6 +245,12 @@ namespace GeoQuiz_backend.Infrastructure.Persistence.MySQL
                         v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new()
                     );
 
+                entity.Property(e => e.Regions)
+                    .HasConversion(
+                        v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+                        v => JsonSerializer.Deserialize<List<Region>>(v, (JsonSerializerOptions?)null) ?? new()
+                    );
+
                 entity.HasIndex(e => e.KothMatchId)
                     .IsUnique(false);
 

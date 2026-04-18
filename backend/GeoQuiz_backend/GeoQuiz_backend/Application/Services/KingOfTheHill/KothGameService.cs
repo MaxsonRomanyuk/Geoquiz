@@ -222,7 +222,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
             lock (gameState)
             {
-                gameState.PendingAnswers.Add(new KothAnswer
+                var kothAnswer = new KothAnswer
                 {
                     Id = Guid.NewGuid(),
                     MatchId = matchId,
@@ -233,7 +233,9 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     TimeSpentMs = request.TimeSpentMs,
                     ScoreGained = result.ScoreGained,
                     AnsweredAt = DateTime.UtcNow
-                });
+                };
+                gameState.Match.Answers.Add(kothAnswer);
+                gameState.PendingAnswers.Add(kothAnswer);
             }
 
             if (_roundService.IsRoundComplete(gameState))
@@ -390,6 +392,8 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 matchId, allPlayers.Count, maxQuestions, seed);
 
             var questions = await GenerateQuestionsAsync(maxQuestions, seed, randomMode);
+            var countriesIds = questions.Select(q => RemoveLastUnderscorePart(q.QuestionId)).ToList();
+            var countries = await _countryRepo.GetByIdsAsync(countriesIds);
 
             var questionSet = new QuestionSet
             {
@@ -399,7 +403,8 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 Language = AppLanguage.Ru,
                 Seed = seed,
                 CreatedAt = DateTime.UtcNow,
-                QuestionIds = questions.Select(q => q.QuestionId).ToList()
+                QuestionIds = questions.Select(q => q.QuestionId).ToList(),
+                Regions = countries.Select(c => c.RegionEnum).ToList(),
             };
 
             var match = new KothMatch
@@ -637,6 +642,19 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
         private string? GetAudioUrl(GameMode mode, Country country)
         {
             return mode == GameMode.Language ? country.LanguageAudio : null;
+        }
+        public static string RemoveLastUnderscorePart(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+
+            for (int i = input.Length - 1; i >= 0; i--)
+            {
+                if (input[i] == '_')
+                {
+                    return input.Substring(0, i);
+                }
+            }
+            return input;
         }
     }
 }

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-03-26T10:25:01.604Z",
+  "lastUpdated": "2026-04-17T12:26:54.008Z",
   "countries": [
     {
       "id": "australia",
@@ -12,7 +12,7 @@
         "ru": "Канберра",
         "en": "Canberra"
       },
-      "region": "Океания",
+      "region": "oceania",
       "flagImage": "images/flags/australia.png",
       "outlineImage": "images/outline/australia.png",
       "languageAudio": "sounds/languages/australia.mp3"
@@ -27,7 +27,7 @@
         "ru": "Вена",
         "en": "Vienna"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/austria.png",
       "outlineImage": "images/outline/austria.png",
       "languageAudio": "sounds/languages/austria.mp3"
@@ -42,7 +42,7 @@
         "ru": "Баку",
         "en": "Baku"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/azerbaijan.png",
       "outlineImage": "images/outline/azerbaijan.png",
       "languageAudio": "sounds/languages/azerbaijan.mp3"
@@ -57,7 +57,7 @@
         "ru": "Тирана",
         "en": "Tirana"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/albania.png",
       "outlineImage": "images/outline/albania.png",
       "languageAudio": "sounds/languages/albania.mp3"
@@ -72,7 +72,7 @@
         "ru": "Алжир",
         "en": "Algiers"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/algeria.png",
       "outlineImage": "images/outline/algeria.png",
       "languageAudio": "sounds/languages/algeria.mp3"
@@ -87,7 +87,7 @@
         "ru": "Луанда",
         "en": "Luanda"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/angola.png",
       "outlineImage": "images/outline/angola.png",
       "languageAudio": "sounds/languages/angola.mp3"
@@ -102,7 +102,7 @@
         "ru": "Андорра-ла-Велья",
         "en": "Andorra la Vella"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/andorra.png",
       "outlineImage": "images/outline/andorra.png",
       "languageAudio": "sounds/languages/andorra.mp3"
@@ -117,7 +117,7 @@
         "ru": "Сент-Джонс",
         "en": "St. John's"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/antigua_barbuda.png",
       "outlineImage": "images/outline/antigua_barbuda.png",
       "languageAudio": "sounds/languages/antigua_and_barbuda.mp3"
@@ -132,7 +132,7 @@
         "ru": "Буэнос-Айрес",
         "en": "Buenos Aires"
       },
-      "region": "Южная Америка",
+      "region": "america",
       "flagImage": "images/flags/argentina.png",
       "outlineImage": "images/outline/argentina.png",
       "languageAudio": "sounds/languages/argentina.mp3"
@@ -147,7 +147,7 @@
         "ru": "Ереван",
         "en": "Yerevan"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/armenia.png",
       "outlineImage": "images/outline/armenia.png",
       "languageAudio": "sounds/languages/armenia.mp3"
@@ -162,7 +162,7 @@
         "ru": "Кабул",
         "en": "Kabul"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/afghanistan.png",
       "outlineImage": "images/outline/afghanistan.png",
       "languageAudio": "sounds/languages/afghanistan.mp3"
@@ -177,7 +177,7 @@
         "ru": "Нассау",
         "en": "Nassau"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/bahamas.png",
       "outlineImage": "images/outline/bahamas.png",
       "languageAudio": "sounds/languages/bahamas.mp3"
@@ -192,7 +192,7 @@
         "ru": "Дакка",
         "en": "Dhaka"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/bangladesh.png",
       "outlineImage": "images/outline/bangladesh.png",
       "languageAudio": "sounds/languages/bangladesh.mp3"
@@ -207,7 +207,7 @@
         "ru": "Бриджтаун",
         "en": "Bridgetown"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/barbados.png",
       "outlineImage": "images/outline/barbados.png",
       "languageAudio": "sounds/languages/barbados.mp3"
@@ -222,7 +222,7 @@
         "ru": "Манама",
         "en": "Manama"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/bahrain.png",
       "outlineImage": "images/outline/bahrain.png",
       "languageAudio": "sounds/languages/bahrain.mp3"
@@ -237,7 +237,7 @@
         "ru": "Бельмопан",
         "en": "Belmopan"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/belize.png",
       "outlineImage": "images/outline/belize.png",
       "languageAudio": "sounds/languages/belize.mp3"
@@ -252,7 +252,7 @@
         "ru": "Минск",
         "en": "Minsk"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/belarus.png",
       "outlineImage": "images/outline/belarus.png",
       "languageAudio": "sounds/languages/belarus.mp3"
@@ -267,7 +267,7 @@
         "ru": "Брюссель",
         "en": "Brussels"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/belgium.png",
       "outlineImage": "images/outline/belgium.png",
       "languageAudio": "sounds/languages/belgium.mp3"
@@ -282,7 +282,7 @@
         "ru": "Порто-Ново",
         "en": "Porto-Novo"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/benin.png",
       "outlineImage": "images/outline/benin.png",
       "languageAudio": "sounds/languages/benin.mp3"
@@ -297,7 +297,7 @@
         "ru": "София",
         "en": "Sofia"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/bulgaria.png",
       "outlineImage": "images/outline/bulgaria.png",
       "languageAudio": "sounds/languages/bulgaria.mp3"
@@ -312,7 +312,7 @@
         "ru": "Сукре",
         "en": "Sucre"
       },
-      "region": "Южная Америка",
+      "region": "america",
       "flagImage": "images/flags/bolivia.png",
       "outlineImage": "images/outline/bolivia.png",
       "languageAudio": "sounds/languages/bolivia.mp3"
@@ -327,7 +327,7 @@
         "ru": "Сараево",
         "en": "Sarajevo"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/bosnia_herzegovina.png",
       "outlineImage": "images/outline/bosnia_herzegovina.png",
       "languageAudio": "sounds/languages/bosnia_and_herzegovina.mp3"
@@ -342,7 +342,7 @@
         "ru": "Габороне",
         "en": "Gaborone"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/botswana.png",
       "outlineImage": "images/outline/botswana.png",
       "languageAudio": "sounds/languages/botswana.mp3"
@@ -357,7 +357,7 @@
         "ru": "Бразилиа",
         "en": "Brasília"
       },
-      "region": "Южная Америка",
+      "region": "america",
       "flagImage": "images/flags/brazil.png",
       "outlineImage": "images/outline/brazil.png",
       "languageAudio": "sounds/languages/brazil.mp3"
@@ -372,7 +372,7 @@
         "ru": "Бандар-Сери-Бегаван",
         "en": "Bandar Seri Begawan"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/brunei.png",
       "outlineImage": "images/outline/brunei.png",
       "languageAudio": "sounds/languages/brunei.mp3"
@@ -387,7 +387,7 @@
         "ru": "Уагадугу",
         "en": "Ouagadougou"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/burkina_faso.png",
       "outlineImage": "images/outline/burkina_faso.png",
       "languageAudio": "sounds/languages/burkina_faso.mp3"
@@ -402,7 +402,7 @@
         "ru": "Гитега",
         "en": "Gitega"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/burundi.png",
       "outlineImage": "images/outline/burundi.png",
       "languageAudio": "sounds/languages/burundi.mp3"
@@ -417,7 +417,7 @@
         "ru": "Тхимпху",
         "en": "Thimphu"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/bhutan.png",
       "outlineImage": "images/outline/bhutan.png",
       "languageAudio": "sounds/languages/bhutan.mp3"
@@ -432,7 +432,7 @@
         "ru": "Порт-Вила",
         "en": "Port Vila"
       },
-      "region": "Океания",
+      "region": "oceania",
       "flagImage": "images/flags/vanuatu.png",
       "outlineImage": "images/outline/vanuatu.png",
       "languageAudio": "sounds/languages/vanuatu.mp3"
@@ -447,7 +447,7 @@
         "ru": "Ватикан",
         "en": "Vatican City"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/vatican.png",
       "outlineImage": "images/outline/vatican.png",
       "languageAudio": "sounds/languages/vatican_city.mp3"
@@ -462,7 +462,7 @@
         "ru": "Лондон",
         "en": "London"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/uk.png",
       "outlineImage": "images/outline/uk.png",
       "languageAudio": "sounds/languages/united_kingdom.mp3"
@@ -477,7 +477,7 @@
         "ru": "Будапешт",
         "en": "Budapest"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/hungary.png",
       "outlineImage": "images/outline/hungary.png",
       "languageAudio": "sounds/languages/hungary.mp3"
@@ -492,7 +492,7 @@
         "ru": "Каракас",
         "en": "Caracas"
       },
-      "region": "Южная Америка",
+      "region": "america",
       "flagImage": "images/flags/venezuela.png",
       "outlineImage": "images/outline/venezuela.png",
       "languageAudio": "sounds/languages/venezuela.mp3"
@@ -507,7 +507,7 @@
         "ru": "Дили",
         "en": "Dili"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/timor_leste.png",
       "outlineImage": "images/outline/timor_leste.png",
       "languageAudio": "sounds/languages/timor-leste.mp3"
@@ -522,7 +522,7 @@
         "ru": "Ханой",
         "en": "Hanoi"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/vietnam.png",
       "outlineImage": "images/outline/vietnam.png",
       "languageAudio": "sounds/languages/vietnam.mp3"
@@ -537,7 +537,7 @@
         "ru": "Либревиль",
         "en": "Libreville"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/gabon.png",
       "outlineImage": "images/outline/gabon.png",
       "languageAudio": "sounds/languages/gabon.mp3"
@@ -552,7 +552,7 @@
         "ru": "Порт-о-Пренс",
         "en": "Port-au-Prince"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/haiti.png",
       "outlineImage": "images/outline/haiti.png",
       "languageAudio": "sounds/languages/haiti.mp3"
@@ -567,7 +567,7 @@
         "ru": "Джорджтаун",
         "en": "Georgetown"
       },
-      "region": "Южная Америка",
+      "region": "america",
       "flagImage": "images/flags/guyana.png",
       "outlineImage": "images/outline/guyana.png",
       "languageAudio": "sounds/languages/guyana.mp3"
@@ -582,7 +582,7 @@
         "ru": "Банжул",
         "en": "Banjul"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/gambia.png",
       "outlineImage": "images/outline/gambia.png",
       "languageAudio": "sounds/languages/gambia.mp3"
@@ -597,7 +597,7 @@
         "ru": "Аккра",
         "en": "Accra"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/ghana.png",
       "outlineImage": "images/outline/ghana.png",
       "languageAudio": "sounds/languages/ghana.mp3"
@@ -612,7 +612,7 @@
         "ru": "Гватемала",
         "en": "Guatemala City"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/guatemala.png",
       "outlineImage": "images/outline/guatemala.png",
       "languageAudio": "sounds/languages/guatemala.mp3"
@@ -627,7 +627,7 @@
         "ru": "Конакри",
         "en": "Conakry"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/guinea.png",
       "outlineImage": "images/outline/guinea.png",
       "languageAudio": "sounds/languages/guinea.mp3"
@@ -642,7 +642,7 @@
         "ru": "Бисау",
         "en": "Bissau"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/guinea_bissau.png",
       "outlineImage": "images/outline/guinea_bissau.png",
       "languageAudio": "sounds/languages/guinea-bissau.mp3"
@@ -657,7 +657,7 @@
         "ru": "Берлин",
         "en": "Berlin"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/germany.png",
       "outlineImage": "images/outline/germany.png",
       "languageAudio": "sounds/languages/germany.mp3"
@@ -672,7 +672,7 @@
         "ru": "Тегусигальпа",
         "en": "Tegucigalpa"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/honduras.png",
       "outlineImage": "images/outline/honduras.png",
       "languageAudio": "sounds/languages/honduras.mp3"
@@ -687,7 +687,7 @@
         "ru": "Сент-Джорджес",
         "en": "St. George's"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/grenada.png",
       "outlineImage": "images/outline/grenada.png",
       "languageAudio": "sounds/languages/grenada.mp3"
@@ -702,7 +702,7 @@
         "ru": "Афины",
         "en": "Athens"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/greece.png",
       "outlineImage": "images/outline/greece.png",
       "languageAudio": "sounds/languages/greece.mp3"
@@ -717,7 +717,7 @@
         "ru": "Тбилиси",
         "en": "Tbilisi"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/georgia.png",
       "outlineImage": "images/outline/georgia.png",
       "languageAudio": "sounds/languages/georgia.mp3"
@@ -732,7 +732,7 @@
         "ru": "Копенгаген",
         "en": "Copenhagen"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/denmark.png",
       "outlineImage": "images/outline/denmark.png",
       "languageAudio": "sounds/languages/denmark.mp3"
@@ -747,7 +747,7 @@
         "ru": "Джибути",
         "en": "Djibouti"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/djibouti.png",
       "outlineImage": "images/outline/djibouti.png",
       "languageAudio": "sounds/languages/djibouti.mp3"
@@ -762,7 +762,7 @@
         "ru": "Розо",
         "en": "Roseau"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/dominica.png",
       "outlineImage": "images/outline/dominica.png",
       "languageAudio": "sounds/languages/dominica.mp3"
@@ -777,7 +777,7 @@
         "ru": "Санто-Доминго",
         "en": "Santo Domingo"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/dominican_republic.png",
       "outlineImage": "images/outline/dominican_republic.png",
       "languageAudio": "sounds/languages/dominican_republic.mp3"
@@ -792,7 +792,7 @@
         "ru": "Каир",
         "en": "Cairo"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/egypt.png",
       "outlineImage": "images/outline/egypt.png",
       "languageAudio": "sounds/languages/egypt.mp3"
@@ -807,7 +807,7 @@
         "ru": "Лусака",
         "en": "Lusaka"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/zambia.png",
       "outlineImage": "images/outline/zambia.png",
       "languageAudio": "sounds/languages/zambia.mp3"
@@ -822,7 +822,7 @@
         "ru": "Хараре",
         "en": "Harare"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/zimbabwe.png",
       "outlineImage": "images/outline/zimbabwe.png",
       "languageAudio": "sounds/languages/zimbabwe.mp3"
@@ -837,7 +837,7 @@
         "ru": "Иерусалим",
         "en": "Jerusalem"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/israel.png",
       "outlineImage": "images/outline/israel.png",
       "languageAudio": "sounds/languages/israel.mp3"
@@ -852,7 +852,7 @@
         "ru": "Нью-Дели",
         "en": "New Delhi"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/india.png",
       "outlineImage": "images/outline/india.png",
       "languageAudio": "sounds/languages/india.mp3"
@@ -867,7 +867,7 @@
         "ru": "Джакарта",
         "en": "Jakarta"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/indonesia.png",
       "outlineImage": "images/outline/indonesia.png",
       "languageAudio": "sounds/languages/indonesia.mp3"
@@ -882,7 +882,7 @@
         "ru": "Амман",
         "en": "Amman"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/jordan.png",
       "outlineImage": "images/outline/jordan.png",
       "languageAudio": "sounds/languages/jordan.mp3"
@@ -897,7 +897,7 @@
         "ru": "Багдад",
         "en": "Baghdad"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/iraq.png",
       "outlineImage": "images/outline/iraq.png",
       "languageAudio": "sounds/languages/iraq.mp3"
@@ -912,7 +912,7 @@
         "ru": "Тегеран",
         "en": "Tehran"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/iran.png",
       "outlineImage": "images/outline/iran.png",
       "languageAudio": "sounds/languages/iran.mp3"
@@ -927,7 +927,7 @@
         "ru": "Дублин",
         "en": "Dublin"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/ireland.png",
       "outlineImage": "images/outline/ireland.png",
       "languageAudio": "sounds/languages/ireland.mp3"
@@ -942,7 +942,7 @@
         "ru": "Рейкьявик",
         "en": "Reykjavík"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/iceland.png",
       "outlineImage": "images/outline/iceland.png",
       "languageAudio": "sounds/languages/iceland.mp3"
@@ -957,7 +957,7 @@
         "ru": "Мадрид",
         "en": "Madrid"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/spain.png",
       "outlineImage": "images/outline/spain.png",
       "languageAudio": "sounds/languages/spain.mp3"
@@ -972,7 +972,7 @@
         "ru": "Рим",
         "en": "Rome"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/italy.png",
       "outlineImage": "images/outline/italy.png",
       "languageAudio": "sounds/languages/italy.mp3"
@@ -987,7 +987,7 @@
         "ru": "Сана",
         "en": "Sana'a"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/yemen.png",
       "outlineImage": "images/outline/yemen.png",
       "languageAudio": "sounds/languages/yemen.mp3"
@@ -1002,7 +1002,7 @@
         "ru": "Прая",
         "en": "Praia"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/cape_verde.png",
       "outlineImage": "images/outline/cape_verde.png",
       "languageAudio": "sounds/languages/cape_verde.mp3"
@@ -1017,7 +1017,7 @@
         "ru": "Нур-Султан",
         "en": "Nur-Sultan"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/kazakhstan.png",
       "outlineImage": "images/outline/kazakhstan.png",
       "languageAudio": "sounds/languages/kazakhstan.mp3"
@@ -1032,7 +1032,7 @@
         "ru": "Пномпень",
         "en": "Phnom Penh"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/cambodia.png",
       "outlineImage": "images/outline/cambodia.png",
       "languageAudio": "sounds/languages/cambodia.mp3"
@@ -1047,7 +1047,7 @@
         "ru": "Яунде",
         "en": "Yaoundé"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/cameroon.png",
       "outlineImage": "images/outline/cameroon.png",
       "languageAudio": "sounds/languages/cameroon.mp3"
@@ -1062,7 +1062,7 @@
         "ru": "Оттава",
         "en": "Ottawa"
       },
-      "region": "Северная Америка",
+      "region": "america",
       "flagImage": "images/flags/canada.png",
       "outlineImage": "images/outline/canada.png",
       "languageAudio": "sounds/languages/canada.mp3"
@@ -1077,7 +1077,7 @@
         "ru": "Доха",
         "en": "Doha"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/qatar.png",
       "outlineImage": "images/outline/qatar.png",
       "languageAudio": "sounds/languages/qatar.mp3"
@@ -1092,7 +1092,7 @@
         "ru": "Найроби",
         "en": "Nairobi"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/kenya.png",
       "outlineImage": "images/outline/kenya.png",
       "languageAudio": "sounds/languages/kenya.mp3"
@@ -1107,7 +1107,7 @@
         "ru": "Никосия",
         "en": "Nicosia"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/cyprus.png",
       "outlineImage": "images/outline/cyprus.png",
       "languageAudio": "sounds/languages/cyprus.mp3"
@@ -1122,7 +1122,7 @@
         "ru": "Бишкек",
         "en": "Bishkek"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/kyrgyzstan.png",
       "outlineImage": "images/outline/kyrgyzstan.png",
       "languageAudio": "sounds/languages/kyrgyzstan.mp3"
@@ -1137,7 +1137,7 @@
         "ru": "Южная Тарава",
         "en": "South Tarawa"
       },
-      "region": "Океания",
+      "region": "oceania",
       "flagImage": "images/flags/kiribati.png",
       "outlineImage": "images/outline/kiribati.png",
       "languageAudio": "sounds/languages/kiribati.mp3"
@@ -1152,7 +1152,7 @@
         "ru": "Пекин",
         "en": "Beijing"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/china.png",
       "outlineImage": "images/outline/china.png",
       "languageAudio": "sounds/languages/china.mp3"
@@ -1167,7 +1167,7 @@
         "ru": "Богота",
         "en": "Bogotá"
       },
-      "region": "Южная Америка",
+      "region": "america",
       "flagImage": "images/flags/colombia.png",
       "outlineImage": "images/outline/colombia.png",
       "languageAudio": "sounds/languages/colombia.mp3"
@@ -1182,7 +1182,7 @@
         "ru": "Морони",
         "en": "Moroni"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/comoros.png",
       "outlineImage": "images/outline/comoros.png",
       "languageAudio": "sounds/languages/comoros.mp3"
@@ -1197,7 +1197,7 @@
         "ru": "Браззавиль",
         "en": "Brazzaville"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/congo.png",
       "outlineImage": "images/outline/congo.png",
       "languageAudio": "sounds/languages/congo.mp3"
@@ -1212,7 +1212,7 @@
         "ru": "Киншаса",
         "en": "Kinshasa"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/dr_congo.png",
       "outlineImage": "images/outline/dr_congo.png",
       "languageAudio": "sounds/languages/dr_congo.mp3"
@@ -1227,7 +1227,7 @@
         "ru": "Пхеньян",
         "en": "Pyongyang"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/north_korea.png",
       "outlineImage": "images/outline/north_korea.png",
       "languageAudio": "sounds/languages/north_korea.mp3"
@@ -1242,7 +1242,7 @@
         "ru": "Сеул",
         "en": "Seoul"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/south_korea.png",
       "outlineImage": "images/outline/south_korea.png",
       "languageAudio": "sounds/languages/south_korea.mp3"
@@ -1257,7 +1257,7 @@
         "ru": "Сан-Хосе",
         "en": "San José"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/costa_rica.png",
       "outlineImage": "images/outline/costa_rica.png",
       "languageAudio": "sounds/languages/costa_rica.mp3"
@@ -1272,7 +1272,7 @@
         "ru": "Ямусукро",
         "en": "Yamoussoukro"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/ivory_coast.png",
       "outlineImage": "images/outline/ivory_coast.png",
       "languageAudio": "sounds/languages/ivory_coast.mp3"
@@ -1287,7 +1287,7 @@
         "ru": "Гавана",
         "en": "Havana"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/cuba.png",
       "outlineImage": "images/outline/cuba.png",
       "languageAudio": "sounds/languages/cuba.mp3"
@@ -1302,7 +1302,7 @@
         "ru": "Эль-Кувейт",
         "en": "Kuwait City"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/kuwait.png",
       "outlineImage": "images/outline/kuwait.png",
       "languageAudio": "sounds/languages/kuwait.mp3"
@@ -1317,7 +1317,7 @@
         "ru": "Вьентьян",
         "en": "Vientiane"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/laos.png",
       "outlineImage": "images/outline/laos.png",
       "languageAudio": "sounds/languages/laos.mp3"
@@ -1332,7 +1332,7 @@
         "ru": "Рига",
         "en": "Riga"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/latvia.png",
       "outlineImage": "images/outline/latvia.png",
       "languageAudio": "sounds/languages/latvia.mp3"
@@ -1347,7 +1347,7 @@
         "ru": "Масеру",
         "en": "Maseru"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/lesotho.png",
       "outlineImage": "images/outline/lesotho.png",
       "languageAudio": "sounds/languages/lesotho.mp3"
@@ -1362,7 +1362,7 @@
         "ru": "Бейрут",
         "en": "Beirut"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/lebanon.png",
       "outlineImage": "images/outline/lebanon.png",
       "languageAudio": "sounds/languages/lebanon.mp3"
@@ -1377,7 +1377,7 @@
         "ru": "Триполи",
         "en": "Tripoli"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/libya.png",
       "outlineImage": "images/outline/libya.png",
       "languageAudio": "sounds/languages/libya.mp3"
@@ -1392,7 +1392,7 @@
         "ru": "Монровия",
         "en": "Monrovia"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/liberia.png",
       "outlineImage": "images/outline/liberia.png",
       "languageAudio": "sounds/languages/liberia.mp3"
@@ -1407,7 +1407,7 @@
         "ru": "Вадуц",
         "en": "Vaduz"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/liechtenstein.png",
       "outlineImage": "images/outline/liechtenstein.png",
       "languageAudio": "sounds/languages/liechtenstein.mp3"
@@ -1422,7 +1422,7 @@
         "ru": "Вильнюс",
         "en": "Vilnius"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/lithuania.png",
       "outlineImage": "images/outline/lithuania.png",
       "languageAudio": "sounds/languages/lithuania.mp3"
@@ -1437,7 +1437,7 @@
         "ru": "Люксембург",
         "en": "Luxembourg"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/luxembourg.png",
       "outlineImage": "images/outline/luxembourg.png",
       "languageAudio": "sounds/languages/luxembourg.mp3"
@@ -1452,7 +1452,7 @@
         "ru": "Порт-Луи",
         "en": "Port Louis"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/mauritius.png",
       "outlineImage": "images/outline/mauritius.png",
       "languageAudio": "sounds/languages/mauritius.mp3"
@@ -1467,7 +1467,7 @@
         "ru": "Нуакшот",
         "en": "Nouakchott"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/mauritania.png",
       "outlineImage": "images/outline/mauritania.png",
       "languageAudio": "sounds/languages/mauritania.mp3"
@@ -1482,7 +1482,7 @@
         "ru": "Антананариву",
         "en": "Antananarivo"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/madagascar.png",
       "outlineImage": "images/outline/madagascar.png",
       "languageAudio": "sounds/languages/madagascar.mp3"
@@ -1497,7 +1497,7 @@
         "ru": "Лилонгве",
         "en": "Lilongwe"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/malawi.png",
       "outlineImage": "images/outline/malawi.png",
       "languageAudio": "sounds/languages/malawi.mp3"
@@ -1512,7 +1512,7 @@
         "ru": "Куала-Лумпур",
         "en": "Kuala Lumpur"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/malaysia.png",
       "outlineImage": "images/outline/malaysia.png",
       "languageAudio": "sounds/languages/malaysia.mp3"
@@ -1527,7 +1527,7 @@
         "ru": "Бамако",
         "en": "Bamako"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/mali.png",
       "outlineImage": "images/outline/mali.png",
       "languageAudio": "sounds/languages/mali.mp3"
@@ -1542,7 +1542,7 @@
         "ru": "Мале",
         "en": "Malé"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/maldives.png",
       "outlineImage": "images/outline/maldives.png",
       "languageAudio": "sounds/languages/maldives.mp3"
@@ -1557,7 +1557,7 @@
         "ru": "Валлетта",
         "en": "Valletta"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/malta.png",
       "outlineImage": "images/outline/malta.png",
       "languageAudio": "sounds/languages/malta.mp3"
@@ -1572,7 +1572,7 @@
         "ru": "Рабат",
         "en": "Rabat"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/morocco.png",
       "outlineImage": "images/outline/morocco.png",
       "languageAudio": "sounds/languages/morocco.mp3"
@@ -1587,7 +1587,7 @@
         "ru": "Маджуро",
         "en": "Majuro"
       },
-      "region": "Океания",
+      "region": "oceania",
       "flagImage": "images/flags/marshall_islands.png",
       "outlineImage": "images/outline/marshall_islands.png",
       "languageAudio": "sounds/languages/marshall_islands.mp3"
@@ -1602,7 +1602,7 @@
         "ru": "Мехико",
         "en": "Mexico City"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/mexico.png",
       "outlineImage": "images/outline/mexico.png",
       "languageAudio": "sounds/languages/mexico.mp3"
@@ -1617,7 +1617,7 @@
         "ru": "Паликир",
         "en": "Palikir"
       },
-      "region": "Океания",
+      "region": "oceania",
       "flagImage": "images/flags/micronesia.png",
       "outlineImage": "images/outline/micronesia.png",
       "languageAudio": "sounds/languages/micronesia.mp3"
@@ -1632,7 +1632,7 @@
         "ru": "Мапуту",
         "en": "Maputo"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/mozambique.png",
       "outlineImage": "images/outline/mozambique.png",
       "languageAudio": "sounds/languages/mozambique.mp3"
@@ -1647,7 +1647,7 @@
         "ru": "Кишинёв",
         "en": "Chișinău"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/moldova.png",
       "outlineImage": "images/outline/moldova.png",
       "languageAudio": "sounds/languages/moldova.mp3"
@@ -1662,7 +1662,7 @@
         "ru": "Монако",
         "en": "Monaco"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/monaco.png",
       "outlineImage": "images/outline/monaco.png",
       "languageAudio": "sounds/languages/monaco.mp3"
@@ -1677,7 +1677,7 @@
         "ru": "Улан-Батор",
         "en": "Ulaanbaatar"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/mongolia.png",
       "outlineImage": "images/outline/mongolia.png",
       "languageAudio": "sounds/languages/mongolia.mp3"
@@ -1692,7 +1692,7 @@
         "ru": "Нейпьидо",
         "en": "Naypyidaw"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/myanmar.png",
       "outlineImage": "images/outline/myanmar.png",
       "languageAudio": "sounds/languages/myanmar.mp3"
@@ -1707,7 +1707,7 @@
         "ru": "Виндхук",
         "en": "Windhoek"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/namibia.png",
       "outlineImage": "images/outline/namibia.png",
       "languageAudio": "sounds/languages/namibia.mp3"
@@ -1722,7 +1722,7 @@
         "ru": "Ярен",
         "en": "Yaren"
       },
-      "region": "Океания",
+      "region": "oceania",
       "flagImage": "images/flags/nauru.png",
       "outlineImage": "images/outline/nauru.png",
       "languageAudio": "sounds/languages/nauru.mp3"
@@ -1737,7 +1737,7 @@
         "ru": "Катманду",
         "en": "Kathmandu"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/nepal.png",
       "outlineImage": "images/outline/nepal.png",
       "languageAudio": "sounds/languages/nepal.mp3"
@@ -1752,7 +1752,7 @@
         "ru": "Ниамей",
         "en": "Niamey"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/niger.png",
       "outlineImage": "images/outline/niger.png",
       "languageAudio": "sounds/languages/niger.mp3"
@@ -1767,7 +1767,7 @@
         "ru": "Абуджа",
         "en": "Abuja"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/nigeria.png",
       "outlineImage": "images/outline/nigeria.png",
       "languageAudio": "sounds/languages/nigeria.mp3"
@@ -1782,7 +1782,7 @@
         "ru": "Амстердам",
         "en": "Amsterdam"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/netherlands.png",
       "outlineImage": "images/outline/netherlands.png",
       "languageAudio": "sounds/languages/netherlands.mp3"
@@ -1797,7 +1797,7 @@
         "ru": "Манагуа",
         "en": "Managua"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/nicaragua.png",
       "outlineImage": "images/outline/nicaragua.png",
       "languageAudio": "sounds/languages/nicaragua.mp3"
@@ -1812,7 +1812,7 @@
         "ru": "Веллингтон",
         "en": "Wellington"
       },
-      "region": "Океания",
+      "region": "oceania",
       "flagImage": "images/flags/new_zealand.png",
       "outlineImage": "images/outline/new_zealand.png",
       "languageAudio": "sounds/languages/new_zealand.mp3"
@@ -1827,7 +1827,7 @@
         "ru": "Осло",
         "en": "Oslo"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/norway.png",
       "outlineImage": "images/outline/norway.png",
       "languageAudio": "sounds/languages/norway.mp3"
@@ -1842,7 +1842,7 @@
         "ru": "Абу-Даби",
         "en": "Abu Dhabi"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/uae.png",
       "outlineImage": "images/outline/uae.png",
       "languageAudio": "sounds/languages/united_arab_emirates.mp3"
@@ -1857,7 +1857,7 @@
         "ru": "Маскат",
         "en": "Muscat"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/oman.png",
       "outlineImage": "images/outline/oman.png",
       "languageAudio": "sounds/languages/oman.mp3"
@@ -1872,7 +1872,7 @@
         "ru": "Исламабад",
         "en": "Islamabad"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/pakistan.png",
       "outlineImage": "images/outline/pakistan.png",
       "languageAudio": "sounds/languages/pakistan.mp3"
@@ -1887,7 +1887,7 @@
         "ru": "Нгерулмуд",
         "en": "Ngerulmud"
       },
-      "region": "Океания",
+      "region": "oceania",
       "flagImage": "images/flags/palau.png",
       "outlineImage": "images/outline/palau.png",
       "languageAudio": "sounds/languages/palau.mp3"
@@ -1902,7 +1902,7 @@
         "ru": "Панама",
         "en": "Panama City"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/panama.png",
       "outlineImage": "images/outline/panama.png",
       "languageAudio": "sounds/languages/panama.mp3"
@@ -1917,7 +1917,7 @@
         "ru": "Порт-Морсби",
         "en": "Port Moresby"
       },
-      "region": "Океания",
+      "region": "oceania",
       "flagImage": "images/flags/papua_new_guinea.png",
       "outlineImage": "images/outline/papua_new_guinea.png",
       "languageAudio": "sounds/languages/papua_new_guinea.mp3"
@@ -1932,7 +1932,7 @@
         "ru": "Рамалла",
         "en": "Ramallah"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/palestine.png",
       "outlineImage": "images/outline/palestine.png",
       "languageAudio": "sounds/languages/palestine.mp3"
@@ -1947,7 +1947,7 @@
         "ru": "Асунсьон",
         "en": "Asunción"
       },
-      "region": "Южная Америка",
+      "region": "america",
       "flagImage": "images/flags/paraguay.png",
       "outlineImage": "images/outline/paraguay.png",
       "languageAudio": "sounds/languages/paraguay.mp3"
@@ -1962,7 +1962,7 @@
         "ru": "Лима",
         "en": "Lima"
       },
-      "region": "Южная Америка",
+      "region": "america",
       "flagImage": "images/flags/peru.png",
       "outlineImage": "images/outline/peru.png",
       "languageAudio": "sounds/languages/peru.mp3"
@@ -1977,7 +1977,7 @@
         "ru": "Варшава",
         "en": "Warsaw"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/poland.png",
       "outlineImage": "images/outline/poland.png",
       "languageAudio": "sounds/languages/poland.mp3"
@@ -1992,7 +1992,7 @@
         "ru": "Лиссабон",
         "en": "Lisbon"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/portugal.png",
       "outlineImage": "images/outline/portugal.png",
       "languageAudio": "sounds/languages/portugal.mp3"
@@ -2007,7 +2007,7 @@
         "ru": "Москва",
         "en": "Moscow"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/russia.png",
       "outlineImage": "images/outline/russia.png",
       "languageAudio": "sounds/languages/russia.mp3"
@@ -2022,7 +2022,7 @@
         "ru": "Кигали",
         "en": "Kigali"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/rwanda.png",
       "outlineImage": "images/outline/rwanda.png",
       "languageAudio": "sounds/languages/rwanda.mp3"
@@ -2037,7 +2037,7 @@
         "ru": "Бухарест",
         "en": "Bucharest"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/romania.png",
       "outlineImage": "images/outline/romania.png",
       "languageAudio": "sounds/languages/romania.mp3"
@@ -2052,7 +2052,7 @@
         "ru": "Сан-Сальвадор",
         "en": "San Salvador"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/el_salvador.png",
       "outlineImage": "images/outline/el_salvador.png",
       "languageAudio": "sounds/languages/el_salvador.mp3"
@@ -2067,7 +2067,7 @@
         "ru": "Апиа",
         "en": "Apia"
       },
-      "region": "Океания",
+      "region": "oceania",
       "flagImage": "images/flags/samoa.png",
       "outlineImage": "images/outline/samoa.png",
       "languageAudio": "sounds/languages/samoa.mp3"
@@ -2082,7 +2082,7 @@
         "ru": "Сан-Марино",
         "en": "San Marino"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/san_marino.png",
       "outlineImage": "images/outline/san_marino.png",
       "languageAudio": "sounds/languages/san_marino.mp3"
@@ -2097,7 +2097,7 @@
         "ru": "Сан-Томе",
         "en": "São Tomé"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/sao_tome.png",
       "outlineImage": "images/outline/sao_tome.png",
       "languageAudio": "sounds/languages/sao_tome_and_principe.mp3"
@@ -2112,7 +2112,7 @@
         "ru": "Эр-Рияд",
         "en": "Riyadh"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/saudi_arabia.png",
       "outlineImage": "images/outline/saudi_arabia.png",
       "languageAudio": "sounds/languages/saudi_arabia.mp3"
@@ -2127,7 +2127,7 @@
         "ru": "Скопье",
         "en": "Skopje"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/north_macedonia.png",
       "outlineImage": "images/outline/north_macedonia.png",
       "languageAudio": "sounds/languages/north_macedonia.mp3"
@@ -2142,7 +2142,7 @@
         "ru": "Виктория",
         "en": "Victoria"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/seychelles.png",
       "outlineImage": "images/outline/seychelles.png",
       "languageAudio": "sounds/languages/seychelles.mp3"
@@ -2157,7 +2157,7 @@
         "ru": "Дакар",
         "en": "Dakar"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/senegal.png",
       "outlineImage": "images/outline/senegal.png",
       "languageAudio": "sounds/languages/senegal.mp3"
@@ -2172,7 +2172,7 @@
         "ru": "Кингстаун",
         "en": "Kingstown"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/st_vincent.png",
       "outlineImage": "images/outline/st_vincent.png",
       "languageAudio": "sounds/languages/saint_vincent_and_the_grenadines.mp3"
@@ -2187,7 +2187,7 @@
         "ru": "Бастер",
         "en": "Basseterre"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/st_kitts.png",
       "outlineImage": "images/outline/st_kitts.png",
       "languageAudio": "sounds/languages/saint_kitts_and_nevis.mp3"
@@ -2202,7 +2202,7 @@
         "ru": "Кастри",
         "en": "Castries"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/st_lucia.png",
       "outlineImage": "images/outline/st_lucia.png",
       "languageAudio": "sounds/languages/saint_lucia.mp3"
@@ -2217,7 +2217,7 @@
         "ru": "Белград",
         "en": "Belgrade"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/serbia.png",
       "outlineImage": "images/outline/serbia.png",
       "languageAudio": "sounds/languages/serbia.mp3"
@@ -2232,7 +2232,7 @@
         "ru": "Сингапур",
         "en": "Singapore"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/singapore.png",
       "outlineImage": "images/outline/singapore.png",
       "languageAudio": "sounds/languages/singapore.mp3"
@@ -2247,7 +2247,7 @@
         "ru": "Дамаск",
         "en": "Damascus"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/syria.png",
       "outlineImage": "images/outline/syria.png",
       "languageAudio": "sounds/languages/syria.mp3"
@@ -2262,7 +2262,7 @@
         "ru": "Братислава",
         "en": "Bratislava"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/slovakia.png",
       "outlineImage": "images/outline/slovakia.png",
       "languageAudio": "sounds/languages/slovakia.mp3"
@@ -2277,7 +2277,7 @@
         "ru": "Любляна",
         "en": "Ljubljana"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/slovenia.png",
       "outlineImage": "images/outline/slovenia.png",
       "languageAudio": "sounds/languages/slovenia.mp3"
@@ -2292,7 +2292,7 @@
         "ru": "Вашингтон",
         "en": "Washington, D.C."
       },
-      "region": "Северная Америка",
+      "region": "america",
       "flagImage": "images/flags/usa.png",
       "outlineImage": "images/outline/usa.png",
       "languageAudio": "sounds/languages/united_states.mp3"
@@ -2307,7 +2307,7 @@
         "ru": "Хониара",
         "en": "Honiara"
       },
-      "region": "Океания",
+      "region": "oceania",
       "flagImage": "images/flags/solomon_islands.png",
       "outlineImage": "images/outline/solomon_islands.png",
       "languageAudio": "sounds/languages/solomon_islands.mp3"
@@ -2322,7 +2322,7 @@
         "ru": "Могадишо",
         "en": "Mogadishu"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/somalia.png",
       "outlineImage": "images/outline/somalia.png",
       "languageAudio": "sounds/languages/somalia.mp3"
@@ -2337,7 +2337,7 @@
         "ru": "Хартум",
         "en": "Khartoum"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/sudan.png",
       "outlineImage": "images/outline/sudan.png",
       "languageAudio": "sounds/languages/sudan.mp3"
@@ -2352,7 +2352,7 @@
         "ru": "Парамарибо",
         "en": "Paramaribo"
       },
-      "region": "Южная Америка",
+      "region": "america",
       "flagImage": "images/flags/suriname.png",
       "outlineImage": "images/outline/suriname.png",
       "languageAudio": "sounds/languages/suriname.mp3"
@@ -2367,7 +2367,7 @@
         "ru": "Фритаун",
         "en": "Freetown"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/sierra_leone.png",
       "outlineImage": "images/outline/sierra_leone.png",
       "languageAudio": "sounds/languages/sierra_leone.mp3"
@@ -2382,7 +2382,7 @@
         "ru": "Душанбе",
         "en": "Dushanbe"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/tajikistan.png",
       "outlineImage": "images/outline/tajikistan.png",
       "languageAudio": "sounds/languages/tajikistan.mp3"
@@ -2397,7 +2397,7 @@
         "ru": "Бангкок",
         "en": "Bangkok"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/thailand.png",
       "outlineImage": "images/outline/thailand.png",
       "languageAudio": "sounds/languages/thailand.mp3"
@@ -2412,7 +2412,7 @@
         "ru": "Додома",
         "en": "Dodoma"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/tanzania.png",
       "outlineImage": "images/outline/tanzania.png",
       "languageAudio": "sounds/languages/tanzania.mp3"
@@ -2427,7 +2427,7 @@
         "ru": "Ломе",
         "en": "Lomé"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/togo.png",
       "outlineImage": "images/outline/togo.png",
       "languageAudio": "sounds/languages/togo.mp3"
@@ -2442,7 +2442,7 @@
         "ru": "Нукуалофа",
         "en": "Nukuʻalofa"
       },
-      "region": "Океания",
+      "region": "oceania",
       "flagImage": "images/flags/tonga.png",
       "outlineImage": "images/outline/tonga.png",
       "languageAudio": "sounds/languages/tonga.mp3"
@@ -2457,7 +2457,7 @@
         "ru": "Порт-оф-Спейн",
         "en": "Port of Spain"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/trinidad_tobago.png",
       "outlineImage": "images/outline/trinidad_tobago.png",
       "languageAudio": "sounds/languages/trinidad_and_tobago.mp3"
@@ -2472,7 +2472,7 @@
         "ru": "Фунафути",
         "en": "Funafuti"
       },
-      "region": "Океания",
+      "region": "oceania",
       "flagImage": "images/flags/tuvalu.png",
       "outlineImage": "images/outline/tuvalu.png",
       "languageAudio": "sounds/languages/tuvalu.mp3"
@@ -2487,7 +2487,7 @@
         "ru": "Тунис",
         "en": "Tunis"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/tunisia.png",
       "outlineImage": "images/outline/tunisia.png",
       "languageAudio": "sounds/languages/tunisia.mp3"
@@ -2502,7 +2502,7 @@
         "ru": "Ашхабад",
         "en": "Ashgabat"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/turkmenistan.png",
       "outlineImage": "images/outline/turkmenistan.png",
       "languageAudio": "sounds/languages/turkmenistan.mp3"
@@ -2517,7 +2517,7 @@
         "ru": "Анкара",
         "en": "Ankara"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/turkey.png",
       "outlineImage": "images/outline/turkey.png",
       "languageAudio": "sounds/languages/turkey.mp3"
@@ -2532,7 +2532,7 @@
         "ru": "Кампала",
         "en": "Kampala"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/uganda.png",
       "outlineImage": "images/outline/uganda.png",
       "languageAudio": "sounds/languages/uganda.mp3"
@@ -2547,7 +2547,7 @@
         "ru": "Ташкент",
         "en": "Tashkent"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/uzbekistan.png",
       "outlineImage": "images/outline/uzbekistan.png",
       "languageAudio": "sounds/languages/uzbekistan.mp3"
@@ -2562,7 +2562,7 @@
         "ru": "Киев",
         "en": "Kyiv"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/ukraine.png",
       "outlineImage": "images/outline/ukraine.png",
       "languageAudio": "sounds/languages/ukraine.mp3"
@@ -2577,7 +2577,7 @@
         "ru": "Монтевидео",
         "en": "Montevideo"
       },
-      "region": "Южная Америка",
+      "region": "america",
       "flagImage": "images/flags/uruguay.png",
       "outlineImage": "images/outline/uruguay.png",
       "languageAudio": "sounds/languages/uruguay.mp3"
@@ -2592,7 +2592,7 @@
         "ru": "Сува",
         "en": "Suva"
       },
-      "region": "Океания",
+      "region": "oceania",
       "flagImage": "images/flags/fiji.png",
       "outlineImage": "images/outline/fiji.png",
       "languageAudio": "sounds/languages/fiji.mp3"
@@ -2607,7 +2607,7 @@
         "ru": "Манила",
         "en": "Manila"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/philippines.png",
       "outlineImage": "images/outline/philippines.png",
       "languageAudio": "sounds/languages/philippines.mp3"
@@ -2622,7 +2622,7 @@
         "ru": "Хельсинки",
         "en": "Helsinki"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/finland.png",
       "outlineImage": "images/outline/finland.png",
       "languageAudio": "sounds/languages/finland.mp3"
@@ -2637,7 +2637,7 @@
         "ru": "Париж",
         "en": "Paris"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/france.png",
       "outlineImage": "images/outline/france.png",
       "languageAudio": "sounds/languages/france.mp3"
@@ -2652,7 +2652,7 @@
         "ru": "Загреб",
         "en": "Zagreb"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/croatia.png",
       "outlineImage": "images/outline/croatia.png",
       "languageAudio": "sounds/languages/croatia.mp3"
@@ -2667,7 +2667,7 @@
         "ru": "Банги",
         "en": "Bangui"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/car.png",
       "outlineImage": "images/outline/car.png",
       "languageAudio": "sounds/languages/central_african_republic.mp3"
@@ -2682,7 +2682,7 @@
         "ru": "Нджамена",
         "en": "N'Djamena"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/chad.png",
       "outlineImage": "images/outline/chad.png",
       "languageAudio": "sounds/languages/chad.mp3"
@@ -2697,7 +2697,7 @@
         "ru": "Подгорица",
         "en": "Podgorica"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/montenegro.png",
       "outlineImage": "images/outline/montenegro.png",
       "languageAudio": "sounds/languages/montenegro.mp3"
@@ -2712,7 +2712,7 @@
         "ru": "Прага",
         "en": "Prague"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/czech_republic.png",
       "outlineImage": "images/outline/czech_republic.png",
       "languageAudio": "sounds/languages/czech_republic.mp3"
@@ -2727,7 +2727,7 @@
         "ru": "Сантьяго",
         "en": "Santiago"
       },
-      "region": "Южная Америка",
+      "region": "america",
       "flagImage": "images/flags/chile.png",
       "outlineImage": "images/outline/chile.png",
       "languageAudio": "sounds/languages/chile.mp3"
@@ -2742,7 +2742,7 @@
         "ru": "Берн",
         "en": "Bern"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/switzerland.png",
       "outlineImage": "images/outline/switzerland.png",
       "languageAudio": "sounds/languages/switzerland.mp3"
@@ -2757,7 +2757,7 @@
         "ru": "Стокгольм",
         "en": "Stockholm"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/sweden.png",
       "outlineImage": "images/outline/sweden.png",
       "languageAudio": "sounds/languages/sweden.mp3"
@@ -2772,7 +2772,7 @@
         "ru": "Шри-Джаяварденепура-Котте",
         "en": "Sri Jayawardenepura Kotte"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/sri_lanka.png",
       "outlineImage": "images/outline/sri_lanka.png",
       "languageAudio": "sounds/languages/sri_lanka.mp3"
@@ -2787,7 +2787,7 @@
         "ru": "Кито",
         "en": "Quito"
       },
-      "region": "Южная Америка",
+      "region": "america",
       "flagImage": "images/flags/ecuador.png",
       "outlineImage": "images/outline/ecuador.png",
       "languageAudio": "sounds/languages/ecuador.mp3"
@@ -2802,7 +2802,7 @@
         "ru": "Малабо",
         "en": "Malabo"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/equatorial_guinea.png",
       "outlineImage": "images/outline/equatorial_guinea.png",
       "languageAudio": "sounds/languages/equatorial_guinea.mp3"
@@ -2817,7 +2817,7 @@
         "ru": "Асмэра",
         "en": "Asmara"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/eritrea.png",
       "outlineImage": "images/outline/eritrea.png",
       "languageAudio": "sounds/languages/eritrea.mp3"
@@ -2832,7 +2832,7 @@
         "ru": "Мбабане",
         "en": "Mbabane"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/eswatini.png",
       "outlineImage": "images/outline/eswatini.png",
       "languageAudio": "sounds/languages/eswatini.mp3"
@@ -2847,7 +2847,7 @@
         "ru": "Таллин",
         "en": "Tallinn"
       },
-      "region": "Европа",
+      "region": "europe",
       "flagImage": "images/flags/estonia.png",
       "outlineImage": "images/outline/estonia.png",
       "languageAudio": "sounds/languages/estonia.mp3"
@@ -2862,7 +2862,7 @@
         "ru": "Аддис-Абеба",
         "en": "Addis Ababa"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/ethiopia.png",
       "outlineImage": "images/outline/ethiopia.png",
       "languageAudio": "sounds/languages/ethiopia.mp3"
@@ -2877,7 +2877,7 @@
         "ru": "Претория",
         "en": "Pretoria"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/south_africa.png",
       "outlineImage": "images/outline/south_africa.png",
       "languageAudio": "sounds/languages/south_africa.mp3"
@@ -2892,7 +2892,7 @@
         "ru": "Джуба",
         "en": "Juba"
       },
-      "region": "Африка",
+      "region": "africa",
       "flagImage": "images/flags/south_sudan.png",
       "outlineImage": "images/outline/south_sudan.png",
       "languageAudio": "sounds/languages/south_sudan.mp3"
@@ -2907,7 +2907,7 @@
         "ru": "Кингстон",
         "en": "Kingston"
       },
-      "region": "Центральная Америка",
+      "region": "america",
       "flagImage": "images/flags/jamaica.png",
       "outlineImage": "images/outline/jamaica.png",
       "languageAudio": "sounds/languages/jamaica.mp3"
@@ -2922,7 +2922,7 @@
         "ru": "Токио",
         "en": "Tokyo"
       },
-      "region": "Азия",
+      "region": "asia",
       "flagImage": "images/flags/japan.png",
       "outlineImage": "images/outline/japan.png",
       "languageAudio": "sounds/languages/japan.mp3"

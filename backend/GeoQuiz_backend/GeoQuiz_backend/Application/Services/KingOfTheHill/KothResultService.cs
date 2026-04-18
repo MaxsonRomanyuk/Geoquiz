@@ -130,6 +130,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
         }
         private async Task UpdateUserStatsAsync(AppDbContext db, KothGameState gameState, List<GameSession> gameSessions)
         {
+            var match = gameState.Match;
             foreach (var session in gameSessions)
             {
                 var user = await db.Users
@@ -173,28 +174,59 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     }
                 }
 
-                switch (session.Mode)
+                if (session.CorrectAnswers > 0)
                 {
-                    case GameMode.Flag:
-                        stats.FlagsCorrect += session.CorrectAnswers;
-                        break;
-                    case GameMode.Capital:
-                        stats.CapitalsCorrect += session.CorrectAnswers;
-                        break;
-                    case GameMode.Outline:
-                        stats.OutlinesCorrect += session.CorrectAnswers;
-                        break;
-                    case GameMode.Language:
-                        stats.LanguagesCorrect += session.CorrectAnswers;
-                        break;
+                    switch (session.Mode)
+                    {
+                        case GameMode.Flag:
+                            stats.FlagsCorrect += session.CorrectAnswers;
+                            break;
+                        case GameMode.Capital:
+                            stats.CapitalsCorrect += session.CorrectAnswers;
+                            break;
+                        case GameMode.Outline:
+                            stats.OutlinesCorrect += session.CorrectAnswers;
+                            break;
+                        case GameMode.Language:
+                            stats.LanguagesCorrect += session.CorrectAnswers;
+                            break;
+                    }
+
+                    var answers = match.Answers.Where(a => a.UserId.Equals(user.Id)).ToList();
+                    var questionSet = match.QuestionSet;
+
+                    if (questionSet != null)
+                    {
+                        var regions = questionSet.Regions;
+                        var questionIds = questionSet.QuestionIds;
+                        var idRegion = questionIds
+                            .Zip(regions, (id, region) => new { id, region })
+                            .ToDictionary(x => x.id, x => x.region);
+                        foreach (var answer in answers)
+                        {
+                            if (answer.IsCorrect)
+                            {
+                                if (idRegion.TryGetValue(answer.QuestionId, out var region))
+                                {
+                                    switch (region)
+                                    {
+                                        case Region.Europe: stats.EuropeCorrect++; break;
+                                        case Region.Asia: stats.AsiaCorrect++; break;
+                                        case Region.Africa: stats.AfricaCorrect++; break;
+                                        case Region.America: stats.AmericaCorrect++; break;
+                                        case Region.Oceania: stats.OceaniaCorrect++; break;
+                                    }
+                                }
+                            }
+                        }
+
+                    }
                 }
-
                 var newStats = stats;
+                await db.SaveChangesAsync();
                 await CheckAchievementsAsync(user.Id, oldStats, newStats, session);
+                _logger.LogInformation("User stats updated for match {MatchId}", gameState.MatchId);
             }
-
-            await db.SaveChangesAsync();
-            _logger.LogInformation("User stats updated for match {MatchId}", gameState.MatchId);
         }
         private async Task CheckAchievementsAsync(Guid userId, UserStats oldStats, UserStats newStats, GameSession session)
         {

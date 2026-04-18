@@ -329,16 +329,16 @@ public class GameRepository {
 
         int regionVal = 0;
         switch (region) {
-            case "Европа":
+            case "europe":
                 regionVal = 1;
                 break;
-            case "Азия":
+            case "asia":
                 regionVal = 2;
                 break;
-            case "Африка":
+            case "africa":
                 regionVal = 3;
                 break;
-            case "Америка":
+            case "america":
                 regionVal = 4;
                 break;
             default:

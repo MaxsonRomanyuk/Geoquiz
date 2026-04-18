@@ -29,7 +29,7 @@ import java.util.TimeZone;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "GameDatabaseHelper";
     private static final String DATABASE_NAME = "geoquiz.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
 
     private static final String TABLE_COUNTRIES = "countries";
@@ -429,7 +429,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 stats.getAmericaCorrect(),
                 stats.getOceaniaCorrect()
         };
-        String[] continents = {"Европа", "Азия", "Африка", "Америка", "Океания"};
+        String[] continents = {"europe", "asia", "africa", "america", "oceania"};
 
         int maxIndex = 0;
         for (int i = 1; i < values.length; i++) {

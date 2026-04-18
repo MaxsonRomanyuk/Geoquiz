@@ -29,6 +29,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
             var match = await _db.PvPMatches
                 .Include(m => m.Player1).ThenInclude(u => u.Stats)
                 .Include(m => m.Player2).ThenInclude(u => u.Stats)
+                .Include(m => m.QuestionSet)
                 .FirstAsync(m => m.Id == matchId);
 
             if (match.Status == PvPMatchStatus.Finished)
@@ -146,8 +147,6 @@ namespace GeoQuiz_backend.Application.Services.PvP
             await UpdateUserStats(match, match.Player1, s1, s2, match.Player2, winnerId);
             await UpdateUserStats(match, match.Player2, s2, s1, match.Player1, winnerId);
 
-            //await _db.SaveChangesAsync(); в _achievementService.CheckAndGrantAsync обновляется
-
             return new PvPMatchResultDto
             {
                 MatchId = matchId,
@@ -184,14 +183,45 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
             stats.MaxWinStreak = Math.Max(stats.MaxWinStreak, stats.CurrentWinStreak);
 
-            switch (match.SelectedMode)
+            if (correctAnswers > 0)
             {
-                case GameMode.Flag: stats.FlagsCorrect += correctAnswers; break;
-                case GameMode.Capital: stats.CapitalsCorrect += correctAnswers; break;
-                case GameMode.Outline: stats.OutlinesCorrect += correctAnswers; break;
-                case GameMode.Language: stats.LanguagesCorrect += correctAnswers; break;
-            }
+                switch (match.SelectedMode)
+                {
+                    case GameMode.Flag: stats.FlagsCorrect += correctAnswers; break;
+                    case GameMode.Capital: stats.CapitalsCorrect += correctAnswers; break;
+                    case GameMode.Outline: stats.OutlinesCorrect += correctAnswers; break;
+                    case GameMode.Language: stats.LanguagesCorrect += correctAnswers; break;
+                }
 
+                var answers = match.Answers.Where(a => a.UserId.Equals(user.Id)).ToList();
+                var questionSet = match.QuestionSet;
+
+                if (questionSet != null)
+                {
+                    var regions = questionSet.Regions;
+                    var questionIds = questionSet.QuestionIds;
+                    var idRegion = questionIds
+                        .Zip(regions, (id, region) => new { id, region })
+                        .ToDictionary(x => x.id, x => x.region);
+                    foreach (var answer in answers)
+                    {
+                        if (answer.IsCorrect)
+                        {
+                            if (idRegion.TryGetValue(answer.QuestionId, out var region))
+                            {
+                                switch (region)
+                                {
+                                    case Region.Europe: stats.EuropeCorrect++; break;
+                                    case Region.Asia: stats.AsiaCorrect++; break;
+                                    case Region.Africa: stats.AfricaCorrect++; break;
+                                    case Region.America: stats.AmericaCorrect++; break;
+                                    case Region.Oceania: stats.OceaniaCorrect++; break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             var newStats = stats;
             await _db.SaveChangesAsync();
 

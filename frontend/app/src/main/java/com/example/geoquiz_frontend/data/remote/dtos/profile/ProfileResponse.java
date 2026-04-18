@@ -94,7 +94,7 @@ public class ProfileResponse {
 
         public String getBestContinent() {
             int[] values = {europeCorrect, asiaCorrect, africaCorrect, americaCorrect, oceaniaCorrect};
-            String[] continents = {"Европа", "Азия", "Африка", "Америка", "Океания"};
+            String[] continents = {"europe", "asia", "africa", "america", "oceania"};
 
             int maxIndex = 0;
             for (int i = 1; i < values.length; i++) {

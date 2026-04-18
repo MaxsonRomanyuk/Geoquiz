@@ -24,6 +24,15 @@ namespace GeoQuiz_backend.Infrastructure.Persistence.Mongo.Repositories
             return await _countries.Find(c => c.Id == id).FirstOrDefaultAsync();
         }
 
+        public async Task<List<Country>> GetByIdsAsync(List<string> ids)
+        {
+            var countries = await _countries
+                .Find(q => ids.Contains(q.Id))
+                .ToListAsync();
+
+            return ids.Select(id => countries.First(c => c.Id == id)).ToList();
+        }
+
         public async Task CreateAsync(Country country)
         {
             await _countries.InsertOneAsync(country);

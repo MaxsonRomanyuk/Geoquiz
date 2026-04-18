@@ -11,11 +11,13 @@ namespace GeoQuiz_backend.Application.Services.PvP
     {
         private readonly AppDbContext _db;
         private readonly IQuestionRepository _questionRepo;
+        private readonly ICountryRepository _countryRepo;
 
-        public QuestionSetService(AppDbContext db, IQuestionRepository questionRepo)
+        public QuestionSetService(AppDbContext db, IQuestionRepository questionRepo, ICountryRepository countryRepo)
         {
             _db = db;
             _questionRepo = questionRepo;
+            _countryRepo = countryRepo;
         }
 
         public async Task<QuestionSet> CreateForMatchAsync(Guid matchId)
@@ -39,6 +41,9 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 .Take(10)
                 .ToList();
 
+            var countriesIds = selected.Select(q => RemoveLastUnderscorePart(q.Id)).ToList();
+            var countries = await _countryRepo.GetByIdsAsync(countriesIds);
+
             var questionSet = new QuestionSet
             {
                 Id = Guid.NewGuid(),
@@ -47,9 +52,11 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 Language = AppLanguage.En,
                 Seed = seed,
                 CreatedAt = DateTime.UtcNow,
-                QuestionIds = selected.Select(q => q.Id).ToList()
+                QuestionIds = selected.Select(q => q.Id).ToList(),
+                Regions = countries.Select(c => c.RegionEnum).ToList(),
             };
 
+            match.QuestionSet = questionSet;
             _db.QuestionSets.Add(questionSet);
 
             await _db.SaveChangesAsync();
@@ -62,6 +69,19 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 .FirstAsync(q => q.PvPMatchId == matchId);
 
             return await _questionRepo.GetByIdsAsync(set.QuestionIds);
+        }
+        public static string RemoveLastUnderscorePart(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+
+            for (int i = input.Length - 1; i >= 0; i--)
+            {
+                if (input[i] == '_')
+                {
+                    return input.Substring(0, i);
+                }
+            }
+            return input;
         }
     }
 }

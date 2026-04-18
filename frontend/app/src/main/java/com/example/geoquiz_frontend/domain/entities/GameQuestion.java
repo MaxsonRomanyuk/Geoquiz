@@ -42,7 +42,7 @@ public class GameQuestion implements Serializable {
     public boolean isAnswered() { return isAnswered; }
     public boolean isCorrect() { return isCorrect; }
 
-    public int getRegion() {return region; }
+    public int getRegion() { return region; }
 
     public void setTimeSpent(int timeSpent) { this.timeSpent = timeSpent; }
 

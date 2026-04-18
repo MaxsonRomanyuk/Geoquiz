@@ -201,6 +201,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void updateUI(ProfileResponse profileData) {
+        String language = preferencesHelper.getLanguage();
+
         if (profileData == null) {
             Log.e("MainActivity", "profileData is null");
             return;
@@ -250,7 +252,29 @@ public class MainActivity extends BaseActivity {
         }
 
         if (geography != null) {
-            tvBestContinent.setText(geography.getBestContinent());
+            String bestContinent = "";
+            switch (geography.getBestContinent())
+            {
+                case "europe":
+                    bestContinent = language.equals("ru") ? "Европа" : "Europe";
+                    break;
+                case "asia":
+                    bestContinent = language.equals("ru") ? "Азия" : "Asia";
+                    break;
+                case "africa":
+                    bestContinent = language.equals("ru") ? "Африка" : "Africa";
+                    break;
+                case "america":
+                    bestContinent = language.equals("ru") ? "Америка" : "America";
+                    break;
+                case "oceania":
+                    bestContinent = language.equals("ru") ? "Океания" : "Oceania";
+                    break;
+                default:
+                    bestContinent = language.equals("ru") ? "Европа" : "Europe";
+                    break;
+            }
+            tvBestContinent.setText(bestContinent);
         } else {
             tvBestContinent.setText("—");
         }
