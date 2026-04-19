@@ -29,7 +29,7 @@ import java.util.TimeZone;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "GameDatabaseHelper";
     private static final String DATABASE_NAME = "geoquiz.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
 
     private static final String TABLE_COUNTRIES = "countries";
@@ -60,6 +60,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_WIN_RATE = "win_rate";
     private static final String COLUMN_LEVEL = "level";
     private static final String COLUMN_EXPERIENCE = "experience";
+    private static final String COLUMN_SCORE = "score";
     private static final String COLUMN_DAILY_STREAK = "daily_streak";
     private static final String COLUMN_WIN_STREAK = "win_streak";
     private static final String COLUMN_EUROPE_CORRECT = "europe_correct";
@@ -122,6 +123,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_WIN_RATE + " REAL DEFAULT 0,"
                 + COLUMN_LEVEL + " INTEGER DEFAULT 1,"
                 + COLUMN_EXPERIENCE + " INTEGER DEFAULT 0,"
+                + COLUMN_SCORE + " INTEGER DEFAULT 0,"
                 + COLUMN_DAILY_STREAK + " INTEGER DEFAULT 0,"
                 + COLUMN_WIN_STREAK + " INTEGER DEFAULT 0,"
                 + COLUMN_EUROPE_CORRECT + " INTEGER DEFAULT 0,"
@@ -330,6 +332,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_WIN_RATE, stats.getWinRate());
         values.put(COLUMN_LEVEL, stats.getLevel());
         values.put(COLUMN_EXPERIENCE, stats.getExperience());
+        values.put(COLUMN_SCORE, stats.getScore());
         values.put(COLUMN_DAILY_STREAK, stats.getDailyStreak());
         values.put(COLUMN_WIN_STREAK, stats.getWinStreak());
         values.put(COLUMN_EUROPE_CORRECT, stats.getEuropeCorrect());
@@ -376,6 +379,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             stats.setWinStreak(stats.getWinStreak() + 1);
 
             stats.setExperience(stats.getExperience() + xpGained);
+            stats.setScore(stats.getScore() + xpGained);
             int exp = stats.getExperience();
             int expToNextLevel = stats.getLevel()*100;
             if (exp > expToNextLevel)
@@ -460,6 +464,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         stats.setWinRate(cursor.getFloat(cursor.getColumnIndex(COLUMN_WIN_RATE)));
         stats.setLevel(cursor.getInt(cursor.getColumnIndex(COLUMN_LEVEL)));
         stats.setExperience(cursor.getInt(cursor.getColumnIndex(COLUMN_EXPERIENCE)));
+        stats.setScore(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE)));
         stats.setDailyStreak(cursor.getInt(cursor.getColumnIndex(COLUMN_DAILY_STREAK)));
         stats.setWinStreak(cursor.getInt(cursor.getColumnIndex(COLUMN_WIN_STREAK)));
 

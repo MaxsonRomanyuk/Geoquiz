@@ -9,6 +9,7 @@ namespace GeoQuiz_backend.Domain.Entities
 
         public int Level { get; set; }
         public int Experience { get; set; }
+        public int Score { get; set; }
 
 
         public int TotalGamesPlayed { get; set; }
@@ -55,6 +56,7 @@ namespace GeoQuiz_backend.Domain.Entities
                 UserId = this.UserId,
                 Level = this.Level,
                 Experience = this.Experience,
+                Score = this.Score,
                 TotalGamesPlayed = this.TotalGamesPlayed,
                 TotalGamesWon = this.TotalGamesWon,
                 TotalCorrectAnswers = this.TotalCorrectAnswers,

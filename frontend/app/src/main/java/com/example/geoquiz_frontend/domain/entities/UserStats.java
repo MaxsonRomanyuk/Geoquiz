@@ -9,6 +9,7 @@ public class UserStats implements Serializable {
     private float winRate;
     private int level;
     private int experience;
+    private int score;
     private int dailyStreak;
     private int winStreak;
 
@@ -34,6 +35,7 @@ public class UserStats implements Serializable {
         this.winRate = 0;
         this.level = 1;
         this.experience = 0;
+        this.score = 0;
         this.dailyStreak = 0;
         this.winStreak = 0;
         this.europeCorrect = 0;
@@ -41,7 +43,7 @@ public class UserStats implements Serializable {
         this.africaCorrect = 0;
         this.americaCorrect = 0;
         this.oceaniaCorrect = 0;
-        this.bestContinent = "Европа";
+        this.bestContinent = "europe";
         this.capitalsCorrect = 0;
         this.flagsCorrect = 0;
         this.outlinesCorrect = 0;
@@ -65,6 +67,8 @@ public class UserStats implements Serializable {
 
     public int getExperience() { return experience; }
     public void setExperience(int experience) { this.experience = experience; }
+    public int getScore() { return score; }
+    public void setScore(int score) { this.score = score; }
 
     public int getDailyStreak() { return dailyStreak; }
     public void setDailyStreak(int dailyStreak) { this.dailyStreak = dailyStreak; }

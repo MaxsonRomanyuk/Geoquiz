@@ -88,7 +88,8 @@ namespace GeoQuiz_backend.Application.Services
                         u.Stats.MaxWinStreak,
                         u.Stats.DailyLoginStreak,
                         u.Stats.Level,
-                        u.Stats.Experience
+                        u.Stats.Experience,
+                        u.Stats.Score
                     },
                     Geography = new
                     {

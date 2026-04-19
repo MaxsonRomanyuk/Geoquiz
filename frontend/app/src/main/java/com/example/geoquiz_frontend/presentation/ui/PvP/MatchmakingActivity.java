@@ -112,7 +112,7 @@ public class MatchmakingActivity extends BaseActivity {
         String username = preferencesHelper.getUserName();
         UserStats userStats = databaseHelper.getUserStats(preferencesHelper.getUserId());
         int level = userStats.getLevel();
-        int score = level*100 + userStats.getExperience();
+        int score = userStats.getScore();
 
         tvCurrentPlayerName.setText(username != null ? username : "Guest");
         tvCurrentPlayerScore.setText(getString(R.string.score_format, Math.max(score, 0)));
@@ -212,7 +212,8 @@ public class MatchmakingActivity extends BaseActivity {
         showStatus(getString(R.string.opponent_found));
 
         tvOpponentName.setText(data.getOpponentName());
-        tvOpponentScore.setText(getString(R.string.score_format, calculateRatingFromLevel(data.getOpponentLevel())));
+        tvOpponentScore.setText(getString(R.string.score_format,data.getOpponentScore()));
+        //tvOpponentScore.setText(getString(R.string.score_format, calculateRatingFromLevel(data.getOpponentLevel())));
         tvOpponentLevel.setText("Lvl " + data.getOpponentLevel());
 
         cardOpponent.setVisibility(View.VISIBLE);
@@ -244,10 +245,12 @@ public class MatchmakingActivity extends BaseActivity {
         intent.putExtra("matchId", data.getMatchId());
         intent.putExtra("opponentName", data.getOpponentName());
         intent.putExtra("opponentLevel", data.getOpponentLevel());
+        intent.putExtra("opponentScore", data.getOpponentScore());
         intent.putExtra("availableModes", data.getAvailableModes().toArray(new String[0]));
         intent.putExtra("currentTurnUserId", data.getCurrentTurnUserId());
         intent.putExtra("yourId", data.getYourId());
         intent.putExtra("yourLevel", databaseHelper.getUserStats(preferencesHelper.getUserId()).getLevel());
+        intent.putExtra("yourScore", databaseHelper.getUserStats(preferencesHelper.getUserId()).getScore());
         intent.putExtra("timePerTurn", data.getTimePerTurnSeconds());
 
         intent.putExtra("connectionActive", true);

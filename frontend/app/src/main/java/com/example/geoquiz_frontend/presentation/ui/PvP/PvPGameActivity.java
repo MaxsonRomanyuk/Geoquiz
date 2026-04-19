@@ -57,11 +57,8 @@ public class PvPGameActivity extends BaseActivity {
     private String activityId;
 
     private String matchId;
-    private String yourId;
-    private int yourLvl;
-    private String opponentName;
-    private int opponentLevel;
     private int yourTotalScore = 0;
+    private String opponentName;
     private int opponentTotalScore = 0;
 
 
@@ -163,12 +160,8 @@ public class PvPGameActivity extends BaseActivity {
         Intent intent = getIntent();
         matchId = intent.getStringExtra("matchId");
         opponentName = intent.getStringExtra("opponentName");
-        opponentLevel = intent.getIntExtra("opponentLevel", 1);
-        yourId = preferencesHelper.getUserId();
-        yourLvl = intent.getIntExtra("yourLevel", 1);
-
-        yourTotalScore = yourLvl * 100 + 67; // temp
-        opponentTotalScore = opponentLevel * 100 + 67; // temp
+        opponentTotalScore = intent.getIntExtra("opponentScore", 0);
+        yourTotalScore = intent.getIntExtra("yourScore", 0);
     }
 
     private void loadPlayerData() {

@@ -7,6 +7,7 @@ public class MatchFoundData {
     private String opponentId;
     private String opponentName;
     private int opponentLevel;
+    private int opponentScore;
     private boolean opponentIsPremium;
     private List<String> availableModes;
     private List<String> bannedModes;
@@ -19,6 +20,7 @@ public class MatchFoundData {
     public String getOpponentId() { return opponentId; }
     public String getOpponentName() { return opponentName; }
     public int getOpponentLevel() { return opponentLevel; }
+    public int getOpponentScore() { return opponentScore; }
     public boolean isOpponentIsPremium() { return opponentIsPremium; }
     public List<String> getAvailableModes() { return availableModes; }
     public List<String> getBannedModes() { return bannedModes; }

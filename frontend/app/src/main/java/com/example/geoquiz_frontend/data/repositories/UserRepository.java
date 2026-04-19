@@ -175,6 +175,7 @@ public class UserRepository {
         statsDto.setWinRate(stats.getWinRate());
         statsDto.setLevel(stats.getLevel());
         statsDto.setExperience(stats.getExperience());
+        statsDto.setScore(stats.getScore());
         statsDto.setDailyStreak(stats.getDailyStreak());
         statsDto.setCurrentWinStreak(stats.getWinStreak());
 
@@ -207,6 +208,7 @@ public class UserRepository {
         stats.setWinRate((float) s.getWinRate());
         stats.setLevel(s.getLevel());
         stats.setExperience(s.getExperience());
+        stats.setScore(s.getScore());
         stats.setDailyStreak(s.getDailyStreak());
         stats.setWinStreak(s.getCurrentWinStreak());
 

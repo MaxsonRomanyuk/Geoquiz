@@ -166,6 +166,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
                     var experienceGain = session.Score * 3;
                     stats.Experience += experienceGain;
+                    stats.Score += experienceGain;
 
                     while (stats.Experience >= GetXpToNextLevel(stats.Level))
                     {

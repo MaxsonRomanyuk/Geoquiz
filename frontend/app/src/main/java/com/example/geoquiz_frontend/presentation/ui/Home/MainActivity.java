@@ -234,7 +234,8 @@ public class MainActivity extends BaseActivity {
             int progressPercent = (int) ((float) currentXP / nextLevelXP * 100);
             progressXP.setProgress(progressPercent);
 
-            int totalScore = calculateTotalScore(stats.getLevel(), currentXP);
+            //int totalScore = calculateTotalScore(stats.getLevel(), currentXP);
+            int totalScore = stats.getScore();
             tvTotalScore.setText(String.format("%,d", totalScore));
 
             tvGamesPlayed.setText(String.valueOf(stats.getGamesPlayed()));

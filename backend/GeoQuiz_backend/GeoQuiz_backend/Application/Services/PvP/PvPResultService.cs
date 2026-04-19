@@ -174,6 +174,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 stats.TotalGamesWon++;
                 stats.PvPGamesWon++;
                 stats.CurrentPvPStreak++;
+                stats.Score += self.Score;
                 AddExperience(stats, self.Score);
             }
             else
@@ -247,7 +248,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
         {
             stats.Experience += gainedXp;
 
-            if (stats.Experience >= GetXpToNextLevel(stats.Level))
+            while (stats.Experience >= GetXpToNextLevel(stats.Level))
             {
                 stats.Experience -= GetXpToNextLevel(stats.Level);
                 stats.Level++;

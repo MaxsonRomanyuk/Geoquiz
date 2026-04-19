@@ -85,6 +85,7 @@ namespace GeoQuiz_backend.Application.Services
             {
                 stats.CurrentWinStreak++;
                 stats.TotalGamesWon++;
+                stats.Score += r.Score;
                 AddExperience(stats, r.Score);
             }
             else
@@ -111,7 +112,7 @@ namespace GeoQuiz_backend.Application.Services
         {
             stats.Experience += gainedXp;
 
-            if (stats.Experience >= GetXpToNextLevel(stats.Level))
+            while (stats.Experience >= GetXpToNextLevel(stats.Level))
             {
                 stats.Experience -= GetXpToNextLevel(stats.Level);
                 stats.Level++;

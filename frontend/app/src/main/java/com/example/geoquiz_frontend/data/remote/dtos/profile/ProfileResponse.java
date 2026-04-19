@@ -52,6 +52,7 @@ public class ProfileResponse {
         private double winRate;
         private int level;
         private int experience;
+        private int score;
         private int dailyLoginStreak;
         private int totalCorrectAnswers;
         private int currentWinStreak;
@@ -62,6 +63,7 @@ public class ProfileResponse {
         public double getWinRate() { return winRate; }
         public int getLevel() { return level; }
         public int getExperience() { return experience; }
+        public int getScore() { return score; }
         public int getDailyStreak() { return dailyLoginStreak; }
         public int getTotalCorrectAnswers() { return totalCorrectAnswers; }
         public int getCurrentWinStreak() { return currentWinStreak; }
@@ -72,6 +74,7 @@ public class ProfileResponse {
         public void setWinRate(double winRate) { this.winRate = winRate; }
         public void setLevel(int level) { this.level = level; }
         public void setExperience(int experience) { this.experience = experience; }
+        public void setScore(int score) { this.score = score; }
         public void setDailyStreak(int dailyLoginStreak) { this.dailyLoginStreak = dailyLoginStreak; }
         public void setTotalCorrectAnswers(int totalCorrectAnswers) { this.totalCorrectAnswers = totalCorrectAnswers; }
         public void setCurrentWinStreak(int currentWinStreak) { this.currentWinStreak = currentWinStreak; }

@@ -50,7 +50,8 @@ public class DraftModeActivity extends BaseActivity {
 
     private String matchId;
     private String yourId;
-    private Integer yourLvl;
+    private int yourLvl;
+    private int yourScore;
     private String currentTurnUserId;
     private List<String> availableModes;
     private List<String> bannedModes;
@@ -68,6 +69,7 @@ public class DraftModeActivity extends BaseActivity {
 
     private String opponentName;
     private int opponentLevel;
+    private int opponentScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,9 +155,11 @@ public class DraftModeActivity extends BaseActivity {
         matchId = intent.getStringExtra("matchId");
         opponentName = intent.getStringExtra("opponentName");
         opponentLevel = intent.getIntExtra("opponentLevel", 1);
+        opponentScore = intent.getIntExtra("opponentScore", 0);
         currentTurnUserId = intent.getStringExtra("currentTurnUserId");
         yourId = intent.getStringExtra("yourId");
         yourLvl = intent.getIntExtra("yourLevel", 1);
+        yourScore = intent.getIntExtra("yourScore", 0);
         timePerTurn = intent.getIntExtra("timePerTurn", 10);
 
 
@@ -170,18 +174,14 @@ public class DraftModeActivity extends BaseActivity {
     }
     private void loadPlayerData() {
         String username = preferencesHelper.getUserName();
-        int level = yourLvl;
-        int score = (100 * (level - 1) * level) / 2 + 67; // temp
-
-
 
         tvPlayer1Name.setText(username != null ? username : "You");
-        tvPlayer1Score.setText(String.valueOf(score));
-        tvPlayer1Level.setText(getString(R.string.level_prefix) + " " + level);
+        tvPlayer1Score.setText(String.valueOf(yourScore));
+        tvPlayer1Level.setText(getString(R.string.level_prefix) + " " + yourLvl);
 
         tvPlayer2Name.setText(opponentName);
-        tvPlayer2Score.setText(String.valueOf((100 * (opponentLevel - 1) * opponentLevel) / 2 + 67));
-        tvPlayer2Level.setText(getString(R.string.level_prefix) + " " + level);
+        tvPlayer2Score.setText(String.valueOf((opponentScore)));
+        tvPlayer2Level.setText(getString(R.string.level_prefix) + " " + opponentLevel);
     }
     private void connectToSignalR() {
         if (!signalRManager.isConnected()) {
@@ -402,8 +402,8 @@ public class DraftModeActivity extends BaseActivity {
         Intent intent = new Intent(this, PvPGameActivity.class);
         intent.putExtra("matchId", data.getMatchId());
         intent.putExtra("opponentName", opponentName);
-        intent.putExtra("opponentLevel", opponentLevel);
-        intent.putExtra("yourLevel", yourLvl);
+        intent.putExtra("opponentScore", opponentScore);
+        intent.putExtra("yourScore", yourScore);
         intent.putExtra("gameData", gameDataJson);
 
         startActivity(intent);

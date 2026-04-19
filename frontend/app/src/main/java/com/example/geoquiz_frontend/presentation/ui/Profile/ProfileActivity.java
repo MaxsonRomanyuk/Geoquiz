@@ -139,7 +139,8 @@ public class ProfileActivity extends BaseActivity {
             tvXP.setText(String.format("%d/%d XP", currentXP, nextLevelXP));
             progressXP.setProgress((int) ((float) currentXP / nextLevelXP * 100));
 
-            tvTotalPoints.setText(String.format("%,d", calculateTotalScore(stats.getLevel(), currentXP)));
+            //tvTotalPoints.setText(String.format("%,d", calculateTotalScore(stats.getLevel(), currentXP)));
+            tvTotalPoints.setText(String.format("%,d",stats.getScore()));
             tvGamesPlayed.setText(String.valueOf(stats.getGamesPlayed()));
             tvWins.setText(String.valueOf(stats.getWins()));
             tvWinRate.setText(String.format("%.0f%%", stats.getWinRate()));

@@ -11,6 +11,7 @@ namespace GeoQuiz_backend.Application.DTOs.PvP
         public Guid OpponentId { get; set; }
         public string OpponentName { get; set; }
         public int OpponentLevel { get; set; }
+        public int OpponentScore { get; set; }
         public bool OpponentIsPremium { get; set; }
 
 
