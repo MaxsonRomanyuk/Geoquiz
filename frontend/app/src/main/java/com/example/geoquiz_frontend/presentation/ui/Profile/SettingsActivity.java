@@ -22,11 +22,11 @@ import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.presentation.ui.Auth.LoginActivity;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.android.material.card.MaterialCardView;
 import com.google.gson.Gson;
 
 public class SettingsActivity extends BaseActivity {
-    private PreferencesHelper preferencesHelper;
     private AuthManager authManager;
     private User currentUser;
     private GameManager gameManager;
@@ -38,9 +38,7 @@ public class SettingsActivity extends BaseActivity {
 
 
         setContentView(R.layout.activity_settings);
-
-
-        preferencesHelper = new PreferencesHelper(this);
+        preferencesHelper = new SecurePreferencesHelper(this);
         authManager = new AuthManager(this);
         currentUser = authManager.getCurrentUser();
         gameManager = GameManager.getInstance(this);

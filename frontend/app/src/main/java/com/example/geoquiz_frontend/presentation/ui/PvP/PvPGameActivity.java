@@ -30,6 +30,7 @@ import com.example.geoquiz_frontend.data.remote.dtos.pvp.OptionData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.QuestionData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.TimerUpdateData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.UnlockedAchievement;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -52,7 +53,6 @@ public class PvPGameActivity extends BaseActivity {
     private Button[] optionButtons = new Button[4];
 
     private PvPSignalRClientManager signalRManager;
-    private PreferencesHelper preferencesHelper;
     private UserRepository userRepository;
     private String activityId;
 
@@ -88,7 +88,7 @@ public class PvPGameActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pvp_game);
 
-        preferencesHelper = new PreferencesHelper(this);
+        preferencesHelper = new SecurePreferencesHelper(this);
         activityId = "game_" + System.currentTimeMillis();
 
         initViews();

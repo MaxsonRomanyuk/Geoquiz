@@ -6,6 +6,8 @@ namespace GeoQuiz_backend.Application.Interfaces
     {
         Task RegisterAsync(RegisterRequest request);
         Task<AuthResponse> LoginAsync(LoginRequest request);
-
+        Task<RefreshTokenResponse> RefreshTokensAsync(RefreshTokenRequest request);
+        Task LogoutAsync(LogoutRequest request);
+        Task RevokeAllUserTokensAsync(Guid userId);
     }
 }

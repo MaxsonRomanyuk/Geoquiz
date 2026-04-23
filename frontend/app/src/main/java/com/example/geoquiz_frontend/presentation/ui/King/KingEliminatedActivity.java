@@ -12,6 +12,7 @@ import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.remote.KothSignalRClientManager;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.android.material.button.MaterialButton;
 
 public class KingEliminatedActivity extends BaseActivity {
@@ -28,14 +29,13 @@ public class KingEliminatedActivity extends BaseActivity {
     private boolean isManuallyDisabled;
     private int totalPlayers;
     private KothSignalRClientManager signalRManager;
-    private PreferencesHelper preferencesHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_king_eliminated);
 
-        preferencesHelper = new PreferencesHelper(this);
+        preferencesHelper = new SecurePreferencesHelper(this);
         signalRManager = KothSignalRClientManager.getInstance();
 
         getIntentData();

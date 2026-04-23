@@ -22,5 +22,6 @@ namespace GeoQuiz_backend.Domain.Entities
             = new List<UserAchievement>();
 
         public Subscription? Subscription { get; set; }
+        public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
 }

@@ -16,6 +16,7 @@ import com.example.geoquiz_frontend.domain.entities.GameSession;
 import com.example.geoquiz_frontend.domain.entities.PendingGame;
 import com.example.geoquiz_frontend.domain.enums.GameMode;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -52,7 +53,7 @@ public class GameRepository {
     private static final String BOOTSTRAP_ASSETS_FILE = "bootstrap_data.json";
 
     private final Context context;
-    private final PreferencesHelper preferencesHelper;
+    private final SecurePreferencesHelper preferencesHelper;
     private final ApiService apiService;
     private final ApiService apiServiceWithAuth;
     private final DatabaseHelper dbHelper;
@@ -64,10 +65,11 @@ public class GameRepository {
     private Map<Integer, List<BootstrapResponse.QuestionDto>> questionsCache;
 
     public GameRepository(Context context) {
+        ApiClient.init(context);
         this.context = context.getApplicationContext();
-        this.preferencesHelper = new PreferencesHelper(context);
+        this.preferencesHelper = new SecurePreferencesHelper(context);
         this.apiService = ApiClient.getApi();
-        this.apiServiceWithAuth = ApiClient.getApiWithAuth(preferencesHelper);
+        this.apiServiceWithAuth = ApiClient.getApiWithAuth();
         this.dbHelper = new DatabaseHelper(context);
         this.gson = new Gson();
         this.executorService = Executors.newSingleThreadExecutor();
@@ -387,7 +389,7 @@ public class GameRepository {
         Log.d(TAG, "Игра сохранена локально. ID: " + session.getId() +
                 ", счет: " + session.getScore());
 
-        if (preferencesHelper.hasValidToken()) {
+        if (preferencesHelper.hasValidAccessToken()) {
             if (pendingGames.size() > 1) syncPendingGames();
             else {
                 FinishGameRequest fgr = new FinishGameRequest(
@@ -429,7 +431,7 @@ public class GameRepository {
             return;
         }
 
-        if (!preferencesHelper.hasValidToken()) {
+        if (!preferencesHelper.hasValidAccessToken()) {
             Log.d(TAG, "Нет токена, синхронизация отложена");
             return;
         }

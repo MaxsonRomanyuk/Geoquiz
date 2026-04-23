@@ -5,13 +5,16 @@ import static android.content.ContentValues.TAG;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerResponse;
+import com.example.geoquiz_frontend.presentation.utils.GameTokenManager;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
@@ -24,6 +27,8 @@ import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameReadyData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.MatchFoundData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.TimerUpdateData;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.TokenRefreshHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
@@ -45,7 +50,8 @@ public class MatchmakingActivity extends BaseActivity {
     private int seconds = 0;
 
     private PvPSignalRClientManager signalRManager;
-    private PreferencesHelper preferencesHelper;
+    private GameTokenManager gameTokenManager;
+    //private SecurePreferencesHelper preferencesHelper;
     private DatabaseHelper databaseHelper;
     private String language;
     private String activityId;
@@ -56,7 +62,9 @@ public class MatchmakingActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matchmaking);
 
-        preferencesHelper = new PreferencesHelper(this);
+        preferencesHelper = new SecurePreferencesHelper(this);
+        TokenRefreshHelper tokenRefreshHelper = new TokenRefreshHelper(this, preferencesHelper);
+        gameTokenManager = new GameTokenManager(preferencesHelper, tokenRefreshHelper);
         activityId = "matchmaking_" + System.currentTimeMillis();
         databaseHelper = new DatabaseHelper(this);
 
@@ -66,19 +74,38 @@ public class MatchmakingActivity extends BaseActivity {
         setupClickListeners();
         loadCurrentPlayerData();
 
-        signalRManager = PvPSignalRClientManager.getInstance();
-        String token = preferencesHelper.getAuthToken();
-        String userId = preferencesHelper.getUserId();
-
-        if (token != null && !token.isEmpty()) {
-            signalRManager.reset();
-            signalRManager.init(token, userId);
-        }
-
-        signalRManager.removeListener(activityId);
-        connectToSignalR();
+        initSignalR();
     }
+    private void initSignalR() {
+        gameTokenManager.prepareForShortGameAsync(new GameTokenManager.GameTokenCallback() {
+            @Override
+            public void onSuccess() {
 
+                String token = preferencesHelper.getAuthToken();
+                String userId = preferencesHelper.getUserId();
+
+                if (token != null && !token.isEmpty()) {
+                    signalRManager = PvPSignalRClientManager.getInstance();
+                    signalRManager.reset();
+                    signalRManager.init(token, userId);
+                    signalRManager.removeListener(activityId);
+                    connectToSignalR();
+                } else {
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                if (isFinishing() || isDestroyed()) return;
+                runOnUiThread(() -> {
+                    Toast.makeText(MatchmakingActivity.this, "Ошибка: " + error, Toast.LENGTH_LONG).show();
+                    finish();
+                });
+                //Toast.makeText(MatchmakingActivity.this, "Не удалось обновить сессию. Попробуйте перелогиниться.", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
     private void initViews() {
         ivClose = findViewById(R.id.ivClose);
         progressSearch = findViewById(R.id.progressSearch);
@@ -208,40 +235,51 @@ public class MatchmakingActivity extends BaseActivity {
     private void showOpponentFound(MatchFoundData data) {
         stopSearch();
 
-        progressSearch.setVisibility(View.GONE);
-        showStatus(getString(R.string.opponent_found));
+        gameTokenManager.prepareForShortGameAsync(new GameTokenManager.GameTokenCallback() {
+            @Override
+            public void onSuccess() {
+                progressSearch.setVisibility(View.GONE);
+                showStatus(getString(R.string.opponent_found));
 
-        tvOpponentName.setText(data.getOpponentName());
-        tvOpponentScore.setText(getString(R.string.score_format,data.getOpponentScore()));
-        //tvOpponentScore.setText(getString(R.string.score_format, calculateRatingFromLevel(data.getOpponentLevel())));
-        tvOpponentLevel.setText("Lvl " + data.getOpponentLevel());
+                tvOpponentName.setText(data.getOpponentName());
+                tvOpponentScore.setText(getString(R.string.score_format,data.getOpponentScore()));
+                //tvOpponentScore.setText(getString(R.string.score_format, calculateRatingFromLevel(data.getOpponentLevel())));
+                tvOpponentLevel.setText("Lvl " + data.getOpponentLevel());
 
-        cardOpponent.setVisibility(View.VISIBLE);
-        cardOpponent.setAlpha(0f);
-        cardOpponent.animate()
-                .alpha(1f)
-                .setDuration(500)
-                .start();
+                cardOpponent.setVisibility(View.VISIBLE);
+                cardOpponent.setAlpha(0f);
+                cardOpponent.animate()
+                        .alpha(1f)
+                        .setDuration(500)
+                        .start();
 
-        new Handler().postDelayed(() -> {
-            tvVS.setVisibility(View.VISIBLE);
-            tvVS.setAlpha(0f);
-            tvVS.animate()
-                    .alpha(1f)
-                    .setDuration(500)
-                    .withEndAction(() -> {
-                        navigateToDraftMode(data);
-                    })
-                    .start();
-        }, 1000);
+                new Handler().postDelayed(() -> {
+                    tvVS.setVisibility(View.VISIBLE);
+                    tvVS.setAlpha(0f);
+                    tvVS.animate()
+                            .alpha(1f)
+                            .setDuration(500)
+                            .withEndAction(() -> {
+                                navigateToDraftMode(data);
+                            })
+                            .start();
+                }, 1000);
+            }
+            @Override
+            public void onFailure(String error) {
+                //Toast.makeText(MatchmakingActivity.this, "Не удалось обновить сессию. Попробуйте перелогиниться.", Toast.LENGTH_LONG).show();
+                //cancelSearchAndExit();
+                if (!isFinishing() && !isDestroyed()) {
+                    String userMessage = getErrorMessage(error);
+                    showErrorAndFinish(userMessage);
+                }
+            }
+        });
     }
 
-    private int calculateRatingFromLevel(int level) {
-        return level * 100 + 67; // temporary
-    }
 
     private void navigateToDraftMode(MatchFoundData data) {
-        Intent intent = new Intent(this, DraftModeActivity.class);
+        Intent intent = new Intent(MatchmakingActivity.this, DraftModeActivity.class);
         intent.putExtra("matchId", data.getMatchId());
         intent.putExtra("opponentName", data.getOpponentName());
         intent.putExtra("opponentLevel", data.getOpponentLevel());
@@ -268,10 +306,25 @@ public class MatchmakingActivity extends BaseActivity {
         isSearching = false;
         timerHandler.removeCallbacks(timerRunnable);
     }
-
+    private void showErrorAndFinish(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        finish();
+    }
+    private String getErrorMessage(String error) {
+        if (error != null && error.contains("timeout")) {
+            return "Сервер недоступен. Проверьте подключение.";
+        } else if (error != null && error.contains("Network error")) {
+            return "Нет подключения к серверу";
+        } else if (error != null && error.contains("No internet")) {
+            return "Нет интернет-соединения";
+        }
+        return "Не удалось подключиться. Попробуйте позже.";
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        signalRManager.removeListener(activityId);
+        if (signalRManager != null) {
+            signalRManager.removeListener(activityId);
+        }
     }
 }

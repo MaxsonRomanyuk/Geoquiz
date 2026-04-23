@@ -26,6 +26,7 @@ import com.example.geoquiz_frontend.data.remote.KothSignalRClientManager;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.*;
 import com.example.geoquiz_frontend.domain.enums.LocalizedText;
 import com.example.geoquiz_frontend.domain.enums.RoundType;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
@@ -56,7 +57,6 @@ public class KingGameActivity extends BaseActivity {
 
     private KothSignalRClientManager signalRManager;
     private UserRepository userRepository;
-    private PreferencesHelper preferencesHelper;
     private String activityId;
     private String matchId;
     private String userId;
@@ -88,7 +88,7 @@ public class KingGameActivity extends BaseActivity {
         setContentView(R.layout.activity_king_game);
 
         userRepository = UserRepository.getInstance(this);
-        preferencesHelper = new PreferencesHelper(this);
+        preferencesHelper = new SecurePreferencesHelper(this);
         userId = preferencesHelper.getUserId();
         language = preferencesHelper.getLanguage();
         activityId = "king_game_" + System.currentTimeMillis();

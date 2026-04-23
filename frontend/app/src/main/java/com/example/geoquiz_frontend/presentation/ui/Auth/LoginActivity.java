@@ -2,8 +2,10 @@ package com.example.geoquiz_frontend.presentation.ui.Auth;
 
 import static android.content.ContentValues.TAG;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +34,8 @@ import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.TokenRefreshHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.card.MaterialCardView;
@@ -52,7 +56,6 @@ public class LoginActivity extends BaseActivity {
 
     private boolean isLoginMode = true;
     private AuthManager authManager;
-    private PreferencesHelper preferencesHelper;
     private UserRepository userRepository;
     private GameManager gameManager;
 
@@ -62,7 +65,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        preferencesHelper = new PreferencesHelper(this);
+        preferencesHelper = new SecurePreferencesHelper(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -75,15 +78,36 @@ public class LoginActivity extends BaseActivity {
             userRepository = UserRepository.getInstance(this);
             userRepository.loadUserData(false);
 
-            activityId = "login_" + System.currentTimeMillis();
-            notificationManager = NotificationManager.getInstance();
-            String token = preferencesHelper.getAuthToken();
-            String userId = preferencesHelper.getUserId();
+            if (preferencesHelper.hasValidAccessToken()) {
+                activityId = "login_" + System.currentTimeMillis();
+                notificationManager = NotificationManager.getInstance();
+                String token = preferencesHelper.getAuthToken();
+                String userId = preferencesHelper.getUserId();
 
-            if (token != null && !token.isEmpty()) {
                 notificationManager.reset();
                 notificationManager.init(token, userId);
                 connectToSignalR();
+            }
+            else {
+                TokenRefreshHelper tokenRefreshHelper = new TokenRefreshHelper(this, preferencesHelper);
+                tokenRefreshHelper.refreshTokenAsync(new TokenRefreshHelper.TokenRefreshCallback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d("TokenManager", "Token refreshed on app start");
+                        activityId = "login_" + System.currentTimeMillis();
+                        notificationManager = NotificationManager.getInstance();
+                        String newToken = preferencesHelper.getAuthToken();
+                        String userId = preferencesHelper.getUserId();
+
+                        notificationManager.reset();
+                        notificationManager.init(newToken, userId);
+                        connectToSignalR();
+                    }
+                    @Override
+                    public void onFailure(String error) {
+                        Log.w("TokenManager", "Could not refresh token on start: " + error);
+                    }
+                });
             }
             startMainActivity();
             return;
@@ -229,17 +253,21 @@ public class LoginActivity extends BaseActivity {
 
     private void loginUser(String email, String password) {
         ApiService api = ApiClient.getApi();
-
-        LoginRequest request = new LoginRequest(email, password);
-
+        @SuppressLint("HardwareIds") String deviceId = Settings.Secure.getString(
+                getContentResolver(),
+                Settings.Secure.ANDROID_ID
+        );
+        LoginRequest request = new LoginRequest(email, password, deviceId);
         api.login(request).enqueue(new Callback<AuthResponse>() {
             @Override
             public void onResponse(@NonNull Call<AuthResponse> call, @NonNull Response<AuthResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    String token = response.body().getToken();
+                    String accessToken = response.body().getAccessToken();
+                    String refreshToken = response.body().getRefreshToken();
                     String uid = response.body().getUserId();
                     String name = response.body().getUserName();
-                    saveUserData(email, token, uid, name);
+                    long expiresIn = response.body().getExpiresIn();
+                    saveUserData(accessToken, refreshToken, email, uid, name, expiresIn);
                 } else {
                     showTempMessage(getString(R.string.error_user_not_found));
                     showLoading(false);
@@ -286,17 +314,13 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void saveUserData(String email, String token, String uid, String name) {
+    private void saveUserData(String accessToken, String refreshToken, String email, String uid, String name, long expiresIn) {
         if (preferencesHelper == null) {
-            preferencesHelper = new PreferencesHelper(LoginActivity.this);
+            preferencesHelper = new SecurePreferencesHelper(LoginActivity.this);
         }
 
-        saveAuthToken(token);
-        User user = new User();
-        user.setId(uid);
-        user.setEmail(email);
-        user.setName(name);
-        user.setPremium(false);
+        saveAuthToken(accessToken, refreshToken , expiresIn);
+        User user = new User(uid, email, name);
         authManager.LoginWithEmail(user);
 
         loadBoostrapData();
@@ -307,17 +331,17 @@ public class LoginActivity extends BaseActivity {
         activityId = "login_" + System.currentTimeMillis();
         notificationManager = NotificationManager.getInstance();
 
-        if (token != null && !token.isEmpty()) {
+        if (accessToken != null && !accessToken.isEmpty()) {
             notificationManager.reset();
-            notificationManager.init(token, uid);
+            notificationManager.init(accessToken, uid);
         }
         connectToSignalR();
 
         startMainActivity();
     }
 
-    private void saveAuthToken(String token) {
-        preferencesHelper.saveAuthToken(token);
+    private void saveAuthToken(String accessToken, String refreshToken, long expiresInSeconds) {
+        preferencesHelper.saveAuthTokens(accessToken, refreshToken, expiresInSeconds);
     }
 
     private void loginAsGuest() {

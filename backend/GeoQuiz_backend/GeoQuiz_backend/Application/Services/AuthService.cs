@@ -13,12 +13,12 @@ namespace GeoQuiz_backend.Application.Services
     public class AuthService : IAuthService
     {
         private readonly AppDbContext _db;
-        private readonly IConfiguration _config;
+        private readonly ITokenService _tokenService;
 
-        public AuthService(AppDbContext db, IConfiguration config)
+        public AuthService(AppDbContext db, ITokenService tokenService)
         {
             _db = db;
-            _config = config;
+            _tokenService = tokenService;
         }
 
         public async Task RegisterAsync(RegisterRequest request)
@@ -82,42 +82,125 @@ namespace GeoQuiz_backend.Application.Services
         {
             var user = await _db.Users
                 .FirstOrDefaultAsync(u => u.Email == request.Email);
-            var userId = user?.Id;
-            var userName = user?.UserName;
 
-            if (user == null ||
-                !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+            if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
                 throw new Exception("Invalid credentials");
-            return new AuthResponse { Token = GenerateJwt(user), UserId = (Guid)userId, UserName = userName };
-        }
 
-        private string GenerateJwt(User user)
-        {
-            var jwt = _config.GetSection("Jwt");
+            var accessToken = _tokenService.GenerateAccessToken(user);
+            var refreshToken = _tokenService.GenerateRefreshToken();
 
-            var claims = new[]
+            var hashedToken = _tokenService.ComputeSha256Hash(refreshToken);
+
+            var oldTokens = await _db.RefreshTokens
+                .Where(rt => rt.UserId == user.Id && rt.DeviceId == request.DeviceId && !rt.IsRevoked)
+                .ToListAsync();
+            foreach (var oldToken in oldTokens)
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("username", user.UserName)
+                oldToken.IsRevoked = true;
+                oldToken.RevokedAt = DateTime.UtcNow;
+            }
+
+            var newRefreshToken = new RefreshToken
+            {
+                UserId = user.Id,
+                TokenHash = hashedToken,
+                DeviceId = request.DeviceId,
+                ExpiryDate = DateTime.UtcNow.AddDays(30), 
+                CreatedAt = DateTime.UtcNow,
+                IsRevoked = false
             };
 
-            var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwt["Key"]!)
-            );
+            _db.RefreshTokens.Add(newRefreshToken);
+            await _db.SaveChangesAsync();
 
-            var token = new JwtSecurityToken(
-                issuer: jwt["Issuer"],
-                audience: jwt["Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(
-                    int.Parse(jwt["ExpiresMinutes"]!)
-                ),
-                signingCredentials:
-                    new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
-            );
+            if (user.Stats != null)
+            {
+                user.Stats.LastLoginDate = DateTime.UtcNow;
+                await _db.SaveChangesAsync();
+            }
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return new AuthResponse
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+                UserId = user.Id,
+                UserName = user.UserName,
+                ExpiresIn = 1800 
+            };
+        }
+
+        public async Task<RefreshTokenResponse> RefreshTokensAsync(RefreshTokenRequest request)
+        {
+            var hashedToken = _tokenService.ComputeSha256Hash(request.RefreshToken);
+            var dbToken = await _db.RefreshTokens
+                .Include(rt => rt.User)
+                .FirstOrDefaultAsync(rt => rt.TokenHash == hashedToken);
+
+            if (dbToken == null)
+                throw new Exception("Invalid refresh token");
+
+            if (dbToken.IsRevoked)
+                throw new Exception("Token has been revoked");
+
+            if (dbToken.ExpiryDate < DateTime.UtcNow)
+                throw new Exception("Refresh token expired");
+
+            if (dbToken.DeviceId != request.DeviceId)
+                throw new Exception("Device ID mismatch");
+
+            dbToken.IsRevoked = true;
+            dbToken.RevokedAt = DateTime.UtcNow;
+
+            var newAccessToken = _tokenService.GenerateAccessToken(dbToken.User);
+            var newRefreshToken = _tokenService.GenerateRefreshToken();
+
+            var newHashedToken = _tokenService.ComputeSha256Hash(newRefreshToken);
+            var newDbToken = new RefreshToken
+            {
+                UserId = dbToken.UserId,
+                TokenHash = newHashedToken,
+                DeviceId = request.DeviceId,
+                ExpiryDate = DateTime.UtcNow.AddDays(30),
+                CreatedAt = DateTime.UtcNow,
+                IsRevoked = false
+            };
+
+            _db.RefreshTokens.Add(newDbToken);
+            await _db.SaveChangesAsync();
+
+            return new RefreshTokenResponse
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken,
+                ExpiresIn = 1800
+            };
+        }
+        public async Task LogoutAsync(LogoutRequest request)
+        {
+            var hashedToken = _tokenService.ComputeSha256Hash(request.RefreshToken);
+            var dbToken = await _db.RefreshTokens
+                .FirstOrDefaultAsync(rt => rt.TokenHash == hashedToken);
+
+            if (dbToken != null && !dbToken.IsRevoked)
+            {
+                dbToken.IsRevoked = true;
+                dbToken.RevokedAt = DateTime.UtcNow;
+                await _db.SaveChangesAsync();
+            }
+        }
+        public async Task RevokeAllUserTokensAsync(Guid userId)
+        {
+            var tokens = await _db.RefreshTokens
+                .Where(rt => rt.UserId == userId && !rt.IsRevoked)
+                .ToListAsync();
+
+            foreach (var token in tokens)
+            {
+                token.IsRevoked = true;
+                token.RevokedAt = DateTime.UtcNow;
+            }
+
+            await _db.SaveChangesAsync();
         }
     }
 }

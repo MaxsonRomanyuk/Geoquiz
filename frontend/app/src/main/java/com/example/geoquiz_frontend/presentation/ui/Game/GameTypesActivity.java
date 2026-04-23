@@ -18,6 +18,7 @@ import com.example.geoquiz_frontend.presentation.ui.PvP.MatchmakingActivity;
 import com.example.geoquiz_frontend.presentation.ui.achievements.AchievementsActivity;
 import com.example.geoquiz_frontend.presentation.utils.AuthManager;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
@@ -27,7 +28,6 @@ public class GameTypesActivity extends BaseActivity {
     private View lockedOverlayPvP, lockedOverlayKing;
     private LinearLayout layoutLockedBadgePvP, layoutLockedBadgeKing;
     private BottomNavigationView bottomNavigationView;
-    private PreferencesHelper preferencesHelper;
     private AuthManager authManager;
 
     @Override
@@ -39,7 +39,7 @@ public class GameTypesActivity extends BaseActivity {
         setupClickListeners();
         setupBottomNavigation();
 
-        preferencesHelper = new PreferencesHelper(this);
+        preferencesHelper = new SecurePreferencesHelper(this);
         authManager = new AuthManager(this);
         if (preferencesHelper.getUserId().equals("uid")) showLockedBadge();
 

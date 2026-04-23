@@ -3,6 +3,7 @@ package com.example.geoquiz_frontend.data.remote;
 import androidx.annotation.NonNull;
 
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 
 import java.io.IOException;
 
@@ -11,9 +12,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class AuthInterceptor implements Interceptor {
-    private final PreferencesHelper preferencesHelper;
+    private final SecurePreferencesHelper preferencesHelper;
 
-    public AuthInterceptor(PreferencesHelper preferencesHelper) {
+    public AuthInterceptor(SecurePreferencesHelper preferencesHelper) {
         this.preferencesHelper = preferencesHelper;
     }
 

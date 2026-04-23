@@ -1,6 +1,9 @@
 package com.example.geoquiz_frontend.data.remote;
 
 import com.example.geoquiz_frontend.data.remote.dtos.auth.AuthResponse;
+import com.example.geoquiz_frontend.data.remote.dtos.auth.LogoutRequest;
+import com.example.geoquiz_frontend.data.remote.dtos.auth.RefreshTokenRequest;
+import com.example.geoquiz_frontend.data.remote.dtos.auth.RefreshTokenResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.solo.BootstrapResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.solo.FinishGameRequest;
 import com.example.geoquiz_frontend.data.remote.dtos.auth.LoginRequest;
@@ -20,6 +23,10 @@ public interface ApiService {
     Call<Void> register(@Body RegisterRequest request);
     @POST("api/auth/login")
     Call<AuthResponse> login(@Body LoginRequest request);
+    @POST("api/auth/refresh")
+    Call<RefreshTokenResponse> refreshToken(@Body RefreshTokenRequest request);
+    @POST("api/auth/logout")
+    Call<Void> logout(@Body LogoutRequest request);
     @GET("api/profile/me")
     Call<ProfileResponse> getProfile();
 

@@ -27,6 +27,7 @@ import com.example.geoquiz_frontend.domain.entities.GameSession;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,7 +50,6 @@ public class SoloGameActivity extends BaseActivity {
 
 
     private GameManager gameManager;
-    private PreferencesHelper preferencesHelper;
     private DatabaseHelper databaseHelper;
     private UserRepository userRepository;
     private GameSession currentSession;
@@ -82,7 +82,7 @@ public class SoloGameActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_solo_game);
 
-        preferencesHelper = new PreferencesHelper(this);
+        preferencesHelper = new SecurePreferencesHelper(this);
         databaseHelper = new DatabaseHelper(this);
         gameManager = GameManager.getInstance(this);
         userRepository = UserRepository.getInstance(this);

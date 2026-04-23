@@ -15,6 +15,7 @@ import com.example.geoquiz_frontend.domain.entities.Achievement;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
 import com.example.geoquiz_frontend.domain.enums.LocalizedText;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +45,7 @@ public class UserRepository {
     private final List<ProfileResponse.AchievementDto> pendingAchievements = new ArrayList<>();
 
     private ApiService apiService;
-    private PreferencesHelper preferencesHelper;
+    private SecurePreferencesHelper preferencesHelper;
     private DatabaseHelper databaseHelper;
     private static final String ACHIEVEMENTS_FILE = "achievements.json";
     private static Map<String, JSONObject> achievementsCache;
@@ -52,13 +53,13 @@ public class UserRepository {
 
     private UserRepository(Context context) {
         this.context = context.getApplicationContext();
-        preferencesHelper = new PreferencesHelper(context);
+        preferencesHelper = new SecurePreferencesHelper(context);
         databaseHelper = new DatabaseHelper(context);
 
         initAchievementsCache();
 
-        if (preferencesHelper.hasValidToken()) {
-            apiService = ApiClient.getApiWithAuth(preferencesHelper);
+        if (preferencesHelper.hasValidAccessToken()) {
+            apiService = ApiClient.getApiWithAuth();
         }
     }
 

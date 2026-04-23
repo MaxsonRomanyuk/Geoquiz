@@ -49,6 +49,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
     implementation("com.microsoft.signalr:signalr:7.0.0")
     implementation("org.slf4j:slf4j-jdk14:1.7.30")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")

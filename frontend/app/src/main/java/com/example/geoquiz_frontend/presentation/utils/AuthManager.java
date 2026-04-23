@@ -12,13 +12,12 @@ import com.example.geoquiz_frontend.domain.entities.User;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
 
 public class AuthManager {
-    private PreferencesHelper preferencesHelper;
+    private SecurePreferencesHelper preferencesHelper;
     private DatabaseHelper databaseHelper;
     private GameRepository gameRepository;
 
     public AuthManager(Context context) {
-
-        preferencesHelper = new PreferencesHelper(context);
+        preferencesHelper = new SecurePreferencesHelper(context);
         databaseHelper = new DatabaseHelper(context);
         gameRepository = new GameRepository(context);
     }
@@ -29,7 +28,7 @@ public class AuthManager {
                 "guest@example.com",
                 "Guest"
         );
-        preferencesHelper.setCurrentUser(guestUser);
+        preferencesHelper.saveCurrentUser(guestUser);
         String uid = preferencesHelper.getUserId();
         databaseHelper.saveUserStats(new UserStats(uid));
         databaseHelper.saveAllEmptyAchievements(uid);
@@ -46,7 +45,7 @@ public class AuthManager {
         databaseHelper.deleteUserStats(userId);
         databaseHelper.deleteUserAchievements(userId);
         gameRepository.clearPendingGames();
-        preferencesHelper.clearCurrentUser();
+        preferencesHelper.clearUserAndTokens();
         UserRepository.reset();
     }
 
@@ -63,10 +62,10 @@ public class AuthManager {
 
     public void registerWithEmail(String uid, String email, String name) {
         User user = new User(uid,email,name);
-        preferencesHelper.setCurrentUser(user);
+        preferencesHelper.saveCurrentUser(user);
     }
 
     public void LoginWithEmail(User user) {
-        preferencesHelper.setCurrentUser(user);
+        preferencesHelper.saveCurrentUser(user);
     }
 }

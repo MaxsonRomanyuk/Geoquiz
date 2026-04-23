@@ -20,6 +20,7 @@ import com.example.geoquiz_frontend.presentation.ui.Game.GameTypesActivity;
 import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
 import com.example.geoquiz_frontend.presentation.ui.Profile.ProfileActivity;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.card.MaterialCardView;
@@ -34,8 +35,6 @@ public class AchievementsActivity extends BaseActivity {
     private TabLayout tabLayout;
     private RecyclerView recyclerAchievements;
     private BottomNavigationView bottomNavigationView;
-
-    private PreferencesHelper preferencesHelper;
     private UserRepository userRepository;
     private List<Achievement> allAchievements = new ArrayList<>();
     private List<String> unlockedAchievementIds = new ArrayList<>();
@@ -49,7 +48,7 @@ public class AchievementsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
 
-        preferencesHelper = new PreferencesHelper(this);
+        preferencesHelper = new SecurePreferencesHelper(this);
         userRepository = UserRepository.getInstance(this);
 
         initViews();

@@ -1,11 +1,9 @@
 ﻿namespace GeoQuiz_backend.Application.DTOs.Auth
 {
-    public class AuthResponse
+    public class RefreshTokenResponse
     {
         public string AccessToken { get; set; } = null!;
         public string RefreshToken { get; set; } = null!;
-        public Guid UserId { get; set; }
-        public string UserName { get; set; } = null!;
         public int ExpiresIn { get; set; }
     }
 }

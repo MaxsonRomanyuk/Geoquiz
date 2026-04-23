@@ -16,6 +16,7 @@ import com.example.geoquiz_frontend.presentation.utils.AchievementDialogHelper;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.remote.PvPSignalRClientManager;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
@@ -44,7 +45,6 @@ public class PvPResultActivity extends BaseActivity {
     private String finishReason;
     private String opponentName;
 
-    private PreferencesHelper preferencesHelper;
     private PvPSignalRClientManager signalRManager;
     private UserRepository userRepository;
 
@@ -53,7 +53,7 @@ public class PvPResultActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pvp_results);
 
-        preferencesHelper = new PreferencesHelper(this);
+        preferencesHelper = new SecurePreferencesHelper(this);
         userRepository = UserRepository.getInstance(this);
         signalRManager = PvPSignalRClientManager.getInstance();
 

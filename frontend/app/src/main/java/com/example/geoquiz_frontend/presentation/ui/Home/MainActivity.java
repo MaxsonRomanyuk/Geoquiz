@@ -30,10 +30,14 @@ import com.example.geoquiz_frontend.presentation.ui.Game.GameModesActivity;
 import com.example.geoquiz_frontend.presentation.ui.Game.GameTypesActivity;
 import com.example.geoquiz_frontend.presentation.ui.Profile.ProfileActivity;
 import com.example.geoquiz_frontend.presentation.ui.PvP.MatchmakingActivity;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.gson.Gson;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +53,6 @@ public class MainActivity extends BaseActivity {
     private ProgressBar progressXP;
 
     private AuthManager authManager;
-    private PreferencesHelper preferencesHelper;
     private UserRepository userRepository;
 
 
@@ -59,13 +62,13 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         authManager = new AuthManager(this);
-        preferencesHelper = new PreferencesHelper(this);
+        preferencesHelper = new SecurePreferencesHelper(this);
 
         boolean isGuest = preferencesHelper.getUserId().equals("uid");
-        if (!preferencesHelper.hasValidToken() && !isGuest) {
-            handleUnauthorized();
-            //redirectToLogin();
-            return;
+        if (!preferencesHelper.hasValidAccessToken() && !isGuest) {
+            //handleUnauthorized();
+            //refreshTokenSilently();
+            //return;
         }
 
         initViews();
@@ -352,6 +355,16 @@ public class MainActivity extends BaseActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
+    }
+    private boolean isNetworkAvailable() {
+        try {
+            try (Socket socket = new Socket()) {
+                socket.connect(new InetSocketAddress("8.8.8.8", 53), 1500);
+                return true;
+            }
+        } catch (IOException e) {
+            return false;
+        }
     }
     @Override
     protected void onResume() {

@@ -21,6 +21,7 @@ import com.example.geoquiz_frontend.presentation.ui.Game.GameResultActivity;
 import com.example.geoquiz_frontend.presentation.utils.AchievementDialogHelper;
 import com.example.geoquiz_frontend.presentation.utils.LocaleHelper;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 
 import java.util.List;
 
@@ -30,12 +31,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     private View connectionStatusBanner;
     private NotificationManager notificationManager;
     private UserRepository userRepository;
-    protected PreferencesHelper preferencesHelper;
+    protected SecurePreferencesHelper preferencesHelper;
 
     private String currentConnectionKey;
     @Override
     protected void attachBaseContext(Context newBase) {
-        preferencesHelper = new PreferencesHelper(newBase);
+        preferencesHelper = new SecurePreferencesHelper(newBase);
         String lang = preferencesHelper.getLanguage();
 
         Context context = LocaleHelper.setLocale(newBase, lang);
@@ -47,13 +48,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         applyTheme();
         super.onCreate(savedInstanceState);
         if (preferencesHelper == null) {
-            preferencesHelper = new PreferencesHelper(this);
+            preferencesHelper = new SecurePreferencesHelper(this);
         }
     }
 
     private void applyTheme() {
-        PreferencesHelper prefs = new PreferencesHelper(this);
-        String theme = prefs.getTheme();
+        //SecurePreferencesHelper prefs = new SecurePreferencesHelper(this);
+        String theme = preferencesHelper.getTheme();
 
         AppCompatDelegate.setDefaultNightMode(
                 "dark".equals(theme)

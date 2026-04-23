@@ -104,7 +104,7 @@ public class AchievementDialogHelper {
     }
 
     private void updateDisplay() {
-        PreferencesHelper prefs = new PreferencesHelper(context);
+        SecurePreferencesHelper prefs = new SecurePreferencesHelper(context);
         boolean isRu = "ru".equals(prefs.getLanguage());
         Achievement achievement = achievements.get(currentIndex);
 

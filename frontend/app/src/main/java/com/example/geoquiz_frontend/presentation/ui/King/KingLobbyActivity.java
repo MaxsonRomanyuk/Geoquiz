@@ -8,10 +8,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.gridlayout.widget.GridLayout;
 
+import com.example.geoquiz_frontend.data.remote.PvPSignalRClientManager;
 import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
+import com.example.geoquiz_frontend.presentation.ui.PvP.MatchmakingActivity;
+import com.example.geoquiz_frontend.presentation.utils.GameTokenManager;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
@@ -27,6 +31,8 @@ import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerLobby;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.RoundFinishedData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.RoundStartedData;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.TokenRefreshHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
@@ -60,7 +66,7 @@ public class KingLobbyActivity extends BaseActivity {
 
     private List<PlayerSlot> playerSlots = new ArrayList<>();
     private Map<String, PlayerSlot> playerSlotMap = new HashMap<>();
-    private PreferencesHelper preferencesHelper;
+    private GameTokenManager gameTokenManager;
     private KothSignalRClientManager signalRManager;
     private DatabaseHelper databaseHelper;
     private String language;
@@ -86,7 +92,9 @@ public class KingLobbyActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_king_lobby);
 
-        preferencesHelper = new PreferencesHelper(this);
+        preferencesHelper = new SecurePreferencesHelper(this);
+        TokenRefreshHelper tokenRefreshHelper = new TokenRefreshHelper(this, preferencesHelper);
+        gameTokenManager = new GameTokenManager(preferencesHelper, tokenRefreshHelper);
         databaseHelper = new DatabaseHelper(this);
         activityId = "koth_lobby_" + System.currentTimeMillis();
         language = preferencesHelper.getLanguage();
@@ -237,17 +245,31 @@ public class KingLobbyActivity extends BaseActivity {
     }
 
     private void initSignalR() {
-        String token = preferencesHelper.getAuthToken();
-        if (token == null || token.isEmpty()) {
-            finish();
-            return;
-        }
+        gameTokenManager.prepareForLongGameAsync(new GameTokenManager.GameTokenCallback() {
+            @Override
+            public void onSuccess() {
 
-        signalRManager = KothSignalRClientManager.getInstance();
-        signalRManager.reset();
-        signalRManager.init(token, playerId);
-        signalRManager.removeListener(activityId);
-        connectToSignalR();
+                String token = preferencesHelper.getAuthToken();
+                String userId = preferencesHelper.getUserId();
+
+                if (token != null && !token.isEmpty()) {
+                    signalRManager = KothSignalRClientManager.getInstance();
+                    signalRManager.reset();
+                    signalRManager.init(token, userId);
+                    signalRManager.removeListener(activityId);
+                    connectToSignalR();
+                } else {
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                //Toast.makeText(MatchmakingActivity.this, "Не удалось обновить сессию. Попробуйте перелогиниться.", Toast.LENGTH_LONG).show();
+                Toast.makeText(KingLobbyActivity.this,"Ошибка: " + error, Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
     }
     private void connectToSignalR() {
         if (!signalRManager.isConnected()) {
@@ -385,25 +407,35 @@ public class KingLobbyActivity extends BaseActivity {
     }
     private void handleMatchStarted(MatchStartedData data) {
         Log.d(TAG, "Match started! Total players: " + data.getTotalPlayers() + ", rounds: " + data.getTotalRounds());
+        gameTokenManager.prepareForLongGameAsync(new GameTokenManager.GameTokenCallback() {
+            @Override
+            public void onSuccess() {
+                Intent intent = new Intent(KingLobbyActivity.this, KingGameActivity.class);
+                intent.putExtra("match_id", data.getMatchId());
+                intent.putExtra("total_players", data.getTotalPlayers());
+                intent.putExtra("total_rounds", data.getTotalRounds());
+                intent.putExtra("all_players", new ArrayList<>(data.getAllPlayers()));
 
-        Intent intent = new Intent(this, KingGameActivity.class);
-        intent.putExtra("match_id", data.getMatchId());
-        intent.putExtra("total_players", data.getTotalPlayers());
-        intent.putExtra("total_rounds", data.getTotalRounds());
-        intent.putExtra("all_players", new ArrayList<>(data.getAllPlayers()));
-
-        View rootView = findViewById(android.R.id.content);
-        rootView.animate()
-                .alpha(0f)
-                .scaleX(0.9f)
-                .scaleY(0.9f)
-                .setDuration(1000)
-                .withEndAction(() -> {
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                    finish();
-                })
-                .start();
+                View rootView = findViewById(android.R.id.content);
+                rootView.animate()
+                        .alpha(0f)
+                        .scaleX(0.9f)
+                        .scaleY(0.9f)
+                        .setDuration(1000)
+                        .withEndAction(() -> {
+                            startActivity(intent);
+                            overridePendingTransition(0, 0);
+                            finish();
+                        })
+                        .start();
+            }
+            @Override
+            public void onFailure(String error) {
+                //Toast.makeText(MatchmakingActivity.this, "Не удалось обновить сессию. Попробуйте перелогиниться.", Toast.LENGTH_LONG).show();
+                Toast.makeText(KingLobbyActivity.this,"Ошибка: " + error, Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
     }
     private void startSearch() {
         layoutTimer.setVisibility(View.VISIBLE);

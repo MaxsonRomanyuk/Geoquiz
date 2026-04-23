@@ -2,29 +2,21 @@ package com.example.geoquiz_frontend.data.remote.dtos.auth;
 
 import com.google.gson.annotations.SerializedName;
 
-public class AuthResponse {
+public class RefreshTokenResponse {
     @SerializedName("accessToken")
     private String accessToken;
 
     @SerializedName("refreshToken")
     private String refreshToken;
 
-    @SerializedName("userId")
-    private String userId;
-
-    @SerializedName("userName")
-    private String userName;
-
     @SerializedName("expiresIn")
     private int expiresIn;
 
-    public AuthResponse() {}
+    public RefreshTokenResponse() {}
 
-    public AuthResponse(String accessToken, String refreshToken, String userId, String userName, int expiresIn) {
+    public RefreshTokenResponse(String accessToken, String refreshToken, int expiresIn) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
-        this.userId = userId;
-        this.userName = userName;
         this.expiresIn = expiresIn;
     }
 
@@ -33,12 +25,6 @@ public class AuthResponse {
 
     public String getRefreshToken() { return refreshToken; }
     public void setRefreshToken(String refreshToken) { this.refreshToken = refreshToken; }
-
-    public String getUserId() { return userId; }
-    public void setUserId(String userId) { this.userId = userId; }
-
-    public String getUserName() { return userName; }
-    public void setUserName(String userName) { this.userName = userName; }
 
     public int getExpiresIn() { return expiresIn; }
     public void setExpiresIn(int expiresIn) { this.expiresIn = expiresIn; }

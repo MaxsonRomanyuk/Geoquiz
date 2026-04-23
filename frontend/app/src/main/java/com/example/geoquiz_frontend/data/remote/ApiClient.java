@@ -1,5 +1,8 @@
 package com.example.geoquiz_frontend.data.remote;
+import android.content.Context;
+
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
@@ -27,6 +30,12 @@ public class ApiClient {
 
     private static final String BASE_URL = IS_EMULATOR ? EMULATOR_URL : DEVICE_URL;
     private static ApiService instance;
+    private static ApiService authInstance;
+    private static Context appContext;
+
+    public static void init(Context context) {
+        appContext = context.getApplicationContext();
+    }
 
     public static ApiService getApi() {
         if (instance == null) {
@@ -34,7 +43,19 @@ public class ApiClient {
         }
         return instance;
     }
+    public static ApiService getApiWithAuth() {
+        if (appContext == null) {
+            throw new IllegalStateException("ApiClient not initialized. Call ApiClient.init(context) in your Application class");
+        }
 
+        if (authInstance == null) {
+            authInstance = createApiWithAuth();
+        }
+        return authInstance;
+    }
+    public static void refreshAuthInstance() {
+        authInstance = null;
+    }
     private static ApiService createApi() {
         Gson gson = createGsonWithDateAdapter();
 
@@ -51,15 +72,18 @@ public class ApiClient {
                 .build()
                 .create(ApiService.class);
     }
-
-    public static ApiService getApiWithAuth(PreferencesHelper preferencesHelper) {
+    private static ApiService createApiWithAuth() {
         Gson gson = createGsonWithDateAdapter();
+
+        SecurePreferencesHelper preferencesHelper = new SecurePreferencesHelper(appContext);
+        RefreshAuthenticator refreshAuthenticator = new RefreshAuthenticator(appContext, preferencesHelper);
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .addInterceptor(new AuthInterceptor(preferencesHelper))
+                .authenticator(refreshAuthenticator)
                 .build();
 
         return new Retrofit.Builder()

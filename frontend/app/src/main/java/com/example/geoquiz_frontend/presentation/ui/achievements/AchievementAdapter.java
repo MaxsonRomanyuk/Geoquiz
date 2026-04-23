@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.domain.entities.Achievement;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
@@ -27,14 +28,14 @@ public class AchievementAdapter extends RecyclerView.Adapter<AchievementAdapter.
 
     private Context context;
     private List<Achievement> achievements;
-    private PreferencesHelper preferencesHelper;
+    private SecurePreferencesHelper preferencesHelper;
     private String currentLanguage;
     private int lastPosition = -1;
 
     public AchievementAdapter(Context context, List<Achievement> achievements) {
         this.context = context;
         this.achievements = achievements;
-        this.preferencesHelper = new PreferencesHelper(context);
+        this.preferencesHelper = new SecurePreferencesHelper(context);
         this.currentLanguage = preferencesHelper.getLanguage();
     }
 

@@ -21,6 +21,7 @@ import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.remote.KothSignalRClientManager;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.MatchFinishedData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerFinalStanding;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 import java.util.List;
@@ -34,7 +35,6 @@ public class KingResultActivity extends BaseActivity {
     private MatchFinishedData matchData;
     private String currentUserId;
     private KothSignalRClientManager signalRManager;
-    private PreferencesHelper preferencesHelper;
     private UserRepository userRepository;
 
     @Override
@@ -43,7 +43,7 @@ public class KingResultActivity extends BaseActivity {
         setContentView(R.layout.activity_king_results);
 
         userRepository = UserRepository.getInstance(this);
-        preferencesHelper = new PreferencesHelper(this);
+        preferencesHelper = new SecurePreferencesHelper(this);
         signalRManager = KothSignalRClientManager.getInstance();
         currentUserId = preferencesHelper.getUserId();
 

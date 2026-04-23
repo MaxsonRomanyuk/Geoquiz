@@ -24,6 +24,7 @@ import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameFinishedData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameReadyData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.MatchFoundData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.TimerUpdateData;
+import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.gson.Gson;
@@ -44,7 +45,6 @@ public class DraftModeActivity extends BaseActivity {
     private MaterialCardView cardCapitals, cardFlags, cardOutlines, cardLanguages;
 
     private PvPSignalRClientManager signalRManager;
-    private PreferencesHelper preferencesHelper;
     private String language;
     private String activityId;
 
@@ -76,7 +76,7 @@ public class DraftModeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_draft_mode);
 
-        preferencesHelper = new PreferencesHelper(this);
+        preferencesHelper = new SecurePreferencesHelper(this);
         activityId = "draft_" + System.currentTimeMillis();
         language = preferencesHelper.getLanguage();
 

@@ -11,6 +11,7 @@ namespace GeoQuiz_backend.Infrastructure.Persistence.MySQL
             : base(options) { }
 
         public DbSet<User> Users => Set<User>();
+        public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
         public DbSet<UserStats> UserStats => Set<UserStats>();
         public DbSet<GameSession> GameSessions => Set<GameSession>();
         public DbSet<Subscription> Subscriptions => Set<Subscription>();
@@ -27,6 +28,7 @@ namespace GeoQuiz_backend.Infrastructure.Persistence.MySQL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("users");
+            modelBuilder.Entity<RefreshToken>().ToTable("refreshTokens");
             modelBuilder.Entity<UserStats>().ToTable("userstats");
             modelBuilder.Entity<GameSession>().ToTable("gamesessions");
             modelBuilder.Entity<Subscription>().ToTable("subscriptions");
@@ -67,6 +69,11 @@ namespace GeoQuiz_backend.Infrastructure.Persistence.MySQL
                     .HasForeignKey<UserStats>(s => s.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
 
+                entity.HasMany(e => e.RefreshTokens)
+                    .WithOne(gs => gs.User)
+                    .HasForeignKey(gs => gs.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
                 entity.HasOne(e => e.Subscription)
                     .WithOne(s => s.User)
                     .HasForeignKey<Subscription>(s => s.UserId)
@@ -81,6 +88,35 @@ namespace GeoQuiz_backend.Infrastructure.Persistence.MySQL
                     .WithOne(ua => ua.User)
                     .HasForeignKey(ua => ua.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
+
+            });
+
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.UserId).IsRequired();
+
+                entity.Property(e => e.TokenHash)
+                    .IsRequired()
+                    .HasMaxLength(500);
+
+                entity.Property(e => e.DeviceId)
+                    .IsRequired()
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.ExpiryDate)
+                    .IsRequired();
+
+                entity.Property(e => e.IsRevoked)
+                    .IsRequired()
+                    .HasDefaultValue(false);
+
+                entity.Property(e => e.CreatedAt)
+                    .IsRequired();
+
+                entity.Property(e => e.RevokedAt)
+                    .IsRequired(false);
             });
 
             modelBuilder.Entity<UserStats>(entity =>
