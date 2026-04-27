@@ -10,5 +10,6 @@ namespace GeoQuiz_backend.Application.Interfaces
         Task<ModeDraft> GetDraftAsync(Guid matchId);
         Task<ModeDraft> BanModeAsync(Guid matchId, Guid userId, GameMode bannedMode, int expectedStep);
         void StartDraftTimer(Guid matchId, int step);
+        DateTime? GetDraftTimerEndsAt(Guid matchId);
     }
 }

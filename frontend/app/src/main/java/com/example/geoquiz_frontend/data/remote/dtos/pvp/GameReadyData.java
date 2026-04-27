@@ -9,8 +9,6 @@ public class GameReadyData {
     private int totalGameTimeSeconds;
     private String gameStartTime;
     private List<QuestionData> questions;
-    private int questionSeed;
-    private int difficultyLevel;
 
     public String getMatchId() { return matchId; }
     public String getSelectedMode() { return selectedMode; }
@@ -18,6 +16,4 @@ public class GameReadyData {
     public int getTotalGameTimeSeconds() { return totalGameTimeSeconds; }
     public String getGameStartTime() { return gameStartTime; }
     public List<QuestionData> getQuestions() { return questions; }
-    public int getQuestionSeed() { return questionSeed; }
-    public int getDifficultyLevel() { return difficultyLevel; }
 }

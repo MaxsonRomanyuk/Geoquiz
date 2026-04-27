@@ -13,7 +13,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameResumeData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerResponse;
+import com.example.geoquiz_frontend.domain.enums.LocalizedText;
 import com.example.geoquiz_frontend.presentation.utils.GameTokenManager;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
@@ -31,6 +33,7 @@ import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.example.geoquiz_frontend.presentation.utils.TokenRefreshHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.gson.Gson;
 
 import java.util.Locale;
 
@@ -185,9 +188,25 @@ public class MatchmakingActivity extends BaseActivity {
             @Override
             public void onDraftUpdated(DraftUpdateData data) {
             }
+
+            @Override
+            public void onDraftResume(MatchFoundData resumeData) {
+                runOnUiThread(() -> {
+                    navigateToDraftMode(resumeData, true);
+                });
+            }
+
             @Override
             public void onGameReady(GameReadyData gameData) {
             }
+
+            @Override
+            public void onGameResume(GameResumeData resumeData) {
+                runOnUiThread(() -> {
+                    navigateToGame(resumeData, true);
+                });
+            }
+
             @Override
             public void onQuestionResult(SubmitAnswerResponse resultData) {
             }
@@ -199,6 +218,11 @@ public class MatchmakingActivity extends BaseActivity {
             }
             @Override
             public void onOpponentDisconnected(DisconnectData disconnectData) {
+            }
+
+            @Override
+            public void onForceDisconnect(LocalizedText message) {
+                runOnUiThread(() -> handleForceDisconnect(message));
             }
         });
 
@@ -260,7 +284,7 @@ public class MatchmakingActivity extends BaseActivity {
                             .alpha(1f)
                             .setDuration(500)
                             .withEndAction(() -> {
-                                navigateToDraftMode(data);
+                                navigateToDraftMode(data, false);
                             })
                             .start();
                 }, 1000);
@@ -277,23 +301,52 @@ public class MatchmakingActivity extends BaseActivity {
         });
     }
 
-
-    private void navigateToDraftMode(MatchFoundData data) {
+    private void handleForceDisconnect(LocalizedText message)
+    {
+        String msg = preferencesHelper.getLanguage().equals("ru") ? message.getRu() : message.getEn();
+        Toast.makeText(MatchmakingActivity.this, msg, Toast.LENGTH_SHORT).show();
+        if (signalRManager != null) signalRManager.stop();
+        finish();
+    }
+    private void navigateToDraftMode(MatchFoundData data, boolean isResumedGame) {
         Intent intent = new Intent(MatchmakingActivity.this, DraftModeActivity.class);
         intent.putExtra("matchId", data.getMatchId());
         intent.putExtra("opponentName", data.getOpponentName());
         intent.putExtra("opponentLevel", data.getOpponentLevel());
         intent.putExtra("opponentScore", data.getOpponentScore());
         intent.putExtra("availableModes", data.getAvailableModes().toArray(new String[0]));
+        intent.putExtra("bannedModes", data.getBannedModes().toArray(new String[0]));
         intent.putExtra("currentTurnUserId", data.getCurrentTurnUserId());
         intent.putExtra("yourId", data.getYourId());
         intent.putExtra("yourLevel", databaseHelper.getUserStats(preferencesHelper.getUserId()).getLevel());
         intent.putExtra("yourScore", databaseHelper.getUserStats(preferencesHelper.getUserId()).getScore());
-        intent.putExtra("timePerTurn", data.getTimePerTurnSeconds());
+        intent.putExtra("timerEndAt", data.getTimerEndAt());
+        intent.putExtra("serverTime", data.getServerTime());
 
-        intent.putExtra("connectionActive", true);
+        intent.putExtra("isResumedGame", isResumedGame);
+        //intent.putExtra("connectionActive", true);
         startActivity(intent);
     }
+    private void navigateToGame(GameResumeData data, boolean isResumedGame) {
+        Gson gson = new Gson();
+        String gameDataJson = gson.toJson(data.getGameData());
+
+        Intent intent = new Intent(this, PvPGameActivity.class);
+        intent.putExtra("gameData", gameDataJson);
+        intent.putExtra("matchId", data.getGameData().getMatchId());
+        intent.putExtra("opponentName", data.getOpponentName());
+        intent.putExtra("opponentScore", data.getOpponentTotalScore());
+        intent.putExtra("yourScore", data.getYourTotalScore());
+        intent.putExtra("opponentCurrentScore", data.getOpponentCurrentScore());
+        intent.putExtra("yourCurrentScore", data.getYourCurrentScore());
+        intent.putExtra("timerEndAt", data.getTimerEndAt());
+        intent.putExtra("serverTime", data.getServerTime());
+        intent.putExtra("currentQuestion", data.getCurrentQuestion());
+
+        intent.putExtra("isResumedGame", isResumedGame);
+        startActivity(intent);
+    }
+
     private void cancelSearchAndExit() {
         cancelSearch();
         if (signalRManager!= null && signalRManager.isConnected()) {

@@ -8,5 +8,6 @@ namespace GeoQuiz_backend.Application.Interfaces
         Task<PvPGameStateDto> GetGameStateAsync(Guid matchId, Guid userId);
         Task<SubmitAnswerResponse> SubmitAnswerAsync(Guid matchId, Guid userId, SubmitAnswerRequest dto);
         Task MonitorGameTimeAsync(Guid matchId);
+        DateTime? GetGameTimerEndsAt(Guid matchId);
     }
 }

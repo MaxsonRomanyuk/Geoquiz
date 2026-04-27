@@ -41,32 +41,38 @@ public class SecurePreferencesHelper {
     private SharedPreferences regularPrefs;
     private SharedPreferences encryptedPrefs;
 
+//    public SecurePreferencesHelper(Context context) {
+//        this.context = context.getApplicationContext();
+//        try {
+//            regularPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+//            encryptedPrefs = context.getSharedPreferences(ENCRYPTED_PREFS_NAME, Context.MODE_PRIVATE);
+//
+//            String masterKeyAlias = MasterKeys.getOrCreate(
+//                    new KeyGenParameterSpec.Builder(
+//                            MasterKeys.AES256_GCM_SPEC.getKeystoreAlias(),
+//                            KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+//                            .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+//                            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+//                            .setKeySize(256)
+//                            .build()
+//            );
+//
+//            encryptedPrefs = EncryptedSharedPreferences.create(
+//                    ENCRYPTED_PREFS_NAME,
+//                    masterKeyAlias,
+//                    context,
+//                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+//                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+//            );
+//        } catch (GeneralSecurityException | IOException e) {
+//            e.printStackTrace();
+//            encryptedPrefs = context.getSharedPreferences(ENCRYPTED_PREFS_NAME, Context.MODE_PRIVATE);
+//        }
+//    }
     public SecurePreferencesHelper(Context context) {
         this.context = context.getApplicationContext();
-        try {
-            regularPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-
-            String masterKeyAlias = MasterKeys.getOrCreate(
-                    new KeyGenParameterSpec.Builder(
-                            MasterKeys.AES256_GCM_SPEC.getKeystoreAlias(),
-                            KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
-                            .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                            .setKeySize(256)
-                            .build()
-            );
-
-            encryptedPrefs = EncryptedSharedPreferences.create(
-                    ENCRYPTED_PREFS_NAME,
-                    masterKeyAlias,
-                    context,
-                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-            );
-        } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
-            encryptedPrefs = context.getSharedPreferences(ENCRYPTED_PREFS_NAME, Context.MODE_PRIVATE);
-        }
+        regularPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        encryptedPrefs = context.getSharedPreferences(ENCRYPTED_PREFS_NAME, Context.MODE_PRIVATE);
     }
 
 

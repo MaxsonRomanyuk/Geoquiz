@@ -6,14 +6,17 @@ import com.example.geoquiz_frontend.data.remote.dtos.pvp.DisconnectData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.DraftUpdateData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameFinishedData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameReadyData;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameResumeData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.MatchFoundData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerRequest;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.TimerUpdateData;
+import com.example.geoquiz_frontend.domain.enums.LocalizedText;
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
 import com.microsoft.signalr.HubConnectionState;
 
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.reactivex.rxjava3.core.Completable;
@@ -39,11 +42,14 @@ public class PvPSignalRClientManager {
         void onError(String error);
         void onMatchFound(MatchFoundData matchData);
         void onDraftUpdated(DraftUpdateData draftData);
+        void onDraftResume(MatchFoundData resumeData);
         void onGameReady(GameReadyData gameData);
+        void onGameResume(GameResumeData resumeData);
         void onQuestionResult(SubmitAnswerResponse resultData);
         void onTimerUpdate(TimerUpdateData timerData);
         void onGameFinished(GameFinishedData finishData);
         void onOpponentDisconnected(DisconnectData disconnectData);
+        void onForceDisconnect(LocalizedText message);
     }
 
     private PvPSignalRClientManager() {}
@@ -84,6 +90,11 @@ public class PvPSignalRClientManager {
             notifyListeners(listener -> listener.onDraftUpdated(draftData));
         }, DraftUpdateData.class);
 
+        hubConnection.on("DraftResume", (draftData) -> {
+            Log.d(TAG, "DraftResume received");
+            notifyListeners(listener -> listener.onDraftResume(draftData));
+        }, MatchFoundData.class);
+
         hubConnection.onClosed(error -> {
             Log.e(TAG, "Connection closed: " + error);
             notifyListeners(listener -> listener.onDisconnected());
@@ -93,6 +104,11 @@ public class PvPSignalRClientManager {
             Log.d(TAG, "GameReady received");
             notifyListeners(listener -> listener.onGameReady(gameData));
         }, GameReadyData.class);
+
+        hubConnection.on("GameResume", (gameData) -> {
+            Log.d(TAG, "GameResume received");
+            notifyListeners(listener -> listener.onGameResume(gameData));
+        }, GameResumeData.class);
 
         hubConnection.on("QuestionResult", (resultData) -> {
             Log.d(TAG, "QuestionResult received for question " + resultData.getQuestionNumber());
@@ -113,6 +129,11 @@ public class PvPSignalRClientManager {
             Log.d(TAG, "OpponentDisconnected received");
             notifyListeners(listener -> listener.onOpponentDisconnected(disconnectData));
         }, DisconnectData.class);
+
+        hubConnection.on("ForceDisconnect", (message) -> {
+            Log.d(TAG, "ForceDisconnect received");
+            notifyListeners(listener -> listener.onForceDisconnect(message));
+        }, LocalizedText.class);
     }
 
     private interface ListenerAction {

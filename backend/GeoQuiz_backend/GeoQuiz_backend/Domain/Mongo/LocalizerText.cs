@@ -2,7 +2,7 @@
 {
     public class LocalizedText
     {
-        public string Ru { get; set; }
-        public string En { get; set; }
+        public string Ru { get; set; } = null!;
+        public string En { get; set; } = null!;
     }
 }

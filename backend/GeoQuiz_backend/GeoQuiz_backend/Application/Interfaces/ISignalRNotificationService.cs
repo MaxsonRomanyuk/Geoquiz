@@ -1,18 +1,22 @@
 ﻿using GeoQuiz_backend.Application.DTOs.KingOfTheHill;
 using GeoQuiz_backend.Application.DTOs.PvP;
 using GeoQuiz_backend.Application.DTOs.User;
+using GeoQuiz_backend.Domain.Mongo;
 
 namespace GeoQuiz_backend.Application.Interfaces
 {
     public interface ISignalRNotificationService
     {
         Task NotifyAchievementUnlocked(Guid userId, AchievementUnlockedMessage data);
+        Task NotifyForcePvPDisconnect(string connectionId, LocalizedText message);
 
         Task NotifyMatchFound(Guid userId, MatchFoundWithDraftData matchData);
 
         Task NotifyDraftUpdated(Guid matchId, DraftUpdateData updateData);
+        Task NotifyDraftResume(Guid userId, MatchFoundWithDraftData resumeData);
 
         Task NotifyGameReady(Guid matchId, GameReadyData gameData);
+        Task NotifyGameResume(Guid userId, GameResumeData resumeData);
 
         Task NotifyQuestionResult(Guid userId, SubmitAnswerResponse resultData);
 

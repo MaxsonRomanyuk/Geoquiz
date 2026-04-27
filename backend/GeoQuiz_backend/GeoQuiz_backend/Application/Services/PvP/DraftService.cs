@@ -20,6 +20,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
         private static readonly ConcurrentDictionary<Guid, CancellationTokenSource> _draftTimers = new();
         private static readonly ConcurrentDictionary<Guid, SemaphoreSlim> _matchLocks = new();
+        private static readonly ConcurrentDictionary<Guid, DateTime> _draftTimerEndsAt = new();
 
         public DraftService(
             AppDbContext db,
@@ -156,12 +157,14 @@ namespace GeoQuiz_backend.Application.Services.PvP
             CancelDraftTimer(matchId);
             const int COUNTDOWN_SECONDS = 10;
 
+            var timerEndsAt = DateTime.UtcNow.AddSeconds(COUNTDOWN_SECONDS);
+
             var cts = new CancellationTokenSource();
             lock (_matchLocks)
             {
                 _draftTimers[matchId] = cts;
+                _draftTimerEndsAt[matchId] = timerEndsAt;
             }
-
 
             Task.Run(async () =>
             {
@@ -173,7 +176,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
                     await notificationService.NotifyTimerUpdate(matchId, new TimerUpdateData
                     {
                         ServerTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-                        TimerEndsAt = DateTimeOffset.UtcNow.AddSeconds(COUNTDOWN_SECONDS).ToUnixTimeMilliseconds()
+                        TimerEndsAt = new DateTimeOffset(timerEndsAt).ToUnixTimeMilliseconds()
                     });
 
                     await Task.Delay(TimeSpan.FromSeconds(COUNTDOWN_SECONDS), cts.Token);
@@ -225,10 +228,19 @@ namespace GeoQuiz_backend.Application.Services.PvP
                     lock (_matchLocks)
                     {
                         _draftTimers.TryRemove(matchId, out _);
+                        _draftTimerEndsAt.TryRemove(matchId, out _);
                     }
                     cts.Dispose();
                 }
             }, cts.Token);
+        }
+        public DateTime? GetDraftTimerEndsAt(Guid matchId)
+        {
+            if (_draftTimerEndsAt.TryGetValue(matchId, out var endTime))
+            {
+                return endTime;
+            }
+            return null;
         }
         public static void CancelDraftTimer(Guid matchId)
         {
@@ -237,6 +249,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 cts.Cancel();
                 cts.Dispose();
             }
+            _draftTimerEndsAt.TryRemove(matchId, out _);
         }
     }
 }

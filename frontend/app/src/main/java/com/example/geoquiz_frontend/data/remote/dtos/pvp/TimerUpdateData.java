@@ -5,7 +5,13 @@ public class TimerUpdateData {
     private long serverTime;
     private long timerEndsAt;
 
+    public TimerUpdateData(long serverTime, long timerEndsAt)
+    {
+        this.serverTime = serverTime;
+        this.timerEndsAt = timerEndsAt;
+    }
     //public String getMatchId() { return matchId; }
     public long getServerTime() { return serverTime; }
     public long getTimerEndsAt() { return timerEndsAt; }
+
 }

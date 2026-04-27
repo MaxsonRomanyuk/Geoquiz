@@ -18,8 +18,8 @@ namespace GeoQuiz_backend.Application.DTOs.PvP
         public List<GameMode> AvailableModes { get; set; }
         public List<GameMode> BannedModes { get; set; } 
         public Guid CurrentTurnUserId { get; set; } 
-        public int TimePerTurnSeconds { get; set; } = 10;
-
+        public long TimerEndAt { get; set; }
+        public long ServerTime {  get; set; }
         public DateTime FirstTurnStartTime { get; set; }
 
         public Guid YourId { get; set; }
@@ -40,7 +40,18 @@ namespace GeoQuiz_backend.Application.DTOs.PvP
     }
 
 
-
+    public class GameResumeData
+    {
+        public GameReadyData GameData { get; set; } = new GameReadyData();
+        public string OpponentName { get; set; } = null!;
+        public int OpponentTotalScore { get; set; }
+        public int YourTotalScore { get; set;  }
+        public int OpponentCurrentScore { get; set; }
+        public int YourCurrentScore { get; set; }
+        public int CurrentQuestion {  get; set; }
+        public long TimerEndAt { get; set; }
+        public long ServerTime { get; set; }
+    }
     public class GameReadyData
     {
         public Guid MatchId { get; set; }
@@ -51,8 +62,6 @@ namespace GeoQuiz_backend.Application.DTOs.PvP
         public DateTime GameStartTime { get; set; }
 
         public List<QuestionData> Questions { get; set; } = new();
-        public int QuestionSeed { get; set; }
-        public int DifficultyLevel { get; set; }
     }
     public class QuestionData
     {

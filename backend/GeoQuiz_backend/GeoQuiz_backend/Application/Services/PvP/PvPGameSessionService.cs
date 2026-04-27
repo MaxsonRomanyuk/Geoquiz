@@ -26,6 +26,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
         private readonly ILogger<PvPGameSessionService> _logger;
 
         private static readonly ConcurrentDictionary<Guid, CancellationTokenSource> _gameTimers = new();
+        private static readonly ConcurrentDictionary<Guid, DateTime> _gameTimerEndsAt = new();
         private static readonly object _matchLock = new();
 
 
@@ -60,7 +61,8 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
             if (match.SelectedMode != null)
             {
-                var gameQuestion = await GenerateQuestionsAsync(matchId, (GameMode)match.SelectedMode);
+                var questionsSet = await _questionSetService.CreateForMatchAsync(matchId);
+                var gameQuestion = await GenerateQuestionsAsync(matchId, (GameMode)match.SelectedMode, questionsSet);
 
                 await _notificationService.NotifyGameReady(matchId, new GameReadyData
                 {
@@ -81,82 +83,17 @@ namespace GeoQuiz_backend.Application.Services.PvP
             await _db.SaveChangesAsync(); 
 
         }
-        private async Task<List<QuestionData>> GenerateQuestionsAsync(Guid matchId, GameMode mode)
-        {
-            var questions = new List<QuestionData>();
-            var questionsSet = await _questionSetService.CreateForMatchAsync(matchId);
-            var allCountries = await _countryRepository.GetAllAsync();
-
-            var random = new Random(questionsSet.Seed);
-
-
-            foreach (var questionId in questionsSet.QuestionIds)
-            {
-                var countryId = RemoveLastUnderscorePart(questionId);
-                var country = allCountries.First(c => c.Id == countryId);
-
-                var optionRandom = new Random(questionsSet.Seed + questionId.GetHashCode());
-
-                var options = new List<OptionData>();
-                var correctOption = new OptionData
-                {
-                    Index = 0,
-                    Text = GetLocalizedTextForCountry(country, mode)
-                };
-
-                var wrongCountries = allCountries
-                    .Where(c => c.Id != country.Id)
-                    .OrderBy(x => optionRandom.Next())
-                    .Take(3)
-                    .ToList();
-
-                options.Add(correctOption);
-                foreach (var wrongCountry in wrongCountries)
-                {
-                    options.Add(new OptionData
-                    {
-                        Index = options.Count,
-                        Text = GetLocalizedTextForCountry(wrongCountry, mode)
-                    });
-                }
-
-                options = options.OrderBy(x => optionRandom.Next()).ToList();
-
-                questions.Add(new QuestionData
-                {
-                    QuestionId = questionId,
-                    QuestionText = GetQuestionLocalizedText(mode, country),
-                    Options = options,
-                    QuestionNumber = questions.Count+1,
-                    ImageUrl = GetImageUrl(mode, country),
-                    AudioUrl = GetAudioUrl(mode, country)
-                });
-            }
-
-            return questions;
-        }
-        public static string RemoveLastUnderscorePart(string input)
-        {
-            if (string.IsNullOrEmpty(input)) return input;
-
-            for (int i = input.Length - 1; i >= 0; i--)
-            {
-                if (input[i] == '_')
-                {
-                    return input.Substring(0, i);
-                }
-            }
-            return input;
-        }
         public async Task MonitorGameTimeAsync(Guid matchId)
         {
             const int COUNTDOWN_SECONDS = 60;
 
             var cts = new CancellationTokenSource();
+            var timerEndsAt = DateTime.UtcNow.AddSeconds(COUNTDOWN_SECONDS);
 
             lock (_matchLock)
             {
                 _gameTimers[matchId] = cts;
+                _gameTimerEndsAt[matchId] = timerEndsAt;
             }
 
             try
@@ -168,7 +105,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
                     await notificationService.NotifyTimerUpdate(matchId, new TimerUpdateData
                     {
                         ServerTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-                        TimerEndsAt = DateTimeOffset.UtcNow.AddSeconds(COUNTDOWN_SECONDS).ToUnixTimeMilliseconds()
+                        TimerEndsAt = new DateTimeOffset(timerEndsAt).ToUnixTimeMilliseconds()
                     });
                 }
 
@@ -193,9 +130,18 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 lock (_matchLock)
                 {
                     _gameTimers.TryRemove(matchId, out _);
+                    _gameTimerEndsAt.TryRemove(matchId, out _);
                 }
                 cts.Dispose();
             }
+        }
+        public DateTime? GetGameTimerEndsAt(Guid matchId)
+        {
+            if (_gameTimerEndsAt.TryGetValue(matchId, out var endTime))
+            {
+                return endTime;
+            }
+            return null;
         }
         public static void CancelMatchTimer(Guid matchId)
         {
@@ -204,6 +150,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 cts.Cancel();
                 cts.Dispose();
             }
+            _gameTimerEndsAt.TryRemove(matchId, out _);
         }
         public async Task<PvPGameStateDto> GetGameStateAsync(Guid matchId, Guid userId)
         {
@@ -216,22 +163,41 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 .ToListAsync();
 
             var yourAnswered = answers.Count(a => a.UserId == userId);
+            var yourCurrentScore = answers
+                .Where(a => a.UserId == userId)
+                .Sum(a => (int?)a.ScoreGained) ?? 0;
 
             var opponentId = match.Player1Id == userId
                 ? match.Player2Id
                 : match.Player1Id;
 
             var opponentAnswered = answers.Count(a => a.UserId == opponentId);
+            var opponentCurrentScore = answers
+                .Where(a => a.UserId == opponentId)
+                .Sum(a => (int?)a.ScoreGained) ?? 0;
+            var questions = await GenerateQuestionsAsync(matchId, match.QuestionSet.Mode, match.QuestionSet);
+
+            var players = await _db.Users
+                .Include(u => u.Stats)
+                .Where(u => u.Id == match.Player1Id || u.Id == match.Player2Id)
+                .ToListAsync();
+
+            var player = players.Single(p => p.Id == userId);
+            var opponent = players.Single(p => p.Id != userId);
 
             return new PvPGameStateDto
             {
                 MatchId = matchId,
                 Mode = match.QuestionSet.Mode,
                 Language = match.QuestionSet.Language,
-                QuestionIds = match.QuestionSet.QuestionIds,
+                Questions = questions,
+                YourCurrentScore = yourCurrentScore,
+                OpponentCurrentScore = opponentCurrentScore,
                 YourAnswered = yourAnswered,
                 OpponentAnswered = opponentAnswered,
-                IsFinished = yourAnswered >= 10 && opponentAnswered >= 10
+                IsFinished = match.Status == PvPMatchStatus.Finished,
+                Player = player,
+                Opponent = opponent
             };
         }
 
@@ -331,6 +297,73 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 YourAnswered = yourAnswers.Count(),
                 OpponentAnswered = opponentAnswers.Count()
             };
+        }
+        private async Task<List<QuestionData>> GenerateQuestionsAsync(Guid matchId, GameMode mode, QuestionSet questionsSet)
+        {
+            var questions = new List<QuestionData>();
+            //var questionsSet = await _questionSetService.CreateForMatchAsync(matchId);
+            var allCountries = await _countryRepository.GetAllAsync();
+
+            var random = new Random(questionsSet.Seed);
+
+
+            foreach (var questionId in questionsSet.QuestionIds)
+            {
+                var countryId = RemoveLastUnderscorePart(questionId);
+                var country = allCountries.First(c => c.Id == countryId);
+
+                var optionRandom = new Random(questionsSet.Seed + questionId.GetHashCode());
+
+                var options = new List<OptionData>();
+                var correctOption = new OptionData
+                {
+                    Index = 0,
+                    Text = GetLocalizedTextForCountry(country, mode)
+                };
+
+                var wrongCountries = allCountries
+                    .Where(c => c.Id != country.Id)
+                    .OrderBy(x => optionRandom.Next())
+                    .Take(3)
+                    .ToList();
+
+                options.Add(correctOption);
+                foreach (var wrongCountry in wrongCountries)
+                {
+                    options.Add(new OptionData
+                    {
+                        Index = options.Count,
+                        Text = GetLocalizedTextForCountry(wrongCountry, mode)
+                    });
+                }
+
+                options = options.OrderBy(x => optionRandom.Next()).ToList();
+
+                questions.Add(new QuestionData
+                {
+                    QuestionId = questionId,
+                    QuestionText = GetQuestionLocalizedText(mode, country),
+                    Options = options,
+                    QuestionNumber = questions.Count + 1,
+                    ImageUrl = GetImageUrl(mode, country),
+                    AudioUrl = GetAudioUrl(mode, country)
+                });
+            }
+
+            return questions;
+        }
+        private static string RemoveLastUnderscorePart(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+
+            for (int i = input.Length - 1; i >= 0; i--)
+            {
+                if (input[i] == '_')
+                {
+                    return input.Substring(0, i);
+                }
+            }
+            return input;
         }
         private LocalizedText GetLocalizedTextForCountry(Country country, GameMode mode)
         {

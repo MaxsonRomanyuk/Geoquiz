@@ -121,7 +121,7 @@ public class PvPResultActivity extends BaseActivity {
     private void setupClickListeners() {
         btnRematch.setOnClickListener(v -> {
             if (signalRManager!= null && signalRManager.isConnected()) {
-                signalRManager.leaveQueue();
+                //signalRManager.leaveQueue();
                 signalRManager.stop();
             }
             Intent intent = new Intent(this, MatchmakingActivity.class);
@@ -132,7 +132,7 @@ public class PvPResultActivity extends BaseActivity {
 
         btnMainMenu.setOnClickListener(v -> {
             if (signalRManager!= null && signalRManager.isConnected()) {
-                signalRManager.leaveQueue();
+                //signalRManager.leaveQueue();
                 signalRManager.stop();
             }
             Intent intent = new Intent(this, MainActivity.class);

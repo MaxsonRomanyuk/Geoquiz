@@ -15,8 +15,10 @@ import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameResumeData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerResponse;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
+import com.example.geoquiz_frontend.domain.enums.LocalizedText;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
@@ -79,9 +81,9 @@ public class PvPGameActivity extends BaseActivity {
     private long turnEndsAtMillis = 0;
     private boolean isTimerRunning = false;
 
-
     private int yourCurrentScore = 0;
     private int opponentCurrentScore = 0;
+    private boolean isResumedGame = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +113,11 @@ public class PvPGameActivity extends BaseActivity {
 
         signalRManager = PvPSignalRClientManager.getInstance();
         connectToSignalR();
-        sendReadyForGame(matchId);
+        if (!isResumedGame) sendReadyForGame(matchId);
+        else {
+            handleTimerUpdate(new TimerUpdateData(serverTime, turnEndsAtMillis));
+            updateCrown();
+        }
     }
 
     private void initViews() {
@@ -147,6 +153,10 @@ public class PvPGameActivity extends BaseActivity {
 
     private void setupClickListeners() {
         ivClose.setOnClickListener(v -> {
+            if (signalRManager!= null && signalRManager.isConnected()) {
+                //signalRManager.leaveQueue();
+                signalRManager.stop();
+            }
             finish();
         });
 
@@ -162,6 +172,14 @@ public class PvPGameActivity extends BaseActivity {
         opponentName = intent.getStringExtra("opponentName");
         opponentTotalScore = intent.getIntExtra("opponentScore", 0);
         yourTotalScore = intent.getIntExtra("yourScore", 0);
+
+
+        yourCurrentScore = intent.getIntExtra("yourCurrentScore", 0);
+        opponentCurrentScore = intent.getIntExtra("opponentCurrentScore", 0);
+        turnEndsAtMillis = intent.getLongExtra("timerEndAt", System.currentTimeMillis());
+        serverTime = intent.getLongExtra("serverTime", System.currentTimeMillis());
+        isResumedGame = intent.getBooleanExtra("isResumedGame", false);
+        currentQuestionIndex = intent.getIntExtra("currentQuestion", 0);
     }
 
     private void loadPlayerData() {
@@ -169,11 +187,11 @@ public class PvPGameActivity extends BaseActivity {
 
         tvPlayer1Name.setText(username != null ? username : "You");
         tvPlayer1TotalScore.setText(String.valueOf(yourTotalScore));
-        tvPlayer1Score.setText("0");
+        tvPlayer1Score.setText(String.valueOf(yourCurrentScore));
 
         tvPlayer2Name.setText(opponentName);
         tvPlayer2TotalScore.setText(String.valueOf(opponentTotalScore));
-        tvPlayer2Score.setText("0");
+        tvPlayer2Score.setText(String.valueOf(opponentCurrentScore));
     }
 
     private void connectToSignalR() {
@@ -191,8 +209,7 @@ public class PvPGameActivity extends BaseActivity {
             @Override
             public void onDisconnected() {
                 runOnUiThread(() -> {
-                    Toast.makeText(PvPGameActivity.this,
-                            getString(R.string.connection_lost), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PvPGameActivity.this, getString(R.string.connection_lost), Toast.LENGTH_SHORT).show();
                     finish();
                 });
             }
@@ -212,7 +229,14 @@ public class PvPGameActivity extends BaseActivity {
             public void onDraftUpdated(DraftUpdateData data) { }
 
             @Override
+            public void onDraftResume(MatchFoundData resumeData) {}
+
+            @Override
             public void onGameReady(GameReadyData data) {
+            }
+
+            @Override
+            public void onGameResume(GameResumeData resumeData) {
             }
 
             @Override
@@ -236,6 +260,13 @@ public class PvPGameActivity extends BaseActivity {
             public void onOpponentDisconnected(DisconnectData data) {
                 runOnUiThread(() -> handleOpponentDisconnected(data));
             }
+
+            @Override
+            public void onForceDisconnect(LocalizedText message) {
+                runOnUiThread(() -> {
+                    handleForceDisconnect(message);
+                });
+            }
         });
     }
     private void sendReadyForGame(String matchId)
@@ -250,16 +281,8 @@ public class PvPGameActivity extends BaseActivity {
         this.questions = data.getQuestions();
         this.totalQuestions = data.getTotalQuestions();
 
-        showQuestion(0);
-    }
-    private void handleTimerUpdate(TimerUpdateData timerData) {
-        long clientTime = System.currentTimeMillis();
-        serverTime = timerData.getServerTime();
-        serverTimeOffset = serverTime - clientTime;
-        turnEndsAtMillis = timerData.getTimerEndsAt();
-        if (!isTimerRunning && turnEndsAtMillis > 0) {
-            startTimerWithData();
-        }
+
+        showQuestion(currentQuestionIndex);
     }
     private void showQuestion(int index) {
         if (questions == null || index >= questions.size()) return;
@@ -390,7 +413,15 @@ public class PvPGameActivity extends BaseActivity {
             }
         }
     }
-
+    private void handleTimerUpdate(TimerUpdateData timerData) {
+        long clientTime = System.currentTimeMillis();
+        serverTime = timerData.getServerTime();
+        serverTimeOffset = serverTime - clientTime;
+        turnEndsAtMillis = timerData.getTimerEndsAt();
+        if (!isTimerRunning && turnEndsAtMillis > 0) {
+            startTimerWithData();
+        }
+    }
     private void startTimerWithData() {
         if (isTimerRunning) {
             stopTimer();
@@ -401,23 +432,25 @@ public class PvPGameActivity extends BaseActivity {
         timerRunnable = new Runnable() {
             @Override
             public void run() {
-                updateTimerDisplay();
-
                 long now = System.currentTimeMillis() + serverTimeOffset;
-                if (turnEndsAtMillis <= now) {
+                long remainingMs = turnEndsAtMillis - now;
+                Log.d(TAG, "startTimerWithData: remainingMs=" + remainingMs + ", now=" + now + ", turnEndsAtMillis=" + turnEndsAtMillis);
+
+                if (remainingMs <= 0) {
                     stopTimer();
                     return;
                 }
 
+                updateTimerDisplay(remainingMs);
                 timerHandler.postDelayed(this, 1000);
             }
         };
 
         timerHandler.post(timerRunnable);
     }
-    private void updateTimerDisplay() {
-        long now = System.currentTimeMillis() + serverTimeOffset;
-        long remainingMs = turnEndsAtMillis - now;
+    private void updateTimerDisplay(long remainingMs) {
+        //long now = System.currentTimeMillis() + serverTimeOffset;
+        //long remainingMs = turnEndsAtMillis - now;
         int timeLeft = (int) Math.ceil(remainingMs / 1000.0);
 
         int minutes = timeLeft / 60;
@@ -485,7 +518,13 @@ public class PvPGameActivity extends BaseActivity {
             finish();
         }, 2000);
     }
-
+    private void handleForceDisconnect(LocalizedText message)
+    {
+        String msg = preferencesHelper.getLanguage().equals("ru") ? message.getRu() : message.getEn();
+        Toast.makeText(PvPGameActivity.this, msg, Toast.LENGTH_SHORT).show();
+        if (signalRManager != null) signalRManager.stop();
+        finish();
+    }
     @Override
     protected void handleAchievementUnlocked(List<ProfileResponse.AchievementDto> achievements) {
         runOnUiThread(() -> {

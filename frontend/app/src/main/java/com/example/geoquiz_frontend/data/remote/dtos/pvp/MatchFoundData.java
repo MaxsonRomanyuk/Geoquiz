@@ -12,7 +12,8 @@ public class MatchFoundData {
     private List<String> availableModes;
     private List<String> bannedModes;
     private String currentTurnUserId;
-    private int timePerTurnSeconds;
+    private long timerEndAt;
+    private long serverTime;
     private String firstTurnStartTime;
     private String yourId;
 
@@ -25,7 +26,8 @@ public class MatchFoundData {
     public List<String> getAvailableModes() { return availableModes; }
     public List<String> getBannedModes() { return bannedModes; }
     public String getCurrentTurnUserId() { return currentTurnUserId; }
-    public int getTimePerTurnSeconds() { return timePerTurnSeconds; }
+    public long getTimerEndAt() { return timerEndAt; }
+    public long getServerTime() { return serverTime; }
     public String getFirstTurnStartTime() { return firstTurnStartTime; }
     public String getYourId() { return yourId; }
 

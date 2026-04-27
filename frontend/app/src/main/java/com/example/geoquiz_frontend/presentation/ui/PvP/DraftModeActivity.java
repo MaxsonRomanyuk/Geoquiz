@@ -13,7 +13,9 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameResumeData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerResponse;
+import com.example.geoquiz_frontend.domain.enums.LocalizedText;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
@@ -31,6 +33,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class DraftModeActivity extends BaseActivity {
@@ -55,18 +58,17 @@ public class DraftModeActivity extends BaseActivity {
     private String currentTurnUserId;
     private List<String> availableModes;
     private List<String> bannedModes;
-    private int timePerTurn;
     private boolean isPlayerTurn = false;
     private boolean isDraftActive = true;
 
-    private Handler timerHandler = new Handler();
+    private final Handler timerHandler = new Handler();
     private Runnable timerRunnable;
 
     private long serverTime = 0;
     private long serverTimeOffset = 0;
     private long turnEndsAtMillis = 0;
     private boolean isTimerRunning = false;
-
+    private boolean isResumedGame = false;
     private String opponentName;
     private int opponentLevel;
     private int opponentScore;
@@ -84,13 +86,15 @@ public class DraftModeActivity extends BaseActivity {
         setupClickListeners();
         getIntentData();
 
-
-        bannedModes = new ArrayList<>();
-
         signalRManager = PvPSignalRClientManager.getInstance();
         signalRManager.setCurrentMatch(matchId);
         connectToSignalR();
-        sendReadyForDraft(matchId);
+        if (!isResumedGame) {
+            sendReadyForDraft(matchId);
+        }
+        else {
+            handleTimerUpdate(new TimerUpdateData(serverTime, turnEndsAtMillis));
+        }
         updateTurnStatus();
 
     }
@@ -160,12 +164,21 @@ public class DraftModeActivity extends BaseActivity {
         yourId = intent.getStringExtra("yourId");
         yourLvl = intent.getIntExtra("yourLevel", 1);
         yourScore = intent.getIntExtra("yourScore", 0);
-        timePerTurn = intent.getIntExtra("timePerTurn", 10);
+        turnEndsAtMillis = intent.getLongExtra("timerEndAt", System.currentTimeMillis());
+        serverTime = intent.getLongExtra("serverTime", System.currentTimeMillis());
+        isResumedGame = intent.getBooleanExtra("isResumedGame", false);
 
-
-        String[] modesArray = intent.getStringArrayExtra("availableModes");
-        if (modesArray != null) {
-            availableModes = Arrays.asList(modesArray);
+        String[] avModesArray = intent.getStringArrayExtra("availableModes");
+        if (avModesArray != null) {
+            availableModes = Arrays.asList(avModesArray);
+        }
+        String[] banModesArray = intent.getStringArrayExtra("bannedModes");
+        if (banModesArray != null) {
+            bannedModes = new ArrayList<>(Arrays.asList(banModesArray));
+            for (String mode : bannedModes) {
+                String bannedMode = convertServerModeToClient(mode);
+                banModeLocally(bannedMode, yourId, false);
+            }
         }
 
         isPlayerTurn = yourId.equals(currentTurnUserId);
@@ -220,10 +233,20 @@ public class DraftModeActivity extends BaseActivity {
             public void onDraftUpdated(DraftUpdateData data) {
                 runOnUiThread(() -> handleDraftUpdate(data));
             }
+
+            @Override
+            public void onDraftResume(MatchFoundData resumeData) {
+            }
+
             @Override
             public void onGameReady(GameReadyData gameData) {
                 runOnUiThread(() -> handleGameReady(gameData));
             }
+
+            @Override
+            public void onGameResume(GameResumeData resumeData) {
+            }
+
             @Override
             public void onQuestionResult(SubmitAnswerResponse resultData) {
             }
@@ -237,6 +260,11 @@ public class DraftModeActivity extends BaseActivity {
             @Override
             public void onOpponentDisconnected(DisconnectData disconnectData) {
                 runOnUiThread(() -> handleOpponentDisconnected(disconnectData));
+            }
+
+            @Override
+            public void onForceDisconnect(LocalizedText message) {
+                runOnUiThread(() -> handleForceDisconnect(message));
             }
         });
     }
@@ -271,31 +299,34 @@ public class DraftModeActivity extends BaseActivity {
                     return;
                 }
 
-                updateTimerDisplay();
+                //updateTimerDisplay();
 
                 long now = System.currentTimeMillis() + serverTimeOffset;
-                if (turnEndsAtMillis <= now) {
+                long remainingMs = turnEndsAtMillis - now;
+                Log.d(TAG, "startTimerWithData: remainingMs=" + remainingMs + ", now=" + now + ", turnEndsAtMillis=" + turnEndsAtMillis);
+                if (remainingMs <= 0) {
                     stopTimer();
                     return;
                 }
-
+                updateTimerDisplay(remainingMs);
                 timerHandler.postDelayed(this, 1000);
             }
         };
 
         timerHandler.post(timerRunnable);
     }
-    private void updateTimerDisplay() {
-        long now = System.currentTimeMillis() + serverTimeOffset;
-        long remainingMs = turnEndsAtMillis - now;
+    private void updateTimerDisplay(long remainingMs) {
+        //long now = System.currentTimeMillis() + serverTimeOffset;
+        //long remainingMs = turnEndsAtMillis - now;
+        Log.d(TAG, "updateTimerDisplay: remainingMs=" + remainingMs + ", offset=" + serverTimeOffset + ", servertime=" + serverTime);
         int timeLeft = (int) Math.ceil(remainingMs / 1000.0);
-
         if (remainingMs <= 0) {
             tvTimer.setText("0 s");
             progressTimer.setProgress(100);
             return;
         }
 
+        int timePerTurn = 10;
         int progress = (timePerTurn - timeLeft) * 100 / timePerTurn;
         progressTimer.setProgress(Math.max(0, Math.min(100, progress)));
         tvTimer.setText(timeLeft + " s");
@@ -329,7 +360,7 @@ public class DraftModeActivity extends BaseActivity {
 
         String bannedMode = convertServerModeToClient(data.getBannedMode());
         if (bannedMode != null) {
-            banModeLocally(bannedMode, data.getBannedByUserId());
+            banModeLocally(bannedMode, data.getBannedByUserId(), true);
         }
 
         currentTurnUserId = data.getNextTurnUserId();
@@ -345,22 +376,25 @@ public class DraftModeActivity extends BaseActivity {
             tvTurnStatus.setText("Final mode selected!");
         }
     }
-    private void banModeLocally(String mode, String bannedByUserId) {
+    private void banModeLocally(String mode, String bannedByUserId, boolean needMessage) {
         MaterialCardView card = getCardByMode(mode);
         if (card != null) {
             card.setStrokeColor(getColorFromAttr(R.attr.colorError));
             card.setAlpha(0.5f);
             card.setClickable(false);
 
-            bannedModes.add(mode);
+            //bannedModes.add(mode);
 
             String message;
-            if (bannedByUserId.equals(yourId)) {
-                message = getString(R.string.you_banned) + getModeName(mode);
-            } else {
-                message = getString(R.string.opponent_banned) + getModeName(mode);
+            if (needMessage) {
+                bannedModes.add(mode);
+                if (bannedByUserId.equals(yourId)) {
+                    message = getString(R.string.you_banned) + getModeName(mode);
+                } else {
+                    message = getString(R.string.opponent_banned) + getModeName(mode);
+                }
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
     }
     private void sendReadyForDraft(String matchId)
@@ -409,7 +443,13 @@ public class DraftModeActivity extends BaseActivity {
         startActivity(intent);
         finish();
     }
-
+    private void handleForceDisconnect(LocalizedText message)
+    {
+        String msg = getLanguageCode().equals("ru") ? message.getRu() : message.getEn();
+        Toast.makeText(DraftModeActivity.this, msg, Toast.LENGTH_SHORT).show();
+        if (signalRManager != null) signalRManager.stop();
+        finish();
+    }
     private void updateTurnStatus() {
         if (!isDraftActive) {
             tvTurnStatus.setText("Draft completed");

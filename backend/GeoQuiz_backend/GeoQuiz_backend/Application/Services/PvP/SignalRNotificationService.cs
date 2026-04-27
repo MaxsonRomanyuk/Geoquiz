@@ -1,10 +1,12 @@
-﻿using GeoQuiz_backend.Application.Interfaces;
-using GeoQuiz_backend.API.HubClients;
+﻿using GeoQuiz_backend.API.HubClients;
 using GeoQuiz_backend.API.Hubs;
 using GeoQuiz_backend.Application.DTOs.KingOfTheHill;
 using GeoQuiz_backend.Application.DTOs.PvP;
-using Microsoft.AspNetCore.SignalR;
 using GeoQuiz_backend.Application.DTOs.User;
+using GeoQuiz_backend.Application.Interfaces;
+using GeoQuiz_backend.Domain.Entities;
+using GeoQuiz_backend.Domain.Mongo;
+using Microsoft.AspNetCore.SignalR;
 
 namespace GeoQuiz_backend.Application.Services.PvP
 {
@@ -26,7 +28,11 @@ namespace GeoQuiz_backend.Application.Services.PvP
         {
             await _notificationHub.Clients.User(userId.ToString()).AchievementUnlocked(data);
         }
-
+        public async Task NotifyForcePvPDisconnect(string connectionId, LocalizedText message)
+        {
+            await _pvpHub.Clients.Client(connectionId).ForceDisconnect(message);
+            //await _pvpHub.Clients.User(connectionId).ForceDisconnect(message);
+        }
         public async Task NotifyMatchFound(Guid userId, MatchFoundWithDraftData matchData)
         {
             await _pvpHub.Clients.User(userId.ToString()).MatchFound(matchData);
@@ -35,11 +41,18 @@ namespace GeoQuiz_backend.Application.Services.PvP
         {
             await _pvpHub.Clients.Group($"match_{matchId}").DraftUpdated(updateData);
         }
+        public async Task NotifyDraftResume(Guid userId, MatchFoundWithDraftData resumeData)
+        {
+            await _pvpHub.Clients.User(userId.ToString()).DraftResume(resumeData);
+        }
         public async Task NotifyGameReady(Guid matchId, GameReadyData gameData)
         {
             await _pvpHub.Clients.Group($"match_{matchId}").GameReady(gameData);
         }
-
+        public async Task NotifyGameResume(Guid userId, GameResumeData resumeData)
+        {
+            await _pvpHub.Clients.User(userId.ToString()).GameResume(resumeData);
+        }
         public async Task NotifyQuestionResult(Guid userId, SubmitAnswerResponse resultData)
         {
             await _pvpHub.Clients.Group($"match_{userId}").QuestionResult(resultData);
