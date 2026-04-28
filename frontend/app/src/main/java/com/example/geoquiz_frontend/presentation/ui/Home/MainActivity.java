@@ -65,11 +65,6 @@ public class MainActivity extends BaseActivity {
         preferencesHelper = new SecurePreferencesHelper(this);
 
         boolean isGuest = preferencesHelper.getUserId().equals("uid");
-        if (!preferencesHelper.hasValidAccessToken() && !isGuest) {
-            //handleUnauthorized();
-            //refreshTokenSilently();
-            //return;
-        }
 
         initViews();
         if (isGuest)

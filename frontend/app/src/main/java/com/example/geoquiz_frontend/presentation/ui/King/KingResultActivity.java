@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
+import com.example.geoquiz_frontend.domain.engine.GameManager;
 import com.example.geoquiz_frontend.domain.entities.Achievement;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
@@ -153,6 +154,8 @@ public class KingResultActivity extends BaseActivity {
     }
     private void updateStats()
     {
+        GameManager gameManager = GameManager.getInstance(this);
+        gameManager.syncGames();
         UserRepository userRepository = UserRepository.getInstance(this);
         userRepository.loadUserData(true);
     }

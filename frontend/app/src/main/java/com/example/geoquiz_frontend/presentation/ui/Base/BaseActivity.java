@@ -22,6 +22,7 @@ import com.example.geoquiz_frontend.presentation.utils.AchievementDialogHelper;
 import com.example.geoquiz_frontend.presentation.utils.LocaleHelper;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
+import com.example.geoquiz_frontend.presentation.utils.TokenRefreshHelper;
 
 import java.util.List;
 
@@ -85,8 +86,40 @@ public abstract class BaseActivity extends AppCompatActivity {
         currentConnectionKey = getClass().getSimpleName() + "_" + System.currentTimeMillis();
         if (!notificationManager.isConnected())
         {
-            if (shouldShowConnectionBanner()) {
-                showConnectionBanner(getLocalizedMessage(ConnectionErrorType.NO_INTERNET));
+            if (preferencesHelper.hasValidAccessToken())
+            {
+                String token = preferencesHelper.getAuthToken();
+                String id = preferencesHelper.getUserId();
+                notificationManager.reset();
+                notificationManager.init(token, id);
+                notificationManager.start();
+                if (!notificationManager.isConnected() && shouldShowConnectionBanner()) {
+                    showConnectionBanner(getLocalizedMessage(ConnectionErrorType.NO_INTERNET));
+                }
+            }
+            else {
+                TokenRefreshHelper tokenRefreshHelper = new TokenRefreshHelper(this, preferencesHelper);
+                tokenRefreshHelper.refreshTokenAsync(new TokenRefreshHelper.TokenRefreshCallback() {
+                    @Override
+                    public void onSuccess() {
+                        String newToken = preferencesHelper.getAuthToken();
+                        String id = preferencesHelper.getUserId();
+                        notificationManager.reset();
+                        notificationManager.init(newToken, id);
+                        notificationManager.start();
+
+                        if (!notificationManager.isConnected() && shouldShowConnectionBanner()) {
+                            showConnectionBanner(getLocalizedMessage(ConnectionErrorType.NO_INTERNET));
+                        }
+                    }
+                    @Override
+                    public void onFailure(String error) {
+                        Log.w("TokenManager", "Could not refresh token on start: " + error);
+                        if (shouldShowConnectionBanner()) {
+                            showConnectionBanner(getLocalizedMessage(ConnectionErrorType.NO_INTERNET));
+                        }
+                    }
+                });
             }
         }
 
@@ -107,10 +140,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             @Override
             public void onAchievementUnlocked(List<ProfileResponse.AchievementDto> achievements) {
-//                if (isFinishing() || isDestroyed()) {
-//                    Log.d("NotificationManager", "Ignoring achievement - activity is finishing/destroyed");
-//                    return;
-//                }
                 handleAchievementUnlocked(achievements);
             }
 

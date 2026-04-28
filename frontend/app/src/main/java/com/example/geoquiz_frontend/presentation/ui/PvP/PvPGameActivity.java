@@ -84,6 +84,7 @@ public class PvPGameActivity extends BaseActivity {
     private int yourCurrentScore = 0;
     private int opponentCurrentScore = 0;
     private boolean isResumedGame = false;
+    private boolean isManualDisconnect = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,7 +210,7 @@ public class PvPGameActivity extends BaseActivity {
             @Override
             public void onDisconnected() {
                 runOnUiThread(() -> {
-                    Toast.makeText(PvPGameActivity.this, getString(R.string.connection_lost), Toast.LENGTH_SHORT).show();
+                    if (!isManualDisconnect || !isDestroyed() || isFinishing()) Toast.makeText(PvPGameActivity.this, getString(R.string.connection_lost), Toast.LENGTH_SHORT).show();
                     finish();
                 });
             }
@@ -491,6 +492,10 @@ public class PvPGameActivity extends BaseActivity {
         stopTimer();
         Log.d(TAG, "Game finished! Winner: " + data.getWinnerId());
 
+        if (signalRManager != null) {
+            signalRManager.removeListener(activityId);
+        }
+
         Intent intent = new Intent(this, PvPResultActivity.class);
         intent.putExtra("player_won", data.isWinner());
         intent.putExtra("finish_reason", data.getFinishReason());
@@ -513,16 +518,23 @@ public class PvPGameActivity extends BaseActivity {
 
     private void handleOpponentDisconnected(DisconnectData data) {
         Toast.makeText(this, getString(R.string.opponent_disconnected), Toast.LENGTH_LONG).show();
-
+        handleDisconnect();
         new Handler().postDelayed(() -> {
             finish();
         }, 2000);
+    }
+    private void handleDisconnect()
+    {
+        isManualDisconnect = true;
+        if (signalRManager!= null && signalRManager.isConnected()) {
+            signalRManager.stop();
+        }
     }
     private void handleForceDisconnect(LocalizedText message)
     {
         String msg = preferencesHelper.getLanguage().equals("ru") ? message.getRu() : message.getEn();
         Toast.makeText(PvPGameActivity.this, msg, Toast.LENGTH_SHORT).show();
-        if (signalRManager != null) signalRManager.stop();
+        handleDisconnect();
         finish();
     }
     @Override
@@ -541,6 +553,6 @@ public class PvPGameActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         timerHandler.removeCallbacksAndMessages(null);
-        signalRManager.removeListener(activityId);
+        if (signalRManager!=null)signalRManager.removeListener(activityId);
     }
 }

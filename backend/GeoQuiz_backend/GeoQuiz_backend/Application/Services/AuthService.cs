@@ -51,6 +51,7 @@ namespace GeoQuiz_backend.Application.Services
                         TotalGamesWon = request.Stats.GamesWon,
                         CurrentWinStreak = request.Stats.WinStreak,
                         MaxWinStreak = request.Stats.WinStreak,
+                        Score = request.Stats.Score,
                         DailyLoginStreak = request.Stats.DailyStreak,
                         EuropeCorrect = request.Stats.EuropeCorrect,
                         AsiaCorrect = request.Stats.AsiaCorrect,

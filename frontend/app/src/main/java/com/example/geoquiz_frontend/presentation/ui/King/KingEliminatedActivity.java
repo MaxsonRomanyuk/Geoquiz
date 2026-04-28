@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
+import com.example.geoquiz_frontend.domain.engine.GameManager;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
@@ -100,6 +101,8 @@ public class KingEliminatedActivity extends BaseActivity {
     }
     private void updateStats()
     {
+        GameManager gameManager = GameManager.getInstance(this);
+        gameManager.syncGames();
         UserRepository userRepository = UserRepository.getInstance(this);
         userRepository.loadUserData(true);
     }

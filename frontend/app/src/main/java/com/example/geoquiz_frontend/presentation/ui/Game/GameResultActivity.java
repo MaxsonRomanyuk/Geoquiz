@@ -53,7 +53,7 @@ public class GameResultActivity extends BaseActivity {
             if (!achievements.isEmpty()) {
                 handleAchievementUnlocked(achievements);
             }
-        }, 100);
+        }, 200);
 
     }
 

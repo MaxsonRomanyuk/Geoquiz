@@ -2,6 +2,7 @@ package com.example.geoquiz_frontend.presentation.ui.PvP;
 
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
+import com.example.geoquiz_frontend.domain.engine.GameManager;
 import com.example.geoquiz_frontend.domain.entities.Achievement;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import android.content.Intent;
@@ -61,9 +62,7 @@ public class PvPResultActivity extends BaseActivity {
         initViews();
         setupClickListeners();
         displayResults();
-        Log.d("NotificationManager", "update stats: ");
         updateStats();
-        Log.d("NotificationManager", "stats Updated: ");
 
         new Handler().postDelayed(() -> {
             List<ProfileResponse.AchievementDto> achievements = userRepository.consumePendingAchievements();
@@ -71,6 +70,7 @@ public class PvPResultActivity extends BaseActivity {
             if (!achievements.isEmpty()) {
                 handleAchievementUnlocked(achievements);
             }
+            handleDisconnect();
         }, 100);
     }
 
@@ -120,10 +120,7 @@ public class PvPResultActivity extends BaseActivity {
 
     private void setupClickListeners() {
         btnRematch.setOnClickListener(v -> {
-            if (signalRManager!= null && signalRManager.isConnected()) {
-                //signalRManager.leaveQueue();
-                signalRManager.stop();
-            }
+            handleDisconnect();
             Intent intent = new Intent(this, MatchmakingActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -131,15 +128,18 @@ public class PvPResultActivity extends BaseActivity {
         });
 
         btnMainMenu.setOnClickListener(v -> {
-            if (signalRManager!= null && signalRManager.isConnected()) {
-                //signalRManager.leaveQueue();
-                signalRManager.stop();
-            }
+            handleDisconnect();
             Intent intent = new Intent(this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
         });
+    }
+    private void handleDisconnect()
+    {
+        if (signalRManager!= null && signalRManager.isConnected()) {
+            signalRManager.stop();
+        }
     }
     @Override
     protected void handleAchievementUnlocked(List<ProfileResponse.AchievementDto> achievements) {
@@ -188,6 +188,8 @@ public class PvPResultActivity extends BaseActivity {
     }
     private void updateStats()
     {
+        GameManager gameManager = GameManager.getInstance(this);
+        gameManager.syncGames();
         UserRepository userRepository = UserRepository.getInstance(this);
         userRepository.loadUserData(true);
     }

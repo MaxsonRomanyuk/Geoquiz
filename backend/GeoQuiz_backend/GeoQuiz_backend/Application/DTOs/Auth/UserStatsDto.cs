@@ -7,6 +7,7 @@
         public int GamesPlayed { get; set; }
         public int GamesWon { get; set; }
         public float WinRate { get; set; }
+        public int Score { get; set; }
         public int DailyStreak { get; set; }
         public int WinStreak { get; set; }
         public int EuropeCorrect { get; set; }

@@ -30,7 +30,6 @@ import com.example.geoquiz_frontend.data.repositories.GameRepository;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.domain.engine.GameManager;
 import com.example.geoquiz_frontend.domain.entities.User;
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
@@ -66,52 +65,10 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         preferencesHelper = new SecurePreferencesHelper(this);
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
         authManager = new AuthManager(this);
-
-        if (authManager.isLoggedIn()) {
-            loadBoostrapData();
-
-            userRepository = UserRepository.getInstance(this);
-            userRepository.loadUserData(false);
-
-            if (preferencesHelper.hasValidAccessToken()) {
-                activityId = "login_" + System.currentTimeMillis();
-                notificationManager = NotificationManager.getInstance();
-                String token = preferencesHelper.getAuthToken();
-                String userId = preferencesHelper.getUserId();
-
-                notificationManager.reset();
-                notificationManager.init(token, userId);
-                connectToSignalR();
-            }
-            else {
-                TokenRefreshHelper tokenRefreshHelper = new TokenRefreshHelper(this, preferencesHelper);
-                tokenRefreshHelper.refreshTokenAsync(new TokenRefreshHelper.TokenRefreshCallback() {
-                    @Override
-                    public void onSuccess() {
-                        Log.d("TokenManager", "Token refreshed on app start");
-                        activityId = "login_" + System.currentTimeMillis();
-                        notificationManager = NotificationManager.getInstance();
-                        String newToken = preferencesHelper.getAuthToken();
-                        String userId = preferencesHelper.getUserId();
-
-                        notificationManager.reset();
-                        notificationManager.init(newToken, userId);
-                        connectToSignalR();
-                    }
-                    @Override
-                    public void onFailure(String error) {
-                        Log.w("TokenManager", "Could not refresh token on start: " + error);
-                    }
-                });
-            }
-            startMainActivity();
-            return;
-        }
+        setContentView(R.layout.activity_login);
         initViews();
         setupClickListeners();
 
@@ -119,7 +76,6 @@ public class LoginActivity extends BaseActivity {
         if (statsJson != null) {
             Gson gson = new Gson();
             userStats = gson.fromJson(statsJson, UserStats.class);
-            userStats.getExperience();
         }
     }
     private void loadBoostrapData()
@@ -133,6 +89,40 @@ public class LoginActivity extends BaseActivity {
             public void onError(String error) {
             }
         });
+    }
+
+    @Override
+    protected void setupConnectionListener()
+    {
+        if (authManager.isLoggedIn()) {
+            loadBoostrapData();
+
+            userRepository = UserRepository.getInstance(this);
+            userRepository.loadUserData(false);
+
+            if (preferencesHelper.hasValidAccessToken()) {
+                String token = preferencesHelper.getAuthToken();
+                String userId = preferencesHelper.getUserId();
+                connectToNotificationManager(token, userId);
+            }
+            else {
+                TokenRefreshHelper tokenRefreshHelper = new TokenRefreshHelper(this, preferencesHelper);
+                tokenRefreshHelper.refreshTokenAsync(new TokenRefreshHelper.TokenRefreshCallback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d("TokenManager", "Token refreshed on app start");
+                        String newToken = preferencesHelper.getAuthToken();
+                        String userId = preferencesHelper.getUserId();
+                        connectToNotificationManager(newToken, userId);
+                    }
+                    @Override
+                    public void onFailure(String error) {
+                        Log.w("TokenManager", "Could not refresh token on start: " + error);
+                    }
+                });
+            }
+            startMainActivity();
+        }
     }
     private void initViews() {
         toggleGroup = findViewById(R.id.toggleGroup);
@@ -268,6 +258,10 @@ public class LoginActivity extends BaseActivity {
                     String name = response.body().getUserName();
                     long expiresIn = response.body().getExpiresIn();
                     saveUserData(accessToken, refreshToken, email, uid, name, expiresIn);
+                    loadUserData();
+                    loadBoostrapData();
+                    connectToNotificationManager(accessToken,uid);
+                    startMainActivity();
                 } else {
                     showTempMessage(getString(R.string.error_user_not_found));
                     showLoading(false);
@@ -322,12 +316,14 @@ public class LoginActivity extends BaseActivity {
         saveAuthToken(accessToken, refreshToken , expiresIn);
         User user = new User(uid, email, name);
         authManager.LoginWithEmail(user);
-
-        loadBoostrapData();
-
+    }
+    private void loadUserData()
+    {
         userRepository = UserRepository.getInstance(this);
         userRepository.loadUserData(true);
-
+    }
+    private void connectToNotificationManager(String accessToken, String uid)
+    {
         activityId = "login_" + System.currentTimeMillis();
         notificationManager = NotificationManager.getInstance();
 
@@ -337,9 +333,7 @@ public class LoginActivity extends BaseActivity {
         }
         connectToSignalR();
 
-        startMainActivity();
     }
-
     private void saveAuthToken(String accessToken, String refreshToken, long expiresInSeconds) {
         preferencesHelper.saveAuthTokens(accessToken, refreshToken, expiresInSeconds);
     }

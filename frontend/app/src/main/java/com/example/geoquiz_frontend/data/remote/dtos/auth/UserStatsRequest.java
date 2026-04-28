@@ -8,6 +8,7 @@ public class UserStatsRequest {
     private int gamesPlayed;
     private int gamesWon;
     private float winRate;
+    private int score;
     private int dailyStreak;
     private int winStreak;
     private int europeCorrect;
@@ -27,6 +28,7 @@ public class UserStatsRequest {
         this.gamesPlayed = stats.getGamesPlayed();
         this.gamesWon = stats.getGamesWon();
         this.winRate = stats.getWinRate();
+        this.score = stats.getScore();
         this.dailyStreak = stats.getDailyStreak();
         this.winStreak = stats.getWinStreak();
         this.europeCorrect = stats.getEuropeCorrect();
@@ -41,12 +43,12 @@ public class UserStatsRequest {
         this.languagesCorrect = stats.getLanguagesCorrect();
     }
 
-    // Геттеры
     public int getLevel() { return level; }
     public int getExperience() { return experience; }
     public int getGamesPlayed() { return gamesPlayed; }
     public int getGamesWon() { return gamesWon; }
     public float getWinRate() { return winRate; }
+    public int getScore() { return score; }
     public int getDailyStreak() { return dailyStreak; }
     public int getWinStreak() { return winStreak; }
     public int getEuropeCorrect() { return europeCorrect; }

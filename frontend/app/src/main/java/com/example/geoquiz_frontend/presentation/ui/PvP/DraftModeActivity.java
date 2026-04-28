@@ -67,12 +67,12 @@ public class DraftModeActivity extends BaseActivity {
     private long serverTime = 0;
     private long serverTimeOffset = 0;
     private long turnEndsAtMillis = 0;
-    private boolean isTimerRunning = false;
-    private boolean isResumedGame = false;
     private String opponentName;
     private int opponentLevel;
     private int opponentScore;
-
+    private boolean isTimerRunning = false;
+    private boolean isResumedGame = false;
+    private boolean isManualDisconnect = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -212,7 +212,7 @@ public class DraftModeActivity extends BaseActivity {
             public void onDisconnected() {
                 runOnUiThread(() -> {
                     Log.d(TAG, "Disconnected from SignalR");
-                    Toast.makeText(DraftModeActivity.this, getString(R.string.connection_lost), Toast.LENGTH_SHORT).show();
+                    if (!isManualDisconnect) Toast.makeText(DraftModeActivity.this, getString(R.string.connection_lost), Toast.LENGTH_SHORT).show();
                 });
             }
 
@@ -422,7 +422,7 @@ public class DraftModeActivity extends BaseActivity {
     }
     private void handleOpponentDisconnected(DisconnectData data) {
         Toast.makeText(this, getString(R.string.opponent_disconnected_2), Toast.LENGTH_LONG).show();
-
+        handleDisconnect();
         new Handler().postDelayed(() -> {
             finish();
         }, 1000);
@@ -443,11 +443,18 @@ public class DraftModeActivity extends BaseActivity {
         startActivity(intent);
         finish();
     }
+    private void handleDisconnect()
+    {
+        isManualDisconnect = true;
+        if (signalRManager!= null && signalRManager.isConnected()) {
+            signalRManager.stop();
+        }
+    }
     private void handleForceDisconnect(LocalizedText message)
     {
         String msg = getLanguageCode().equals("ru") ? message.getRu() : message.getEn();
         Toast.makeText(DraftModeActivity.this, msg, Toast.LENGTH_SHORT).show();
-        if (signalRManager != null) signalRManager.stop();
+        handleDisconnect();
         finish();
     }
     private void updateTurnStatus() {

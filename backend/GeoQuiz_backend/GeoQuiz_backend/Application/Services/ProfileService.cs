@@ -50,17 +50,25 @@ namespace GeoQuiz_backend.Application.Services
 
             if (DateTime.UtcNow - lastCheck < TimeSpan.FromDays(1)) return;
 
-            _ = Task.Run(async () =>
-            {
-                using var scope = _serviceScopeFactory.CreateScope();
-                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                var stats = await db.UserStats.FirstAsync(s => s.UserId == userId);
+            using var scope = _serviceScopeFactory.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var stats = await db.UserStats.FirstAsync(s => s.UserId == userId);
 
-                await _achievementService.CheckAndGrantMissingAchievements(db, userId, stats);
+            await _achievementService.CheckAndGrantMissingAchievements(db, userId, stats);
 
-                stats.LastAchievementSync = DateTime.UtcNow;
-                await db.SaveChangesAsync();
-            });
+            stats.LastAchievementSync = DateTime.UtcNow;
+            await db.SaveChangesAsync();
+            //_ = Task.Run(async () =>
+            //{
+            //    using var scope = _serviceScopeFactory.CreateScope();
+            //    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            //    var stats = await db.UserStats.FirstAsync(s => s.UserId == userId);
+
+            //    await _achievementService.CheckAndGrantMissingAchievements(db, userId, stats);
+
+            //    stats.LastAchievementSync = DateTime.UtcNow;
+            //    await db.SaveChangesAsync();
+            //});
         }
         private async Task<object?> LoadProfile(Guid userId)
         {
