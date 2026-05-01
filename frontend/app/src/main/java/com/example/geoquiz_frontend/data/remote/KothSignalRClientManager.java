@@ -5,19 +5,24 @@ import android.util.Log;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.AnswerResultData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.LobbyInitialStateData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.MatchFinishedData;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.MatchResumeData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.MatchStartedData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerEliminatedData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerJoinedData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerLeftData;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.PlayerLobby;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.RoundFinishedData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.RoundStartedData;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.SubmitAnswerRequest;
+import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameResumeData;
+import com.example.geoquiz_frontend.domain.enums.LocalizedText;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
 import com.microsoft.signalr.HubConnectionState;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.reactivex.rxjava3.core.Completable;
@@ -50,11 +55,13 @@ public class KothSignalRClientManager {
         void onLobbyCountdownCancelled();
 
         void onMatchStarted(MatchStartedData data);
+        void onMatchResume(MatchResumeData data);
         void onRoundStarted(RoundStartedData data);
         void onRoundFinished(RoundFinishedData data);
         void onPlayerEliminated(PlayerEliminatedData data);
         void onAnswerResult(AnswerResultData data);
         void onMatchFinished(MatchFinishedData data);
+        void onForceDisconnect(LocalizedText message);
     }
 
     private KothSignalRClientManager() {}
@@ -83,15 +90,31 @@ public class KothSignalRClientManager {
 
         registerHandlers();
     }
-
+    private String formatPlayers(List<PlayerLobby> players) {
+        if (players == null) return "null";
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < players.size(); i++) {
+            PlayerLobby p = players.get(i);
+            if (i > 0) sb.append(", ");
+            sb.append(String.format("{id:%s, name:%s, level:%d}",
+                    p.getId(), p.getName(), p.getLevel()));
+        }
+        sb.append("]");
+        return sb.toString();
+    }
     private void registerHandlers() {
         hubConnection.on("PlayerJoinedToOthers", (data) -> {
             Log.d(TAG, "PlayerJoined received");
+            Log.d(TAG, String.format("PlayerJoined received - LobbyId: %s, PlayerId: %s, PlayerName: %s, Level: %d, TotalPlayers: %d",
+                    data.getLobbyId(), data.getPlayerId(), data.getPlayerName(),
+                    data.getPlayerLevel(), data.getTotalPlayers()));
             notifyListeners(listener -> listener.onPlayerJoinedToOthers(data));
         }, PlayerJoinedData.class);
 
         hubConnection.on("PlayerAboutLobby", (data) -> {
             Log.d(TAG, "PlayerAbout received");
+            Log.d(TAG, String.format("PlayerAbout received - LobbyId: %s, TotalPlayers: %d, Players: %s",
+                    data.getLobbyId(), data.getTotalPlayers(), formatPlayers(data.getPlayers())));
             notifyListeners(listener -> listener.onPlayerAboutLobby(data));
         }, LobbyInitialStateData.class);
 
@@ -114,6 +137,11 @@ public class KothSignalRClientManager {
             Log.d(TAG, "MatchStarted received: " + data.getMatchId());
             notifyListeners(listener -> listener.onMatchStarted(data));
         }, MatchStartedData.class);
+
+        hubConnection.on("MatchResume", (gameData) -> {
+            Log.d(TAG, "MatchResume received");
+            notifyListeners(listener -> listener.onMatchResume(gameData));
+        }, MatchResumeData.class);
 
         hubConnection.on("RoundStarted", (data) -> {
             Log.d(TAG, "RoundStarted received: Round " + data.getRoundNumber());
@@ -144,6 +172,10 @@ public class KothSignalRClientManager {
             Log.e(TAG, "Connection closed: " + error);
             notifyListeners(listener -> listener.onDisconnected());
         });
+        hubConnection.on("ForceDisconnect", (message) -> {
+            Log.d(TAG, "ForceDisconnect received");
+            notifyListeners(listener -> listener.onForceDisconnect(message));
+        }, LocalizedText.class);
     }
 
     private interface ListenerAction {

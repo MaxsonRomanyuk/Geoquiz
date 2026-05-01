@@ -86,6 +86,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         currentConnectionKey = getClass().getSimpleName() + "_" + System.currentTimeMillis();
         if (!notificationManager.isConnected())
         {
+            if (shouldShowConnectionBanner()) showConnectionBanner(getLocalizedMessage(ConnectionErrorType.NO_INTERNET));
             if (preferencesHelper.hasValidAccessToken())
             {
                 String token = preferencesHelper.getAuthToken();
@@ -93,8 +94,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                 notificationManager.reset();
                 notificationManager.init(token, id);
                 notificationManager.start();
-                if (!notificationManager.isConnected() && shouldShowConnectionBanner()) {
-                    showConnectionBanner(getLocalizedMessage(ConnectionErrorType.NO_INTERNET));
+                if (notificationManager.isConnected()) {
+                    hideConnectionBanner();
                 }
             }
             else {
@@ -108,8 +109,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                         notificationManager.init(newToken, id);
                         notificationManager.start();
 
-                        if (!notificationManager.isConnected() && shouldShowConnectionBanner()) {
-                            showConnectionBanner(getLocalizedMessage(ConnectionErrorType.NO_INTERNET));
+                        if (notificationManager.isConnected()) {
+                            hideConnectionBanner();
                         }
                     }
                     @Override
@@ -171,6 +172,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void hideConnectionBanner() {
+        Toast.makeText(this, "HIDE", Toast.LENGTH_SHORT).show();
         if (connectionStatusBanner == null || connectionStatusBanner.getVisibility() != View.VISIBLE) {
             return;
         }

@@ -30,7 +30,7 @@ namespace GeoQuiz_backend.API.Hubs
 
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        private static readonly ConcurrentDictionary<Guid, UserSession> _userSessions = new();
+        private static readonly ConcurrentDictionary<Guid, UserPvPSession> _userSessions = new();
         private static readonly ConcurrentDictionary<Guid, Guid> _userCurrentMatch = new();
         private static readonly ConcurrentDictionary<Guid, PvPMatchState> _activeMatches = new();
 
@@ -63,7 +63,7 @@ namespace GeoQuiz_backend.API.Hubs
 
                 await HandleMultiDeviceConflict(userId, existingSession, connectionId);
 
-                _userSessions[userId] = new UserSession
+                _userSessions[userId] = new UserPvPSession
                 {
                     ConnectionId = connectionId,
                     ConnectedAt = DateTime.UtcNow,
@@ -75,7 +75,7 @@ namespace GeoQuiz_backend.API.Hubs
             }
             else
             {
-                _userSessions[userId] = new UserSession
+                _userSessions[userId] = new UserPvPSession
                 {
                     ConnectionId = connectionId,
                     ConnectedAt = DateTime.UtcNow,
@@ -117,7 +117,8 @@ namespace GeoQuiz_backend.API.Hubs
                 }
                 else
                 {
-                    _logger.LogInformation("User {UserId} disconnecting from connection {ConnectionId}", userId, connectionId);
+                    _logger.LogInformation("User {UserId} disconnected from connection {ConnectionId} and trying to delete new connection {session}",
+                        userId, connectionId, session.ConnectionId);
                 }
             }
             _logger.LogInformation("User {UserId} disconnected", userId);
@@ -340,7 +341,7 @@ namespace GeoQuiz_backend.API.Hubs
                 session.CurrentMatchId = matchId;
             }
         }
-        private async Task HandleMultiDeviceConflict(Guid userId, UserSession existingSession, string newConnectionId)
+        private async Task HandleMultiDeviceConflict(Guid userId, UserPvPSession existingSession, string newConnectionId)
         {
             if (existingSession.IsInQueue)
             {
@@ -517,7 +518,7 @@ namespace GeoQuiz_backend.API.Hubs
             }
         }
     }
-    public class UserSession
+    public class UserPvPSession
     {
         public string ConnectionId { get; set; }
         public DateTime ConnectedAt { get; set; }

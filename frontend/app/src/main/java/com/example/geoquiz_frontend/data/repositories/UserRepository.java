@@ -57,7 +57,6 @@ public class UserRepository {
         databaseHelper = new DatabaseHelper(context);
 
         initAchievementsCache();
-
         if (preferencesHelper.hasValidAccessToken()) {
             apiService = ApiClient.getApiWithAuth();
         }
@@ -116,9 +115,15 @@ public class UserRepository {
         }
 
         if (apiService == null) {
-            errorMessage.setValue("No authentication");
-            isLoading.setValue(false);
-            return;
+            if (preferencesHelper.hasValidAccessToken())
+            {
+                apiService = ApiClient.getApiWithAuth();
+            }
+            else {
+                errorMessage.setValue("No authentication");
+                isLoading.setValue(false);
+                return;
+            }
         }
 
         if (!userId.equals("uid")) {

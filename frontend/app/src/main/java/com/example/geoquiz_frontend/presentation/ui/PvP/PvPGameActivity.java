@@ -210,7 +210,8 @@ public class PvPGameActivity extends BaseActivity {
             @Override
             public void onDisconnected() {
                 runOnUiThread(() -> {
-                    if (!isManualDisconnect || !isDestroyed() || isFinishing()) Toast.makeText(PvPGameActivity.this, getString(R.string.connection_lost), Toast.LENGTH_SHORT).show();
+                    if (!isManualDisconnect || !isDestroyed() || isFinishing())
+                        Toast.makeText(PvPGameActivity.this, getString(R.string.connection_lost), Toast.LENGTH_SHORT).show();
                     finish();
                 });
             }

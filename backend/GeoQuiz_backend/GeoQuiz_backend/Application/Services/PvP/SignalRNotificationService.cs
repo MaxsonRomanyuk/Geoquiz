@@ -28,11 +28,6 @@ namespace GeoQuiz_backend.Application.Services.PvP
         {
             await _notificationHub.Clients.User(userId.ToString()).AchievementUnlocked(data);
         }
-        public async Task NotifyForcePvPDisconnect(string connectionId, LocalizedText message)
-        {
-            await _pvpHub.Clients.Client(connectionId).ForceDisconnect(message);
-            //await _pvpHub.Clients.User(connectionId).ForceDisconnect(message);
-        }
         public async Task NotifyMatchFound(Guid userId, MatchFoundWithDraftData matchData)
         {
             await _pvpHub.Clients.User(userId.ToString()).MatchFound(matchData);
@@ -73,6 +68,10 @@ namespace GeoQuiz_backend.Application.Services.PvP
         {
             await _pvpHub.Clients.User(userId.ToString()).OpponentDisconnected(disconnectData);
         }
+        public async Task NotifyForcePvPDisconnect(string connectionId, LocalizedText message)
+        {
+            await _pvpHub.Clients.Client(connectionId).ForceDisconnect(message);
+        }
 
 
 
@@ -101,6 +100,10 @@ namespace GeoQuiz_backend.Application.Services.PvP
         {
             await _kothHub.Clients.Group($"lobby_{lobbyId}").MatchStarted(data);
         }
+        public async Task NotifyMatchResume(Guid userId, MatchResumeData resumeData)
+        {
+            await _kothHub.Clients.User(userId.ToString()).MatchResume(resumeData);
+        }
         public async Task NotifyRoundStarted(Guid matchId, RoundStartedData data)
         {
             await _kothHub.Clients.Group($"match_{matchId}").RoundStarted(data);
@@ -123,6 +126,10 @@ namespace GeoQuiz_backend.Application.Services.PvP
         public async Task NotifyMatchFinished(Guid matchId, MatchFinishedData data)
         {
             await _kothHub.Clients.Group($"match_{matchId}").MatchFinished(data);
+        }
+        public async Task NotifyForceKothDisconnect(string connectionId, LocalizedText message)
+        {
+            await _kothHub.Clients.Client(connectionId).ForceDisconnect(message);
         }
     }
 }

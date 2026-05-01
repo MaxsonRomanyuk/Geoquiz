@@ -6,6 +6,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
+import android.util.Log;
+
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 
@@ -105,7 +107,7 @@ public class SecurePreferencesHelper {
     public boolean hasValidAccessToken() {
         if (getUserId().equals("uid")) return false;
         String token = getAuthToken();
-        if (token == null) return false;
+        if (token == null)  return false;
 
         long expiresAt = getTokenExpiry();
         long now = System.currentTimeMillis();

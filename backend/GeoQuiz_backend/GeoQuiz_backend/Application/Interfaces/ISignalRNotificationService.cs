@@ -8,10 +8,8 @@ namespace GeoQuiz_backend.Application.Interfaces
     public interface ISignalRNotificationService
     {
         Task NotifyAchievementUnlocked(Guid userId, AchievementUnlockedMessage data);
-        Task NotifyForcePvPDisconnect(string connectionId, LocalizedText message);
 
         Task NotifyMatchFound(Guid userId, MatchFoundWithDraftData matchData);
-
         Task NotifyDraftUpdated(Guid matchId, DraftUpdateData updateData);
         Task NotifyDraftResume(Guid userId, MatchFoundWithDraftData resumeData);
 
@@ -25,7 +23,7 @@ namespace GeoQuiz_backend.Application.Interfaces
         Task NotifyGameFinished(Guid userId, GameFinishedData finishData);
 
         Task NotifyOpponentDisconnected(Guid userId, DisconnectData disconnectData);
-
+        Task NotifyForcePvPDisconnect(string connectionId, LocalizedText message);
 
 
         Task NotifyPlayerJoinedToOthers(Guid lobbyId, PlayerJoinedData data, string connectionIdToExclude);
@@ -34,10 +32,12 @@ namespace GeoQuiz_backend.Application.Interfaces
         Task NotifyLobbyCountdown(Guid lobbyId, int secondsRemaining);
         Task NotifyLobbyCountdownCancelled(Guid lobbyId);
         Task NotifyMatchStarted(Guid lobbyId, MatchStartedData data);
+        Task NotifyMatchResume(Guid userId, MatchResumeData resumeData);
         Task NotifyRoundStarted(Guid matchId, RoundStartedData data);
         Task NotifyRoundFinished(Guid matchId, RoundFinishedData data);
         Task NotifyPlayerEliminated(Guid userId, PlayerEliminatedData data);
         Task NotifyAnswerResult(Guid userId, AnswerResultData data);
         Task NotifyMatchFinished(Guid userId, MatchFinishedData data);
+        Task NotifyForceKothDisconnect(string connectionId, LocalizedText message);
     }
 }

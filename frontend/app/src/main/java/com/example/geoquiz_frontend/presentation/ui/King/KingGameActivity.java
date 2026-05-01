@@ -19,7 +19,9 @@ import androidx.core.content.ContextCompat;
 
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
+import com.example.geoquiz_frontend.domain.entities.UserStats;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.PvP.PvPGameActivity;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.remote.KothSignalRClientManager;
@@ -75,6 +77,7 @@ public class KingGameActivity extends BaseActivity {
     private boolean hasAnswered = false;
     private boolean isEliminated = false;
     private boolean isSpectator = false;
+    private boolean isManualDisconnect = false;
     private long questionStartTime;
 
 
@@ -94,8 +97,8 @@ public class KingGameActivity extends BaseActivity {
         activityId = "king_game_" + System.currentTimeMillis();
 
         initViews();
-        getIntentData();
         setupClickListeners();
+        getIntentData();
 
         signalRManager = KothSignalRClientManager.getInstance();
         connectToSignalR();
@@ -148,20 +151,24 @@ public class KingGameActivity extends BaseActivity {
         Intent intent = getIntent();
         matchId = intent.getStringExtra("match_id");
         totalPlayers = intent.getIntExtra("total_players", 0);
+        playersRemaining = intent.getIntExtra("players_remaining", totalPlayers);
+        yourScore = intent.getIntExtra("current_score", 0);
+
         allPlayers = (List<PlayerInfo>) intent.getSerializableExtra("all_players");
         if (allPlayers == null) {
             allPlayers = new ArrayList<>();
         }
 
-//        for (PlayerInfo playerInfo : allPlayers) {
-//            Toast.makeText(this, playerInfo.getPlayerName(), Toast.LENGTH_SHORT).show();
-//        }
-
-
-        playersRemaining = totalPlayers;
+        String roundJson = getIntent().getStringExtra("roundData");
+        if (roundJson != null) {
+            Gson gson = new Gson();
+            RoundStartedData roundData = gson.fromJson(roundJson, RoundStartedData.class);
+            handleRoundStarted(roundData);
+        }
 
         tvPlayersRemaining.setText(String.valueOf(playersRemaining));
         tvTotalPlayers.setText("/" + String.valueOf(totalPlayers));
+        tvScore.setText(String.valueOf(yourScore));
     }
 
     private void connectToSignalR() {
@@ -177,7 +184,8 @@ public class KingGameActivity extends BaseActivity {
             @Override
             public void onDisconnected() {
                 runOnUiThread(() -> {
-                    Toast.makeText(KingGameActivity.this, getString(R.string.connection_lost), Toast.LENGTH_SHORT).show();
+                    if (!isManualDisconnect || !isDestroyed() || isFinishing())
+                        Toast.makeText(KingGameActivity.this, getString(R.string.connection_lost), Toast.LENGTH_SHORT).show();
                     finish();
                 });
             }
@@ -196,6 +204,7 @@ public class KingGameActivity extends BaseActivity {
             @Override public void onLobbyCountdown(int secondsRemaining) { }
             @Override public void onLobbyCountdownCancelled() { }
             @Override public void onMatchStarted(MatchStartedData data) {}
+            @Override public void onMatchResume(MatchResumeData data) {}
 
             @Override
             public void onRoundStarted(RoundStartedData data) {
@@ -220,6 +229,13 @@ public class KingGameActivity extends BaseActivity {
             @Override
             public void onMatchFinished(MatchFinishedData data) {
                 runOnUiThread(() -> handleMatchFinished(data));
+            }
+
+            @Override
+            public void onForceDisconnect(LocalizedText message) {
+                runOnUiThread(() -> {
+                    handleForceDisconnect(message);
+                });
             }
         });
     }
@@ -570,7 +586,20 @@ public class KingGameActivity extends BaseActivity {
                 .setNegativeButton(negativeButton, null)
                 .show();
     }
-
+    private void handleDisconnect()
+    {
+        isManualDisconnect = true;
+        if (signalRManager!= null && signalRManager.isConnected()) {
+            signalRManager.stop();
+        }
+    }
+    private void handleForceDisconnect(LocalizedText message)
+    {
+        String msg = preferencesHelper.getLanguage().equals("ru") ? message.getRu() : message.getEn();
+        Toast.makeText(KingGameActivity.this, msg, Toast.LENGTH_SHORT).show();
+        handleDisconnect();
+        finish();
+    }
     private void performExitGame() {
         stopTimer();
         if (signalRManager != null && signalRManager.isConnected() && matchId != null) {

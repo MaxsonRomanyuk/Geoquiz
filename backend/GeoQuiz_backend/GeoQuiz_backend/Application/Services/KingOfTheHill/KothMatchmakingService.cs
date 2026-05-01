@@ -3,6 +3,7 @@ using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace GeoQuiz_backend.Application.Services.KingOfTheHill
@@ -11,34 +12,27 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
     {
         private readonly AppDbContext _db;
         private readonly ISignalRNotificationService _notificationService;
-        private readonly IKothGameService _gameService;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger<KothMatchmakingService> _logger;
 
-        private static readonly Dictionary<Guid, KothLobby> _activeLobbies = new();
+        private static readonly ConcurrentDictionary<Guid, KothLobby> _activeLobbies = new();
         private static readonly object _lobbyLock = new();
-        private static readonly Dictionary<Guid, CancellationTokenSource> _lobbyTimers = new();
+        private static readonly ConcurrentDictionary<Guid, CancellationTokenSource> _lobbyTimers = new();
 
         public KothMatchmakingService(
             AppDbContext db,
             ISignalRNotificationService notificationService,
-            IKothGameService gameService,
             IServiceScopeFactory serviceScopeFactory,
             ILogger<KothMatchmakingService> logger)
         {
             _db = db;
             _notificationService = notificationService;
-            _gameService = gameService;
             _serviceScopeFactory = serviceScopeFactory;
             _logger = logger;
         }
 
         public async Task<(KothLobby? Lobby, string UserName, int UserLevel)> JoinLobbyAsync(Guid userId)
         {
-            KothLobby lobby;
-            string userName;
-            int userLevel;
-
             var user = await _db.Users
                 .Include(u => u.Stats)
                 .FirstOrDefaultAsync(u => u.Id == userId);
@@ -49,8 +43,9 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 return (null, string.Empty, 0); 
             }
 
-            userName = user.UserName;
-            userLevel = user.Stats?.Level ?? 1;
+            KothLobby lobby;
+            var userName = user.UserName;
+            var userLevel = user.Stats?.Level ?? 1;
 
             lock (_lobbyLock)
             {
@@ -74,7 +69,13 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     };
                     _activeLobbies[lobby.Id] = lobby;
 
-                    _logger.LogInformation("Created new lobby {LobbyId} with first player {UserId}", lobby.Id, userId);
+                    _notificationService.NotifyCurrentPlayerAboutLobby(userId, new LobbyInitialStateData
+                    {
+                        LobbyId = lobby.Id,
+                        Players = lobby.PlayersLobby,
+                        TotalPlayers = lobby.PlayersLobby.Count
+                    });
+                    _logger.LogInformation("Created new lobby {LobbyId} with first player {UserId} {name}", lobby.Id, userId, lobby.PlayersLobby.First().Name);
                 }
                 else
                 {
@@ -83,6 +84,13 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                         Id = userId,
                         Name = userName,
                         Level = userLevel
+                    });
+
+                    _notificationService.NotifyCurrentPlayerAboutLobby(userId, new LobbyInitialStateData
+                    {
+                        LobbyId = lobby.Id,
+                        Players = lobby.PlayersLobby,
+                        TotalPlayers = lobby.PlayersLobby.Count
                     });
                     _logger.LogInformation("User {UserId} joined lobby {LobbyId}, now {Count}/32", userId, lobby.Id, lobby.PlayersLobby.Count);
                 }
@@ -111,12 +119,12 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                         _logger.LogInformation("Lobby {LobbyId} full (32 players), starting immediately", lobbyId);
                         shouldStartImmediately = true;
                         playersToStart = lobby.PlayersLobby;
-                        _activeLobbies.Remove(lobbyId);
+                        _activeLobbies.TryRemove(lobbyId, out _);
 
                         if (_lobbyTimers.TryGetValue(lobbyId, out var cts))
                         {
                             cts.Cancel();
-                            _lobbyTimers.Remove(lobbyId);
+                            _lobbyTimers.TryRemove(lobbyId, out _);
                         }
                     }
                     else if (lobby.PlayersLobby.Count >= 2 && !_lobbyTimers.ContainsKey(lobbyId))
@@ -178,12 +186,11 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
                 if (remainingPlayers == 0)
                 {
-                    _activeLobbies.Remove(lobby.Id);
+                    _activeLobbies.TryRemove(lobby.Id, out _);
 
-                    if (_lobbyTimers.TryGetValue(lobby.Id, out var cts))
+                    if (_lobbyTimers.TryRemove(lobby.Id, out var cts))
                     {
                         cts.Cancel();
-                        _lobbyTimers.Remove(lobby.Id);
                     }
 
                     _logger.LogInformation("Lobby {LobbyId} removed (empty)", lobby.Id);
@@ -251,7 +258,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                         if (i == 1 && stillValid)
                         {
                             playersToStart = lobby.PlayersLobby;
-                            _activeLobbies.Remove(lobbyId);
+                            _activeLobbies.TryRemove(lobbyId, out _);
                         }
                     }
 
@@ -268,7 +275,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
                         lock (_lobbyLock)
                         {
-                            _lobbyTimers.Remove(lobbyId);
+                            _lobbyTimers.TryRemove(lobbyId, out _);
                         }
 
                         using (var scope = _serviceScopeFactory.CreateScope())
@@ -289,24 +296,15 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
         private async Task CancelLobbyTimerAsync(Guid lobbyId)
         {
-            CancellationTokenSource? cts = null;
-
-            lock (_lobbyLock)
-            {
-                if (_lobbyTimers.TryGetValue(lobbyId, out cts))
-                {
-                    _lobbyTimers.Remove(lobbyId);
-                }
-            }
-
-            if (cts != null)
+            if (_lobbyTimers.TryRemove(lobbyId, out var cts))
             {
                 cts.Cancel();
-                using (var scope = _serviceScopeFactory.CreateScope())
-                {
-                    var notificationService = scope.ServiceProvider.GetRequiredService<ISignalRNotificationService>();
-                    await notificationService.NotifyLobbyCountdownCancelled(lobbyId);
-                }
+
+                cts.Dispose();
+
+                using var scope = _serviceScopeFactory.CreateScope();
+                var notificationService = scope.ServiceProvider.GetRequiredService<ISignalRNotificationService>();
+                await notificationService.NotifyLobbyCountdownCancelled(lobbyId);
             }
         }
 

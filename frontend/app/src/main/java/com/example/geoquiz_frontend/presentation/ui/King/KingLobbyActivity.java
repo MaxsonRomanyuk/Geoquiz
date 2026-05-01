@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.gridlayout.widget.GridLayout;
 
 import com.example.geoquiz_frontend.data.remote.PvPSignalRClientManager;
+import com.example.geoquiz_frontend.data.remote.dtos.koth.MatchResumeData;
+import com.example.geoquiz_frontend.domain.enums.LocalizedText;
 import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
 import com.example.geoquiz_frontend.presentation.ui.PvP.MatchmakingActivity;
 import com.example.geoquiz_frontend.presentation.utils.GameTokenManager;
@@ -43,6 +45,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
+import com.google.gson.Gson;
 
 public class KingLobbyActivity extends BaseActivity {
     private static final String TAG = "KingLobbyActivity";
@@ -54,7 +57,6 @@ public class KingLobbyActivity extends BaseActivity {
     private LinearLayout layoutError;
     private MaterialButton btnLeave;
 
-    private Handler timerHandler = new Handler();
     private boolean isCountdownActive = false;
 
     private int currentPlayers = 0;
@@ -388,6 +390,12 @@ public class KingLobbyActivity extends BaseActivity {
                 signalRManager.joinMatch(data.getMatchId());
                 runOnUiThread(() -> handleMatchStarted(data));
             }
+
+            @Override
+            public void onMatchResume(MatchResumeData data) {
+                runOnUiThread(() -> handleMatchResume(data));
+            }
+
             @Override
             public void onRoundStarted(RoundStartedData data) {
             }
@@ -403,6 +411,11 @@ public class KingLobbyActivity extends BaseActivity {
             @Override
             public void onMatchFinished(MatchFinishedData data) {
             }
+
+            @Override
+            public void onForceDisconnect(LocalizedText message) {
+                runOnUiThread(() -> handleForceDisconnect(message));
+            }
         });
     }
     private void handleMatchStarted(MatchStartedData data) {
@@ -413,7 +426,7 @@ public class KingLobbyActivity extends BaseActivity {
                 Intent intent = new Intent(KingLobbyActivity.this, KingGameActivity.class);
                 intent.putExtra("match_id", data.getMatchId());
                 intent.putExtra("total_players", data.getTotalPlayers());
-                intent.putExtra("total_rounds", data.getTotalRounds());
+                //intent.putExtra("total_rounds", data.getTotalRounds());
                 intent.putExtra("all_players", new ArrayList<>(data.getAllPlayers()));
 
                 View rootView = findViewById(android.R.id.content);
@@ -437,6 +450,34 @@ public class KingLobbyActivity extends BaseActivity {
             }
         });
     }
+    private void handleMatchResume(MatchResumeData data) {
+        Intent intent = new Intent(KingLobbyActivity.this, KingGameActivity.class);
+        intent.putExtra("match_id", data.getMatchId());
+        intent.putExtra("total_players", data.getTotalPlayers());
+        intent.putExtra("players_remaining", data.getPlayersLeft());
+
+        intent.putExtra("current_score", data.getCurrentScore());
+        if (data.getRoundStartedData()!=null)
+        {
+            Gson gson = new Gson();
+            String roundData = gson.toJson(data.getRoundStartedData());
+            intent.putExtra("roundData", roundData);
+        }
+        View rootView = findViewById(android.R.id.content);
+        rootView.animate()
+                .alpha(0f)
+                .scaleX(0.9f)
+                .scaleY(0.9f)
+                .setDuration(1000)
+                .withEndAction(() -> {
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                    finish();
+                })
+                .start();
+//        startActivity(intent);
+//        finish();
+    }
     private void startSearch() {
         layoutTimer.setVisibility(View.VISIBLE);
         tvTimer.setText("00:00");
@@ -450,6 +491,13 @@ public class KingLobbyActivity extends BaseActivity {
     private void showStatus(String status) {
         layoutError.setVisibility(View.VISIBLE);
         tvError.setText(status);
+    }
+    private void handleForceDisconnect(LocalizedText message)
+    {
+        String msg = preferencesHelper.getLanguage().equals("ru") ? message.getRu() : message.getEn();
+        Toast.makeText(KingLobbyActivity.this, msg, Toast.LENGTH_SHORT).show();
+        if (signalRManager != null) signalRManager.stop();
+        finish();
     }
     private void cancelSearchAndExit() {
         if (signalRManager != null && signalRManager.isConnected()) {

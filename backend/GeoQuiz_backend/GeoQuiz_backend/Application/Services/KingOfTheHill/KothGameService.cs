@@ -15,6 +15,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
     {
         private static readonly ConcurrentDictionary<Guid, KothGameState> _activeGames = new();
         private static readonly ConcurrentDictionary<Guid, CancellationTokenSource> _roundTimers = new();
+        private static readonly ConcurrentDictionary<Guid, DateTime> _roundTimerEndsAt = new();
 
         private readonly AppDbContext _db;
         private readonly IQuestionRepository _questionRepo;
@@ -175,6 +176,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
             var cts = new CancellationTokenSource();
             _roundTimers[matchId] = cts;
+            _roundTimerEndsAt[matchId] = DateTimeOffset.FromUnixTimeMilliseconds(roundData.RoundEndAt).UtcDateTime;
 
             try
             {
@@ -182,19 +184,18 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
                 if (!cts.Token.IsCancellationRequested)
                 {
-                    _logger.LogInformation("Round {RoundNumber} timer expired for match {MatchId}",
-                        gameState.CurrentRound, matchId);
+                    _logger.LogInformation("Round {RoundNumber} timer expired for match {MatchId}",gameState.CurrentRound, matchId);
                     await FinishRoundAsync(matchId);
                 }
             }
             catch (TaskCanceledException)
             {
-                _logger.LogDebug("Round {RoundNumber} timer cancelled for match {MatchId}",
-                    gameState.CurrentRound, matchId);
+                _logger.LogDebug("Round {RoundNumber} timer cancelled for match {MatchId}", gameState.CurrentRound, matchId);
             }
             finally
             {
                 _roundTimers.TryRemove(matchId, out _);
+                _roundTimerEndsAt.TryRemove(matchId, out _);
                 cts.Dispose();
             }
         }
@@ -245,6 +246,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     cts.Cancel();
                     cts.Dispose();
                 }
+                _roundTimerEndsAt.TryRemove(matchId, out _);
                 _ = Task.Run(() => FinishRoundAsync(matchId));
             }
 
@@ -368,8 +370,15 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             _activeGames.TryGetValue(matchId, out var gameState);
             return Task.FromResult(gameState);
         }
+        public DateTime? GetRoundTimerEndsAt(Guid matchId)
+        {
+            if (_roundTimerEndsAt.TryGetValue(matchId, out var endTime))
+            {
+                return endTime;
+            }
+            return null;
+        }
 
-        
         private async Task<KothGameState> CreateGameStateAsync(Guid matchId, List<PlayerInfo> realPlayers)
         {
             var totalPlayers = realPlayers.Count;

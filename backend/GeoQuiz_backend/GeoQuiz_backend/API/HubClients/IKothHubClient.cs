@@ -1,4 +1,5 @@
 ﻿using GeoQuiz_backend.Application.DTOs.KingOfTheHill;
+using GeoQuiz_backend.Domain.Mongo;
 
 namespace GeoQuiz_backend.API.HubClients
 {
@@ -12,9 +13,11 @@ namespace GeoQuiz_backend.API.HubClients
 
         Task MatchStarted(MatchStartedData data);
         Task RoundStarted(RoundStartedData data);
+        Task MatchResume(MatchResumeData gameResumeData);
         Task RoundFinished(RoundFinishedData data);
         Task PlayerEliminated(PlayerEliminatedData data);
         Task MatchFinished(MatchFinishedData data);
         Task AnswerResult(AnswerResultData data);
+        Task ForceDisconnect(LocalizedText message);
     }
 }
