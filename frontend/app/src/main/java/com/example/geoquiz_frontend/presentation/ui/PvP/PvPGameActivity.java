@@ -17,10 +17,11 @@ import androidx.core.content.ContextCompat;
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameResumeData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerResponse;
+import com.example.geoquiz_frontend.data.remote.dtos.question.OptionData;
+import com.example.geoquiz_frontend.data.remote.dtos.question.QuestionData;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.domain.enums.LocalizedText;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.remote.PvPSignalRClientManager;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.DisconnectData;
@@ -28,10 +29,7 @@ import com.example.geoquiz_frontend.data.remote.dtos.pvp.DraftUpdateData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameFinishedData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameReadyData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.MatchFoundData;
-import com.example.geoquiz_frontend.data.remote.dtos.pvp.OptionData;
-import com.example.geoquiz_frontend.data.remote.dtos.pvp.QuestionData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.TimerUpdateData;
-import com.example.geoquiz_frontend.data.remote.dtos.pvp.UnlockedAchievement;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.gson.Gson;
 
@@ -365,7 +363,7 @@ public class PvPGameActivity extends BaseActivity {
         QuestionData currentQuestion = questions.get(currentQuestionIndex);
         signalRManager.submitAnswer(
                 matchId,
-                currentQuestion.getQuestionId(),
+                currentQuestion.getCountryId(),
                 slcIndex,
                 (int) answerTime,
                 currentQuestionIndex + 1
@@ -451,8 +449,6 @@ public class PvPGameActivity extends BaseActivity {
         timerHandler.post(timerRunnable);
     }
     private void updateTimerDisplay(long remainingMs) {
-        //long now = System.currentTimeMillis() + serverTimeOffset;
-        //long remainingMs = turnEndsAtMillis - now;
         int timeLeft = (int) Math.ceil(remainingMs / 1000.0);
 
         int minutes = timeLeft / 60;

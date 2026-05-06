@@ -325,7 +325,24 @@ public class MatchmakingActivity extends BaseActivity {
 
         intent.putExtra("isResumedGame", isResumedGame);
         //intent.putExtra("connectionActive", true);
-        startActivity(intent);
+        if (isResumedGame)
+        {
+            View rootView = findViewById(android.R.id.content);
+            rootView.animate()
+                    .alpha(0f)
+                    .scaleX(0.9f)
+                    .scaleY(0.9f)
+                    .setDuration(1000)
+                    .withEndAction(() -> {
+                        startActivity(intent);
+                        overridePendingTransition(0, 0);
+                        finish();
+                    })
+                    .start();
+        }
+        else {
+            startActivity(intent);
+        }
     }
     private void navigateToGame(GameResumeData data, boolean isResumedGame) {
         Gson gson = new Gson();
@@ -344,7 +361,18 @@ public class MatchmakingActivity extends BaseActivity {
         intent.putExtra("currentQuestion", data.getCurrentQuestion());
 
         intent.putExtra("isResumedGame", isResumedGame);
-        startActivity(intent);
+        View rootView = findViewById(android.R.id.content);
+        rootView.animate()
+                .alpha(0f)
+                .scaleX(0.9f)
+                .scaleY(0.9f)
+                .setDuration(1000)
+                .withEndAction(() -> {
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                    finish();
+                })
+                .start();
     }
 
     private void cancelSearchAndExit() {

@@ -1,4 +1,6 @@
 ﻿using GeoQuiz_backend.Application.Interfaces;
+using GeoQuiz_backend.Application.Payloads.Koth;
+using GeoQuiz_backend.Application.Payloads.Questions;
 using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Domain.Enums;
 using GeoQuiz_backend.Domain.Mongo;
@@ -10,13 +12,11 @@ namespace GeoQuiz_backend.Application.Services.PvP
     public class QuestionSetService : IQuestionSetService
     {
         private readonly AppDbContext _db;
-        private readonly IQuestionRepository _questionRepo;
         private readonly ICountryRepository _countryRepo;
 
-        public QuestionSetService(AppDbContext db, IQuestionRepository questionRepo, ICountryRepository countryRepo)
+        public QuestionSetService(AppDbContext db, ICountryRepository countryRepo)
         {
             _db = db;
-            _questionRepo = questionRepo;
             _countryRepo = countryRepo;
         }
 
@@ -35,25 +35,21 @@ namespace GeoQuiz_backend.Application.Services.PvP
             var seed = Random.Shared.Next();
             var rnd = new Random(seed);
 
-            var allQuestions = await _questionRepo.GetByTypeAsync(match.SelectedMode.Value);
-            var selected = allQuestions
+            var allCountries = await _countryRepo.GetAllAsync();
+            var selected = allCountries
                 .OrderBy(q => rnd.Next())
                 .Take(10)
                 .ToList();
-
-            var countriesIds = selected.Select(q => RemoveLastUnderscorePart(q.Id)).ToList();
-            var countries = await _countryRepo.GetByIdsAsync(countriesIds);
 
             var questionSet = new QuestionSet
             {
                 Id = Guid.NewGuid(),
                 PvPMatchId = matchId,
                 Mode = match.SelectedMode.Value,
-                Language = AppLanguage.En,
                 Seed = seed,
                 CreatedAt = DateTime.UtcNow,
-                QuestionIds = selected.Select(q => q.Id).ToList(),
-                Regions = countries.Select(c => c.RegionEnum).ToList(),
+                CountryIds = selected.Select(s => s.Id).ToList(),
+                Regions = selected.Select(s => s.RegionEnum).ToList(),
             };
 
             match.QuestionSet = questionSet;
@@ -62,26 +58,123 @@ namespace GeoQuiz_backend.Application.Services.PvP
             await _db.SaveChangesAsync();
             return questionSet;
         }
-
-        public async Task<List<Question>> GetQuestionsAsync(Guid matchId)
+        public async Task<List<GameQuestion>> GenerateQuestionsAsync(int count, int seed, GameMode mode)
         {
-            var set = await _db.QuestionSets
-                .FirstAsync(q => q.PvPMatchId == matchId);
+            var questions = new List<GameQuestion>();
+            var allCountries = await _countryRepo.GetAllAsync();
 
-            return await _questionRepo.GetByIdsAsync(set.QuestionIds);
-        }
-        public static string RemoveLastUnderscorePart(string input)
-        {
-            if (string.IsNullOrEmpty(input)) return input;
+            var random = new Random(seed);
 
-            for (int i = input.Length - 1; i >= 0; i--)
+            var selectedCountries = allCountries
+                .OrderBy(x => random.Next())
+                .Take(count)
+                .ToList();
+
+            foreach (var country in selectedCountries)
             {
-                if (input[i] == '_')
+                var optionRandom = new Random(seed + country.Id.GetHashCode());
+
+                var options = new List<GameOption>();
+                var correctOption = new GameOption
                 {
-                    return input.Substring(0, i);
+                    Index = 0,
+                    Text = GetLocalizedTextForCountry(country, mode)
+                };
+
+                var wrongCountries = allCountries
+                    .Where(c => c.Id != country.Id)
+                    .OrderBy(x => optionRandom.Next())
+                    .Take(3)
+                    .ToList();
+
+                options.Add(correctOption);
+                foreach (var wrongCountry in wrongCountries)
+                {
+                    options.Add(new GameOption
+                    {
+                        Index = options.Count,
+                        Text = GetLocalizedTextForCountry(wrongCountry, mode)
+                    });
                 }
+
+                options = options.OrderBy(x => optionRandom.Next()).ToList();
+
+                var correctIndex = options.FindIndex(o =>
+                    o.Text.Ru == correctOption.Text.Ru &&
+                    o.Text.En == correctOption.Text.En);
+
+                questions.Add(new GameQuestion
+                {
+                    CountryId = country.Id,
+                    QuestionText = GetQuestionLocalizedText(mode, country),
+                    Options = options,
+                    CorrectOptionIndex = correctIndex,
+                    ImageUrl = GetImageUrl(mode, country),
+                    AudioUrl = GetAudioUrl(mode, country)
+                });
             }
-            return input;
+
+            return questions;
+        }
+        private LocalizedText GetLocalizedTextForCountry(Country country, GameMode mode)
+        {
+            return mode switch
+            {
+                GameMode.Capital => country.Capital,
+                GameMode.Flag => country.Name,
+                GameMode.Outline => country.Name,
+                GameMode.Language => country.Name,
+                _ => country.Name
+            };
+        }
+
+        private LocalizedText GetQuestionLocalizedText(GameMode mode, Country country)
+        {
+            return mode switch
+            {
+                GameMode.Capital => new LocalizedText
+                {
+                    Ru = $"Столица страны {country.Name.Ru}?",
+                    En = $"Capital of {country.Name.En}?"
+                },
+                GameMode.Flag => new LocalizedText
+                {
+                    Ru = "Флаг какой страны?",
+                    En = "Which country's flag?"
+                },
+                GameMode.Outline => new LocalizedText
+                {
+                    Ru = "Контур какой страны?",
+                    En = "Which country's outline?"
+                },
+                GameMode.Language => new LocalizedText
+                {
+                    Ru = $"Официальный язык {country.Name.Ru}?",
+                    En = $"Official language of {country.Name.En}?"
+                },
+                _ => new LocalizedText
+                {
+                    Ru = "Вопрос",
+                    En = "Question"
+                }
+            };
+        }
+
+        private string? GetImageUrl(GameMode mode, Country country)
+        {
+            return mode == GameMode.Flag ? country.FlagImage
+                : mode == GameMode.Outline ? country.OutlineImage
+                : null;
+        }
+
+        private string? GetAudioUrl(GameMode mode, Country country)
+        {
+            if (mode != GameMode.Language) return null;
+
+            var languages = country.Languages;
+            if (languages == null || languages.Count == 0) return null;
+
+            return languages[Random.Shared.Next(languages.Count)].AudioUrl;
         }
     }
 }

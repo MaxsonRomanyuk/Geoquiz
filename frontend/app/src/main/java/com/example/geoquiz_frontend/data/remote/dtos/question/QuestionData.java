@@ -1,19 +1,28 @@
-package com.example.geoquiz_frontend.data.remote.dtos.pvp;
+package com.example.geoquiz_frontend.data.remote.dtos.question;
 
 import com.example.geoquiz_frontend.domain.enums.LocalizedText;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 public class QuestionData {
-    private String questionId;
+
+    @SerializedName("countryId")
+    private String countryId;
+
+    @SerializedName("questionText")
     private LocalizedText questionText;
+
+    @SerializedName("options")
     private List<OptionData> options;
-    private int questionNumber;
+
+    @SerializedName("imageUrl")
     private String imageUrl;
+
+    @SerializedName("audioUrl")
     private String audioUrl;
 
-    public String getQuestionId() { return questionId; }
-    public int getQuestionNumber() { return questionNumber; }
+    public String getCountryId() { return countryId; }
     public LocalizedText getQuestionText() { return questionText; }
     public List<OptionData> getOptions() { return options; }
     public String getImageUrl() { return imageUrl; }

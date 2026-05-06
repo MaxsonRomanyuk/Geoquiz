@@ -1,6 +1,7 @@
 ﻿using GeoQuiz_backend.Application.DTOs.KingOfTheHill;
 using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Application.Payloads.Koth;
+using GeoQuiz_backend.Application.Payloads.Questions;
 using GeoQuiz_backend.Application.Services.Bots;
 using GeoQuiz_backend.Domain.Entities;
 
@@ -62,7 +63,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
             var answer = new PlayerAnswer
             {
-                QuestionId = request.QuestionId,
+                QuestionId = request.CountryId,
                 IsCorrect = isCorrect,
                 TimeSpentMs = request.TimeSpentMs,
                 ScoreGained = scoreGained,
@@ -116,7 +117,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
                         var answer = new PlayerAnswer
                         {
-                            QuestionId = question.QuestionId,
+                            QuestionId = question.CountryId,
                             IsCorrect = botAnswer.IsCorrect,
                             TimeSpentMs = botAnswer.ResponseTimeMs,
                             ScoreGained = botAnswer.IsCorrect ? CalculateScore(botAnswer.ResponseTimeMs) : 0,
@@ -248,9 +249,9 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
         {
             return new QuestionData
             {
-                QuestionId = question.QuestionId,
+                CountryId = question.CountryId,
                 QuestionText = question.QuestionText,
-                Options = question.Options.Select(o => new OptionData
+                Options = question.Options.Select(o => new GameOption
                 {
                     Index = o.Index,
                     Text = o.Text

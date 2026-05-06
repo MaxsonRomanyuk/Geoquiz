@@ -1,5 +1,7 @@
 package com.example.geoquiz_frontend.data.remote.dtos.pvp;
 
+import com.example.geoquiz_frontend.data.remote.dtos.question.QuestionData;
+
 import java.util.List;
 
 public class GameReadyData {

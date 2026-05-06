@@ -307,7 +307,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 await notificationService.NotifyLobbyCountdownCancelled(lobbyId);
             }
         }
-
+        
         public Task<bool> IsInLobbyAsync(Guid userId)
         {
             lock (_lobbyLock)

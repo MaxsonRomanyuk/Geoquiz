@@ -342,24 +342,24 @@ namespace GeoQuiz_backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("CountryIds")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("Difficality")
+                        .HasColumnType("int");
+
                     b.Property<Guid?>("KothMatchId")
                         .HasColumnType("char(36)");
-
-                    b.Property<int>("Language")
-                        .HasColumnType("int");
 
                     b.Property<int>("Mode")
                         .HasColumnType("int");
 
                     b.Property<Guid?>("PvPMatchId")
                         .HasColumnType("char(36)");
-
-                    b.Property<string>("QuestionIds")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Regions")
                         .IsRequired()

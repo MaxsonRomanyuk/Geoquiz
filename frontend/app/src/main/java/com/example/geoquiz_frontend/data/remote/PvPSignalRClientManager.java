@@ -227,11 +227,11 @@ public class PvPSignalRClientManager {
             hubConnection.send("PlayerReadyForGame", matchId);
         }
     }
-    public void submitAnswer(String matchId, String questionId, int selectedIndex,
+    public void submitAnswer(String matchId, String countryId, int selectedIndex,
                              int timeSpentMs, int questionNumber) {
         if (hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
             SubmitAnswerRequest request = new SubmitAnswerRequest(
-                    matchId, questionId, selectedIndex, timeSpentMs, questionNumber);
+                    matchId, countryId, selectedIndex, timeSpentMs, questionNumber);
             hubConnection.send("SubmitAnswer", request);
             Log.d(TAG, "SubmitAnswer sent for question " + questionNumber);
         }

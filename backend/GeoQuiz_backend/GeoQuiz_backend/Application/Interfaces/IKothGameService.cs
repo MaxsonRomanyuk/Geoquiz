@@ -11,5 +11,6 @@ namespace GeoQuiz_backend.Application.Interfaces
         Task LeaveMatchAsync(Guid userId, Guid matchId);
         Task<KothGameState?> GetGameStateAsync(Guid matchId);
         DateTime? GetRoundTimerEndsAt(Guid matchId);
+        int GetExpectedCount(Guid matchId);
     }
 }

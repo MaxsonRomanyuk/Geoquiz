@@ -1,4 +1,6 @@
-﻿using GeoQuiz_backend.Domain.Entities;
+﻿using GeoQuiz_backend.Application.Payloads.Koth;
+using GeoQuiz_backend.Application.Payloads.Questions;
+using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Domain.Enums;
 using GeoQuiz_backend.Domain.Mongo;
 
@@ -63,28 +65,22 @@ namespace GeoQuiz_backend.Application.DTOs.PvP
 
         public List<QuestionData> Questions { get; set; } = new();
     }
-    public class QuestionData
-    {
-        public string QuestionId { get; set; } = null!;
-        public LocalizedText QuestionText { get; set; } = null!;
-        public List<OptionData> Options { get; set; } = new();
-        public int QuestionNumber { get; set; }
-
-        public string? ImageUrl { get; set; }
-        public string? AudioUrl { get; set; }
-    }
-    public class OptionData
-    {
-        public int Index { get; set; }
-        public LocalizedText Text { get; set; } = null!;
-    }
+    //public class QuestionData
+    //{
+    //    public string CountryId { get; set; } = null!;
+    //    public LocalizedText QuestionText { get; set; } = null!;
+    //    public List<GameOption> Options { get; set; } = new();
+    //    public string? ImageUrl { get; set; }
+    //    public string? AudioUrl { get; set; }
+    //}
+    //public class OptionData
+    //{
+    //    public int Index { get; set; }
+    //    public LocalizedText Text { get; set; } = null!;
+    //}
 
     public class TimerUpdateData
     {
-        //public Guid MatchId { get; set; }
-        //public int RemainingTimeSeconds { get; set; }
-        //public DateTime ServerTime { get; set; }
-        //public DateTime TimerEndsAt { get; set; }
         public long ServerTime { get; set; }
         public long TimerEndsAt { get; set; }
     }

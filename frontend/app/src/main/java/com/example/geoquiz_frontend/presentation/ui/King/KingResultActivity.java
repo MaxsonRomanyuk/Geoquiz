@@ -60,6 +60,7 @@ public class KingResultActivity extends BaseActivity {
             if (!achievements.isEmpty()) {
                 handleAchievementUnlocked(achievements);
             }
+            handleDisconnect();
         }, 100);
     }
 
@@ -182,7 +183,12 @@ public class KingResultActivity extends BaseActivity {
         startActivity(intent);
         finish();
     }
-
+    private void handleDisconnect()
+    {
+        if (signalRManager!= null && signalRManager.isConnected()) {
+            signalRManager.stop();
+        }
+    }
     private int getColorFromAttr(int attrResId) {
         android.util.TypedValue typedValue = new android.util.TypedValue();
         getTheme().resolveAttribute(attrResId, typedValue, true);

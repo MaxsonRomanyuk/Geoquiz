@@ -440,7 +440,7 @@ namespace GeoQuiz_backend.API.Hubs
                 BannedModes = draft.BannedModes,
                 CurrentTurnUserId = draft.CurrentTurnUserId,
                 TimerEndAt = new DateTimeOffset(timerEndsAt).ToUnixTimeMilliseconds(),
-                ServerTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                ServerTime = DateTimeOffset.UtcNow.AddSeconds(1).ToUnixTimeMilliseconds(),
                 FirstTurnStartTime = DateTime.UtcNow.AddSeconds(1)
             };
 
@@ -470,7 +470,7 @@ namespace GeoQuiz_backend.API.Hubs
                 YourCurrentScore = matchData.YourCurrentScore,
                 CurrentQuestion = matchData.YourAnswered,
                 TimerEndAt = new DateTimeOffset(timerEndsAt).ToUnixTimeMilliseconds(),
-                ServerTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                ServerTime = DateTimeOffset.UtcNow.AddSeconds(1).ToUnixTimeMilliseconds(),
                 GameData = gameData
             };
 

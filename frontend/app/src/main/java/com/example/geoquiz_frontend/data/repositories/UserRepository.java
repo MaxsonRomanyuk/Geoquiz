@@ -103,15 +103,7 @@ public class UserRepository {
         }
 
         if (!forceRefresh) {
-            UserStats cachedStats = databaseHelper.getUserStats(userId);
-            List<Achievement> achievements = getFullAchievements(userId); // for empty saved datenow
-            if (cachedStats != null && achievements!= null) {
-                ProfileResponse profileResponse = convertStatsToProfile(cachedStats);
-                userData.setValue(profileResponse);
-                userAchievements.setValue(achievements);
-                isLoading.setValue(false);
-                return;
-            }
+            if (getStatsAndAchievementFromDb(userId)) return;
         }
 
         if (apiService == null) {
@@ -151,11 +143,26 @@ public class UserRepository {
 
                 @Override
                 public void onFailure(Call<ProfileResponse> call, Throwable t) {
-                    isLoading.setValue(false);
-                    errorMessage.setValue("Network error: " + t.getMessage());
+                    if (!getStatsAndAchievementFromDb(userId)) {
+                        isLoading.setValue(false);
+                        errorMessage.setValue("Network error: " + t.getMessage());
+                    }
                 }
             });
         }
+    }
+    public boolean getStatsAndAchievementFromDb(String userId)
+    {
+        UserStats cachedStats = databaseHelper.getUserStats(userId);
+        List<Achievement> achievements = getFullAchievements(userId);
+        if (cachedStats != null && achievements!= null) {
+            ProfileResponse profileResponse = convertStatsToProfile(cachedStats);
+            userData.setValue(profileResponse);
+            userAchievements.setValue(achievements);
+            isLoading.setValue(false);
+            return true;
+        }
+        return false;
     }
     public void refreshFromDb() {
         String userId = preferencesHelper.getUserId();

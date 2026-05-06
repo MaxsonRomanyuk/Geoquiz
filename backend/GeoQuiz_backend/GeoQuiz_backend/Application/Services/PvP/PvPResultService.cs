@@ -4,8 +4,6 @@ using GeoQuiz_backend.Domain.Enums;
 using GeoQuiz_backend.Application.DTOs.PvP;
 using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 using Microsoft.EntityFrameworkCore;
-using static GeoQuiz_backend.Application.Payloads.AchievementsPayloads;
-using GeoQuiz_backend.Application.Services.Achievement;
 
 namespace GeoQuiz_backend.Application.Services.PvP
 {
@@ -192,8 +190,8 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 if (questionSet != null)
                 {
                     var regions = questionSet.Regions;
-                    var questionIds = questionSet.QuestionIds;
-                    var idRegion = questionIds
+                    var countryIds = questionSet.CountryIds;
+                    var idRegion = countryIds
                         .Zip(regions, (id, region) => new { id, region })
                         .ToDictionary(x => x.id, x => x.region);
                     foreach (var answer in answers)

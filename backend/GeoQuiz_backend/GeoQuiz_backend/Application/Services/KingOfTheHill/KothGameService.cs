@@ -16,10 +16,11 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
         private static readonly ConcurrentDictionary<Guid, KothGameState> _activeGames = new();
         private static readonly ConcurrentDictionary<Guid, CancellationTokenSource> _roundTimers = new();
         private static readonly ConcurrentDictionary<Guid, DateTime> _roundTimerEndsAt = new();
+        private static readonly ConcurrentDictionary<Guid, int> _matchExpectedPlayers = new();
 
         private readonly AppDbContext _db;
-        private readonly IQuestionRepository _questionRepo;
         private readonly ICountryRepository _countryRepo;
+        private readonly IQuestionSetService _questionSetService;
         private readonly ISignalRNotificationService _notificationService;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IKothRoundService _roundService;
@@ -28,8 +29,8 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
         public KothGameService(
             AppDbContext db,
-            IQuestionRepository questionRepo,
             ICountryRepository countryRepo,
+            IQuestionSetService questionSetService,
             ISignalRNotificationService notificationService,
             IServiceScopeFactory serviceScopeFactory,
             IKothRoundService roundService,
@@ -37,8 +38,8 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             ILogger<KothGameService> logger)
         {
             _db = db;
-            _questionRepo = questionRepo;
             _countryRepo = countryRepo;
+            _questionSetService = questionSetService;
             _notificationService = notificationService;
             _serviceScopeFactory = serviceScopeFactory;
             _roundService = roundService;
@@ -49,8 +50,9 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
         public async Task StartMatchFromLobbyAsync(List<PlayerInfo> realPlayers, Guid lobbyId)
         {
             var matchId = Guid.NewGuid();
-            var gameState = await CreateGameStateAsync(matchId, realPlayers);
+            _matchExpectedPlayers[matchId] = realPlayers.Count;
 
+            var gameState = await CreateGameStateAsync(matchId, realPlayers);
             _activeGames[matchId] = gameState;
 
             var matchStartedData = new MatchStartedData
@@ -228,7 +230,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     Id = Guid.NewGuid(),
                     MatchId = matchId,
                     UserId = userId,
-                    QuestionId = request.QuestionId,
+                    QuestionId = request.CountryId,
                     RoundNumber = request.RoundNumber,
                     IsCorrect = result.IsCorrect,
                     TimeSpentMs = request.TimeSpentMs,
@@ -370,6 +372,11 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             _activeGames.TryGetValue(matchId, out var gameState);
             return Task.FromResult(gameState);
         }
+        public int GetExpectedCount(Guid matchId)
+        {
+            _matchExpectedPlayers.TryGetValue(matchId, out var count);
+            return count;
+        }
         public DateTime? GetRoundTimerEndsAt(Guid matchId)
         {
             if (_roundTimerEndsAt.TryGetValue(matchId, out var endTime))
@@ -400,8 +407,9 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             _logger.LogInformation("Creating game state for match {MatchId}: {PlayerCount} players, {MaxQuestions} max questions, seed: {Seed}",
                 matchId, allPlayers.Count, maxQuestions, seed);
 
-            var questions = await GenerateQuestionsAsync(maxQuestions, seed, randomMode);
-            var countriesIds = questions.Select(q => RemoveLastUnderscorePart(q.QuestionId)).ToList();
+            var questions = await _questionSetService.GenerateQuestionsAsync(maxQuestions, seed, randomMode);
+            //var questions = await GenerateQuestionsAsync(maxQuestions, seed, randomMode);
+            var countriesIds = questions.Select(q => q.CountryId).ToList();
             var countries = await _countryRepo.GetByIdsAsync(countriesIds);
 
             var questionSet = new QuestionSet
@@ -409,10 +417,9 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 Id = Guid.NewGuid(),
                 KothMatchId = matchId,
                 Mode = randomMode,
-                Language = AppLanguage.Ru,
                 Seed = seed,
                 CreatedAt = DateTime.UtcNow,
-                QuestionIds = questions.Select(q => q.QuestionId).ToList(),
+                CountryIds = countries.Select(c => c.Id).ToList(),
                 Regions = countries.Select(c => c.RegionEnum).ToList(),
             };
 
@@ -478,67 +485,6 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
             return gameState;
         }
-        private async Task<List<GameQuestion>> GenerateQuestionsAsync(int count, int seed, GameMode mode)
-        {
-            var questions = new List<GameQuestion>();
-            var allQuestions = await _questionRepo.GetByTypeAsync(mode);
-            var allCountries = await _countryRepo.GetAllAsync();
-
-            var random = new Random(seed);
-
-            var selectedQuestions = allQuestions
-                .OrderBy(x => random.Next())
-                .Take(count)
-                .ToList();
-
-            foreach (var question in selectedQuestions)
-            {
-                var country = allCountries.First(c => c.Id == question.CountryId);
-
-                var optionRandom = new Random(seed + question.Id.GetHashCode());
-
-                var options = new List<GameOption>();
-                var correctOption = new GameOption
-                {
-                    Index = 0,
-                    Text = GetLocalizedTextForCountry(country, question.Type)
-                };
-
-                var wrongCountries = allCountries
-                    .Where(c => c.Id != country.Id)
-                    .OrderBy(x => optionRandom.Next())
-                    .Take(3)
-                    .ToList();
-
-                options.Add(correctOption);
-                foreach (var wrongCountry in wrongCountries)
-                {
-                    options.Add(new GameOption
-                    {
-                        Index = options.Count,
-                        Text = GetLocalizedTextForCountry(wrongCountry, question.Type)
-                    });
-                }
-
-                options = options.OrderBy(x => optionRandom.Next()).ToList();
-
-                var correctIndex = options.FindIndex(o =>
-                    o.Text.Ru == correctOption.Text.Ru &&
-                    o.Text.En == correctOption.Text.En);
-
-                questions.Add(new GameQuestion
-                {
-                    QuestionId = question.Id,
-                    QuestionText = GetQuestionLocalizedText(question.Type, country),
-                    Options = options,
-                    CorrectOptionIndex = correctIndex,
-                    ImageUrl = GetImageUrl(question.Type, country),
-                    AudioUrl = GetAudioUrl(question.Type, country)
-                });
-            }
-
-            return questions;
-        }
         private async Task SavePendingAnswersAsync(KothGameState gameState)
         {
             List<KothAnswer> answers;
@@ -596,61 +542,6 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             }
 
             return results;
-        }
-        private LocalizedText GetLocalizedTextForCountry(Country country, GameMode mode)
-        {
-            return mode switch
-            {
-                GameMode.Capital => country.Capital,
-                GameMode.Flag => country.Name,
-                GameMode.Outline => country.Name,
-                GameMode.Language => country.Name,
-                _ => country.Name
-            };
-        }
-
-        private LocalizedText GetQuestionLocalizedText(GameMode mode, Country country)
-        {
-            return mode switch
-            {
-                GameMode.Capital => new LocalizedText
-                {
-                    Ru = $"Столица страны {country.Name.Ru}?",
-                    En = $"Capital of {country.Name.En}?"
-                },
-                GameMode.Flag => new LocalizedText
-                {
-                    Ru = "Флаг какой страны?",
-                    En = "Which country's flag?"
-                },
-                GameMode.Outline => new LocalizedText
-                {
-                    Ru = "Контур какой страны?",
-                    En = "Which country's outline?"
-                },
-                GameMode.Language => new LocalizedText
-                {
-                    Ru = $"Официальный язык {country.Name.Ru}?",
-                    En = $"Official language of {country.Name.En}?"
-                },
-                _ => new LocalizedText
-                {
-                    Ru = "Вопрос",
-                    En = "Question"
-                }
-            };
-        }
-
-        private string? GetImageUrl(GameMode mode, Country country)
-        {
-            return mode == GameMode.Flag ? country.FlagImage
-                : mode == GameMode.Outline ? country.OutlineImage
-                : null;
-        }
-
-        private string? GetAudioUrl(GameMode mode, Country country)
-        {
-            return mode == GameMode.Language ? country.LanguageAudio : null;
         }
         public static string RemoveLastUnderscorePart(string input)
         {

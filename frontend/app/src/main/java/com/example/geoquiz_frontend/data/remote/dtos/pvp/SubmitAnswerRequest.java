@@ -2,7 +2,7 @@ package com.example.geoquiz_frontend.data.remote.dtos.pvp;
 
 public class SubmitAnswerRequest {
     private String matchId;
-    private String questionId;
+    private String countryId;
     private int selectedIndex;
     private int timeSpentMs;
     private int questionNumber;
@@ -10,14 +10,14 @@ public class SubmitAnswerRequest {
     public SubmitAnswerRequest(String matchId, String questionId,
                                int selectedIndex, int timeSpentMs, int questionNumber) {
         this.matchId = matchId;
-        this.questionId = questionId;
+        this.countryId = questionId;
         this.selectedIndex = selectedIndex;
         this.timeSpentMs = timeSpentMs;
         this.questionNumber = questionNumber;
     }
 
     public String getMatchId() { return matchId; }
-    public String getQuestionId() { return questionId; }
+    public String getCountryId() { return countryId; }
     public int getSelectedIndex() { return selectedIndex; }
     public int getTimeSpentMs() { return timeSpentMs; }
     public int getQuestionNumber() { return questionNumber; }

@@ -18,6 +18,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
+import com.example.geoquiz_frontend.data.remote.dtos.question.OptionData;
+import com.example.geoquiz_frontend.data.remote.dtos.question.QuestionData;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
 import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
@@ -449,7 +451,9 @@ public class KingGameActivity extends BaseActivity {
 
     private void handleMatchFinished(MatchFinishedData data) {
         Log.d(TAG, "Match finished! Winner: " + data.getWinnerId());
-
+        if (signalRManager != null) {
+            signalRManager.removeListener(activityId);
+        }
         Gson gson = new Gson();
         String matchDataJson = gson.toJson(data);
 
@@ -470,7 +474,7 @@ public class KingGameActivity extends BaseActivity {
 
         setOptionsEnabled(false);
 
-        signalRManager.submitAnswer(matchId, currentRound, currentQuestion.getQuestionId(), index,  (int) answerTime);
+        signalRManager.submitAnswer(matchId, currentRound, currentQuestion.getCountryId(), index,  (int) answerTime);
     }
 
     private void startTimer(long serverTime, long endAt) {

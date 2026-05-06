@@ -62,7 +62,6 @@ public class GameRepository {
 
     private List<PendingGame> pendingGames;
     private Map<String, BootstrapResponse.CountryDto> countriesCache;
-    private Map<Integer, List<BootstrapResponse.QuestionDto>> questionsCache;
 
     public GameRepository(Context context) {
         ApiClient.init(context);
@@ -75,11 +74,10 @@ public class GameRepository {
         this.executorService = Executors.newSingleThreadExecutor();
         this.pendingGames = loadPendingGames();
         this.countriesCache = new HashMap<>();
-        this.questionsCache = new HashMap<>();
     }
 
     public void loadBootstrapData(BootstrapCallback callback) {
-        if (!countriesCache.isEmpty() && !questionsCache.isEmpty()) {
+        if (!countriesCache.isEmpty()) {
             callback.onSuccess(null);
             return;
         }
@@ -161,10 +159,7 @@ public class GameRepository {
                     return;
                 }
 
-                Log.d(TAG, "Загружено из assets: " +
-                        (data.getCountries() != null ? data.getCountries().size() : 0) + " стран, " +
-                        (data.getQuestions() != null ? data.getQuestions().size() : 0) + " вопросов");
-
+                Log.d(TAG, "Загружено из assets: " + (data.getCountries() != null ? data.getCountries().size() : 0) + " стран, ");
                 saveBootstrapData(data, callback);
 
             } catch (Exception e) {
@@ -216,57 +211,44 @@ public class GameRepository {
     }
     private void loadDataFromDatabase() {
         countriesCache.clear();
-        questionsCache.clear();
 
         List<BootstrapResponse.CountryDto> countries = dbHelper.getAllCountries();
         for (BootstrapResponse.CountryDto country : countries) {
             countriesCache.put(country.getId(), country);
         }
 
-        for (GameMode mode : GameMode.values()) {
-            List<BootstrapResponse.QuestionDto> questions = dbHelper.getQuestionsByType(mode.getValue());
-            questionsCache.put(mode.getValue(), questions);
-        }
 
-        Log.d(TAG, String.format(Locale.US,
-                "Загружено %d стран и %d вопросов",
-                countriesCache.size(),
-                questionsCache.values().stream().mapToInt(List::size).sum()));
+        Log.d(TAG, String.format(Locale.US, "Загружено %d стран", countriesCache.size()));
     }
 
     public List<GameQuestion> getQuestionsForMode(int mode, int count) {
-        List<GameQuestion> result = new ArrayList<>();
 
-        List<BootstrapResponse.QuestionDto> questionDtos = questionsCache.get(mode);
-        if (questionDtos == null || questionDtos.isEmpty()) {
-            Log.e(TAG, "Нет вопросов для режима: " + mode);
-            return result;
-        }
+        List<GameQuestion> result = new ArrayList<>();
 
         String language = preferencesHelper.getLanguage();
 
-        List<BootstrapResponse.QuestionDto> shuffled = new ArrayList<>(questionDtos);
-        Collections.shuffle(shuffled);
+        List<BootstrapResponse.CountryDto> countries =
+                new ArrayList<>(countriesCache.values());
 
-        int limit = Math.min(count, shuffled.size());
+        Collections.shuffle(countries);
+
+        int limit = Math.min(count, countries.size());
+
         for (int i = 0; i < limit; i++) {
-            BootstrapResponse.QuestionDto q = shuffled.get(i);
-            BootstrapResponse.CountryDto country = countriesCache.get(q.getCountryId());
 
-            if (country != null) {
-                GameQuestion question = createQuestion(q, country, mode, language);
-                result.add(question);
-            }
+            BootstrapResponse.CountryDto country =
+                    countries.get(i);
+
+            GameQuestion question =
+                    createQuestion(country, mode, language);
+
+            result.add(question);
         }
-
-        Log.d(TAG, String.format(Locale.US,
-                "Сгенерировано %d вопросов для режима %s на языке %s",
-                result.size(), mode, language));
 
         return result;
     }
 
-    private GameQuestion createQuestion(BootstrapResponse.QuestionDto q, BootstrapResponse.CountryDto country, int mode, String language) {
+    private GameQuestion createQuestion(BootstrapResponse.CountryDto country, int mode, String language) {
         String questionText = "";
         List<String> options = new ArrayList<>();
         String mediaUrl = null;
@@ -320,8 +302,16 @@ public class GameRepository {
                 questionText = language.equals("ru") ?
                         "Язык какой страны звучит?" :
                         "Which country's language is this?";
-                mediaUrl = country.getLanguageAudio();
+                if (country.getLanguages() != null
+                        && !country.getLanguages().isEmpty()) {
+
+                    BootstrapResponse.CountryDto.CountryLanguageDto lang =
+                            country.getLanguages().get(0);
+
+                    mediaUrl = lang.getAudioUrl();
+                }
                 options.add(countryName);
+                // дублирование ответов
                 for (BootstrapResponse.CountryDto other : otherCountries) {
                     options.add(language.equals("ru") ?
                             other.getName().getRu() : other.getName().getEn());
@@ -354,7 +344,7 @@ public class GameRepository {
         );
 
         return new GameQuestion(
-                q.getId(),
+                UUID.randomUUID().toString(),
                 country.getId(),
                 questionText,
                 options,

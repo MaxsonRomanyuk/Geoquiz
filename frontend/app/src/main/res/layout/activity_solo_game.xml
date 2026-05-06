@@ -73,19 +73,21 @@
 
     <FrameLayout
         android:id="@+id/image_container"
-        android:layout_width="240dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:background="?attr/colorSurfaceInverse"
-        android:visibility="gone">
+        android:layout_marginHorizontal="24dp"
+        android:background="@drawable/border"
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/iv_question_image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:maxHeight="250dp"
             android:scaleType="fitCenter"
-            android:padding="4dp"/>
+            android:padding="1dp"/>
     </FrameLayout>
 
     <Button

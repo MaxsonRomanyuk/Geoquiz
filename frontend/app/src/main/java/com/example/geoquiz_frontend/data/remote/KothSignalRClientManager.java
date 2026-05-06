@@ -268,10 +268,10 @@ public class KothSignalRClientManager {
             this.currentMatchId = null;
         }
     }
-    public void submitAnswer(String matchId, int roundNumber, String questionId, int selectedOptionIndex, int timeSpentMs) {
+    public void submitAnswer(String matchId, int roundNumber, String countryId, int selectedOptionIndex, int timeSpentMs) {
         if (hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
             SubmitAnswerRequest request = new SubmitAnswerRequest(
-                    matchId, roundNumber, questionId, selectedOptionIndex, timeSpentMs
+                    matchId, roundNumber, countryId, selectedOptionIndex, timeSpentMs
             );
             hubConnection.send("SubmitAnswer", request);
             Log.d(TAG, "SubmitAnswer sent for round " + roundNumber);

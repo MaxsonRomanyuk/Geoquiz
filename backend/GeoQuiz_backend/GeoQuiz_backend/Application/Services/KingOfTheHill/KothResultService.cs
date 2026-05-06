@@ -199,8 +199,8 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     if (questionSet != null)
                     {
                         var regions = questionSet.Regions;
-                        var questionIds = questionSet.QuestionIds;
-                        var idRegion = questionIds
+                        var countryIds = questionSet.CountryIds;
+                        var idRegion = countryIds
                             .Zip(regions, (id, region) => new { id, region })
                             .ToDictionary(x => x.id, x => x.region);
                         foreach (var answer in answers)

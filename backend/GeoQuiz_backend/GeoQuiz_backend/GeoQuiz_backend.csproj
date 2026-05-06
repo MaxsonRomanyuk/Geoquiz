@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="Infrastructure\Persistence\MySQL\Repositories\" />
+    <Folder Include="seedData\" />
   </ItemGroup>
 
 </Project>

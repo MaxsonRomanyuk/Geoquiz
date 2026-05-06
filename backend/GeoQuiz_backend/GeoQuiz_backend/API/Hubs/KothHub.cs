@@ -1,7 +1,9 @@
 ﻿using GeoQuiz_backend.API.HubClients;
 using GeoQuiz_backend.Application.DTOs.KingOfTheHill;
+using GeoQuiz_backend.Application.DTOs.PvP;
 using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Application.Payloads.Koth;
+using GeoQuiz_backend.Application.Payloads.Questions;
 using GeoQuiz_backend.Application.Services.PvP;
 using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Domain.Mongo;
@@ -21,7 +23,6 @@ namespace GeoQuiz_backend.API.Hubs
         private readonly ISignalRNotificationService _notificationService;
         private readonly ILogger<KothHub> _logger;
 
-        //private static readonly ConcurrentDictionary<Guid, string> _userConnections = new();
         private static readonly ConcurrentDictionary<Guid, UserKothSession> _userSessions = new();
         private static readonly ConcurrentDictionary<Guid, Guid> _userCurrentLobby = new();
         private static readonly ConcurrentDictionary<Guid, Guid> _userCurrentMatch = new();
@@ -131,7 +132,6 @@ namespace GeoQuiz_backend.API.Hubs
                 if (session.IsInLobby)
                 {
                     _logger.LogWarning("User {UserId} already in lobby", userId);
-                    // ищем новое лобби
                     return;
                 }
                 else if (session.IsInMatch && session.CurrentMatchId.HasValue)
@@ -212,35 +212,6 @@ namespace GeoQuiz_backend.API.Hubs
                 throw new HubException("Failed to leave lobby");
             }
         }
-        public async Task PlayerReadyForGame(Guid matchId)
-        {
-            var userId = GetUserId();
-            if (!_activeMatches.TryGetValue(matchId, out var matchState))
-            {
-                _logger.LogWarning("Match {MatchId} not found in active matches for user {UserId}", matchId, userId);
-                return;
-            }
-
-            matchState[userId] = true;
-            _logger.LogWarning("Start next round for user {UserId} at {date}", userId, DateTime.UtcNow.ToString());
-
-            if (_roundStarted.ContainsKey(matchId))
-                return;
-
-            var gameReady = matchState.Values.All(ready => ready);
-            
-            if (gameReady)
-            {
-                if (_roundStarted.TryAdd(matchId, true))
-                {
-                    _logger.LogInformation("All players ready for match {MatchId}, starting round", matchId);
-                    _ = Task.Run(async () =>
-                    {
-                        await _gameService.StartNextRoundAsync(matchId);
-                    });
-                }
-            }
-        }
         public async Task JoinMatch(Guid matchId)
         {
             var userId = GetUserId();
@@ -276,7 +247,43 @@ namespace GeoQuiz_backend.API.Hubs
 
             _logger.LogInformation("User {UserId} moved from lobby {LobbyId} to match {MatchId}", userId, lobbyId, matchId);
         }
+        public async Task PlayerReadyForGame(Guid matchId)
+        {
+            var userId = GetUserId();
+            if (!_activeMatches.TryGetValue(matchId, out var matchState))
+            {
+                _logger.LogWarning("Match {MatchId} not found in active matches for user {UserId}", matchId, userId);
+                return;
+            }
 
+            matchState[userId] = true;
+            _logger.LogWarning("Start next round for user {UserId} at {date}", userId, DateTime.UtcNow.ToString());
+
+            if (_roundStarted.ContainsKey(matchId))
+                return;
+
+            var expectedCount = _gameService.GetExpectedCount(matchId);
+            var joinedCount = matchState.Count;
+            _logger.LogWarning("expectedCount {expectedCount} and joinedCount {joinedCount}", expectedCount, joinedCount);
+            if (joinedCount < expectedCount)
+            {
+                _logger.LogWarning("Not all players joined yet for match {MatchId}", matchId);
+                return;
+            }
+            var allReady = matchState.Values.All(ready => ready);
+            
+            if (allReady)
+            {
+                if (_roundStarted.TryAdd(matchId, true))
+                {
+                    _logger.LogInformation("All players ready for match {MatchId}, starting round", matchId);
+                    _ = Task.Run(async () =>
+                    {
+                        await _gameService.StartNextRoundAsync(matchId);
+                    });
+                }
+            }
+        }
         public async Task LeaveMatch(Guid matchId)
         {
             var userId = GetUserId();
@@ -294,7 +301,7 @@ namespace GeoQuiz_backend.API.Hubs
             //_userCurrentLobby.TryRemove(userId, out _);
         }
 
-        public async Task SubmitAnswer(SubmitAnswerRequest request)
+        public async Task SubmitAnswer(Application.DTOs.KingOfTheHill.SubmitAnswerRequest request)
         {
             var userId = GetUserId();
             _logger.LogInformation("User {UserId} submitting answer for round {RoundNumber} in match {MatchId}", userId, request.RoundNumber, request.MatchId);
@@ -367,7 +374,7 @@ namespace GeoQuiz_backend.API.Hubs
                 RoundNumber = gameState.CurrentRound,
                 RoundType = gameState.CurrentRoundType == RoundType.Classic ? 1 : 2,
                 Question = MapToQuestionData(question),
-                ServerTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                ServerTime = DateTimeOffset.UtcNow.AddSeconds(1).ToUnixTimeMilliseconds(),
                 RoundEndAt = new DateTimeOffset(timerEndsAt).ToUnixTimeMilliseconds()
             };
 
@@ -386,9 +393,9 @@ namespace GeoQuiz_backend.API.Hubs
         {
             return new QuestionData
             {
-                QuestionId = question.QuestionId,
+                CountryId = question.CountryId,
                 QuestionText = question.QuestionText,
-                Options = question.Options.Select(o => new OptionData
+                Options = question.Options.Select(o => new GameOption
                 {
                     Index = o.Index,
                     Text = o.Text

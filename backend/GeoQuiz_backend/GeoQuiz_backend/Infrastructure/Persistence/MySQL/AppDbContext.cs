@@ -272,10 +272,11 @@ namespace GeoQuiz_backend.Infrastructure.Persistence.MySQL
                 entity.Property(e => e.Mode)
                     .IsRequired();
 
-                entity.Property(e => e.Language)
-                    .IsRequired();
+                entity.Property(e => e.Difficality)
+                    //.IsRequired()
+                    .HasDefaultValue(1);
 
-                entity.Property(e => e.QuestionIds)
+                entity.Property(e => e.CountryIds)
                     .HasConversion(
                         v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
                         v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new()

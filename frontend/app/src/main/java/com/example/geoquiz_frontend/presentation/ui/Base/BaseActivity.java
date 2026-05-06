@@ -172,7 +172,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void hideConnectionBanner() {
-        Toast.makeText(this, "HIDE", Toast.LENGTH_SHORT).show();
         if (connectionStatusBanner == null || connectionStatusBanner.getVisibility() != View.VISIBLE) {
             return;
         }

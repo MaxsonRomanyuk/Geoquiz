@@ -429,18 +429,8 @@ public class KingLobbyActivity extends BaseActivity {
                 //intent.putExtra("total_rounds", data.getTotalRounds());
                 intent.putExtra("all_players", new ArrayList<>(data.getAllPlayers()));
 
-                View rootView = findViewById(android.R.id.content);
-                rootView.animate()
-                        .alpha(0f)
-                        .scaleX(0.9f)
-                        .scaleY(0.9f)
-                        .setDuration(1000)
-                        .withEndAction(() -> {
-                            startActivity(intent);
-                            overridePendingTransition(0, 0);
-                            finish();
-                        })
-                        .start();
+                startActivity(intent);
+                finish();
             }
             @Override
             public void onFailure(String error) {

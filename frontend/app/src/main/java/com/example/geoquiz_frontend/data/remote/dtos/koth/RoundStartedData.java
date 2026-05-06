@@ -1,5 +1,6 @@
 package com.example.geoquiz_frontend.data.remote.dtos.koth;
 
+import com.example.geoquiz_frontend.data.remote.dtos.question.QuestionData;
 import com.example.geoquiz_frontend.domain.enums.RoundType;
 import com.google.gson.annotations.SerializedName;
 

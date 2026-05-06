@@ -29,11 +29,11 @@ import java.util.TimeZone;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "GameDatabaseHelper";
     private static final String DATABASE_NAME = "geoquiz.db";
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 10;
 
 
     private static final String TABLE_COUNTRIES = "countries";
-    private static final String COLUMN_COUNTRY_ID = "_id";
+    private static final String COLUMN_COUNTRY_ID = "country_id";
     private static final String COLUMN_COUNTRY_NAME_RU = "name_ru";
     private static final String COLUMN_COUNTRY_NAME_EN = "name_en";
     private static final String COLUMN_COUNTRY_CAPITAL_RU = "capital_ru";
@@ -41,15 +41,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_COUNTRY_REGION = "region";
     private static final String COLUMN_COUNTRY_FLAG_IMAGE = "flag_image";
     private static final String COLUMN_COUNTRY_OUTLINE_IMAGE = "outline_image";
-    private static final String COLUMN_COUNTRY_LANGUAGE_AUDIO = "language_audio";
 
 
-
-    private static final String TABLE_QUESTIONS = "questions";
-    private static final String COLUMN_QUESTION_ID = "_id";
-    private static final String COLUMN_QUESTION_COUNTRY_ID = "country_id";
-    private static final String COLUMN_QUESTION_DIFFICULTY = "difficulty";
-    private static final String COLUMN_QUESTION_TYPE = "type";
+    private static final String TABLE_COUNTRY_LANGUAGES = "country_languages";
+    private static final String COLUMN_LANGUAGE_ID = "language_id";
+    private static final String COLUMN_LANGUAGE_COUNTRY_ID = "country_id";
+    private static final String COLUMN_LANGUAGE_NAME_RU = "name_ru";
+    private static final String COLUMN_LANGUAGE_NAME_EN = "name_en";
+    private static final String COLUMN_LANGUAGE_AUDIO = "audio_url";
 
 
 
@@ -103,18 +102,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_COUNTRY_CAPITAL_EN + " TEXT NOT NULL,"
                 + COLUMN_COUNTRY_REGION + " TEXT,"
                 + COLUMN_COUNTRY_FLAG_IMAGE + " TEXT,"
-                + COLUMN_COUNTRY_OUTLINE_IMAGE + " TEXT,"
-                + COLUMN_COUNTRY_LANGUAGE_AUDIO + " TEXT)";
+                + COLUMN_COUNTRY_OUTLINE_IMAGE + " TEXT)";
         db.execSQL(createCountriesTable);
 
-        String createQuestionsTable = "CREATE TABLE " + TABLE_QUESTIONS + "("
-                + COLUMN_QUESTION_ID + " TEXT PRIMARY KEY,"
-                + COLUMN_QUESTION_COUNTRY_ID + " TEXT NOT NULL,"
-                + COLUMN_QUESTION_DIFFICULTY + " INTEGER NOT NULL,"
-                + COLUMN_QUESTION_TYPE + " INTEGER NOT NULL,"
-                + "FOREIGN KEY(" + COLUMN_QUESTION_COUNTRY_ID + ") REFERENCES "
+        String createLanguagesTable = "CREATE TABLE " + TABLE_COUNTRY_LANGUAGES + "("
+                + COLUMN_LANGUAGE_ID + " TEXT NOT NULL,"
+                + COLUMN_LANGUAGE_COUNTRY_ID + " TEXT NOT NULL,"
+                + COLUMN_LANGUAGE_NAME_RU + " TEXT NOT NULL,"
+                + COLUMN_LANGUAGE_NAME_EN + " TEXT NOT NULL,"
+                + COLUMN_LANGUAGE_AUDIO + " TEXT NOT NULL,"
+                + "PRIMARY KEY (" + COLUMN_LANGUAGE_COUNTRY_ID + ", " + COLUMN_LANGUAGE_ID + "),"
+                + "FOREIGN KEY(" + COLUMN_LANGUAGE_COUNTRY_ID + ") REFERENCES "
                 + TABLE_COUNTRIES + "(" + COLUMN_COUNTRY_ID + "))";
-        db.execSQL(createQuestionsTable);
+
+        db.execSQL(createLanguagesTable);
 
         String createUserStatsTable = "CREATE TABLE " + TABLE_USER_STATS + "("
                 + COLUMN_USER_ID + " TEXT PRIMARY KEY,"
@@ -149,8 +150,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + "PRIMARY KEY (" + COLUMN_UID + ", " + COLUMN_CODE + "))";
         db.execSQL(createUserAchievementsTable);
 
-        db.execSQL("CREATE INDEX idx_questions_type ON " + TABLE_QUESTIONS + "(" + COLUMN_QUESTION_TYPE + ")");
-        db.execSQL("CREATE INDEX idx_questions_country ON " + TABLE_QUESTIONS + "(" + COLUMN_QUESTION_COUNTRY_ID + ")");
         db.execSQL("CREATE INDEX idx_user_stats_user ON " + TABLE_USER_STATS + "(" + COLUMN_USER_ID + ")");
         db.execSQL("CREATE INDEX idx_user_achievements ON " + TABLE_USER_ACHIEVEMENTS + "(" + COLUMN_UID + ")");
     }
@@ -159,61 +158,56 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(TAG, "Обновление БД с версии " + oldVersion + " до " + newVersion);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COUNTRIES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUESTIONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COUNTRY_LANGUAGES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_STATS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_ACHIEVEMENTS);
         onCreate(db);
     }
-
     public void saveBootstrapData(BootstrapResponse data) {
-        Log.d(TAG, "Начало сохранения в БД");
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
 
         try {
-            int deletedCountries = db.delete(TABLE_COUNTRIES, null, null);
-            int deletedQuestions = db.delete(TABLE_QUESTIONS, null, null);
+
+            db.delete(TABLE_COUNTRY_LANGUAGES, null, null);
+            db.delete(TABLE_COUNTRIES, null, null);
 
             if (data.getCountries() != null) {
                 for (BootstrapResponse.CountryDto country : data.getCountries()) {
-                    ContentValues values = new ContentValues();
-                    values.put(COLUMN_COUNTRY_ID, country.getId());
-                    values.put(COLUMN_COUNTRY_NAME_RU, country.getName().getRu());
-                    values.put(COLUMN_COUNTRY_NAME_EN, country.getName().getEn());
-                    values.put(COLUMN_COUNTRY_CAPITAL_RU, country.getCapital().getRu());
-                    values.put(COLUMN_COUNTRY_CAPITAL_EN, country.getCapital().getEn());
-                    values.put(COLUMN_COUNTRY_REGION, country.getRegion());
-                    values.put(COLUMN_COUNTRY_FLAG_IMAGE, country.getFlagImage());
-                    values.put(COLUMN_COUNTRY_OUTLINE_IMAGE, country.getOutlineImage());
-                    values.put(COLUMN_COUNTRY_LANGUAGE_AUDIO, country.getLanguageAudio());
+                    ContentValues countryValues = new ContentValues();
+                    countryValues.put(COLUMN_COUNTRY_ID, country.getId());
+                    countryValues.put(COLUMN_COUNTRY_NAME_RU, country.getName().getRu());
+                    countryValues.put(COLUMN_COUNTRY_NAME_EN, country.getName().getEn());
+                    countryValues.put(COLUMN_COUNTRY_CAPITAL_RU, country.getCapital().getRu());
+                    countryValues.put(COLUMN_COUNTRY_CAPITAL_EN, country.getCapital().getEn());
+                    countryValues.put(COLUMN_COUNTRY_REGION, country.getRegion());
+                    countryValues.put(COLUMN_COUNTRY_FLAG_IMAGE, country.getFlagImage());
+                    countryValues.put(COLUMN_COUNTRY_OUTLINE_IMAGE, country.getOutlineImage());
+                    db.insert(TABLE_COUNTRIES, null, countryValues);
 
-                    long id = db.insert(TABLE_COUNTRIES, null, values);
-                    Log.d(TAG, "Сохранена страна: " + country.getId() + ", rowId=" + id);
+                    if (country.getLanguages() != null) {
+                        for (BootstrapResponse.CountryDto.CountryLanguageDto language: country.getLanguages()) {
+                            ContentValues langValues = new ContentValues();
+                            langValues.put(COLUMN_LANGUAGE_ID,language.getId());
+                            langValues.put(COLUMN_LANGUAGE_COUNTRY_ID,country.getId());
+                            langValues.put(COLUMN_LANGUAGE_NAME_RU,language.getName().getRu());
+                            langValues.put(COLUMN_LANGUAGE_NAME_EN,language.getName().getEn());
+                            langValues.put(COLUMN_LANGUAGE_AUDIO,language.getAudioUrl());
+                            db.insert(TABLE_COUNTRY_LANGUAGES,
+                                    null,
+                                    langValues);
+                        }
+                    }
                 }
-                Log.d(TAG, "Сохранено стран: " + data.getCountries().size());
-            }
-
-            if (data.getQuestions() != null) {
-                for (BootstrapResponse.QuestionDto question : data.getQuestions()) {
-                    ContentValues values = new ContentValues();
-                    values.put(COLUMN_QUESTION_ID, question.getId());
-                    values.put(COLUMN_QUESTION_COUNTRY_ID, question.getCountryId());
-                    values.put(COLUMN_QUESTION_DIFFICULTY, question.getDifficulty());
-                    values.put(COLUMN_QUESTION_TYPE, question.getType());
-
-                    long id = db.insert(TABLE_QUESTIONS, null, values);
-                    Log.d(TAG, "Сохранен вопрос: " + question.getId() + ", type=" + question.getType() + ", rowId=" + id);
-                }
-                Log.d(TAG, "Сохранено вопросов: " + data.getQuestions().size());
             }
 
             db.setTransactionSuccessful();
 
         } catch (Exception e) {
-            Log.e(TAG, "Ошибка сохранения данных", e);
+            Log.e(TAG, "Ошибка сохранения bootstrap", e);
+
         } finally {
             db.endTransaction();
-            Log.d(TAG, "Транзакция завершена");
         }
     }
 
@@ -248,37 +242,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return country;
     }
 
-    public List<BootstrapResponse.QuestionDto> getQuestionsByType(int type) {
-        List<BootstrapResponse.QuestionDto> list = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(TABLE_QUESTIONS, null,
-                COLUMN_QUESTION_TYPE + "=?", new String[]{String.valueOf(type)},
-                null, null, null);
-
-        while (cursor.moveToNext()) {
-            BootstrapResponse.QuestionDto question = cursorToQuestion(cursor);
-            list.add(question);
-        }
-        cursor.close();
-
-        return list;
-    }
-    public List<BootstrapResponse.QuestionDto> getAllQuestions() {
-        List<BootstrapResponse.QuestionDto> list = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(TABLE_QUESTIONS, null, null, null, null, null, null);
-
-        while (cursor.moveToNext()) {
-            BootstrapResponse.QuestionDto question = cursorToQuestion(cursor);
-            list.add(question);
-        }
-        cursor.close();
-
-        return list;
-    }
-
     public boolean hasData() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_COUNTRIES, null);
@@ -306,20 +269,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         country.setRegion(cursor.getString(cursor.getColumnIndex(COLUMN_COUNTRY_REGION)));
         country.setFlagImage(cursor.getString(cursor.getColumnIndex(COLUMN_COUNTRY_FLAG_IMAGE)));
         country.setOutlineImage(cursor.getString(cursor.getColumnIndex(COLUMN_COUNTRY_OUTLINE_IMAGE)));
-        country.setLanguageAudio(cursor.getString(cursor.getColumnIndex(COLUMN_COUNTRY_LANGUAGE_AUDIO)));
+        country.setLanguages(getLanguagesForCountry(country.getId()));
 
         return country;
     }
     @SuppressLint("Range")
-    private BootstrapResponse.QuestionDto cursorToQuestion(Cursor cursor) {
-        BootstrapResponse.QuestionDto question = new BootstrapResponse.QuestionDto();
+    private List<BootstrapResponse.CountryDto.CountryLanguageDto> getLanguagesForCountry(String countryId) {
+        List<BootstrapResponse.CountryDto.CountryLanguageDto> list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(
+                TABLE_COUNTRY_LANGUAGES,
+                null,
+                COLUMN_LANGUAGE_COUNTRY_ID + "=?",
+                new String[]{countryId},
+                null,
+                null,
+                null
+        );
+        while (cursor.moveToNext()) {
+            BootstrapResponse.CountryDto.CountryLanguageDto lang = new BootstrapResponse.CountryDto.CountryLanguageDto();
+            lang.setId(cursor.getString(cursor.getColumnIndex(COLUMN_LANGUAGE_ID)));
 
-        question.setId(cursor.getString(cursor.getColumnIndex(COLUMN_QUESTION_ID)));
-        question.setCountryId(cursor.getString(cursor.getColumnIndex(COLUMN_QUESTION_COUNTRY_ID)));
-        question.setDifficulty(cursor.getInt(cursor.getColumnIndex(COLUMN_QUESTION_DIFFICULTY)));
-        question.setType(cursor.getInt(cursor.getColumnIndex(COLUMN_QUESTION_TYPE)));
+            BootstrapResponse.CountryDto.NameDto name = new BootstrapResponse.CountryDto.NameDto();
+            name.setRu(cursor.getString(cursor.getColumnIndex(COLUMN_LANGUAGE_NAME_RU)));
+            name.setEn(cursor.getString(cursor.getColumnIndex(COLUMN_LANGUAGE_NAME_EN)));
+            lang.setName(name);
 
-        return question;
+            lang.setAudioUrl(cursor.getString(cursor.getColumnIndex(COLUMN_LANGUAGE_AUDIO)));
+
+            list.add(lang);
+        }
+        cursor.close();
+        return list;
     }
 
     public void saveUserStats(UserStats stats) {
