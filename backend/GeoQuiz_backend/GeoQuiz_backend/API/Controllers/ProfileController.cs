@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GeoQuiz_backend.API.Controllers
 {
@@ -44,6 +45,19 @@ namespace GeoQuiz_backend.API.Controllers
             await _profileService.UpdateProfile(userId, request);
 
             return Ok(new { Message = "Profile updated successfully" });
+        }
+        [HttpGet("leaderboard")]
+        public async Task<IActionResult> GetLeaderboard()
+        {
+            var userId = Guid.Parse(
+                User.FindFirstValue(ClaimTypes.NameIdentifier)
+                ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub)!
+            );
+            var leaderboard = await _profileService.GetLeaderboard(userId, 100);
+            if (leaderboard == null)
+                return NotFound();
+
+            return Ok(leaderboard);
         }
     }
 }

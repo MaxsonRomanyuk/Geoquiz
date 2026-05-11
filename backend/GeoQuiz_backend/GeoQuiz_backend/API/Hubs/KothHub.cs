@@ -408,7 +408,7 @@ namespace GeoQuiz_backend.API.Hubs
 }
 public class UserKothSession
 {
-    public string ConnectionId { get; set; }
+    public string ConnectionId { get; set; } = null!;
     public DateTime ConnectedAt { get; set; }
     public bool IsInLobby { get; set; }
     public bool IsInMatch { get; set; }

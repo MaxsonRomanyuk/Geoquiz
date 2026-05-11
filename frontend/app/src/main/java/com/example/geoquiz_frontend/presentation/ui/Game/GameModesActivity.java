@@ -8,6 +8,7 @@ import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
 import com.example.geoquiz_frontend.presentation.ui.Profile.ProfileActivity;
 import com.example.geoquiz_frontend.presentation.ui.achievements.AchievementsActivity;
+import com.example.geoquiz_frontend.presentation.ui.leaderboard.LeaderboardActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 
@@ -104,7 +105,10 @@ public class GameModesActivity extends BaseActivity {
             } else if (itemId == R.id.nav_achievements) {
                 Intent intent = new Intent(this, AchievementsActivity.class);
                 startActivity(intent);
+                return true;
             } else if (itemId == R.id.nav_leaderboard) {
+                Intent intent = new Intent(this, LeaderboardActivity.class);
+                startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_profile) {
                 Intent intent = new Intent(this, ProfileActivity.class);

@@ -4,6 +4,7 @@ import com.example.geoquiz_frontend.data.remote.dtos.auth.AuthResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.auth.LogoutRequest;
 import com.example.geoquiz_frontend.data.remote.dtos.auth.RefreshTokenRequest;
 import com.example.geoquiz_frontend.data.remote.dtos.auth.RefreshTokenResponse;
+import com.example.geoquiz_frontend.data.remote.dtos.profile.LeaderboardDto;
 import com.example.geoquiz_frontend.data.remote.dtos.solo.BootstrapResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.solo.FinishGameRequest;
 import com.example.geoquiz_frontend.data.remote.dtos.auth.LoginRequest;
@@ -29,7 +30,8 @@ public interface ApiService {
     Call<Void> logout(@Body LogoutRequest request);
     @GET("api/profile/me")
     Call<ProfileResponse> getProfile();
-
+    @GET("api/profile/leaderboard")
+    Call<LeaderboardDto> getLeaderboard();
     @GET("api/content/bootstrap")
     Call<BootstrapResponse> bootstrap();
 

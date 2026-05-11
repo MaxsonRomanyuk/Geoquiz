@@ -105,7 +105,7 @@ public class LoginActivity extends BaseActivity {
                 String userId = preferencesHelper.getUserId();
                 connectToNotificationManager(token, userId);
             }
-            else {
+            else if (!preferencesHelper.isGuest()){
                 TokenRefreshHelper tokenRefreshHelper = new TokenRefreshHelper(this, preferencesHelper);
                 tokenRefreshHelper.refreshTokenAsync(new TokenRefreshHelper.TokenRefreshCallback() {
                     @Override

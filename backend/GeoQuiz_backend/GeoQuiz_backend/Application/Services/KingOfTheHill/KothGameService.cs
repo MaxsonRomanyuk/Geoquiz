@@ -407,22 +407,6 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             _logger.LogInformation("Creating game state for match {MatchId}: {PlayerCount} players, {MaxQuestions} max questions, seed: {Seed}",
                 matchId, allPlayers.Count, maxQuestions, seed);
 
-            var questions = await _questionSetService.GenerateQuestionsAsync(maxQuestions, seed, randomMode);
-            //var questions = await GenerateQuestionsAsync(maxQuestions, seed, randomMode);
-            var countriesIds = questions.Select(q => q.CountryId).ToList();
-            var countries = await _countryRepo.GetByIdsAsync(countriesIds);
-
-            var questionSet = new QuestionSet
-            {
-                Id = Guid.NewGuid(),
-                KothMatchId = matchId,
-                Mode = randomMode,
-                Seed = seed,
-                CreatedAt = DateTime.UtcNow,
-                CountryIds = countries.Select(c => c.Id).ToList(),
-                Regions = countries.Select(c => c.RegionEnum).ToList(),
-            };
-
             var match = new KothMatch
             {
                 Id = matchId,
@@ -432,8 +416,16 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 CurrentRoundType = RoundType.Classic,
                 CreatedAt = DateTime.UtcNow,
                 StartedAt = DateTime.UtcNow,
-                QuestionSet = questionSet
             };
+            _db.KothMatches.Add(match);
+            await _db.SaveChangesAsync();
+
+            var questionSet = await _questionSetService.CreateQuestionSetAsync(matchId, GameType.KoTH, maxQuestions);
+            var questions = randomMode == GameMode.Language ?
+                    await _questionSetService.GenerateLanguageQuestionsAsync(questionSet) :
+                    await _questionSetService.GenerateQuestionsAsync(questionSet);
+            var countriesIds = questions.Select(q => q.CountryId).ToList();
+            var countries = await _countryRepo.GetByIdsAsync(countriesIds);
 
             foreach (var player in realPlayers)
             {
@@ -446,10 +438,6 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     IsActive = true
                 });
             }
-
-            _db.KothMatches.Add(match);
-            _db.QuestionSets.Add(questionSet);
-            await _db.SaveChangesAsync();
 
             var gameState = new KothGameState
             {

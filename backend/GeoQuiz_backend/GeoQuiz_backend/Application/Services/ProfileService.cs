@@ -1,17 +1,9 @@
 ﻿using GeoQuiz_backend.Application.DTOs.User;
 using GeoQuiz_backend.Application.Interfaces;
-using GeoQuiz_backend.Application.Services.Achievement;
-using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
-using Humanizer;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Mono.TextTemplating;
-using System;
-using System.Collections.Generic;
-using System.Runtime.Intrinsics.X86;
-using System.Threading;
+
 
 namespace GeoQuiz_backend.Application.Services
 {
@@ -40,6 +32,57 @@ namespace GeoQuiz_backend.Application.Services
 
             var profile = await LoadProfile(userId);
             return profile;
+        }
+        public async Task<LeaderboardDto> GetLeaderboard(Guid userId, int pageSize = 100)
+        {
+            var userScore = await _db.Users
+                .Where(u => u.Id == userId && u.Stats != null)
+                .Select(u => u.Stats.Score)
+                .FirstOrDefaultAsync();
+
+            var userRank = await _db.Users
+                .Where(u => u.Stats != null && u.Stats.Score > userScore)
+                .CountAsync() + 1;
+
+            var leaderboardEntries = await _db.Users
+                .Where(u => u.Stats != null)
+                .OrderByDescending(u => u.Stats.Score)
+                .Take(pageSize)
+                .Select(u => new LeaderboardEntry
+                {
+                    playerId = u.Id,
+                    playerName = u.UserName,
+                    level = u.Stats.Level,
+                    totalScore = u.Stats.Score
+                })
+                .ToListAsync();
+
+            for (int i = 0; i < leaderboardEntries.Count; i++)
+            {
+                leaderboardEntries[i].rank = i + 1;
+            }
+            var userEntry = leaderboardEntries.FirstOrDefault(e => e.playerId == userId);
+            var displayRank = userEntry?.rank ?? userRank;
+
+            return new LeaderboardDto
+            {
+                LeaderboardEntries = leaderboardEntries,
+                yourRank = displayRank,
+                yourScore = userScore
+            };
+        }
+        public async Task UpdateProfile(Guid userId, UpdateProfileRequest request)
+        {
+            var user = await _db.Users.FindAsync(userId);
+            if (user == null) return;
+
+            if (!string.IsNullOrEmpty(request.Username))
+                user.UserName = request.Username;
+
+            //if (!string.IsNullOrEmpty(request.AvatarUrl))
+            //    user.AvatarUrl = request.AvatarUrl;
+
+            await _db.SaveChangesAsync();
         }
         private async Task LazyCheckNeeded(Guid userId)
         {
@@ -178,18 +221,6 @@ namespace GeoQuiz_backend.Application.Services
                 Achievements = achievements
             };
         }
-        public async Task UpdateProfile(Guid userId, UpdateProfileRequest request)
-        {
-            var user = await _db.Users.FindAsync(userId);
-            if (user == null) return;
-
-            if (!string.IsNullOrEmpty(request.Username))
-                user.UserName = request.Username;
-
-            //if (!string.IsNullOrEmpty(request.AvatarUrl))
-            //    user.AvatarUrl = request.AvatarUrl;
-
-            await _db.SaveChangesAsync();
-        }
+        
     }
 }

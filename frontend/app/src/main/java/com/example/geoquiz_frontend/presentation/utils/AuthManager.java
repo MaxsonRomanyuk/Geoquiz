@@ -24,7 +24,7 @@ public class AuthManager {
 
     public void loginAsGuest() {
         User guestUser = new User(
-                "uid",
+                "isGuest",
                 "guest@example.com",
                 "Guest"
         );

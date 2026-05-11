@@ -15,6 +15,7 @@ import com.example.geoquiz_frontend.domain.entities.GameQuestion;
 import com.example.geoquiz_frontend.domain.entities.GameSession;
 import com.example.geoquiz_frontend.domain.entities.PendingGame;
 import com.example.geoquiz_frontend.domain.enums.GameMode;
+import com.example.geoquiz_frontend.domain.enums.LanguageQuestionType;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.gson.Gson;
@@ -39,9 +40,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -75,7 +79,10 @@ public class GameRepository {
         this.pendingGames = loadPendingGames();
         this.countriesCache = new HashMap<>();
     }
-
+    public Map<String, BootstrapResponse.CountryDto> getCountriesCache()
+    {
+        return countriesCache;
+    }
     public void loadBootstrapData(BootstrapCallback callback) {
         if (!countriesCache.isEmpty()) {
             callback.onSuccess(null);
@@ -221,155 +228,21 @@ public class GameRepository {
         Log.d(TAG, String.format(Locale.US, "Загружено %d стран", countriesCache.size()));
     }
 
-    public List<GameQuestion> getQuestionsForMode(int mode, int count) {
-
-        List<GameQuestion> result = new ArrayList<>();
-
-        String language = preferencesHelper.getLanguage();
-
-        List<BootstrapResponse.CountryDto> countries =
-                new ArrayList<>(countriesCache.values());
-
-        Collections.shuffle(countries);
-
-        int limit = Math.min(count, countries.size());
-
-        for (int i = 0; i < limit; i++) {
-
-            BootstrapResponse.CountryDto country =
-                    countries.get(i);
-
-            GameQuestion question =
-                    createQuestion(country, mode, language);
-
-            result.add(question);
-        }
-
-        return result;
-    }
-
-    private GameQuestion createQuestion(BootstrapResponse.CountryDto country, int mode, String language) {
-        String questionText = "";
-        List<String> options = new ArrayList<>();
-        String mediaUrl = null;
-
-        String countryName = language.equals("ru") ?
-                country.getName().getRu() : country.getName().getEn();
-        String capital = language.equals("ru") ?
-                country.getCapital().getRu() : country.getCapital().getEn();
-
-        String region = country.getRegion();
-
-        List<BootstrapResponse.CountryDto> otherCountries = getRandomCountries(3, country.getId(), language);
-
-        switch (mode) {
-            case 1:
-                questionText = language.equals("ru") ?
-                        "Столица страны " + countryName + "?" :
-                        "Capital of " + countryName + "?";
-                options.add(capital);
-                for (BootstrapResponse.CountryDto other : otherCountries) {
-                    options.add(language.equals("ru") ?
-                            other.getCapital().getRu() : other.getCapital().getEn());
-                }
-                break;
-
-            case 2:
-                questionText = language.equals("ru") ?
-                        "Какой стране принадлежит этот флаг?" :
-                        "Which country does this flag belong to?";
-                mediaUrl = country.getFlagImage();
-                options.add(countryName);
-                for (BootstrapResponse.CountryDto other : otherCountries) {
-                    options.add(language.equals("ru") ?
-                            other.getName().getRu() : other.getName().getEn());
-                }
-                break;
-
-            case 3:
-                questionText = language.equals("ru") ?
-                        "Какой стране принадлежит этот контур?" :
-                        "Which country does this outline belong to?";
-                mediaUrl = country.getOutlineImage();
-                options.add(countryName);
-                for (BootstrapResponse.CountryDto other : otherCountries) {
-                    options.add(language.equals("ru") ?
-                            other.getName().getRu() : other.getName().getEn());
-                }
-                break;
-
-            case 4:
-                questionText = language.equals("ru") ?
-                        "Язык какой страны звучит?" :
-                        "Which country's language is this?";
-                if (country.getLanguages() != null
-                        && !country.getLanguages().isEmpty()) {
-
-                    BootstrapResponse.CountryDto.CountryLanguageDto lang =
-                            country.getLanguages().get(0);
-
-                    mediaUrl = lang.getAudioUrl();
-                }
-                options.add(countryName);
-                // дублирование ответов
-                for (BootstrapResponse.CountryDto other : otherCountries) {
-                    options.add(language.equals("ru") ?
-                            other.getName().getRu() : other.getName().getEn());
-                }
-                break;
-        }
-
-        int regionVal = 0;
-        switch (region) {
-            case "europe":
-                regionVal = 1;
-                break;
-            case "asia":
-                regionVal = 2;
-                break;
-            case "africa":
-                regionVal = 3;
-                break;
-            case "america":
-                regionVal = 4;
-                break;
-            default:
-                regionVal = 5;
-                break;
-        }
-
-        Collections.shuffle(options);
-        int correctIndex = options.indexOf(
-                mode == 1 ? capital : countryName
-        );
-
-        return new GameQuestion(
-                UUID.randomUUID().toString(),
-                country.getId(),
-                questionText,
-                options,
-                correctIndex,
-                mediaUrl,
-                mode,
-                regionVal
-        );
-    }
-
-    private List<BootstrapResponse.CountryDto> getRandomCountries(int count, String excludeId, String language) {
-        List<BootstrapResponse.CountryDto> allCountries = new ArrayList<>(countriesCache.values());
-        List<BootstrapResponse.CountryDto> result = new ArrayList<>();
-
-        allCountries.removeIf(c -> c.getId().equals(excludeId));
-
-        Collections.shuffle(allCountries);
-
-        int limit = Math.min(count, allCountries.size());
-        for (int i = 0; i < limit; i++) {
-            result.add(allCountries.get(i));
-        }
-
-        return result;
-    }
+//    private List<BootstrapResponse.CountryDto> getRandomCountries(int count, String excludeId) {
+//        List<BootstrapResponse.CountryDto> allCountries = new ArrayList<>(countriesCache.values());
+//        List<BootstrapResponse.CountryDto> result = new ArrayList<>();
+//
+//        allCountries.removeIf(c -> c.getId().equals(excludeId));
+//
+//        Collections.shuffle(allCountries);
+//
+//        int limit = Math.min(count, allCountries.size());
+//        for (int i = 0; i < limit; i++) {
+//            result.add(allCountries.get(i));
+//        }
+//
+//        return result;
+//    }
 
     public void saveGameSession(GameSession session) {
         PendingGame pendingGame = new PendingGame(session);

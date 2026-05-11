@@ -13,6 +13,7 @@ import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.ui.Game.GameTypesActivity;
 import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
 import com.example.geoquiz_frontend.presentation.ui.achievements.AchievementsActivity;
+import com.example.geoquiz_frontend.presentation.ui.leaderboard.LeaderboardActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -96,7 +97,8 @@ public class ProfileActivity extends BaseActivity {
                 startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_leaderboard) {
-                // Navigate to leaderboard
+                Intent intent = new Intent(this, LeaderboardActivity.class);
+                startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_profile){
                 return true;

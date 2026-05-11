@@ -128,7 +128,7 @@ public class SoloGameActivity extends BaseActivity {
     private void loadQuestions() {
         tvQuestionTitle.setText(language.equals("ru") ? "Загрузка вопросов..." : "Loading questions...");
 
-        questions = gameManager.getQuestionsForMode(gameMode, TOTAL_QUESTIONS);
+        questions = gameManager.getQuestionsForMode(gameMode, TOTAL_QUESTIONS, language);
 
         if (questions == null || questions.isEmpty()) {
             Log.e(TAG, "No questions loaded for mode: " + gameMode);
@@ -158,7 +158,6 @@ public class SoloGameActivity extends BaseActivity {
             public void onFinish() {
                 timeLeft = 0;
                 updateTimerDisplay();
-                Log.d(TAG, "Time's up!");
                 endGame();
             }
         }.start();
@@ -234,7 +233,7 @@ public class SoloGameActivity extends BaseActivity {
                 break;
 
             case 4:
-                if (btnPlayAudio != null) {
+                if (btnPlayAudio != null && mediaUrl != null) {
                     btnPlayAudio.setVisibility(View.VISIBLE);
                 }
                 break;

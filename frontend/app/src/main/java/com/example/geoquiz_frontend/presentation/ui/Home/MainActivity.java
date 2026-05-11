@@ -17,6 +17,7 @@ import com.example.geoquiz_frontend.presentation.ui.King.KingLobbyActivity;
 import com.example.geoquiz_frontend.data.remote.ApiClient;
 import com.example.geoquiz_frontend.data.remote.ApiService;
 import com.example.geoquiz_frontend.presentation.ui.achievements.AchievementsActivity;
+import com.example.geoquiz_frontend.presentation.ui.leaderboard.LeaderboardActivity;
 import com.example.geoquiz_frontend.presentation.utils.AchievementDialogHelper;
 import com.example.geoquiz_frontend.presentation.utils.AuthManager;
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
@@ -64,7 +65,7 @@ public class MainActivity extends BaseActivity {
         authManager = new AuthManager(this);
         preferencesHelper = new SecurePreferencesHelper(this);
 
-        boolean isGuest = preferencesHelper.getUserId().equals("uid");
+        boolean isGuest = preferencesHelper.isGuest();
 
         initViews();
         if (isGuest)
@@ -149,7 +150,8 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_leaderboard) {
-                // Navigate to leaderboard
+                Intent intent = new Intent(this, LeaderboardActivity.class);
+                startActivity(intent);
                 return true;
             } else if (itemId == R.id.nav_profile){
                 Intent intent = new Intent(this, ProfileActivity.class);

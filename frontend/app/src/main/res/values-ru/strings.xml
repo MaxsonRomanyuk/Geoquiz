@@ -21,7 +21,7 @@
     <string name="dont_have_account">Нет аккаунта? Зарегистрироваться</string>
     <string name="error_user_not_found">Нет такого пользователя</string>
     <string name="error_email_taken">Email уже занят</string>
-<!--Home-->
+    <!--Home-->
     <string name="level_prefix">Уровень</string>
     <string name="total_points">Всего очков</string>
     <string name="game_type">Тип игры</string>
@@ -213,6 +213,12 @@
     <string name="achievement_unlocked">Достижение разблокировано</string>
     <string name="claim_reward">Получить вознаграждение</string>
 
+    <!--Leaderboards-->
+    <string name="your_rank">Ваше место</string>
+    <string name="your_score">Ваши очки</string>
+    <string name="level_short">Ур</string>
+    <string name="score">Очки</string>
+
     <!--Errors-->
     <string name="connection_lost">Соединение потеряно. Попробуйте позже</string>
     <string name="error">Ошибка: </string>
@@ -223,6 +229,6 @@
     <string name="home">Главная</string>
     <string name="play">Играть</string>
     <string name="achievements">Достижения</string>
-    <string name="leaderboard">Лидерборд</string>
+    <string name="leaderboard">Таблица лидеров</string>
     <string name="profile">Профиль</string>
 </resources>

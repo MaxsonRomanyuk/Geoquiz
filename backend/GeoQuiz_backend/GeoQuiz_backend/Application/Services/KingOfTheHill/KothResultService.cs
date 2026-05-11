@@ -29,23 +29,16 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
         public async Task FinalizeMatchAsync(KothGameState gameState)
         {
             var matchId = gameState.MatchId;
-            _logger.LogError("Finalizing match {MatchId}", matchId);
 
             using var scope = _serviceScopeFactory.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
             await UpdateMatchAsync(db, gameState);
-            _logger.LogError("Update kothmatch {MatchId}", matchId);
-            var gameSessions = await CreateGameSessionsAsync(db, gameState);
-            _logger.LogError("Update gamesession {MatchId}", matchId);
 
+            var gameSessions = await CreateGameSessionsAsync(db, gameState);
             var result = CreateMatchFinishedData(gameState);
             await _notificationService.NotifyMatchFinished(matchId, result);
-            _logger.LogError("Ended match {MatchId}", matchId);
 
             await UpdateUserStatsAsync(db, gameState, gameSessions);
-            _logger.LogError("Update stats {MatchId}", matchId);
-            //return CreateMatchFinishedData(gameState);
         }
         private async Task UpdateMatchAsync(AppDbContext db, KothGameState gameState)
         {

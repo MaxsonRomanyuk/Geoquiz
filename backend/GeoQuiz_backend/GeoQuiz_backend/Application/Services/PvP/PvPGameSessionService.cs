@@ -21,6 +21,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger<PvPGameSessionService> _logger;
 
+        private static readonly ConcurrentDictionary<Guid, List<GameQuestion>> _gameQuestions = new();
         private static readonly ConcurrentDictionary<Guid, CancellationTokenSource> _gameTimers = new();
         private static readonly ConcurrentDictionary<Guid, DateTime> _gameTimerEndsAt = new();
         private static readonly object _matchLock = new();
@@ -55,8 +56,11 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
             if (match.SelectedMode != null)
             {
-                var questionsSet = await _questionSetService.CreateForMatchAsync(matchId);
-                var gameQuestion = await _questionSetService.GenerateQuestionsAsync(10, questionsSet.Seed, (GameMode)match.SelectedMode);
+                var questionsSet = await _questionSetService.CreateQuestionSetAsync(matchId, GameType.PvP, 10);
+                var gameQuestion = match.SelectedMode == GameMode.Language ?
+                    await _questionSetService.GenerateLanguageQuestionsAsync(questionsSet) :
+                    await _questionSetService.GenerateQuestionsAsync(questionsSet);
+                _gameQuestions[matchId] = gameQuestion; 
                 var questionData = gameQuestion.Select(g => MapToQuestionData(g)).ToList();
                 await _notificationService.NotifyGameReady(matchId, new GameReadyData
                 {
@@ -172,9 +176,16 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
             if (match.QuestionSet == null || match.SelectedMode == null) return new PvPGameStateDto();
 
-            var gameQuestion = await _questionSetService.GenerateQuestionsAsync(10, match.QuestionSet.Seed, (GameMode)match.SelectedMode);
-            var questionData = gameQuestion.Select(g => MapToQuestionData(g)).ToList();
-            //var questions = await GenerateQuestionsAsync(matchId, match.QuestionSet.Mode, match.QuestionSet);
+            //var gameQuestion = match.SelectedMode == GameMode.Language ?
+            //        await _questionSetService.GenerateLanguageQuestionsAsync(10, match.QuestionSet.Seed) :
+            //        await _questionSetService.GenerateQuestionsAsync(10, match.QuestionSet.Seed, (GameMode)match.SelectedMode);
+            if (!_gameQuestions.TryGetValue(matchId, out var gameQuestionState))
+            {
+                gameQuestionState = match.SelectedMode == GameMode.Language ?
+                    await _questionSetService.GenerateLanguageQuestionsAsync(match.QuestionSet) :
+                    await _questionSetService.GenerateQuestionsAsync(match.QuestionSet);
+            }
+            var questionData = gameQuestionState.Select(g => MapToQuestionData(g)).ToList();
 
             var players = await _db.Users
                 .Include(u => u.Stats)
@@ -216,22 +227,35 @@ namespace GeoQuiz_backend.Application.Services.PvP
             var questionSet = match.QuestionSet
                 ?? throw new Exception("QuestionSet not generated");
 
+            if (!_gameQuestions.TryGetValue(matchId, out var gameQuestionState))
+            {
+                gameQuestionState = match.SelectedMode == GameMode.Language ?
+                    await _questionSetService.GenerateLanguageQuestionsAsync(questionSet) :
+                    await _questionSetService.GenerateQuestionsAsync(questionSet);
+            }
             //var question = await _questionRepository.GetByIdAsync(request.QuestionId);
-            var countries = await _countryRepository.GetAllAsync();
-            var correctCountry = countries.First(c => c.Id == request.CountryId);
+            //var countries = await _countryRepository.GetAllAsync();
+            //var correctCountry = countries.First(c => c.Id == request.CountryId);
 
             var index = questionSet.CountryIds.IndexOf(request.CountryId);
-            var rnd = new Random(questionSet.Seed + request.CountryId.GetHashCode());
+            var correctIndex = gameQuestionState[index].CorrectOptionIndex;
 
-            var wrong = countries.Where(c => c.Id != correctCountry.Id)
-                .OrderBy(_ => rnd.Next()).Take(3).ToList();
-
-            var options = new List<string> { correctCountry.Id };
-            options.AddRange(wrong.Select(c => c.Id));
-            options = options.OrderBy(_ => rnd.Next()).ToList();
-
-            var correctIndex = options.IndexOf(correctCountry.Id);
             var isCorrect = request.SelectedIndex == correctIndex;
+
+            //var rnd = new Random(questionSet.Seed + request.CountryId.GetHashCode());
+
+            //var wrong = countries
+            //    .Where(c => c.Id != correctCountry.Id)
+            //    .OrderBy(_ => rnd.Next())
+            //    .Take(3)
+            //    .ToList();
+
+            //var options = new List<string> { correctCountry.Id };
+            //options.AddRange(wrong.Select(c => c.Id));
+            //options = options.OrderBy(_ => rnd.Next()).ToList();
+
+            //var correctIndex = options.IndexOf(correctCountry.Id);
+            //var isCorrect = request.SelectedIndex == correctIndex;
 
             var score = isCorrect ? CalculateScore(request.TimeSpentMs) : 0;
 
@@ -294,6 +318,14 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 YourAnswered = yourAnswers.Count(),
                 OpponentAnswered = opponentAnswers.Count()
             };
+        }
+        public async Task ClearQuestionsForMatch(Guid matchId)
+        {
+            if (!_gameQuestions.TryRemove(matchId, out var gameQuestions))
+            {
+                _logger.LogWarning("Game {MatchId} not found when clear questions", matchId);
+                return;
+            }
         }
         private int CalculateScore(int timeMs)
         {

@@ -19,6 +19,7 @@ import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.domain.entities.Achievement;
 import com.example.geoquiz_frontend.presentation.ui.Game.GameResultActivity;
 import com.example.geoquiz_frontend.presentation.utils.AchievementDialogHelper;
+import com.example.geoquiz_frontend.presentation.utils.AuthManager;
 import com.example.geoquiz_frontend.presentation.utils.LocaleHelper;
 import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
@@ -82,6 +83,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setupConnectionListener();
     }
     protected void setupConnectionListener() {
+        if (preferencesHelper.isGuest()) return;
         notificationManager = NotificationManager.getInstance();
         currentConnectionKey = getClass().getSimpleName() + "_" + System.currentTimeMillis();
         if (!notificationManager.isConnected())

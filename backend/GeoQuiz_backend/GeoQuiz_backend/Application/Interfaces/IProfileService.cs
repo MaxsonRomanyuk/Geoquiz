@@ -6,5 +6,6 @@ namespace GeoQuiz_backend.Application.Interfaces
     {
         Task<object?> GetProfile(Guid userId);
         Task UpdateProfile(Guid userId, UpdateProfileRequest request);
+        Task<LeaderboardDto> GetLeaderboard(Guid userId, int pageSize);
     }
 }

@@ -7,7 +7,8 @@ namespace GeoQuiz_backend.Application.Interfaces
 {
     public interface IQuestionSetService
     {
-        Task<QuestionSet> CreateForMatchAsync(Guid matchId);
-        Task<List<GameQuestion>> GenerateQuestionsAsync(int count, int seed, GameMode mode);
+        Task<QuestionSet> CreateQuestionSetAsync(Guid matchId, GameType gameType, int count);
+        Task<List<GameQuestion>> GenerateQuestionsAsync(QuestionSet questionSet);
+        Task<List<GameQuestion>> GenerateLanguageQuestionsAsync(QuestionSet questionSet);
     }
 }

@@ -215,6 +215,12 @@
     <string name="next">Next</string>
     <string name="achievement_unlocked">Achievement Unlocked</string>
     <string name="claim_reward">Claim Reward</string>
+
+    <!--Leaderboards-->
+    <string name="your_rank">Your rank</string>
+    <string name="your_score">Your score</string>
+    <string name="level_short">Lvl</string>
+    <string name="score">Score</string>
     <!--Errors-->
     <string name="connection_lost">Connection lost. Try again later</string>
     <string name="error">Error: </string>

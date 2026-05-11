@@ -138,7 +138,12 @@ public class SecurePreferencesHelper {
 
         return user;
     }
-
+    public boolean isGuest()
+    {
+        String userId = getUserId();
+        if (userId == null) return false;
+        return userId.equals("isGuest");
+    }
     public String getUserId() {
         return encryptedPrefs.getString(KEY_CURRENT_USER_ID, null);
     }

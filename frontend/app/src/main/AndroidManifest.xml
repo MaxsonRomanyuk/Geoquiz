@@ -71,6 +71,9 @@
         <activity
             android:name=".presentation.ui.achievements.AchievementsActivity"
             android:exported="false"/>
+        <activity
+            android:name=".presentation.ui.leaderboard.LeaderboardActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>
