@@ -1,4 +1,5 @@
 ﻿using GeoQuiz_backend.Application.Interfaces;
+using GeoQuiz_backend.Domain.Enums;
 using GeoQuiz_backend.Domain.Mongo;
 using GeoQuiz_backend.Infrastructure.Persistence.Mongo;
 using MongoDB.Driver;
@@ -18,7 +19,10 @@ namespace GeoQuiz_backend.Infrastructure.Persistence.Mongo.Repositories
         {
             return await _countries.Find(_ => true).ToListAsync();
         }
-
+        public async Task<List<Country>> GetAllInRegionAsync(Region region)
+        {
+            return await _countries.Find(c => c.RegionEnum == region).ToListAsync();
+        }
         public async Task<Country?> GetByIdAsync(string id)
         {
             return await _countries.Find(c => c.Id == id).FirstOrDefaultAsync();

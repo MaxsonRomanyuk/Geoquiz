@@ -1,23 +1,18 @@
-package com.example.geoquiz_frontend.presentation.ui.Game;
-
-import static android.content.ContentValues.TAG;
+package com.example.geoquiz_frontend.presentation.ui.soloGame;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.data.remote.NotificationManager;
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.domain.entities.Achievement;
-import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
-import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
+import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.home.MainActivity;
 import com.example.geoquiz_frontend.presentation.utils.AchievementDialogHelper;
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.List;

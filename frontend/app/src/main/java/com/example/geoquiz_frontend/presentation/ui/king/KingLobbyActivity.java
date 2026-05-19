@@ -1,7 +1,6 @@
-package com.example.geoquiz_frontend.presentation.ui.King;
+package com.example.geoquiz_frontend.presentation.ui.king;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +11,10 @@ import android.widget.Toast;
 
 import androidx.gridlayout.widget.GridLayout;
 
-import com.example.geoquiz_frontend.data.remote.PvPSignalRClientManager;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.MatchResumeData;
 import com.example.geoquiz_frontend.domain.enums.LocalizedText;
-import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
-import com.example.geoquiz_frontend.presentation.ui.PvP.MatchmakingActivity;
+import com.example.geoquiz_frontend.presentation.ui.home.MainActivity;
 import com.example.geoquiz_frontend.presentation.utils.GameTokenManager;
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
 import com.example.geoquiz_frontend.data.remote.KothSignalRClientManager;
@@ -44,7 +40,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
 import com.google.gson.Gson;
 
 public class KingLobbyActivity extends BaseActivity {

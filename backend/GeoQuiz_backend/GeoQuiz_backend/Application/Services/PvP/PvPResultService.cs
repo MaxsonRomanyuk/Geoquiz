@@ -136,8 +136,8 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 ExperienceGained = winnerId == match.Player2Id ? p2Score : 0,
             });
 
-            var s1 = CreateSession(match.Player1Id, matchId, p1Answers, p1Score, gameMode);
-            var s2 = CreateSession(match.Player2Id, matchId, p2Answers, p2Score, gameMode);
+            var s1 = CreateSession(match.Player1, match, p1Answers, p1Score, gameMode);
+            var s2 = CreateSession(match.Player2, match, p2Answers, p2Score, gameMode);
 
             _db.GameSessions.AddRange(s1, s2);
             await _db.SaveChangesAsync();
@@ -219,13 +219,15 @@ namespace GeoQuiz_backend.Application.Services.PvP
             await _achievementService.CheckAndGrantAsync(user.Id, oldStats, newStats, self);
                
         }
-        private GameSession CreateSession(Guid userId, Guid matchId, List<PvPAnswer> answers, int score, GameMode gameMode)
+        private GameSession CreateSession(User user, PvPMatch match, List<PvPAnswer> answers, int score, GameMode gameMode)
         {
             return new GameSession
             {
                 Id = Guid.NewGuid(),
-                UserId = userId,
-                PvPMatchId = matchId,
+                UserId = user.Id,
+                User = user,
+                PvPMatchId = match.Id,
+                PvPMatch = match,
                 Mode = gameMode,
                 TotalQuestions = answers.Count,
                 CorrectAnswers = answers.Count(a => a.IsCorrect),

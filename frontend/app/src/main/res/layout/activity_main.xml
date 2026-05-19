@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
-    tools:context=".presentation.ui.Home.MainActivity">
+    tools:context=".presentation.ui.home.MainActivity">
 
     <include layout="@layout/include_connection_banner"/>
 
@@ -40,7 +40,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Traveler42"
+                    android:text="Player..."
                     android:textColor="?attr/colorTertiary"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -62,7 +62,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:text="🔥 5"
+                        android:text="🔥 0"
                         android:textColor="?attr/colorAccent"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -118,7 +118,7 @@
                             android:id="@+id/tvXP"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="1200/2000 XP"
+                            android:text="0/100 XP"
                             android:textColor="?attr/colorTertiaryFixed"
                             android:textSize="14sp" />
                     </LinearLayout>
@@ -139,7 +139,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:fontFamily="sans-serif-black"
-                        android:text="3,250"
+                        android:text="0"
                         android:textColor="?attr/colorTertiary"
                         android:textSize="32sp"
                         android:textStyle="bold" />
@@ -445,7 +445,7 @@
                             android:id="@+id/tvGamesPlayed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="145"
+                            android:text="0"
                             android:textColor="?attr/colorPrimary"
                             android:textSize="24sp"
                             android:textStyle="bold"/>
@@ -486,7 +486,7 @@
                             android:id="@+id/tvWins"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="82"
+                            android:text="0"
                             android:textColor="?attr/colorSecondary"
                             android:textSize="24sp"
                             android:textStyle="bold"/>
@@ -526,7 +526,7 @@
                             android:id="@+id/tvAccuracy"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="78%"
+                            android:text="0%"
                             android:textColor="?attr/colorSecondary"
                             android:textSize="24sp"
                             android:textStyle="bold"/>
@@ -590,6 +590,17 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"

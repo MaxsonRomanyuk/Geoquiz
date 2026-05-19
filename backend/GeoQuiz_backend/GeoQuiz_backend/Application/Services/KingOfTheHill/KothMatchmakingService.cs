@@ -132,18 +132,8 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                         shouldStartTimer = true;
                     }
                 }
-
                 if (shouldStartImmediately && playersToStart != null)
                 {
-                    //_ = Task.Run(async () =>
-                    //{
-                    //    using (var scope = _serviceScopeFactory.CreateScope())
-                    //    {
-                    //        var gameService = scope.ServiceProvider.GetRequiredService<IKothGameServiceMain>();
-                    //        var playersInfo = playersToStart.Select(p => PlayerInfo.FromPlayerLobby(p)).ToList();
-                    //        await gameService.StartMatchFromLobbyAsync(playersInfo, lobbyId);
-                    //    }
-                    //});
                     using (var scope = _serviceScopeFactory.CreateScope())
                     {
                         var gameService = scope.ServiceProvider.GetRequiredService<IKothGameService>();

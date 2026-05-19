@@ -2,12 +2,9 @@ package com.example.geoquiz_frontend.presentation.ui.achievements;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,16 +12,14 @@ import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.domain.entities.Achievement;
 import com.example.geoquiz_frontend.domain.enums.AchievementCategory;
-import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
-import com.example.geoquiz_frontend.presentation.ui.Game.GameTypesActivity;
-import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
-import com.example.geoquiz_frontend.presentation.ui.Profile.ProfileActivity;
+import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.soloGame.GameTypesActivity;
+import com.example.geoquiz_frontend.presentation.ui.home.MainActivity;
+import com.example.geoquiz_frontend.presentation.ui.profile.ProfileActivity;
 import com.example.geoquiz_frontend.presentation.ui.leaderboard.LeaderboardActivity;
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.HashMap;

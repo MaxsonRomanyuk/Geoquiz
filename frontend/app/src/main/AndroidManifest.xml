@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GeoQuiz_frontend">
         <activity
-            android:name=".presentation.ui.Auth.LoginActivity"
+            android:name=".presentation.ui.auth.LoginActivity"
             android:exported="true"
             tools:ignore="Instantiatable">
             <intent-filter>
@@ -24,49 +24,49 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.ui.Home.MainActivity"
+            android:name=".presentation.ui.home.MainActivity"
             android:exported="false"/>
         <activity
-            android:name=".presentation.ui.Profile.ProfileActivity"
+            android:name=".presentation.ui.profile.ProfileActivity"
             android:exported="false"/>
         <activity
-            android:name=".presentation.ui.Profile.SettingsActivity"
+            android:name=".presentation.ui.profile.SettingsActivity"
             android:exported="false"/>
         <activity
-            android:name=".presentation.ui.Game.GameModesActivity"
+            android:name=".presentation.ui.soloGame.GameModesActivity"
             android:exported="false"/>
         <activity
-            android:name=".presentation.ui.Game.GameTypesActivity"
+            android:name=".presentation.ui.soloGame.GameTypesActivity"
             android:exported="false"/>
         <activity
-            android:name=".presentation.ui.Game.SoloGameActivity"
+            android:name=".presentation.ui.soloGame.SoloGameActivity"
             android:exported="false"/>
         <activity
-            android:name=".presentation.ui.Game.GameResultActivity"
+            android:name=".presentation.ui.soloGame.GameResultActivity"
             android:exported="false"/>
         <activity
-            android:name=".presentation.ui.PvP.MatchmakingActivity"
+            android:name=".presentation.ui.pvp.MatchmakingActivity"
             android:exported="false"/>
         <activity
-            android:name=".presentation.ui.PvP.DraftModeActivity"
+            android:name=".presentation.ui.pvp.DraftModeActivity"
             android:exported="false"/>
         <activity
-            android:name=".presentation.ui.PvP.PvPGameActivity"
+            android:name=".presentation.ui.pvp.PvPGameActivity"
             android:exported="false"/>
         <activity
-            android:name=".presentation.ui.PvP.PvPResultActivity"
+            android:name=".presentation.ui.pvp.PvPResultActivity"
             android:exported="false"/>
         <activity
-            android:name=".presentation.ui.King.KingLobbyActivity"
+            android:name=".presentation.ui.king.KingLobbyActivity"
             android:exported="false"/>
         <activity
-            android:name=".presentation.ui.King.KingGameActivity"
+            android:name=".presentation.ui.king.KingGameActivity"
             android:exported="false"/>
         <activity
-            android:name=".presentation.ui.King.KingEliminatedActivity"
+            android:name=".presentation.ui.king.KingEliminatedActivity"
             android:exported="false"/>
         <activity
-            android:name=".presentation.ui.King.KingResultActivity"
+            android:name=".presentation.ui.king.KingResultActivity"
             android:exported="false"/>
         <activity
             android:name=".presentation.ui.achievements.AchievementsActivity"

@@ -30,6 +30,7 @@ namespace GeoQuiz_backend.Application.Services
             {
                 Id = sessionId ?? Guid.NewGuid(),
                 UserId = userId,
+                User = user,
                 Mode = request.Mode,
                 TotalQuestions = request.TotalQuestions,
                 CorrectAnswers = request.CorrectAnswers,

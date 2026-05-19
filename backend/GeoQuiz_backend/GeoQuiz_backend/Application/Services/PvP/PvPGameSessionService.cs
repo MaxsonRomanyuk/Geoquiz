@@ -46,20 +46,27 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
         public async Task StartMatchAsync(Guid matchId)
         {
-            var match = await _db.PvPMatches.FirstAsync(m => m.Id == matchId);
+            var match = await _db.PvPMatches
+                .Include(m => m.Player1).ThenInclude(u => u.Stats)
+                .Include(m => m.Player2).ThenInclude(u => u.Stats)
+                .FirstOrDefaultAsync(m => m.Id == matchId);
 
-            if (match.Status != PvPMatchStatus.Ready)
-                throw new Exception("Match not ready or has already started");
+            if (match == null)
+            {
+                _logger.LogWarning("Match {MatchId} not found in database", matchId);
+                return;
+            }
+
+            if (match.Status != PvPMatchStatus.Ready) throw new Exception("Match not ready or has already started");
 
             match.Status = PvPMatchStatus.InGame;
             match.CreatedAt = DateTime.UtcNow;
 
             if (match.SelectedMode != null)
             {
-                var questionsSet = await _questionSetService.CreateQuestionSetAsync(matchId, GameType.PvP, 10);
-                var gameQuestion = match.SelectedMode == GameMode.Language ?
-                    await _questionSetService.GenerateLanguageQuestionsAsync(questionsSet) :
-                    await _questionSetService.GenerateQuestionsAsync(questionsSet);
+                var averageLevel = (match.Player1.Stats.Level + match.Player2.Stats.Level) / 2;
+                var questionsSet = await _questionSetService.CreateQuestionSetAsync(matchId, GameType.PvP, 10, averageLevel);
+                var gameQuestion = await _questionSetService.GenerateQuestionsAsync(questionsSet);
                 _gameQuestions[matchId] = gameQuestion; 
                 var questionData = gameQuestion.Select(g => MapToQuestionData(g)).ToList();
                 await _notificationService.NotifyGameReady(matchId, new GameReadyData
@@ -73,13 +80,9 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 });
 
             }
-            else
-            {
-                throw new Exception("Game mode not selected");
-            }
+            else throw new Exception("Game mode not selected");
 
             await _db.SaveChangesAsync(); 
-
         }
         public async Task MonitorGameTimeAsync(Guid matchId)
         {
@@ -181,9 +184,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
             //        await _questionSetService.GenerateQuestionsAsync(10, match.QuestionSet.Seed, (GameMode)match.SelectedMode);
             if (!_gameQuestions.TryGetValue(matchId, out var gameQuestionState))
             {
-                gameQuestionState = match.SelectedMode == GameMode.Language ?
-                    await _questionSetService.GenerateLanguageQuestionsAsync(match.QuestionSet) :
-                    await _questionSetService.GenerateQuestionsAsync(match.QuestionSet);
+                gameQuestionState = await _questionSetService.GenerateQuestionsAsync(match.QuestionSet);
             }
             var questionData = gameQuestionState.Select(g => MapToQuestionData(g)).ToList();
 
@@ -229,9 +230,7 @@ namespace GeoQuiz_backend.Application.Services.PvP
 
             if (!_gameQuestions.TryGetValue(matchId, out var gameQuestionState))
             {
-                gameQuestionState = match.SelectedMode == GameMode.Language ?
-                    await _questionSetService.GenerateLanguageQuestionsAsync(questionSet) :
-                    await _questionSetService.GenerateQuestionsAsync(questionSet);
+                gameQuestionState = await _questionSetService.GenerateQuestionsAsync(questionSet);
             }
             //var question = await _questionRepository.GetByIdAsync(request.QuestionId);
             //var countries = await _countryRepository.GetAllAsync();

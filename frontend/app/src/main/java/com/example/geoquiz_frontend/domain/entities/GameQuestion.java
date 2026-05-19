@@ -11,6 +11,7 @@ public class GameQuestion implements Serializable {
     private int correctAnswerIndex;
     private String mediaUrl;
     private int mode;
+    private int difficulty;
     private int timeSpent;
     private int selectedAnswerIndex = -1;
     private boolean isAnswered = false;
@@ -37,6 +38,7 @@ public class GameQuestion implements Serializable {
     public int getCorrectAnswerIndex() { return correctAnswerIndex; }
     public String getMediaUrl() { return mediaUrl; }
     public int getMode() { return mode; }
+    public int getDifficulty() { return difficulty; }
     public int getTimeSpent() { return timeSpent; }
     public int getSelectedAnswerIndex() { return selectedAnswerIndex; }
     public boolean isAnswered() { return isAnswered; }

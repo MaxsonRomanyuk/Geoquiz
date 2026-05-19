@@ -53,7 +53,7 @@ namespace GeoQuiz_backend.API.Controllers.PvP
 
             if (draft.PvPMatch.Status == PvPMatchStatus.Ready)
             {
-                await _questionSetService.CreateQuestionSetAsync(matchId, GameType.PvP, 10);
+                await _questionSetService.CreateQuestionSetAsync(matchId, GameType.PvP, 10, 1);
             }
 
             var dto = new ModeDraftDto

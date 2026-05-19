@@ -1,12 +1,12 @@
-package com.example.geoquiz_frontend.presentation.ui.Game;
+package com.example.geoquiz_frontend.presentation.ui.soloGame;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
-import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
-import com.example.geoquiz_frontend.presentation.ui.Profile.ProfileActivity;
+import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.home.MainActivity;
+import com.example.geoquiz_frontend.presentation.ui.profile.ProfileActivity;
 import com.example.geoquiz_frontend.presentation.ui.achievements.AchievementsActivity;
 import com.example.geoquiz_frontend.presentation.ui.leaderboard.LeaderboardActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

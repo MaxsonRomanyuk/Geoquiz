@@ -58,9 +58,6 @@ namespace GeoQuiz_backend.API.Hubs
 
             if (_userSessions.TryGetValue(userId, out var existingSession))
             {
-                _logger.LogWarning("User {UserId} reconnecting. Old connection: {OldConnection}, New connection: {NewConnection}",
-                    userId, existingSession.ConnectionId, connectionId);
-
                 await HandleMultiDeviceConflict(userId, existingSession, connectionId);
 
                 _userSessions[userId] = new UserPvPSession
@@ -85,8 +82,6 @@ namespace GeoQuiz_backend.API.Hubs
                     CurrentMatchId = null
                 };
             }
-            _logger.LogInformation("User {UserId} connected with connection {ConnectionId}", userId, connectionId);
-
             await base.OnConnectedAsync();
         }
         public override async Task OnDisconnectedAsync(Exception? exception)

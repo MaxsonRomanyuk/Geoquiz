@@ -71,12 +71,25 @@ builder.Services.AddSignalR(options =>
     options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
 });
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
-    )
-);
+try
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseMySql(
+            builder.Configuration.GetConnectionString("DefaultConnection"),
+            ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+        )
+    );
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Warning: Could not detect MySQL version: {ex.Message}");
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseMySql(
+            builder.Configuration.GetConnectionString("DefaultConnection"),
+            new MySqlServerVersion(new Version(8, 0, 46))
+        )
+    );
+}
 
 builder.Services.AddSingleton<MongoContext>();
 builder.Services.AddScoped<MongoSeeder>();
@@ -194,4 +207,5 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapGet("/", () => "Backend is running");
 
-app.Run("http://0.0.0.0:5238");
+//app.Run("http://0.0.0.0:5238");
+app.Run();

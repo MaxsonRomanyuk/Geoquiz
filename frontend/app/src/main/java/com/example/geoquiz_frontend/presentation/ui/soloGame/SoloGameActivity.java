@@ -1,4 +1,4 @@
-package com.example.geoquiz_frontend.presentation.ui.Game;
+package com.example.geoquiz_frontend.presentation.ui.soloGame;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,9 +23,8 @@ import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.domain.engine.GameManager;
 import com.example.geoquiz_frontend.domain.entities.GameQuestion;
 import com.example.geoquiz_frontend.domain.entities.GameSession;
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 
 import java.io.IOException;
@@ -126,9 +124,10 @@ public class SoloGameActivity extends BaseActivity {
     }
 
     private void loadQuestions() {
+        int level = databaseHelper.getUserStats(preferencesHelper.getUserId()).getLevel();
         tvQuestionTitle.setText(language.equals("ru") ? "Загрузка вопросов..." : "Loading questions...");
 
-        questions = gameManager.getQuestionsForMode(gameMode, TOTAL_QUESTIONS, language);
+        questions = gameManager.getQuestionsForMode(gameMode, TOTAL_QUESTIONS, language, level);
 
         if (questions == null || questions.isEmpty()) {
             Log.e(TAG, "No questions loaded for mode: " + gameMode);

@@ -88,26 +88,19 @@ public class GameRepository {
             callback.onSuccess(null);
             return;
         }
-
         executorService.execute(() -> {
             if (dbHelper.hasData()) {
-                Log.d(TAG, "Данные найдены в локальной БД");
                 loadDataFromDatabase();
                 new Handler(Looper.getMainLooper()).post(() ->
                         callback.onSuccess(null)
                 );
                 return;
             }
-
             if (isNetworkAvailable()) {
-                Log.d(TAG, "Есть интернет, загружаем с сервера");
                 loadDataFromServer(callback);
                 return;
             }
-
-            Log.d(TAG, "Нет интернета, загружаем из assets");
             loadDataFromAssets(callback);
-            Log.d(TAG, "Загрузили");
         });
     }
 
@@ -299,10 +292,10 @@ public class GameRepository {
             return;
         }
 
-        //if (!isNetworkAvailable()) {
-          //  Log.d(TAG, "Нет интернета, синхронизация отложена");
-            //return;
-        //}
+//        if (!isNetworkAvailable()) {
+//            Log.d(TAG, "Нет интернета, синхронизация отложена");
+//            return;
+//        }
 
         List<SyncGameSessionRequest> syncList = new ArrayList<>();
 

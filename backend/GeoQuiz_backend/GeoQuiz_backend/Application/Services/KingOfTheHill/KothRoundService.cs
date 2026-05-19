@@ -23,7 +23,6 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     return null;
 
                 gameState.IsRoundStarting = true;
-
                 gameState.CurrentRound++;
 
                 if (gameState.CurrentRound == 1)

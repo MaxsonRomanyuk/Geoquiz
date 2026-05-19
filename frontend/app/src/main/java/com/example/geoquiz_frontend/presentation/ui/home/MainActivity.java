@@ -1,4 +1,4 @@
-package com.example.geoquiz_frontend.presentation.ui.Home;
+package com.example.geoquiz_frontend.presentation.ui.home;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -10,27 +10,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.geoquiz_frontend.domain.entities.Achievement;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
-import com.example.geoquiz_frontend.domain.enums.LocalizedText;
-import com.example.geoquiz_frontend.presentation.ui.King.KingLobbyActivity;
-import com.example.geoquiz_frontend.data.remote.ApiClient;
-import com.example.geoquiz_frontend.data.remote.ApiService;
+import com.example.geoquiz_frontend.presentation.ui.king.KingLobbyActivity;
 import com.example.geoquiz_frontend.presentation.ui.achievements.AchievementsActivity;
 import com.example.geoquiz_frontend.presentation.ui.leaderboard.LeaderboardActivity;
-import com.example.geoquiz_frontend.presentation.utils.AchievementDialogHelper;
 import com.example.geoquiz_frontend.presentation.utils.AuthManager;
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
-import com.example.geoquiz_frontend.data.local.DatabaseHelper;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.presentation.ui.Auth.LoginActivity;
-import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
-import com.example.geoquiz_frontend.presentation.ui.Game.GameModesActivity;
-import com.example.geoquiz_frontend.presentation.ui.Game.GameTypesActivity;
-import com.example.geoquiz_frontend.presentation.ui.Profile.ProfileActivity;
-import com.example.geoquiz_frontend.presentation.ui.PvP.MatchmakingActivity;
+import com.example.geoquiz_frontend.presentation.ui.auth.LoginActivity;
+import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.soloGame.GameModesActivity;
+import com.example.geoquiz_frontend.presentation.ui.soloGame.GameTypesActivity;
+import com.example.geoquiz_frontend.presentation.ui.profile.ProfileActivity;
+import com.example.geoquiz_frontend.presentation.ui.pvp.MatchmakingActivity;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
@@ -39,8 +32,6 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends BaseActivity {
 
@@ -51,7 +42,7 @@ public class MainActivity extends BaseActivity {
     private View lockedOverlayPvP, lockedOverlayKing;
     private LinearLayout layoutLockedBadgePvP, layoutLockedBadgeKing;
     private BottomNavigationView bottomNavigationView;
-    private ProgressBar progressXP;
+    private ProgressBar progressXP, progressBar;
 
     private AuthManager authManager;
     private UserRepository userRepository;
@@ -88,6 +79,7 @@ public class MainActivity extends BaseActivity {
         tvXP = findViewById(R.id.tvXP);
         tvTotalScore = findViewById(R.id.tvTotalScore);
         progressXP = findViewById(R.id.progressXP);
+        progressBar = findViewById(R.id.progressBar);
 
 
         cardSolo = findViewById(R.id.cardSolo);
@@ -176,9 +168,11 @@ public class MainActivity extends BaseActivity {
         cardKing.setEnabled(false);
     }
     private void observeUserData() {
+        progressBar.setVisibility(View.VISIBLE);
         userRepository = UserRepository.getInstance(this);
         userRepository.getUserData().observe(this, profileData -> {
             if (profileData != null) {
+                progressBar.setVisibility(View.GONE);
                 updateUI(profileData);
             }
         });
@@ -195,8 +189,7 @@ public class MainActivity extends BaseActivity {
             }
         });
         userRepository.getAchievements().observe(this, achievements -> {
-            if (achievements != null) {
-            }
+            if (achievements != null) {}
         });
     }
 

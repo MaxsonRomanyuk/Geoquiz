@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/background_gradient"
     android:padding="0dp"
-    tools:context=".presentation.ui.Profile.SettingsActivity">
+    tools:context=".presentation.ui.profile.SettingsActivity">
     <include layout="@layout/include_connection_banner"/>
     <TextView
         android:id="@+id/tv_title"

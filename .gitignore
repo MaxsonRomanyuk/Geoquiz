@@ -14,6 +14,8 @@
 *.opensdf
 *.sdf
 *.VC.VC.opendb
+.env
+appsettings.Docker.json
 
 # .NET
 bin/

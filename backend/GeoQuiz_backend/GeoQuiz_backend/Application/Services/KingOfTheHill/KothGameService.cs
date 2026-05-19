@@ -420,10 +420,9 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             _db.KothMatches.Add(match);
             await _db.SaveChangesAsync();
 
-            var questionSet = await _questionSetService.CreateQuestionSetAsync(matchId, GameType.KoTH, maxQuestions);
-            var questions = randomMode == GameMode.Language ?
-                    await _questionSetService.GenerateLanguageQuestionsAsync(questionSet) :
-                    await _questionSetService.GenerateQuestionsAsync(questionSet);
+            var averageLevel = (int)realPlayers.Average(rp => rp.PlayerLevel);
+            var questionSet = await _questionSetService.CreateQuestionSetAsync(matchId, GameType.KoTH, maxQuestions, averageLevel);
+            var questions = await _questionSetService.GenerateQuestionsAsync(questionSet);
             var countriesIds = questions.Select(q => q.CountryId).ToList();
             var countries = await _countryRepo.GetByIdsAsync(countriesIds);
 

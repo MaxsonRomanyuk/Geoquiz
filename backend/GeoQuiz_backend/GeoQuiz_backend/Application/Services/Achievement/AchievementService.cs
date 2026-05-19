@@ -64,22 +64,6 @@ namespace GeoQuiz_backend.Application.Services
                 await _notificationService.NotifyAchievementUnlocked(userId, achievementUnlocked);
                 _logger.LogError("achievement unlocked for {userId} at {date}", userId, DateTime.UtcNow.ToString());
             }
-            //else
-            //{
-            //    var test = new List<AchievementDto>();
-            //    test.Add(new AchievementDto
-            //    {
-            //        UserId = userId,
-            //        Code = "DAILY_LOGIN",
-            //        Progress = 25,
-            //        Rarity = 4,
-            //        IsUnlocked = true,
-            //        UnlockedAt = DateTime.UtcNow,
-            //    });
-            //    AchievementUnlockedMessage achievementUnlocked = new AchievementUnlockedMessage(test);
-            //    await _notificationService.NotifyAchievementUnlocked(userId, achievementUnlocked);
-            //    _logger.LogError("TEST FAKE NOTIFY  for {userId} at {date}", userId, DateTime.UtcNow.ToString());
-            //}
         }
         public async Task CheckAndGrantAsync(AppDbContext db, Guid userId, UserStats oldStats, UserStats newStats, GameSession? session = null)
         {
@@ -279,6 +263,25 @@ namespace GeoQuiz_backend.Application.Services
             {
                 await UnlockDirect(db, userId, "PERFECT_GAME_PVP", unlockedAchievements);
             }
+            if (session.PvPMatch != null && session.PvPMatch.WinnerId == userId && session.PvPMatch.Player1 != null && session.PvPMatch.Player2 != null)
+            {
+
+                if (session.PvPMatch.Player1.Id == userId)
+                {
+                    var yourLvl = session.PvPMatch.Player1.Stats.Level;
+                    var enemyLvl = session.PvPMatch.Player2.Stats.Level;
+
+                    if (enemyLvl - yourLvl > 5) await Unlock(userId, "PVP_UNDERDOG", unlockedAchievements);
+                }
+                else if (session.PvPMatch.Player2.Id == userId)
+                {
+                    var yourLvl = session.PvPMatch.Player2.Stats.Level;
+                    var enemyLvl = session.PvPMatch.Player1.Stats.Level;
+
+                    if (enemyLvl - yourLvl > 5) await Unlock(userId, "PVP_UNDERDOG", unlockedAchievements);
+                }
+            }
+            // this for koth = undrerdog neednt
         }
         private async Task HandleSessionBasedAchievements(Guid userId, GameSession? session, List<AchievementDto> unlockedAchievements)
         {
@@ -293,6 +296,25 @@ namespace GeoQuiz_backend.Application.Services
                 await Unlock(userId, "PERFECT_GAME_PVP", unlockedAchievements);
             }
             
+            if (session.PvPMatch != null && session.PvPMatch.WinnerId == userId && session.PvPMatch.Player1 != null && session.PvPMatch.Player2 != null)
+            {
+
+                if (session.PvPMatch.Player1.Id == userId)
+                {
+                    var yourLvl = session.PvPMatch.Player1.Stats.Level;
+                    var enemyLvl = session.PvPMatch.Player2.Stats.Level;
+
+                    if (enemyLvl - yourLvl > 5) await Unlock(userId, "PVP_UNDERDOG", unlockedAchievements);
+                }
+                else if (session.PvPMatch.Player2.Id == userId)
+                {
+                    var yourLvl = session.PvPMatch.Player2.Stats.Level;
+                    var enemyLvl = session.PvPMatch.Player1.Stats.Level;
+
+                    if (enemyLvl - yourLvl > 5) await Unlock(userId, "PVP_UNDERDOG", unlockedAchievements);
+                }
+            }
+
             // PVP_UNDERDOG
         }
         private async Task Unlock(Guid userId, string code, List<AchievementDto> unlockedAchievements,

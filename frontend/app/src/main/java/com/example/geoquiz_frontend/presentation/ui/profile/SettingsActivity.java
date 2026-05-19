@@ -1,10 +1,9 @@
-package com.example.geoquiz_frontend.presentation.ui.Profile;
+package com.example.geoquiz_frontend.presentation.ui.profile;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,10 +17,9 @@ import com.example.geoquiz_frontend.data.repositories.GameRepository;
 import com.example.geoquiz_frontend.domain.engine.GameManager;
 import com.example.geoquiz_frontend.domain.entities.User;
 import com.example.geoquiz_frontend.presentation.utils.LocaleHelper;
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.presentation.ui.Auth.LoginActivity;
-import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.auth.LoginActivity;
+import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.android.material.card.MaterialCardView;
 import com.google.gson.Gson;

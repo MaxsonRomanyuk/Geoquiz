@@ -8,15 +8,15 @@ namespace GeoQuiz_backend.API.Controllers.SoloGame
     [Route("api/content")]
     public class ContentController : ControllerBase
     {
-        private readonly ICountryRepository _countryRepo;
+        private readonly ICountryRepository _countryRepository;
         public ContentController(ICountryRepository countryRepo)
         {
-            _countryRepo = countryRepo;
+            _countryRepository = countryRepo;
         }
         [HttpGet("bootstrap")]
         public async Task<IActionResult> Bootstrap()
         {
-            var countries = await _countryRepo.GetAllAsync();
+            var countries = await _countryRepository.GetAllAsync();
             return Ok(new 
             {
                 Countries  = countries,

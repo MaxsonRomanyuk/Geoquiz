@@ -1,0 +1,74 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: quiz_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init_scripts:/docker-entrypoint-initdb.d
+    networks:
+      - quiz_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  mongodb:
+    image: mongo:7.0
+    container_name: quiz_mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - quiz_network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      timeout: 20s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: quiz_backend
+    restart: always
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=geoquiz_mobile;User=quizuser;Password=qweasdzxc;
+      - ConnectionStrings__MongoDbConnection=mongodb://admin:qwertyuiop@mongodb:27017/geoquiz_mobile?authSource=admin
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:8080
+      - JWT__Key=${JWT_KEY}
+      - JWT__Issuer=${JWT_ISSUER}
+      - JWT__Audience=${JWT_AUDIENCE}
+    ports:
+      - "5238:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    networks:
+      - quiz_network
+    volumes:
+      - ./seedData:/app/seedData
+
+volumes:
+  mysql_data:
+  mongodb_data:
+
+networks:
+  quiz_network:
+    driver: bridge

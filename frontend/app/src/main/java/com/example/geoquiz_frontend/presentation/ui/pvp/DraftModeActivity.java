@@ -1,4 +1,4 @@
-package com.example.geoquiz_frontend.presentation.ui.PvP;
+package com.example.geoquiz_frontend.presentation.ui.pvp;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,9 +16,8 @@ import androidx.core.content.ContextCompat;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameResumeData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerResponse;
 import com.example.geoquiz_frontend.domain.enums.LocalizedText;
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
 import com.example.geoquiz_frontend.data.remote.PvPSignalRClientManager;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.DisconnectData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.DraftUpdateData;
@@ -33,7 +32,6 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class DraftModeActivity extends BaseActivity {

@@ -86,32 +86,43 @@ namespace GeoQuiz_backend.Application.Services
         }
         private async Task LazyCheckNeeded(Guid userId)
         {
-            var lastCheck = await _db.UserStats
+            var lastSync = await _db.UserStats
                 .Where(s => s.UserId == userId)
                 .Select(s => s.LastAchievementSync)
                 .FirstOrDefaultAsync();
 
-            if (DateTime.UtcNow - lastCheck < TimeSpan.FromDays(1)) return;
+            bool needSync = lastSync == DateTime.MinValue || DateTime.UtcNow - lastSync >= TimeSpan.FromDays(1);
 
-            using var scope = _serviceScopeFactory.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            var stats = await db.UserStats.FirstAsync(s => s.UserId == userId);
+            var userStats = await _db.UserStats
+                .FirstOrDefaultAsync(s => s.UserId == userId);
 
-            await _achievementService.CheckAndGrantMissingAchievements(db, userId, stats);
+            if (userStats != null)
+            {
+                var today = DateTime.UtcNow.Date;
+                var lastLoginDate = userStats.LastLoginDate.Date;
 
-            stats.LastAchievementSync = DateTime.UtcNow;
-            await db.SaveChangesAsync();
-            //_ = Task.Run(async () =>
-            //{
-            //    using var scope = _serviceScopeFactory.CreateScope();
-            //    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            //    var stats = await db.UserStats.FirstAsync(s => s.UserId == userId);
+                if (lastLoginDate != today)
+                {
+                    if (lastLoginDate == today.AddDays(-1))
+                        userStats.DailyLoginStreak++;
+                    else
+                        userStats.DailyLoginStreak = 1;
+                }
+                userStats.LastLoginDate = DateTime.UtcNow;
+                await _db.SaveChangesAsync();
+            }
 
-            //    await _achievementService.CheckAndGrantMissingAchievements(db, userId, stats);
+            if (needSync && userStats != null)
+            {
+                using var scope = _serviceScopeFactory.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                var stats = await db.UserStats.FirstAsync(s => s.UserId == userId);
 
-            //    stats.LastAchievementSync = DateTime.UtcNow;
-            //    await db.SaveChangesAsync();
-            //});
+                await _achievementService.CheckAndGrantMissingAchievements(db, userId, stats);
+
+                stats.LastAchievementSync = DateTime.UtcNow;
+                await db.SaveChangesAsync();
+            }
         }
         private async Task<object?> LoadProfile(Guid userId)
         {

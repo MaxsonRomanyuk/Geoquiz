@@ -1,4 +1,4 @@
-package com.example.geoquiz_frontend.presentation.ui.Profile;
+package com.example.geoquiz_frontend.presentation.ui.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,9 +9,9 @@ import android.widget.TextView;
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
-import com.example.geoquiz_frontend.presentation.ui.Game.GameTypesActivity;
-import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
+import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.soloGame.GameTypesActivity;
+import com.example.geoquiz_frontend.presentation.ui.home.MainActivity;
 import com.example.geoquiz_frontend.presentation.ui.achievements.AchievementsActivity;
 import com.example.geoquiz_frontend.presentation.ui.leaderboard.LeaderboardActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

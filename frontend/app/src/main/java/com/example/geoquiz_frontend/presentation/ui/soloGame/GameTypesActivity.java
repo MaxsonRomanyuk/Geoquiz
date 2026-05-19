@@ -1,24 +1,22 @@
-package com.example.geoquiz_frontend.presentation.ui.Game;
+package com.example.geoquiz_frontend.presentation.ui.soloGame;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
-import com.example.geoquiz_frontend.presentation.ui.Auth.LoginActivity;
-import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
-import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
-import com.example.geoquiz_frontend.presentation.ui.King.KingLobbyActivity;
-import com.example.geoquiz_frontend.presentation.ui.Profile.ProfileActivity;
-import com.example.geoquiz_frontend.presentation.ui.PvP.MatchmakingActivity;
+import com.example.geoquiz_frontend.presentation.ui.auth.LoginActivity;
+import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.home.MainActivity;
+import com.example.geoquiz_frontend.presentation.ui.king.KingLobbyActivity;
+import com.example.geoquiz_frontend.presentation.ui.profile.ProfileActivity;
+import com.example.geoquiz_frontend.presentation.ui.pvp.MatchmakingActivity;
 import com.example.geoquiz_frontend.presentation.ui.achievements.AchievementsActivity;
 import com.example.geoquiz_frontend.presentation.ui.leaderboard.LeaderboardActivity;
 import com.example.geoquiz_frontend.presentation.utils.AuthManager;
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;

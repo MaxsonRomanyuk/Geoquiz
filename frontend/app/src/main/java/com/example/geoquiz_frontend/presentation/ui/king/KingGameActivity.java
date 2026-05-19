@@ -1,4 +1,4 @@
-package com.example.geoquiz_frontend.presentation.ui.King;
+package com.example.geoquiz_frontend.presentation.ui.king;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -21,10 +21,7 @@ import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.question.OptionData;
 import com.example.geoquiz_frontend.data.remote.dtos.question.QuestionData;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
-import com.example.geoquiz_frontend.domain.entities.UserStats;
-import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
-import com.example.geoquiz_frontend.presentation.ui.PvP.PvPGameActivity;
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
+import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.remote.KothSignalRClientManager;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.*;
@@ -38,7 +35,6 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 

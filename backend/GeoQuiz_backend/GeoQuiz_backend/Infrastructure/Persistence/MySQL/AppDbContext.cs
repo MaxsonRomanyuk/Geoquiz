@@ -28,7 +28,7 @@ namespace GeoQuiz_backend.Infrastructure.Persistence.MySQL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().ToTable("users");
-            modelBuilder.Entity<RefreshToken>().ToTable("refreshTokens");
+            modelBuilder.Entity<RefreshToken>().ToTable("refreshtokens");
             modelBuilder.Entity<UserStats>().ToTable("userstats");
             modelBuilder.Entity<GameSession>().ToTable("gamesessions");
             modelBuilder.Entity<Subscription>().ToTable("subscriptions");

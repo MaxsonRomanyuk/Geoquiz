@@ -1,4 +1,4 @@
-package com.example.geoquiz_frontend.presentation.ui.King;
+package com.example.geoquiz_frontend.presentation.ui.king;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,10 +14,9 @@ import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.domain.engine.GameManager;
 import com.example.geoquiz_frontend.domain.entities.Achievement;
-import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
-import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
+import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.home.MainActivity;
 import com.example.geoquiz_frontend.presentation.utils.AchievementDialogHelper;
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.remote.KothSignalRClientManager;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.MatchFinishedData;

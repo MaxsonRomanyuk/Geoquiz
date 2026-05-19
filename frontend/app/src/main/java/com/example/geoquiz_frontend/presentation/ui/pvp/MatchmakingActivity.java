@@ -1,11 +1,10 @@
-package com.example.geoquiz_frontend.presentation.ui.PvP;
+package com.example.geoquiz_frontend.presentation.ui.pvp;
 
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,9 +16,8 @@ import com.example.geoquiz_frontend.data.remote.dtos.pvp.GameResumeData;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.SubmitAnswerResponse;
 import com.example.geoquiz_frontend.domain.enums.LocalizedText;
 import com.example.geoquiz_frontend.presentation.utils.GameTokenManager;
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
 import com.example.geoquiz_frontend.data.remote.PvPSignalRClientManager;
 import com.example.geoquiz_frontend.data.remote.dtos.pvp.DisconnectData;

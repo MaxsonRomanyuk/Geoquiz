@@ -1,4 +1,4 @@
-package com.example.geoquiz_frontend.presentation.ui.Auth;
+package com.example.geoquiz_frontend.presentation.ui.auth;
 
 import static android.content.ContentValues.TAG;
 
@@ -31,8 +31,8 @@ import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.domain.engine.GameManager;
 import com.example.geoquiz_frontend.domain.entities.User;
 import com.example.geoquiz_frontend.R;
-import com.example.geoquiz_frontend.presentation.ui.Base.BaseActivity;
-import com.example.geoquiz_frontend.presentation.ui.Home.MainActivity;
+import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.home.MainActivity;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.example.geoquiz_frontend.presentation.utils.TokenRefreshHelper;
 import com.google.android.material.button.MaterialButton;
@@ -90,17 +90,21 @@ public class LoginActivity extends BaseActivity {
             }
         });
     }
-
+    private void loadUserData(boolean forceRefresh)
+    {
+        userRepository = UserRepository.getInstance(this);
+        userRepository.loadUserData(forceRefresh);
+    }
     @Override
     protected void setupConnectionListener()
     {
         if (authManager.isLoggedIn()) {
             loadBoostrapData();
-
-            userRepository = UserRepository.getInstance(this);
-            userRepository.loadUserData(false);
+//            userRepository = UserRepository.getInstance(this);
+//            userRepository.loadUserData(false);
 
             if (preferencesHelper.hasValidAccessToken()) {
+                loadUserData(true);
                 String token = preferencesHelper.getAuthToken();
                 String userId = preferencesHelper.getUserId();
                 connectToNotificationManager(token, userId);
@@ -111,12 +115,14 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onSuccess() {
                         Log.d("TokenManager", "Token refreshed on app start");
+                        loadUserData(true);
                         String newToken = preferencesHelper.getAuthToken();
                         String userId = preferencesHelper.getUserId();
                         connectToNotificationManager(newToken, userId);
                     }
                     @Override
                     public void onFailure(String error) {
+                        loadUserData(false);
                         Log.w("TokenManager", "Could not refresh token on start: " + error);
                     }
                 });
@@ -258,7 +264,7 @@ public class LoginActivity extends BaseActivity {
                     String name = response.body().getUserName();
                     long expiresIn = response.body().getExpiresIn();
                     saveUserData(accessToken, refreshToken, email, uid, name, expiresIn);
-                    loadUserData();
+                    loadUserData(true);
                     loadBoostrapData();
                     connectToNotificationManager(accessToken,uid);
                     startMainActivity();
@@ -316,11 +322,6 @@ public class LoginActivity extends BaseActivity {
         saveAuthToken(accessToken, refreshToken , expiresIn);
         User user = new User(uid, email, name);
         authManager.LoginWithEmail(user);
-    }
-    private void loadUserData()
-    {
-        userRepository = UserRepository.getInstance(this);
-        userRepository.loadUserData(true);
     }
     private void connectToNotificationManager(String accessToken, String uid)
     {
