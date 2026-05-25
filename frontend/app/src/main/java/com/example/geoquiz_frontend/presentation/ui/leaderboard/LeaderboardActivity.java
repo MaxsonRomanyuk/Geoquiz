@@ -7,6 +7,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,13 +35,14 @@ public class LeaderboardActivity extends BaseActivity {
     private RecyclerView recyclerLeaderboard;
     private ProgressBar progressBar;
     private BottomNavigationView bottomNavigationView;
+    private View layoutHeaders;
 
     private LeaderboardAdapter adapter;
     private List<LeaderboardEntry> allEntries = new ArrayList<>();
     private final int PAGE_SIZE = 100;
     private int userRank = -1;
     private int userScore = 0;
-
+    private ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class LeaderboardActivity extends BaseActivity {
         tvYourScore = findViewById(R.id.tvYourScore);
         recyclerLeaderboard = findViewById(R.id.recyclerLeaderboard);
         progressBar = findViewById(R.id.progressBar);
+        layoutHeaders = findViewById(R.id.layoutHeaders);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
     }
     private void setupBottomNavigation() {
@@ -98,12 +101,16 @@ public class LeaderboardActivity extends BaseActivity {
 
     private void loadLeaderboardData() {
         progressBar.setVisibility(View.VISIBLE);
-        if (!preferencesHelper.hasValidAccessToken()) return;
-        String errorMessage = preferencesHelper.getLanguage().equals("ru") ? "Не удалось загрузить таблицу лидеров" : "Failed to load leaderboard";
-        ApiService api = ApiClient.getApiWithAuth();
-        api.getLeaderboard().enqueue(new Callback<LeaderboardDto>() {
+        if (preferencesHelper.hasValidAccessToken()) {
+            apiService = ApiClient.getApiWithAuth();
+        }
+        else {
+            showError();
+            return;
+        }
+        apiService.getLeaderboard().enqueue(new Callback<LeaderboardDto>() {
             @Override
-            public void onResponse(Call<LeaderboardDto> call, Response<LeaderboardDto> response) {
+            public void onResponse(@NonNull Call<LeaderboardDto> call,@NonNull Response<LeaderboardDto> response) {
                 LeaderboardDto leaderboardDto = response.body();
                 if (leaderboardDto != null)
                 {
@@ -114,21 +121,22 @@ public class LeaderboardActivity extends BaseActivity {
                         allEntries = leaderboardDto.getLeaderboardEntries();
                         loadPage(1);
                         progressBar.setVisibility(View.GONE);
+                        layoutHeaders.setVisibility(View.VISIBLE);
                         updateUserStats();
                     }
                     else
                     {
-                        Toast.makeText(LeaderboardActivity.this, errorMessage, Toast.LENGTH_SHORT ).show();
+                        showError();
                     }
                 }
                 else {
-                    Toast.makeText(LeaderboardActivity.this, errorMessage, Toast.LENGTH_SHORT ).show();
+                    showError();
                 }
             }
 
             @Override
-            public void onFailure(Call<LeaderboardDto> call, Throwable t) {
-                Toast.makeText(LeaderboardActivity.this, errorMessage, Toast.LENGTH_SHORT ).show();
+            public void onFailure(@NonNull Call<LeaderboardDto> call, @NonNull Throwable t) {
+                showError();
             }
         });
     }
@@ -151,5 +159,9 @@ public class LeaderboardActivity extends BaseActivity {
             tvYourRank.setText("—");
             tvYourScore.setText("0");
         }
+    }
+    private void showError() {
+        String errorMessage = preferencesHelper.getLanguage().equals("ru") ? "Не удалось загрузить таблицу лидеров" : "Failed to load leaderboard";
+        Toast.makeText(LeaderboardActivity.this, errorMessage, Toast.LENGTH_SHORT ).show();
     }
 }

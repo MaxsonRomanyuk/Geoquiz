@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 
@@ -62,7 +63,7 @@ public class PvPResultActivity extends BaseActivity {
         setupClickListeners();
         displayResults();
         updateStats();
-
+        hideSystemBars();
         new Handler().postDelayed(() -> {
             List<ProfileResponse.AchievementDto> achievements = userRepository.consumePendingAchievements();
             Log.d("NotificationManager", "AchievementUnlocked in RESULT CREATE from CONSUME received! Count: " + achievements.size());
@@ -266,6 +267,9 @@ public class PvPResultActivity extends BaseActivity {
 
         tvMessage.setText(message);
     }
-
+    private void hideSystemBars() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
 
 }

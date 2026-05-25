@@ -117,6 +117,7 @@ public class PvPGameActivity extends BaseActivity {
             handleTimerUpdate(new TimerUpdateData(serverTime, turnEndsAtMillis));
             updateCrown();
         }
+        hideSystemBars();
     }
 
     private void initViews() {
@@ -551,5 +552,9 @@ public class PvPGameActivity extends BaseActivity {
         super.onDestroy();
         timerHandler.removeCallbacksAndMessages(null);
         if (signalRManager!=null)signalRManager.removeListener(activityId);
+    }
+    private void hideSystemBars() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 }

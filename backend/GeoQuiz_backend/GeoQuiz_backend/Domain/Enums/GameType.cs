@@ -2,8 +2,8 @@
 {
     public enum GameType
     {
-        Solo,
-        PvP,
-        KoTH
+        Solo = 1,
+        PvP = 2,
+        KoTH = 3
     }
 }

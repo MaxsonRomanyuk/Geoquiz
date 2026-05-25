@@ -51,7 +51,7 @@
     <string name="offline_packs">Offline\nPacks</string>
     <string name="bonus_match_history">Match\nhistory</string>
     <string name="bonus_coins">Bonus\nCoins</string>
-    <string name="correct">correct</string>
+    <string name="correct">correct </string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
@@ -149,6 +149,7 @@
     <string name="flags">Flags</string>
     <string name="borders">Borders</string>
     <string name="languages">Languages</string>
+    <string name="unknown">Unknown</string>
     <string name="banned">BANNED</string>
     <string name="opponent_selecting">Opponent is selecting...</string>
 
@@ -204,7 +205,7 @@
     <string name="winners_title">WINNER</string>
     <string name="final_standings">Final Standings</string>
     <string name="rounds_short">Round</string>
-    <string name="correct_short">Correct</string>
+    <string name="correct_short">Correct </string>
     <string name="score_short">Score</string>
 
 
@@ -221,6 +222,17 @@
     <string name="your_score">Your score</string>
     <string name="level_short">Lvl</string>
     <string name="score">Score</string>
+
+    <string name="reward">Reward</string>
+    <string name="total_matches">Total</string>
+    <string name="page_template">Page %d / %d</string>
+    <string name="place">place</string>
+    <string name="next_short">Next</string>
+    <string name="prev_short">Prev</string>
+
+    <string name="choose_avatar">Choose Avatar</string>
+    <string name="select_avatar_description">Select an avatar to represent you in the game</string>
+    <string name="save_avatar">Save Avatar</string>
     <!--Errors-->
     <string name="connection_lost">Connection lost. Try again later</string>
     <string name="error">Error: </string>

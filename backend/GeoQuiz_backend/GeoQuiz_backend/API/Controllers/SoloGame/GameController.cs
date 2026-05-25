@@ -44,5 +44,17 @@ namespace GeoQuiz_backend.API.Controllers.SoloGame
             await _gameService.SyncGamesAsync(userId, games);
             return Ok();
         }
+        [Authorize]
+        [HttpGet("history")]
+        public async Task<IActionResult> GetGameHistory([FromQuery] int page = 1)
+        {
+            var userId = Guid.Parse(
+                User.FindFirstValue(ClaimTypes.NameIdentifier)
+                ?? User.FindFirstValue(JwtRegisteredClaimNames.Sub)!
+            );
+
+            var result = await _gameService.GetGameHistory(userId, page);
+            return Ok(result);
+        }
     }
 }

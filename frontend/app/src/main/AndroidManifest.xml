@@ -74,6 +74,12 @@
         <activity
             android:name=".presentation.ui.leaderboard.LeaderboardActivity"
             android:exported="false"/>
+        <activity
+            android:name=".presentation.ui.history.MatchHistoryActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".presentation.ui.profile.AvatarChooserActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>

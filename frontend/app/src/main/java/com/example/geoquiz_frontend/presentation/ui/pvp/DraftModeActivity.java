@@ -94,7 +94,7 @@ public class DraftModeActivity extends BaseActivity {
             handleTimerUpdate(new TimerUpdateData(serverTime, turnEndsAtMillis));
         }
         updateTurnStatus();
-
+        hideSystemBars();
     }
 
     private void initViews() {
@@ -531,7 +531,10 @@ public class DraftModeActivity extends BaseActivity {
         }
         return ContextCompat.getColor(this, R.color.primary);
     }
-
+    private void hideSystemBars() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

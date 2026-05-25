@@ -71,6 +71,9 @@ namespace GeoQuiz_backend.Migrations
                     b.Property<bool>("IsOnline")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("IsWin")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<Guid?>("KothMatchId")
                         .HasColumnType("char(36)");
 
@@ -93,6 +96,9 @@ namespace GeoQuiz_backend.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("TotalQuestions")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
@@ -350,7 +356,9 @@ namespace GeoQuiz_backend.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("Difficality")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<Guid?>("KothMatchId")
                         .HasColumnType("char(36)");
@@ -415,7 +423,7 @@ namespace GeoQuiz_backend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("refreshTokens", (string)null);
+                    b.ToTable("refreshtokens", (string)null);
                 });
 
             modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.Subscription", b =>

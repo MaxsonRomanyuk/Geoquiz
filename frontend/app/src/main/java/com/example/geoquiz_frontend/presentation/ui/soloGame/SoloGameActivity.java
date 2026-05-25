@@ -93,6 +93,7 @@ public class SoloGameActivity extends BaseActivity {
         initViews();
         setupClickListeners();
         loadQuestions();
+        hideSystemBars();
     }
 
     private void initViews() {
@@ -455,7 +456,10 @@ public class SoloGameActivity extends BaseActivity {
         Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show();
         finish();
     }
-
+    private void hideSystemBars() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

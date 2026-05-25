@@ -19,11 +19,12 @@ namespace GeoQuiz_backend.Domain.Entities
         public int? RoundsSurvived { get; set; }
 
         public GameMode Mode { get; set; }
+        public GameType Type { get; set; }
 
         public int TotalQuestions { get; set; }
         public int CorrectAnswers { get; set; }
         public int Score { get; set; }
-
+        public bool IsWin { get; set; }
         public bool IsOnline { get; set; }
         public DateTime PlayedAt { get; set; }
     }

@@ -229,10 +229,12 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 PvPMatchId = match.Id,
                 PvPMatch = match,
                 Mode = gameMode,
+                Type = GameType.PvP,
                 TotalQuestions = answers.Count,
                 CorrectAnswers = answers.Count(a => a.IsCorrect),
                 Score = score,
                 IsOnline = true,
+                IsWin = match.WinnerId == user.Id,
                 PlayedAt = DateTime.UtcNow
             };
         }

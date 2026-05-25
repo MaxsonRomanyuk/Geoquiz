@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import androidx.gridlayout.widget.GridLayout;
 import com.example.geoquiz_frontend.data.remote.dtos.koth.MatchResumeData;
 import com.example.geoquiz_frontend.domain.enums.LocalizedText;
 import com.example.geoquiz_frontend.presentation.ui.home.MainActivity;
+import com.example.geoquiz_frontend.presentation.ui.pvp.MatchmakingActivity;
 import com.example.geoquiz_frontend.presentation.utils.GameTokenManager;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
@@ -52,6 +54,7 @@ public class KingLobbyActivity extends BaseActivity {
     private LinearLayout layoutTimer;
     private LinearLayout layoutError;
     private MaterialButton btnLeave;
+    private ProgressBar progressBar;
 
     private boolean isCountdownActive = false;
 
@@ -103,7 +106,7 @@ public class KingLobbyActivity extends BaseActivity {
         loadPlayerData();
         createPlayerSlots();
         updatePlayerCount();
-
+        hideSystemBars();
         initSignalR();
     }
 
@@ -116,6 +119,7 @@ public class KingLobbyActivity extends BaseActivity {
         layoutError = findViewById(R.id.layoutError);
         tvError = findViewById(R.id.tvError);
         btnLeave = findViewById(R.id.btn_leave);
+        progressBar = findViewById(R.id.progressBar);
     }
 
     private void setupClickListeners() {
@@ -263,8 +267,7 @@ public class KingLobbyActivity extends BaseActivity {
 
             @Override
             public void onFailure(String error) {
-                //Toast.makeText(MatchmakingActivity.this, "Не удалось обновить сессию. Попробуйте перелогиниться.", Toast.LENGTH_LONG).show();
-                Toast.makeText(KingLobbyActivity.this,"Ошибка: " + error, Toast.LENGTH_LONG).show();
+                showError();
                 finish();
             }
         });
@@ -303,6 +306,8 @@ public class KingLobbyActivity extends BaseActivity {
             public void onPlayerJoinedToOthers(PlayerJoinedData data) {
                 runOnUiThread(() -> {
                     Log.d(TAG, "Player joined: " + data.getPlayerId());
+                    if (data.getPlayerId().equals(preferencesHelper.getUserId())) return;
+                    if (playerSlotMap.containsKey(data.getPlayerId())) return;
 
                     if (currentLobbyId == null) {
                         currentLobbyId = data.getLobbyId();
@@ -312,8 +317,6 @@ public class KingLobbyActivity extends BaseActivity {
                     int slotIndex = findEmptySlot();
                     if (slotIndex >= 0) {
                         PlayerSlot slot = playerSlots.get(slotIndex);
-
-
                         updateSlotDisplay(slot, true, data.getPlayerName(), data.getPlayerLevel(), data.getPlayerId());
                         updatePlayerCount();
                     }
@@ -340,6 +343,7 @@ public class KingLobbyActivity extends BaseActivity {
                             updatePlayerCount();
                         }
                     }
+                    progressBar.setVisibility(View.GONE);
                 });
             }
             @Override
@@ -350,6 +354,7 @@ public class KingLobbyActivity extends BaseActivity {
                     for (PlayerSlot slot : playerSlots) {
                         if (data.getPlayerId().equals(slot.playerId)) {
                             updateSlotDisplay(slot, false, null, 0, null);
+                            playerSlotMap.remove(data.getPlayerId());
                             break;
                         }
                     }
@@ -361,7 +366,7 @@ public class KingLobbyActivity extends BaseActivity {
             @Override
             public void onLobbyCountdown(int secondsRemaining) {
                 runOnUiThread(() -> {
-                    Log.d(TAG, "Countdown from server: " + secondsRemaining + "s");
+                    //Log.d(TAG, "Countdown from server: " + secondsRemaining + "s");
                     layoutTimer.setVisibility(View.VISIBLE);
                     isCountdownActive = true;
 
@@ -430,8 +435,7 @@ public class KingLobbyActivity extends BaseActivity {
             }
             @Override
             public void onFailure(String error) {
-                //Toast.makeText(MatchmakingActivity.this, "Не удалось обновить сессию. Попробуйте перелогиниться.", Toast.LENGTH_LONG).show();
-                Toast.makeText(KingLobbyActivity.this,"Ошибка: " + error, Toast.LENGTH_LONG).show();
+                showError();
                 finish();
             }
         });
@@ -504,7 +508,17 @@ public class KingLobbyActivity extends BaseActivity {
         getTheme().resolveAttribute(attrResId, typedValue, true);
         return typedValue.data;
     }
-
+    private void showError()
+    {
+        String message = preferencesHelper.getLanguage().equals("ru") ?
+                "Не удалось обновить сессию. Попробуйте перелогиниться.":
+                "Failed to extend session. Try logging in again.";
+        Toast.makeText(KingLobbyActivity.this, message, Toast.LENGTH_LONG).show();
+    }
+    private void hideSystemBars() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

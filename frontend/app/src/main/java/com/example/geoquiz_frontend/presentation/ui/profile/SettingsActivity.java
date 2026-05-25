@@ -43,7 +43,7 @@ public class SettingsActivity extends BaseActivity {
         initViews();
         setupClickListeners();
         setupCurrentSettings();
-
+        hideSystemBars();
         if (preferencesHelper.getUserId().equals("uid")) btnTransfer.setVisibility(View.VISIBLE);
     }
     private void initViews() {
@@ -1176,6 +1176,10 @@ public class SettingsActivity extends BaseActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
+    }
+    private void hideSystemBars() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
     private void backToProfile(){
         Intent intent = new Intent(this, ProfileActivity.class);

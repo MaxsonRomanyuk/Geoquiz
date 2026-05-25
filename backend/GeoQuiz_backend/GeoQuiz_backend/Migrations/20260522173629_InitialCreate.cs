@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -120,6 +121,34 @@ namespace GeoQuiz_backend.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "refreshtokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    TokenHash = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DeviceId = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ExpiryDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    IsRevoked = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    RevokedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_refreshtokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_refreshtokens_users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "subscriptions",
                 columns: table => new
                 {
@@ -178,6 +207,7 @@ namespace GeoQuiz_backend.Migrations
                     UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Level = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
                     Experience = table.Column<int>(type: "int", nullable: false),
+                    Score = table.Column<int>(type: "int", nullable: false),
                     TotalGamesPlayed = table.Column<int>(type: "int", nullable: false),
                     TotalGamesWon = table.Column<int>(type: "int", nullable: false),
                     TotalCorrectAnswers = table.Column<int>(type: "int", nullable: false),
@@ -290,9 +320,11 @@ namespace GeoQuiz_backend.Migrations
                     Place = table.Column<int>(type: "int", nullable: true),
                     RoundsSurvived = table.Column<int>(type: "int", nullable: true),
                     Mode = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
                     TotalQuestions = table.Column<int>(type: "int", nullable: false),
                     CorrectAnswers = table.Column<int>(type: "int", nullable: false),
                     Score = table.Column<int>(type: "int", nullable: false),
+                    IsWin = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     IsOnline = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     PlayedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
@@ -385,8 +417,10 @@ namespace GeoQuiz_backend.Migrations
                     PvPMatchId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     KothMatchId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     Mode = table.Column<int>(type: "int", nullable: false),
-                    Language = table.Column<int>(type: "int", nullable: false),
-                    QuestionIds = table.Column<string>(type: "longtext", nullable: false)
+                    CountryIds = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Difficality = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                    Regions = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Seed = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
@@ -499,6 +533,11 @@ namespace GeoQuiz_backend.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_refreshtokens_UserId",
+                table: "refreshtokens",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_subscriptions_UserId",
                 table: "subscriptions",
                 column: "UserId",
@@ -542,6 +581,9 @@ namespace GeoQuiz_backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "questionset");
+
+            migrationBuilder.DropTable(
+                name: "refreshtokens");
 
             migrationBuilder.DropTable(
                 name: "subscriptions");

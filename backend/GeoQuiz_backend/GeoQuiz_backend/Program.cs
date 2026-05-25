@@ -176,6 +176,9 @@ using (var scope = app.Services.CreateScope())
 {
     var seeder = scope.ServiceProvider.GetRequiredService<MongoSeeder>();
     await seeder.SeedCountriesAsync();
+
+    //var gameService = scope.ServiceProvider.GetRequiredService<GameService>();
+    //await gameService.UpdateGameSessionsFields();
 }
 
 if (app.Environment.IsDevelopment())

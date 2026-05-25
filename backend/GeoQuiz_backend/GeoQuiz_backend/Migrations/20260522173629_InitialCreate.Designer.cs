@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GeoQuiz_backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260418131122_AddScore")]
-    partial class AddScore
+    [Migration("20260522173629_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,6 +74,9 @@ namespace GeoQuiz_backend.Migrations
                     b.Property<bool>("IsOnline")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("IsWin")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<Guid?>("KothMatchId")
                         .HasColumnType("char(36)");
 
@@ -96,6 +99,9 @@ namespace GeoQuiz_backend.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("TotalQuestions")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
@@ -345,24 +351,26 @@ namespace GeoQuiz_backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("CountryIds")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("Difficality")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
                     b.Property<Guid?>("KothMatchId")
                         .HasColumnType("char(36)");
-
-                    b.Property<int>("Language")
-                        .HasColumnType("int");
 
                     b.Property<int>("Mode")
                         .HasColumnType("int");
 
                     b.Property<Guid?>("PvPMatchId")
                         .HasColumnType("char(36)");
-
-                    b.Property<string>("QuestionIds")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Regions")
                         .IsRequired()
@@ -379,6 +387,46 @@ namespace GeoQuiz_backend.Migrations
                         .IsUnique();
 
                     b.ToTable("questionset", (string)null);
+                });
+
+            modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsRevoked")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("refreshtokens", (string)null);
                 });
 
             modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.Subscription", b =>
@@ -728,6 +776,17 @@ namespace GeoQuiz_backend.Migrations
                     b.Navigation("PvPMatch");
                 });
 
+            modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("GeoQuiz_backend.Domain.Entities.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("GeoQuiz_backend.Domain.Entities.Subscription", b =>
                 {
                     b.HasOne("GeoQuiz_backend.Domain.Entities.User", "User")
@@ -797,6 +856,8 @@ namespace GeoQuiz_backend.Migrations
                     b.Navigation("GameSessions");
 
                     b.Navigation("PvPAnswers");
+
+                    b.Navigation("RefreshTokens");
 
                     b.Navigation("Stats")
                         .IsRequired();

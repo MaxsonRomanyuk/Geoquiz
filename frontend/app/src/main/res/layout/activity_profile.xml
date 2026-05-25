@@ -42,24 +42,51 @@
                     android:padding="20dp"
                     android:gravity="center_vertical">
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/cardAvatar"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        app:cardCornerRadius="35dp"
-                        app:cardElevation="2dp"
-                        app:strokeWidth="2dp"
-                        app:strokeColor="?attr/colorPrimary"
-                        app:cardBackgroundColor="?attr/colorSurfaceVariant">
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
-                        <ImageView
-                            android:id="@+id/ivAvatar"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_profile_placeholder"
-                            android:padding="15dp"
-                            app:tint="?attr/colorPrimary" />
-                    </com.google.android.material.card.MaterialCardView>
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cardAvatar"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            app:cardCornerRadius="35dp"
+                            app:cardElevation="2dp"
+                            app:strokeWidth="2dp"
+                            app:strokeColor="?attr/colorTertiary"
+                            app:cardBackgroundColor="?attr/colorSurfaceVariant">
+
+                            <ImageView
+                                android:id="@+id/ivAvatar"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_profile_placeholder"
+                                android:padding="0dp"
+                                android:scaleType="centerCrop" />
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/cardEditAvatar"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            app:cardCornerRadius="35dp"
+                            android:layout_gravity="bottom|end"
+                            app:cardElevation="2dp"
+                            app:strokeWidth="0dp"
+                            app:cardBackgroundColor="?attr/colorTertiary"
+                            android:clickable="true"
+                            android:focusable="true" >
+                            <ImageView
+                                android:id="@+id/ivEditAvatar"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_camera"
+                                android:padding="3dp"
+                                android:scaleType="centerCrop"
+                                app:tint="?attr/colorOnPrimary"/>
+                        </com.google.android.material.card.MaterialCardView>
+                    </FrameLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -72,7 +99,7 @@
                             android:id="@+id/tvUserName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Traveler42"
+                            android:text="Player"
                             android:textColor="?attr/colorTertiary"
                             android:textSize="20sp"
                             android:textStyle="bold"/>
@@ -87,18 +114,18 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/level_prefix"
+                                android:text="@string/level_short"
                                 android:textColor="?attr/colorTertiary"
-                                android:textSize="20sp"
+                                android:textSize="18sp"
                                 android:textStyle="bold"/>
 
                             <TextView
                                 android:id="@+id/tvLevel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="8"
+                                android:text="1"
                                 android:textColor="?attr/colorTertiary"
-                                android:textSize="20sp"
+                                android:textSize="18sp"
                                 android:textStyle="bold"
                                 android:layout_marginStart="4dp"
                                 android:layout_marginEnd="10dp"/>
@@ -107,7 +134,7 @@
                                 android:id="@+id/tvXP"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="1200/2000 XP"
+                                android:text="0/100 XP"
                                 android:textColor="?attr/colorTertiary"
                                 android:textSize="18sp"/>
                         </LinearLayout>
@@ -159,7 +186,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:text="3,250"
+                        android:text="0"
                         android:textColor="?attr/colorTertiary"
                         android:textSize="36sp"
                         android:textStyle="bold" />
@@ -220,7 +247,7 @@
                             android:id="@+id/tvGamesPlayed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="145"
+                            android:text="0"
                             android:textColor="?attr/colorPrimary"
                             android:textSize="32sp"
                             android:textStyle="bold"/>
@@ -260,7 +287,7 @@
                             android:id="@+id/tvWins"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="82"
+                            android:text="0"
                             android:textColor="?attr/colorSecondary"
                             android:textSize="32sp"
                             android:textStyle="bold"/>
@@ -300,7 +327,7 @@
                             android:id="@+id/tvWinRate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="56%"
+                            android:text="0%"
                             android:textColor="?attr/colorSecondary"
                             android:textSize="32sp"
                             android:textStyle="bold"/>
@@ -340,7 +367,7 @@
                             android:id="@+id/tvLongestStreak"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="12"
+                            android:text="0"
                             android:textColor="?attr/colorPrimary"
                             android:textSize="32sp"
                             android:textStyle="bold"/>
@@ -456,7 +483,7 @@
                             android:id="@+id/tvAfricaCorrect"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="46"
+                            android:text="0"
                             android:textColor="?attr/colorPrimary"
                             android:textSize="18sp"
                             android:textStyle="bold"
@@ -501,7 +528,7 @@
                             android:id="@+id/tvAsiaCorrect"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="24"
+                            android:text="0"
                             android:textColor="?attr/colorPrimary"
                             android:textSize="18sp"
                             android:textStyle="bold"
@@ -547,7 +574,7 @@
                             android:id="@+id/tvEuropeCorrect"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="52"
+                            android:text="0"
                             android:textColor="?attr/colorPrimary"
                             android:textSize="18sp"
                             android:textStyle="bold"
@@ -593,7 +620,7 @@
                             android:id="@+id/tvAmericaCorrect"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="46"
+                            android:text="0"
                             android:textColor="?attr/colorPrimary"
                             android:textSize="18sp"
                             android:textStyle="bold"
@@ -638,7 +665,7 @@
                             android:id="@+id/tvOceaniaCorrect"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="24"
+                            android:text="0"
                             android:textColor="?attr/colorPrimary"
                             android:textSize="18sp"
                             android:textStyle="bold"

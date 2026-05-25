@@ -4,6 +4,8 @@ import com.example.geoquiz_frontend.data.remote.dtos.auth.AuthResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.auth.LogoutRequest;
 import com.example.geoquiz_frontend.data.remote.dtos.auth.RefreshTokenRequest;
 import com.example.geoquiz_frontend.data.remote.dtos.auth.RefreshTokenResponse;
+import com.example.geoquiz_frontend.data.remote.dtos.history.GameHistoryResponse;
+import com.example.geoquiz_frontend.data.remote.dtos.history.PageRequest;
 import com.example.geoquiz_frontend.data.remote.dtos.profile.LeaderboardDto;
 import com.example.geoquiz_frontend.data.remote.dtos.solo.BootstrapResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.solo.FinishGameRequest;
@@ -19,6 +21,8 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
+
 public interface ApiService {
     @POST("api/auth/register")
     Call<Void> register(@Body RegisterRequest request);
@@ -37,7 +41,8 @@ public interface ApiService {
 
     @POST("api/game/finish")
     Call<Void> finishGame(@Body FinishGameRequest request);
-
     @POST("api/game/sync")
     Call<Void> syncGames(@Body List<SyncGameSessionRequest> games);
+    @GET("api/game/history")
+    Call<GameHistoryResponse> getGameHistory(@Query("page") int page);
 }

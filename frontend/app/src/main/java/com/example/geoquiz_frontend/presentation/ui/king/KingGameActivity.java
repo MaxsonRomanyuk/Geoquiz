@@ -101,6 +101,7 @@ public class KingGameActivity extends BaseActivity {
         signalRManager = KothSignalRClientManager.getInstance();
         connectToSignalR();
         sendReadyForGame(matchId);
+        hideSystemBars();
     }
 
     private void initViews() {
@@ -617,7 +618,10 @@ public class KingGameActivity extends BaseActivity {
             signalRManager.removeListener(activityId);
         }
     }
-
+    private void hideSystemBars() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
     @Override
     public void onBackPressed() {
         exitGame();

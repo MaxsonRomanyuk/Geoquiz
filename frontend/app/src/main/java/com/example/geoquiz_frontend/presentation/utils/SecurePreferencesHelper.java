@@ -29,6 +29,7 @@ public class SecurePreferencesHelper {
     private static final String KEY_APP_THEME = "app_theme";
     private static final String KEY_HIDE_CONNECTION_BANNER = "hide_connection_banner";
     private static final String KEY_BANNER_DISMISSED_TIME = "banner_dismissed_time";
+    private static final String KEY_AVATAR = "avatar_key";
 
     private static final String KEY_CURRENT_USER_ID = "current_user_id";
     private static final String KEY_CURRENT_USER_NAME = "current_user_name";
@@ -193,6 +194,10 @@ public class SecurePreferencesHelper {
         return regularPrefs.getString(KEY_APP_THEME, "light");
     }
 
+    public void setAvatarKey(String avatarKey){
+        regularPrefs.edit().putString(KEY_AVATAR, avatarKey).apply();
+    }
+    public String getAvatarKey(){ return regularPrefs.getString(KEY_AVATAR, "avatar_1");}
     public void hideConnectionBannerPermanently() {
         regularPrefs.edit().putBoolean(KEY_HIDE_CONNECTION_BANNER, true).apply();
     }

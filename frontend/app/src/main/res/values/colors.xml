@@ -7,11 +7,13 @@
 
     <color name="colorError">#800000</color>
     <color name="colorSuccess">#32CD32</color>
-    <color name="colorWarning">#fcf003</color>
+    <color name="colorWarning">#E6C300</color>
     <color name="primary">#1437AD</color>
+
 
     <color name="white">#ffffff</color>
     <color name="premium">#f0ea19</color>
+    <color name="surface">#A0AEC0</color>
 
 
     <color name="text_primary">#1C1C1E</color>

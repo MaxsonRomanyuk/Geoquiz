@@ -52,7 +52,7 @@ public class KingResultActivity extends BaseActivity {
         setupClickListeners();
         displayResults();
         updateStats();
-
+        hideSystemBars();
         new Handler().postDelayed(() -> {
             List<ProfileResponse.AchievementDto> achievements = userRepository.consumePendingAchievements();
             Log.d("NotificationManager", "AchievementUnlocked in RESULT CREATE from CONSUME received! Count: " + achievements.size());
@@ -193,7 +193,10 @@ public class KingResultActivity extends BaseActivity {
         getTheme().resolveAttribute(attrResId, typedValue, true);
         return typedValue.data;
     }
-
+    private void hideSystemBars() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
     @Override
     public void onBackPressed() {
         exitToMainMenu();

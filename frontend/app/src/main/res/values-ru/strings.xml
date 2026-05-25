@@ -52,7 +52,7 @@
     <string name="offline_packs">Оффлайн\nпаки</string>
     <string name="bonus_match_history">История\nматчей</string>
     <string name="bonus_coins">Бонус\nмонеты</string>
-    <string name="correct">верных</string>
+    <string name="correct">верных </string>
 
     <!-- Settings -->
     <string name="settings_title">Настройки</string>
@@ -148,6 +148,7 @@
     <string name="flags">Флаги</string>
     <string name="borders">Границы</string>
     <string name="languages">Языки</string>
+    <string name="unknown">Неизвестно</string>
     <string name="banned">ЗАБАНЕНО</string>
     <string name="opponent_selecting">Противник выбирает...</string>
 
@@ -202,7 +203,7 @@
     <string name="winners_title">ПОБЕДИТЕЛЬ</string>
     <string name="final_standings">Итоговая таблица</string>
     <string name="rounds_short">Раунд</string>
-    <string name="correct_short">Верно</string>
+    <string name="correct_short">Верно </string>
     <string name="score_short">Очки</string>
 
     <!--Achievements-->
@@ -219,6 +220,16 @@
     <string name="level_short">Ур</string>
     <string name="score">Очки</string>
 
+    <string name="reward">Награда</string>
+    <string name="total_matches">Всего</string>
+    <string name="page_template">Страница %d из %d</string>
+    <string name="place">место</string>
+    <string name="next_short">След</string>
+    <string name="prev_short">Пред</string>
+
+    <string name="choose_avatar">Выберите аватар</string>
+    <string name="select_avatar_description">Выберите аватар, который будет представлять вас в игре</string>
+    <string name="save_avatar">Сохранить аватар</string>
     <!--Errors-->
     <string name="connection_lost">Соединение потеряно. Попробуйте позже</string>
     <string name="error">Ошибка: </string>

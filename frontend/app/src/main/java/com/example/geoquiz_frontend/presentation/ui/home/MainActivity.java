@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -43,6 +44,7 @@ public class MainActivity extends BaseActivity {
     private LinearLayout layoutLockedBadgePvP, layoutLockedBadgeKing;
     private BottomNavigationView bottomNavigationView;
     private ProgressBar progressXP, progressBar;
+    private ImageView ivAvatar;
 
     private AuthManager authManager;
     private UserRepository userRepository;
@@ -66,11 +68,12 @@ public class MainActivity extends BaseActivity {
         setupClickListeners();
         setupBottomNavigation();
         observeUserData();
-
+        loadAvatar();
         //userRepository.loadUserData(false);
     }
 
     private void initViews() {
+        ivAvatar = findViewById(R.id.ivProfile);
         tvUsername = findViewById(R.id.tvUsername);
         tvDailyStreak = findViewById(R.id.tvDailyStreak);
         cardLevel = findViewById(R.id.cardLevel);
@@ -339,22 +342,51 @@ public class MainActivity extends BaseActivity {
         Toast.makeText(this, "Сессия истекла. Войдите снова.", Toast.LENGTH_LONG).show();
         redirectToLogin();
     }
+    private void loadAvatar()
+    {
+        String avatarKey = preferencesHelper.getAvatarKey();
+        if (avatarKey != null)
+        {
+            ivAvatar.setImageResource(getResId(avatarKey));
+        }
+    }
+    private int getResId(String avatarKey)
+    {
+        switch (avatarKey) {
+            case "avatar_1":
+                return R.drawable.avatar_1;
+            case "avatar_2":
+                return R.drawable.avatar_2;
+            case "avatar_3":
+                return R.drawable.avatar_3;
+            case "avatar_4":
+                return R.drawable.avatar_4;
+            case "avatar_5":
+                return R.drawable.avatar_5;
+            case "avatar_6":
+                return R.drawable.avatar_6;
+            case "avatar_7":
+                return R.drawable.avatar_7;
+            case "avatar_8":
+                return R.drawable.avatar_8;
+            case "avatar_9":
+                return R.drawable.avatar_9;
+            case "avatar_10":
+                return R.drawable.avatar_10;
+            case "avatar_11":
+                return R.drawable.avatar_11;
+            case "avatar_12":
+                return R.drawable.avatar_12;
+            default:
+                return R.drawable.ic_profile_placeholder;
+        }
+    }
     private void redirectToLogin() {
         authManager.logout();
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
-    }
-    private boolean isNetworkAvailable() {
-        try {
-            try (Socket socket = new Socket()) {
-                socket.connect(new InetSocketAddress("8.8.8.8", 53), 1500);
-                return true;
-            }
-        } catch (IOException e) {
-            return false;
-        }
     }
     @Override
     protected void onResume() {

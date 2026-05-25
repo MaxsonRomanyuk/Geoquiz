@@ -32,9 +32,11 @@ namespace GeoQuiz_backend.Application.Services
                 UserId = userId,
                 User = user,
                 Mode = request.Mode,
+                Type = GameType.Solo,
                 TotalQuestions = request.TotalQuestions,
                 CorrectAnswers = request.CorrectAnswers,
                 Score = request.Score,
+                IsWin = request.CorrectAnswers > 7,
                 IsOnline = request.IsOnline,
                 PlayedAt = playedAt ?? DateTime.UtcNow
             };
@@ -77,6 +79,120 @@ namespace GeoQuiz_backend.Application.Services
             }
         }
 
+        public async Task<GameHistoryResponse> GetGameHistory(Guid userId, int page, int pageSize = 10)
+        {
+            var anySessions = await _db.GameSessions.AnyAsync();
+            Console.WriteLine($"Any sessions: {anySessions}");
+
+            var firstSession = await _db.GameSessions.FirstOrDefaultAsync();
+            if (firstSession != null)
+            {
+                Console.WriteLine($"First session Type: {firstSession.Type}, IsWin: {firstSession.IsWin}");
+            }
+
+            var query = _db.GameSessions.Where(g => g.UserId == userId);
+
+            var result = await query
+                .OrderByDescending(g => g.PlayedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(g => MapToDto(g))
+                .ToListAsync();
+
+            var totalCount = await query.CountAsync();
+            var totalPages = totalCount / pageSize;
+            var totalWins = await query.Where(r => r.IsWin).CountAsync();
+            var serverTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+            var gameHistory = new GameHistoryResponse
+            {
+                Matches = result,
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                TotalWins = totalWins,
+                ServerTime = serverTime,
+            };
+            return gameHistory;
+        }
+
+        private static GameSessionDto MapToDto(GameSession gameSession)
+        {
+            var session = new GameSessionDto
+            {
+                MatchId = gameSession.Id,
+                GameType = (int)gameSession.Type,
+                PlayedAt = new DateTimeOffset(gameSession.PlayedAt).ToUnixTimeMilliseconds(),
+                TotalScore = gameSession.Score,
+                CorrectAnswers = gameSession.CorrectAnswers,
+                TotalQuestions = gameSession.TotalQuestions,
+                GameMode = (int)gameSession.Mode,
+                IsWin = gameSession.IsWin,
+                Place = gameSession.Place,
+                RoundsSurvived = gameSession.RoundsSurvived,
+                ExperienceGained = GetExperienceGained(gameSession)
+            };
+            return session;
+        }
+
+        public async Task UpdateGameSessionsFields()
+        {
+            var gameSessions = await _db.GameSessions
+                .Include(gs => gs.PvPMatch)
+                .ToListAsync();
+
+            foreach (var session in gameSessions)
+            {
+                if (session.PvPMatchId != null)
+                {
+                    session.Type = GameType.PvP; 
+                }
+                else if (session.KothMatchId != null)
+                {
+                    session.Type = GameType.KoTH; 
+                }
+                else
+                {
+                    session.Type = GameType.Solo; 
+                }
+
+                switch (session.Type)
+                {
+                    case GameType.Solo: 
+                        session.IsWin = session.CorrectAnswers >= 8;
+                        break;
+
+                    case GameType.PvP: 
+                        if (session.PvPMatch != null)
+                        {
+                            session.IsWin = session.PvPMatch.WinnerId == session.UserId;
+                        }
+                        else
+                        {
+                            session.IsWin = false;
+                        }
+                        break;
+
+                    case GameType.KoTH: 
+                        session.IsWin = session.Place == 1;
+                        break;
+                }
+            }
+
+            await _db.SaveChangesAsync();
+        }
+        private static int GetExperienceGained(GameSession gameSession)
+        {
+            if (gameSession.Type == GameType.Solo || gameSession.Type == GameType.PvP)
+            {
+                if (gameSession.IsWin) return gameSession.Score;
+                else return 0;
+            }
+            else
+            {
+                if (gameSession.Place != null && gameSession.Place <= 3) return gameSession.Score * 3;
+                else return 0;
+            }
+        }
         private static void UpdateStats(UserStats stats, FinishGameRequest r)
         {
             stats.TotalGamesPlayed++;

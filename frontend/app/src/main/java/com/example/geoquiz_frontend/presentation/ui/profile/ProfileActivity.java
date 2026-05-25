@@ -6,10 +6,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.repositories.UserRepository;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.history.MatchHistoryActivity;
 import com.example.geoquiz_frontend.presentation.ui.soloGame.GameTypesActivity;
 import com.example.geoquiz_frontend.presentation.ui.home.MainActivity;
 import com.example.geoquiz_frontend.presentation.ui.achievements.AchievementsActivity;
@@ -19,6 +22,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 
 public class ProfileActivity extends BaseActivity {
+    private static final int REQUEST_CODE_AVATAR = 1001;
     private ImageView ivAvatar;
     private TextView tvUserName, tvLevel, tvXP;
     private ProgressBar progressXP;
@@ -26,7 +30,7 @@ public class ProfileActivity extends BaseActivity {
     private TextView tvTotalPoints, tvGamesPlayed, tvWins, tvWinRate, tvCurrentStreak;
 
     private TextView tvAfricaCorrect, tvAsiaCorrect, tvEuropeCorrect, tvAmericaCorrect, tvOceaniaCorrect;
-    private MaterialCardView btnMatchHistory;
+    private MaterialCardView btnMatchHistory, btnEditAvatar;
     private MaterialButton btnGetPlus;
     private BottomNavigationView bottomNavigationView;
     private UserRepository userRepository;
@@ -39,7 +43,7 @@ public class ProfileActivity extends BaseActivity {
         initViews();
         setupClickListeners();
         setupBottomNavigation();
-
+        loadAvatar();
         observeUserData();
     }
     private void initViews() {
@@ -65,6 +69,7 @@ public class ProfileActivity extends BaseActivity {
 
         btnMatchHistory = findViewById(R.id.btnMatchHistory);
         btnGetPlus = findViewById(R.id.btnGetPlus);
+        btnEditAvatar = findViewById(R.id.cardEditAvatar);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
     }
@@ -74,12 +79,17 @@ public class ProfileActivity extends BaseActivity {
         });
 
         btnMatchHistory.setOnClickListener(v -> {
-            // startActivity(new Intent(this, MatchHistoryActivity.class));
+            startActivity(new Intent(this, MatchHistoryActivity.class));
+        });
+
+        btnEditAvatar.setOnClickListener(v -> {
+            openAvatarChooser();
         });
 
         btnGetPlus.setOnClickListener(v -> {
             // startActivity(new Intent(this, PremiumActivity.class));
         });
+
     }
     private void setupBottomNavigation() {
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -173,11 +183,66 @@ public class ProfileActivity extends BaseActivity {
         tvAmericaCorrect.setText(String.valueOf(0));
         tvOceaniaCorrect.setText(String.valueOf(0));
     }
+
     private int calculateNextLevelXP(int currentLevel) {
         return currentLevel * 100;
     }
-    private static int calculateTotalScore(int level, int experience)
+    private void loadAvatar()
     {
-        return (100 * (level - 1) * level) / 2 + experience;
+        String avatarKey = preferencesHelper.getAvatarKey();
+        if(avatarKey != null)
+        {
+            ivAvatar.setImageResource(getResId(avatarKey));
+        }
+    }
+    private int getResId(String avatarKey)
+    {
+        switch (avatarKey) {
+            case "avatar_1":
+                return R.drawable.avatar_1;
+            case "avatar_2":
+                return R.drawable.avatar_2;
+            case "avatar_3":
+                return R.drawable.avatar_3;
+            case "avatar_4":
+                return R.drawable.avatar_4;
+            case "avatar_5":
+                return R.drawable.avatar_5;
+            case "avatar_6":
+                return R.drawable.avatar_6;
+            case "avatar_7":
+                return R.drawable.avatar_7;
+            case "avatar_8":
+                return R.drawable.avatar_8;
+            case "avatar_9":
+                return R.drawable.avatar_9;
+            case "avatar_10":
+                return R.drawable.avatar_10;
+            case "avatar_11":
+                return R.drawable.avatar_11;
+            case "avatar_12":
+                return R.drawable.avatar_12;
+            default:
+                return R.drawable.ic_profile_placeholder;
+        }
+    }
+    private void openAvatarChooser() {
+        Intent intent = new Intent(this, AvatarChooserActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_AVATAR);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_AVATAR && resultCode == RESULT_OK && data != null) {
+            String avatarKey = data.getStringExtra("avatar_key");
+            int avatarResId = data.getIntExtra("avatar_res_id", 0);
+
+            if (avatarResId != 0) {
+                ivAvatar.setImageResource(avatarResId);
+                preferencesHelper.setAvatarKey(avatarKey);
+            }
+        }
     }
 }

@@ -43,6 +43,7 @@ public class KingEliminatedActivity extends BaseActivity {
         setupClickListeners();
         displayPlayerData();
         updateStats();
+        hideSystemBars();
     }
 
     private void getIntentData() {
@@ -114,7 +115,10 @@ public class KingEliminatedActivity extends BaseActivity {
         startActivity(intent);
         finish();
     }
-
+    private void hideSystemBars() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
     @Override
     public void onBackPressed() {
         exitToMainMenu();

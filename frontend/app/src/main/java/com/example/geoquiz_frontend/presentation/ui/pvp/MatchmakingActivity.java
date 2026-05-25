@@ -52,7 +52,6 @@ public class MatchmakingActivity extends BaseActivity {
 
     private PvPSignalRClientManager signalRManager;
     private GameTokenManager gameTokenManager;
-    //private SecurePreferencesHelper preferencesHelper;
     private DatabaseHelper databaseHelper;
     private String language;
     private String activityId;
@@ -76,6 +75,7 @@ public class MatchmakingActivity extends BaseActivity {
         loadCurrentPlayerData();
 
         initSignalR();
+        hideSystemBars();
     }
     private void initSignalR() {
         gameTokenManager.prepareForShortGameAsync(new GameTokenManager.GameTokenCallback() {
@@ -100,10 +100,9 @@ public class MatchmakingActivity extends BaseActivity {
             public void onFailure(String error) {
                 if (isFinishing() || isDestroyed()) return;
                 runOnUiThread(() -> {
-                    Toast.makeText(MatchmakingActivity.this, "Ошибка: " + error, Toast.LENGTH_LONG).show();
+                    showError();
                     finish();
                 });
-                //Toast.makeText(MatchmakingActivity.this, "Не удалось обновить сессию. Попробуйте перелогиниться.", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -292,8 +291,8 @@ public class MatchmakingActivity extends BaseActivity {
                 //Toast.makeText(MatchmakingActivity.this, "Не удалось обновить сессию. Попробуйте перелогиниться.", Toast.LENGTH_LONG).show();
                 //cancelSearchAndExit();
                 if (!isFinishing() && !isDestroyed()) {
-                    String userMessage = getErrorMessage(error);
-                    showErrorAndFinish(userMessage);
+                    showError();
+                    finish();
                 }
             }
         });
@@ -385,19 +384,16 @@ public class MatchmakingActivity extends BaseActivity {
         isSearching = false;
         timerHandler.removeCallbacks(timerRunnable);
     }
-    private void showErrorAndFinish(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-        finish();
+    private void showError()
+    {
+        String message = preferencesHelper.getLanguage().equals("ru") ?
+                "Не удалось обновить сессию. Попробуйте перелогиниться.":
+                "Failed to extend session. Try logging in again.";
+        Toast.makeText(MatchmakingActivity.this, message, Toast.LENGTH_LONG).show();
     }
-    private String getErrorMessage(String error) {
-        if (error != null && error.contains("timeout")) {
-            return "Сервер недоступен. Проверьте подключение.";
-        } else if (error != null && error.contains("Network error")) {
-            return "Нет подключения к серверу";
-        } else if (error != null && error.contains("No internet")) {
-            return "Нет интернет-соединения";
-        }
-        return "Не удалось подключиться. Попробуйте позже.";
+    private void hideSystemBars() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
     @Override
     protected void onDestroy() {
