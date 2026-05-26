@@ -170,7 +170,14 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var seeder = scope.ServiceProvider.GetRequiredService<MongoSeeder>();
-    await seeder.SeedCountriesAsync();
+    try
+    {
+        await seeder.SeedCountriesAsync();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Mongo seed failed: {ex.Message}");
+    }
 
     //var gameService = scope.ServiceProvider.GetRequiredService<GameService>();
     //await gameService.UpdateGameSessionsFields();
@@ -203,6 +210,6 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapGet("/", () => "Backend is running");
 
-//app.Run("http://0.0.0.0:5238");
+app.Run("http://0.0.0.0:5238");
 //app.Run();
-app.Run("http://0.0.0.0:8080");
+//app.Run("http://0.0.0.0:8080");

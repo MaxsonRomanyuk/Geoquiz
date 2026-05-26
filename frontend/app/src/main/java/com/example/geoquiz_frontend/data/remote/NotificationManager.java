@@ -24,7 +24,11 @@ public class NotificationManager {
     private static final String TAG = "NotificationManager";
     private static final int MAX_RECONNECT_ATTEMPTS = 3;
     private static final long RECONNECT_DELAY_MS = 5000;
-    private static final String HUB_URL = "http://192.168.100.49:5238/notificationHub";
+
+    private static final String LOCAL_URL = "http://192.168.100.49:5238/notificationHub";
+    private static final String RAILWAY_URL = "https://geoquiz-production-f991.up.railway.app/notificationHub";
+    private static final boolean IS_LOCAL = false;
+    private static final String HUB_URL = IS_LOCAL ? LOCAL_URL : RAILWAY_URL;
 
     private static NotificationManager instance;
     private HubConnection hubConnection;

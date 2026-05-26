@@ -24,7 +24,12 @@ import io.reactivex.rxjava3.disposables.Disposable;
 
 public class PvPSignalRClientManager {
     private static final String TAG = "SignalRClientManager";
-    private static final String HUB_URL = "http://192.168.100.49:5238/pvpHub";
+
+    private static final String LOCAL_URL = "http://192.168.100.49:5238/pvpHub";
+    private static final String RAILWAY_URL = "https://geoquiz-production-f991.up.railway.app/pvpHub";
+    private static final boolean IS_LOCAL = false;
+    private static final String HUB_URL = IS_LOCAL ? LOCAL_URL : RAILWAY_URL;
+
     private Disposable connectionDisposable;
     private static PvPSignalRClientManager instance;
     private HubConnection hubConnection;
