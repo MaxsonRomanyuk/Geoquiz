@@ -1,8 +1,7 @@
-﻿using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace GeoQuiz_backend
+namespace GeoQuiz_backend.Infrastructure.Persistence.MySQL
 {
     public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
     {

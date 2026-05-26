@@ -107,7 +107,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             {
                 bool shouldStartTimer = false;
                 bool shouldStartImmediately = false;
-                List<PlayerLobby> playersToStart = null;
+                List<PlayerLobby>? playersToStart = null;
 
                 lock (_lobbyLock)
                 {
@@ -169,7 +169,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 lobbyId = lobby.Id;
 
                 var playerLobby = lobby.PlayersLobby.FirstOrDefault(p => p.Id == userId);
-                lobby.PlayersLobby.Remove(playerLobby);
+                if(playerLobby!=null) lobby.PlayersLobby.Remove(playerLobby);
                 remainingPlayers = lobby.PlayersLobby.Count;
 
                 _logger.LogInformation("User {UserId} left lobby {LobbyId}, remaining {Count}", userId, lobby.Id, remainingPlayers);
@@ -236,7 +236,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     await Task.Delay(1000, cts.Token);
 
                     bool stillValid;
-                    List<PlayerLobby> playersToStart = null;
+                    List<PlayerLobby>? playersToStart = null;
 
                     lock (_lobbyLock)
                     {

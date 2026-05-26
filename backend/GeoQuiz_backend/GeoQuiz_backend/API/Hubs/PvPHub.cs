@@ -515,7 +515,7 @@ namespace GeoQuiz_backend.API.Hubs
     }
     public class UserPvPSession
     {
-        public string ConnectionId { get; set; }
+        public string ConnectionId { get; set; } = null!;
         public DateTime ConnectedAt { get; set; }
         public bool IsInQueue { get; set; }
         public bool IsInDraft { get; set; }

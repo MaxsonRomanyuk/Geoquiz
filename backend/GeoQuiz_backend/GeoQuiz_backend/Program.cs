@@ -94,21 +94,17 @@ catch (Exception ex)
 builder.Services.AddSingleton<MongoContext>();
 builder.Services.AddScoped<MongoSeeder>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
-// Auth
+
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-// Game
 builder.Services.AddScoped<GameService>();
 
-//Profile
 builder.Services.AddScoped<IProfileService, ProfileService>();
 
-// Achievement
 builder.Services.AddScoped<IAchievementProgressService, AchievementProgressService>();
 builder.Services.AddScoped<IAchievementService, AchievementService>();
 
-//PVP
 builder.Services.AddSingleton<MatchmakingQueue>();
 builder.Services.AddScoped<IMatchmakingService, MatchmakingService>();
 builder.Services.AddScoped<IDraftService, DraftService>();
@@ -116,7 +112,6 @@ builder.Services.AddScoped<IQuestionSetService, QuestionSetService>();
 builder.Services.AddScoped<IPvPGameSessionService, PvPGameSessionService>();
 builder.Services.AddScoped<IPvPResultService, PvPResultService>();
 
-//KingOfTheHill
 builder.Services.AddScoped<IKothMatchmakingService, KothMatchmakingService>();
 builder.Services.AddScoped<IKothGameService, KothGameService>();
 builder.Services.AddScoped<IKothRoundService, KothRoundService>();
@@ -164,7 +159,7 @@ builder.Services.AddAuthentication(options =>
         {
             if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
             {
-                context.Response.Headers.Add("Token-Expired", "true");
+                context.Response.Headers.Append("Token-Expired", "true");
             }
             return Task.CompletedTask;
         }
@@ -181,11 +176,9 @@ using (var scope = app.Services.CreateScope())
     //await gameService.UpdateGameSessionsFields();
 }
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.MapHub<PvPHub>("/pvpHub", options =>
 {
@@ -211,4 +204,5 @@ app.MapControllers();
 app.MapGet("/", () => "Backend is running");
 
 //app.Run("http://0.0.0.0:5238");
-app.Run();
+//app.Run();
+app.Run("http://0.0.0.0:8080");
