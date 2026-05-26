@@ -343,8 +343,7 @@ public class LoginActivity extends BaseActivity {
         authManager.loginAsGuest();
         loadBoostrapData();
 
-        userRepository = UserRepository.getInstance(this);
-        userRepository.loadUserData(false);
+        loadUserData(false);
 
         startMainActivity();
 

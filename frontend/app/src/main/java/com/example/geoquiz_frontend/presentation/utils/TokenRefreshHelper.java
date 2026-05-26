@@ -20,6 +20,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class TokenRefreshHelper {
     private static final String TAG = "TokenRefreshHelper";
+
+    private static final String LOCAL_URL = "http://192.168.100.49:5238/";
+    private static final String RAILWAY_URL = "https://geoquiz-production-f991.up.railway.app/";
+    private static final boolean IS_LOCAL = false;
+    private static final String BASE_URL = IS_LOCAL ? LOCAL_URL : RAILWAY_URL;
+
     private final Context context;
     private final SecurePreferencesHelper preferencesHelper;
     private final ApiService apiService;
@@ -42,7 +48,7 @@ public class TokenRefreshHelper {
                 .build();
 
         return new Retrofit.Builder()
-                .baseUrl("http://192.168.100.49:5238/")
+                .baseUrl(BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()

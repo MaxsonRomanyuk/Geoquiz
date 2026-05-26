@@ -179,6 +179,8 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine($"Mongo seed failed: {ex.Message}");
     }
 
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
     //var gameService = scope.ServiceProvider.GetRequiredService<GameService>();
     //await gameService.UpdateGameSessionsFields();
 }
