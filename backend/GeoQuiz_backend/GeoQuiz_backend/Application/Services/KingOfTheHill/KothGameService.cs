@@ -416,13 +416,6 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 CreatedAt = DateTime.UtcNow,
                 StartedAt = DateTime.UtcNow,
             };
-
-            var averageLevel = (int)realPlayers.Average(rp => rp.PlayerLevel);
-            var questionSet = await _questionSetService.CreateQuestionSetAsync(matchId, GameType.KoTH, maxQuestions, averageLevel);
-            var questions = await _questionSetService.GenerateQuestionsAsync(questionSet);
-            var countriesIds = questions.Select(q => q.CountryId).ToList();
-            var countries = await _countryRepo.GetByIdsAsync(countriesIds);
-
             foreach (var player in realPlayers)
             {
                 match.Players.Add(new KothPlayer
@@ -434,8 +427,14 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     IsActive = true
                 });
             }
-            _db.KothMatches.Add(match); //
+            _db.KothMatches.Add(match); 
             await _db.SaveChangesAsync();
+
+            var averageLevel = (int)realPlayers.Average(rp => rp.PlayerLevel);
+            var questionSet = await _questionSetService.CreateQuestionSetAsync(matchId, GameType.KoTH, maxQuestions, averageLevel);
+            var questions = await _questionSetService.GenerateQuestionsAsync(questionSet);
+            var countriesIds = questions.Select(q => q.CountryId).ToList();
+            var countries = await _countryRepo.GetByIdsAsync(countriesIds);
 
             var gameState = new KothGameState
             {
