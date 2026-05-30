@@ -357,9 +357,7 @@ public class PvPGameActivity extends BaseActivity {
         hasAnswered = true;
         isQuestionActive = false;
 
-        for (Button button : optionButtons) {
-            button.setEnabled(false);
-        }
+        submitLocally(slcIndex);
 
         QuestionData currentQuestion = questions.get(currentQuestionIndex);
         signalRManager.submitAnswer(
@@ -372,7 +370,13 @@ public class PvPGameActivity extends BaseActivity {
 
         selectedIndex = slcIndex;
     }
-
+    private void submitLocally(int selectedIndex)
+    {
+        for (Button button : optionButtons) {
+            button.setEnabled(false);
+        }
+        optionButtons[selectedIndex].setAlpha(0.5f);
+    }
     private void handleQuestionResult(SubmitAnswerResponse result) {
         if (hasAnswered && !isQuestionActive && !allAnswered) {
             isQuestionActive = true;
@@ -385,7 +389,7 @@ public class PvPGameActivity extends BaseActivity {
             if (result.getQuestionNumber() < 10) {
                 new Handler().postDelayed(() -> {
                     showQuestion(currentQuestionIndex + 1);
-                }, 1000);
+                }, 500);
             }
             else {
                 allAnswered = true;
@@ -402,9 +406,9 @@ public class PvPGameActivity extends BaseActivity {
     }
 
     private void highlightAnswers(int correctIndex) {
+        optionButtons[selectedIndex].setAlpha(1f);
         for (int i = 0; i < optionButtons.length; i++) {
             if (optionButtons[i] == null) continue;
-
             if (i == correctIndex) {
                 optionButtons[i].setBackgroundResource(R.drawable.correct_answer_bg);
                 optionButtons[i].setTextColor(getResources().getColor(android.R.color.white, null));

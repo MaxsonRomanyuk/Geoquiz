@@ -329,8 +329,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
             if (gameState.ActivePlayerIds.Count <= 1)
             {
-                _logger.LogInformation("Match {MatchId} finished after round {RoundNumber}",
-                    matchId, gameState.CurrentRound);
+                _logger.LogInformation("Match {MatchId} finished after round {RoundNumber}", matchId, gameState.CurrentRound);
                 await FinishMatchAsync(matchId);
             }
             else
@@ -417,8 +416,6 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 CreatedAt = DateTime.UtcNow,
                 StartedAt = DateTime.UtcNow,
             };
-            _db.KothMatches.Add(match);
-            await _db.SaveChangesAsync();
 
             var averageLevel = (int)realPlayers.Average(rp => rp.PlayerLevel);
             var questionSet = await _questionSetService.CreateQuestionSetAsync(matchId, GameType.KoTH, maxQuestions, averageLevel);
@@ -437,6 +434,8 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     IsActive = true
                 });
             }
+            _db.KothMatches.Add(match); //
+            await _db.SaveChangesAsync();
 
             var gameState = new KothGameState
             {

@@ -393,6 +393,39 @@ public class KingGameActivity extends BaseActivity {
                 .setDuration(220)
                 .start();
     }
+    private void submitAnswer(int index) {
+        if (!isQuestionActive || hasAnswered || isEliminated || isSpectator) return;
+
+        long answerTime = SystemClock.elapsedRealtime() - questionStartTime;
+
+        hasAnswered = true;
+        isQuestionActive = false;
+        selectedOptionIndex = index;
+
+        submitLocally(index);
+
+        signalRManager.submitAnswer(matchId, currentRound, currentQuestion.getCountryId(), index,  (int) answerTime);
+    }
+    private void submitLocally(int selectedIndex)
+    {
+        setOptionsEnabled(false);
+        optionButtons[selectedIndex].setAlpha(0.5f);
+    }
+    private void handleAnswerResult(AnswerResultData data) {
+        Log.d(TAG, "Answer result: correct=" + data.isCorrect() + ", score=" + data.getScoreGained());
+
+        if (!isEliminated) {
+            yourScore += data.getScoreGained();
+            tvScore.setText(String.valueOf(yourScore));
+
+            highlightSelectedAnswer(data.isCorrect(), data.getCorrectOptionIndex());
+
+            if (data.getRemainingPlayers() > 0) {
+                playersRemaining = data.getRemainingPlayers();
+                tvPlayersRemaining.setText(String.valueOf(playersRemaining));
+            }
+        }
+    }
     private void enterSpectatorMode() {
         isSpectator = true;
         setOptionsEnabled(false);
@@ -430,22 +463,6 @@ public class KingGameActivity extends BaseActivity {
         intent.putExtra("total_players", totalPlayers);
         startActivity(intent);
     }
-    private void handleAnswerResult(AnswerResultData data) {
-        Log.d(TAG, "Answer result: correct=" + data.isCorrect() + ", score=" + data.getScoreGained());
-
-        if (!isEliminated) {
-            yourScore += data.getScoreGained();
-            tvScore.setText(String.valueOf(yourScore));
-
-            highlightSelectedAnswer(data.isCorrect(), data.getCorrectOptionIndex());
-
-            if (data.getRemainingPlayers() > 0) {
-                playersRemaining = data.getRemainingPlayers();
-                tvPlayersRemaining.setText(String.valueOf(playersRemaining));
-            }
-        }
-    }
-
     private void handleMatchFinished(MatchFinishedData data) {
         Log.d(TAG, "Match finished! Winner: " + data.getWinnerId());
         if (signalRManager != null) {
@@ -460,19 +477,7 @@ public class KingGameActivity extends BaseActivity {
         finish();
     }
 
-    private void submitAnswer(int index) {
-        if (!isQuestionActive || hasAnswered || isEliminated || isSpectator) return;
 
-        long answerTime = SystemClock.elapsedRealtime() - questionStartTime;
-
-        hasAnswered = true;
-        isQuestionActive = false;
-        selectedOptionIndex = index;
-
-        setOptionsEnabled(false);
-
-        signalRManager.submitAnswer(matchId, currentRound, currentQuestion.getCountryId(), index,  (int) answerTime);
-    }
 
     private void startTimer(long serverTime, long endAt) {
         stopTimer();
@@ -521,6 +526,7 @@ public class KingGameActivity extends BaseActivity {
     }
 
     private void highlightSelectedAnswer(boolean isCorrect, int correctIndex) {
+        optionButtons[selectedOptionIndex].setAlpha(1f);
         if (correctIndex >= 0 && correctIndex < optionButtons.length) {
             optionButtons[correctIndex].setBackgroundResource(R.drawable.correct_answer_bg);
             optionButtons[correctIndex].setTextColor(ContextCompat.getColor(this, android.R.color.white));

@@ -217,11 +217,6 @@ namespace GeoQuiz_backend.Application.Services
                     };
                 })
                 .ToList();
-            foreach (var achievement in achievements)
-            {
-                //_logger.LogError("{Code} ,progress {Progress}, rarity: {Rarity}, isUnlocked {IsUnlocked} : {UnlockedAt}",
-                //    achievement.Code, achievement.Progress, achievement.Rarity, achievement.IsUnlocked, achievement.UnlockedAt);
-            }
             return new
             {
                 data.User,

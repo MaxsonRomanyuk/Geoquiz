@@ -418,6 +418,8 @@ public class SoloGameActivity extends BaseActivity {
         intent.putExtra("TOTAL", currentQuestionIndex);
         intent.putExtra("TIME", (int) (TOTAL_TIME_MS - timeLeft));
         intent.putExtra("GAME_MODE", gameMode);
+
+        removeListener();
         startActivity(intent);
         finish();
     }

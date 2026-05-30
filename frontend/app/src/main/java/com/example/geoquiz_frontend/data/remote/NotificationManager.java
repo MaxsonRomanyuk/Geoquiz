@@ -226,6 +226,10 @@ public class NotificationManager {
         return hubConnection != null &&
                 hubConnection.getConnectionState() == HubConnectionState.CONNECTED;
     }
+    public boolean isConnecting() {
+        return hubConnection != null &&
+                hubConnection.getConnectionState() == HubConnectionState.CONNECTING;
+    }
     public void reset() {
         Log.d(TAG, "Resetting NotificationManager");
         hubConnection = null;

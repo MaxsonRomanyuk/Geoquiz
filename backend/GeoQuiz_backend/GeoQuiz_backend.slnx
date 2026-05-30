@@ -1,6 +1,4 @@
 <Solution>
-  <Folder Name="/Solution Items/">
-    <File Path=".editorconfig" />
-  </Folder>
+  <Folder Name="/Solution Items/" />
   <Project Path="GeoQuiz_backend/GeoQuiz_backend.csproj" />
 </Solution>

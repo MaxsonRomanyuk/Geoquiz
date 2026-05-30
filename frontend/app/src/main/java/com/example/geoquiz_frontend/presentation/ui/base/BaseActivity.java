@@ -81,6 +81,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (preferencesHelper.isGuest()) return;
         notificationManager = NotificationManager.getInstance();
         currentConnectionKey = getClass().getSimpleName() + "_" + System.currentTimeMillis();
+        if (notificationManager.isConnecting()) return;
         if (!notificationManager.isConnected())
         {
             if (shouldShowConnectionBanner()) showConnectionBanner(getLocalizedMessage(ConnectionErrorType.NO_INTERNET));
@@ -259,19 +260,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         return ConnectionErrorType.UNKNOWN;
     }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void removeListener()
+    {
         if (notificationManager != null && currentConnectionKey != null) {
             notificationManager.removeListener(currentConnectionKey);
         }
     }
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        removeListener();
+    }
+    @Override
     protected void onStop() {
         super.onStop();
-        if (notificationManager != null && currentConnectionKey != null) {
-            notificationManager.removeListener(currentConnectionKey);
-        }
+        removeListener();
     }
     protected enum ConnectionErrorType {
         TIMEOUT, CANNOT_CONNECT, NO_INTERNET, DISCONNECTED, UNKNOWN

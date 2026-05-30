@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.geoquiz_frontend.R;
@@ -41,6 +42,7 @@ public class GameResultActivity extends BaseActivity {
         setupClickListeners();
         updateUI();
         updateStats();
+        hideSystemBars();
 
         new Handler().postDelayed(() -> {
             List<ProfileResponse.AchievementDto> achievements = userRepository.consumePendingAchievements();
@@ -126,7 +128,10 @@ public class GameResultActivity extends BaseActivity {
         }
         tvAccuracy.setText(accuracy + "%");
     }
-
+    private void hideSystemBars() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

@@ -100,7 +100,8 @@ namespace GeoQuiz_backend.Application.Services
                 .ToListAsync();
 
             var totalCount = await query.CountAsync();
-            var totalPages = totalCount / pageSize;
+            int totalPages = (totalCount + pageSize - 1) / pageSize;
+            if (totalPages == 0) totalPages = 1;
             var totalWins = await query.Where(r => r.IsWin).CountAsync();
             var serverTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 

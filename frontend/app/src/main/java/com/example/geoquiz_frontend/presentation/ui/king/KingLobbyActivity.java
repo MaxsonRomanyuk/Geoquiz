@@ -373,7 +373,8 @@ public class KingLobbyActivity extends BaseActivity {
                     tvTimer.setText(String.format(Locale.getDefault(), "00:%02d", secondsRemaining));
 
                     if (secondsRemaining <= 1) {
-                        //
+                        stopSearch();
+                        showStatus(getString(R.string.times_up));
                     }
                 });
             }
@@ -389,7 +390,10 @@ public class KingLobbyActivity extends BaseActivity {
             @Override
             public void onMatchStarted(MatchStartedData data) {
                 signalRManager.joinMatch(data.getMatchId());
-                runOnUiThread(() -> handleMatchStarted(data));
+                runOnUiThread(() ->{
+                        stopSearch();
+                        handleMatchStarted(data);
+                });
             }
 
             @Override

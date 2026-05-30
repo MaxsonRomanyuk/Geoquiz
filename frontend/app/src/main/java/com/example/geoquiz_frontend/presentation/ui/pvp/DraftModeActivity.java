@@ -175,7 +175,7 @@ public class DraftModeActivity extends BaseActivity {
             bannedModes = new ArrayList<>(Arrays.asList(banModesArray));
             for (String mode : bannedModes) {
                 String bannedMode = convertServerModeToClient(mode);
-                banModeLocally(bannedMode, yourId, false);
+                banModeLocally(bannedMode);
             }
         }
 
@@ -193,6 +193,12 @@ public class DraftModeActivity extends BaseActivity {
         tvPlayer2Name.setText(opponentName);
         tvPlayer2Score.setText(String.valueOf((opponentScore)));
         tvPlayer2Level.setText(getString(R.string.level_prefix) + " " + opponentLevel);
+    }
+    private void sendReadyForDraft(String matchId)
+    {
+        if (signalRManager != null && signalRManager.isConnected()) {
+            signalRManager.playerReadyForDraft(matchId);
+        }
     }
     private void connectToSignalR() {
         if (!signalRManager.isConnected()) {
@@ -358,47 +364,40 @@ public class DraftModeActivity extends BaseActivity {
 
         String bannedMode = convertServerModeToClient(data.getBannedMode());
         if (bannedMode != null) {
-            banModeLocally(bannedMode, data.getBannedByUserId(), true);
+            banModeLocally(bannedMode, data.getBannedByUserId());
         }
 
         currentTurnUserId = data.getNextTurnUserId();
         isPlayerTurn = yourId.equals(currentTurnUserId);
 
         updateTurnStatus();
+        Log.d("NotificationManager", "DRAFT IS COMPLETED: " + data.isDraftCompleted());
+        Log.d("NotificationManager", "SIZE AVAL: " + data.getRemainingModes().size());
 
-        if (data.isDraftCompleted()) {
-            tvTurnStatus.setText("Draft completed! Starting game...");
+        if (availableModes.size() == 1) {
+            tvTurnStatus.setText(R.string.draft_completed);
             isDraftActive = false;
             stopTimer();
-        } else if (availableModes.size() == 1) {
-            tvTurnStatus.setText("Final mode selected!");
         }
     }
-    private void banModeLocally(String mode, String bannedByUserId, boolean needMessage) {
+    private void banModeLocally(String mode, String bannedByUserId) {
+        banModeLocally(mode);
+        //bannedModes.add(mode);
+        String message;
+        bannedModes.add(mode);
+        if (bannedByUserId.equals(yourId)) {
+            message = getString(R.string.you_banned) + getModeName(mode);
+        } else {
+            message = getString(R.string.opponent_banned) + getModeName(mode);
+        }
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+    private void banModeLocally(String mode) {
         MaterialCardView card = getCardByMode(mode);
         if (card != null) {
             card.setStrokeColor(getColorFromAttr(R.attr.colorError));
             card.setAlpha(0.5f);
             card.setClickable(false);
-
-            //bannedModes.add(mode);
-
-            String message;
-            if (needMessage) {
-                bannedModes.add(mode);
-                if (bannedByUserId.equals(yourId)) {
-                    message = getString(R.string.you_banned) + getModeName(mode);
-                } else {
-                    message = getString(R.string.opponent_banned) + getModeName(mode);
-                }
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-    private void sendReadyForDraft(String matchId)
-    {
-        if (signalRManager != null && signalRManager.isConnected()) {
-            signalRManager.playerReadyForDraft(matchId);
         }
     }
     private void sendBanMode(String mode) {
@@ -411,6 +410,7 @@ public class DraftModeActivity extends BaseActivity {
                 Toast.makeText(this, getString(R.string.not_your_turn), Toast.LENGTH_SHORT).show();
                 return;
             }
+            banModeLocally(mode);
             signalRManager.banMode(matchId, mode, getLanguageCode(), bannedModes.size());
 
             Log.d(TAG, "Ban mode sent: " + mode);
@@ -441,6 +441,7 @@ public class DraftModeActivity extends BaseActivity {
         startActivity(intent);
         finish();
     }
+
     private void handleDisconnect()
     {
         isManualDisconnect = true;

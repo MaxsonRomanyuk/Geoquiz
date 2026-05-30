@@ -100,8 +100,6 @@ public class LoginActivity extends BaseActivity {
     {
         if (authManager.isLoggedIn()) {
             loadBoostrapData();
-//            userRepository = UserRepository.getInstance(this);
-//            userRepository.loadUserData(false);
 
             if (preferencesHelper.hasValidAccessToken()) {
                 loadUserData(true);
@@ -161,6 +159,17 @@ public class LoginActivity extends BaseActivity {
         tvForgotPassword.setOnClickListener(v -> showForgotPasswordDialog());
         btnGuest.setOnClickListener(v -> loginAsGuest());
     }
+    private void connectToNotificationManager(String accessToken, String uid)
+    {
+        activityId = "login_" + System.currentTimeMillis();
+        notificationManager = NotificationManager.getInstance();
+
+        if (accessToken != null && !accessToken.isEmpty()) {
+            notificationManager.reset();
+            notificationManager.init(accessToken, uid);
+        }
+        connectToSignalR();
+    }
     private void connectToSignalR() {
         notificationManager.addListener(activityId, new NotificationManager.ConnectionListener() {
             @Override
@@ -185,7 +194,7 @@ public class LoginActivity extends BaseActivity {
             public void onConnectionFailed(String reason) {
             }
         });
-        notificationManager.start();
+        if (!notificationManager.isConnected())notificationManager.start();
     }
     private void updateAuthMode() {
         if (isLoginMode) {
@@ -323,18 +332,7 @@ public class LoginActivity extends BaseActivity {
         User user = new User(uid, email, name);
         authManager.LoginWithEmail(user);
     }
-    private void connectToNotificationManager(String accessToken, String uid)
-    {
-        activityId = "login_" + System.currentTimeMillis();
-        notificationManager = NotificationManager.getInstance();
 
-        if (accessToken != null && !accessToken.isEmpty()) {
-            notificationManager.reset();
-            notificationManager.init(accessToken, uid);
-        }
-        connectToSignalR();
-
-    }
     private void saveAuthToken(String accessToken, String refreshToken, long expiresInSeconds) {
         preferencesHelper.saveAuthTokens(accessToken, refreshToken, expiresInSeconds);
     }

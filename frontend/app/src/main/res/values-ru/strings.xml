@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <!--Login-->
-    <string name="app_name">Map Mastermind</string>
+    <string name="app_name">ГеоРаш</string>
     <string name="welcome_to_app">Добро пожаловать в</string>
     <string name="geography_quiz">Географическая викторина</string>
     <string name="login_with">Вход через</string>
@@ -21,6 +21,7 @@
     <string name="dont_have_account">Нет аккаунта? Зарегистрироваться</string>
     <string name="error_user_not_found">Нет такого пользователя</string>
     <string name="error_email_taken">Email уже занят</string>
+    <string name="loading">Загрузка...</string>
     <!--Home-->
     <string name="level_prefix">Уровень</string>
     <string name="total_points">Всего очков</string>
@@ -94,13 +95,13 @@
     <string name="offline_mode">Соло приключение</string>
     <string name="offline_description">Исследуйте страны, столицы и флаги в своём темпе. Идеально для обучения!</string>
     <string name="play_anytime">Играть оффлайн</string>
-    <string name="learn_at_pace">Свой темп</string>
+    <string name="knowledge">Тренировка знаний</string>
     <string name="select_mode">Выбрать режим</string>
 
     <string name="pvp_mode">PvP Дуэль</string>
     <string name="pvp_description">Сразитесь с реальными игроками в интеллектуальном поединке. Докажите свои знания!</string>
-    <string name="online_players">Игроки онлайн</string>
-    <string name="intellectual_duel">Интеллектуальный поединок</string>
+    <string name="online_players">Онлайн сражение</string>
+    <string name="rating_match">Рейтинговый матч</string>
     <string name="find_opponent">Найти соперника</string>
 
     <string name="king_description">Массовая королевская битва. Последний выживший получает корону!</string>
@@ -151,6 +152,7 @@
     <string name="unknown">Неизвестно</string>
     <string name="banned">ЗАБАНЕНО</string>
     <string name="opponent_selecting">Противник выбирает...</string>
+    <string name="draft_completed">Дрфт завершён! Начинаем игру...</string>
 
     <string name="pvp_battle">PvP Битва</string>
     <string name="opponent_disconnected">Оппонент отключился. Вы победили!</string>
@@ -175,7 +177,8 @@
     <string name="empty">Пусто</string>
     <string name="leave">Выйти</string>
     <string name="slot">Слот</string>
-    <string name="wait_players">Ждём...</string>
+    <string name="wait_players">Ждём остальных игроков</string>
+    <string name="times_up">Время вышло! Матч начинается.</string>
 
     <!--Game-->
     <string name="speed_round">СКОРОСТНОЙ</string>

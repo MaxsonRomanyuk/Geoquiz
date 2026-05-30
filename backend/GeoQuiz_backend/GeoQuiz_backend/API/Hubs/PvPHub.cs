@@ -307,7 +307,7 @@ namespace GeoQuiz_backend.API.Hubs
             {
                 var answerResult = await _gameSessionService.SubmitAnswerAsync(request.MatchId, userId, request);
 
-                await _notificationService.NotifyQuestionResult(request.MatchId, answerResult);
+                await _notificationService.NotifyQuestionResult(userId, answerResult);
             }
             catch (Exception ex)
             {

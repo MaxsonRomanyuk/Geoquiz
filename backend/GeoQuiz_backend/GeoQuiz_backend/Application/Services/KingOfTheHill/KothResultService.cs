@@ -90,7 +90,12 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                     .Where(a => a.MatchId == gameState.MatchId && a.UserId == userId)
                     .ToListAsync();
 
-                var place = gameState.PlayerPlaces.GetValueOrDefault(userId, gameState.ActivePlayerIds.Count + 1);
+                var place = gameState.PlayerPlaces.GetValueOrDefault(userId, gameState.ActivePlayerIds.Count +1);
+                if (gameState.ActivePlayerIds.Count == 1)
+                {
+                    place = 1;
+                }
+
                 var roundsSurvived = gameState.Players[userId].EliminatedAtRound;
 
                 var gameSession = new GameSession
