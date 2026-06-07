@@ -14,7 +14,6 @@ namespace GeoQuiz_backend.Infrastructure.Persistence.MySQL
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
         public DbSet<UserStats> UserStats => Set<UserStats>();
         public DbSet<GameSession> GameSessions => Set<GameSession>();
-        public DbSet<Subscription> Subscriptions => Set<Subscription>();
         public DbSet<Achievement> Achievements => Set<Achievement>();
         public DbSet<UserAchievement> UserAchievements => Set<UserAchievement>();
         public DbSet<PvPMatch> PvPMatches => Set<PvPMatch>();
@@ -31,7 +30,6 @@ namespace GeoQuiz_backend.Infrastructure.Persistence.MySQL
             modelBuilder.Entity<RefreshToken>().ToTable("refreshtokens");
             modelBuilder.Entity<UserStats>().ToTable("userstats");
             modelBuilder.Entity<GameSession>().ToTable("gamesessions");
-            modelBuilder.Entity<Subscription>().ToTable("subscriptions");
             modelBuilder.Entity<Achievement>().ToTable("achievements");
             modelBuilder.Entity<UserAchievement>().ToTable("userachievements");
             modelBuilder.Entity<PvPMatch>().ToTable("pvpmatches");
@@ -72,11 +70,6 @@ namespace GeoQuiz_backend.Infrastructure.Persistence.MySQL
                 entity.HasMany(e => e.RefreshTokens)
                     .WithOne(gs => gs.User)
                     .HasForeignKey(gs => gs.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasOne(e => e.Subscription)
-                    .WithOne(s => s.User)
-                    .HasForeignKey<Subscription>(s => s.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasMany(e => e.GameSessions)
@@ -231,19 +224,6 @@ namespace GeoQuiz_backend.Infrastructure.Persistence.MySQL
                     .HasForeignKey<QuestionSet>(q => q.PvPMatchId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-
-            });
-
-            modelBuilder.Entity<Subscription>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-
-                entity.Property(e => e.Type)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.StartDate).IsRequired();
-                entity.Property(e => e.EndDate).IsRequired();
 
             });
 

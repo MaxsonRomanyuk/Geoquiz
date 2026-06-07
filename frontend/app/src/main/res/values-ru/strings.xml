@@ -113,6 +113,7 @@
     <string name="question">Вопрос</string>
     <string name="of">из</string>
     <string name="time_left">Осталось: %1$dс</string>
+    <string name="time">Время</string>
     <string name="time_up">Время вышло!</string>
     <string name="play_audio">Возпроизвести аудио</string>
     <string name="capital_question">Столица страны: %1$s</string>

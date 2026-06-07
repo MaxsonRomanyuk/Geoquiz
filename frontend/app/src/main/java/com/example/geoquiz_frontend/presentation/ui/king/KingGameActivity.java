@@ -42,7 +42,6 @@ public class KingGameActivity extends BaseActivity {
 
     private static final String TAG = "KingGameActivity";
 
-    private ImageView ivClose;
     private TextView tvPlayersRemaining, tvTotalPlayers;
     private TextView tvQuestionNumber, tvRoundTypeIcon, tvRoundType, tvTimer, tvScore, tvQuestionTitle;
     private LinearLayout layoutQuestionInfo;
@@ -105,7 +104,6 @@ public class KingGameActivity extends BaseActivity {
     }
 
     private void initViews() {
-        ivClose = findViewById(R.id.ivClose);
         tvPlayersRemaining = findViewById(R.id.tvPlayersRemaining);
         tvTotalPlayers = findViewById(R.id.tvTotalPlayers);
         tvQuestionNumber = findViewById(R.id.tv_question_number);
@@ -132,8 +130,6 @@ public class KingGameActivity extends BaseActivity {
     }
 
     private void setupClickListeners() {
-        ivClose.setOnClickListener(v -> exitGame());
-
         btnEndGame.setOnClickListener(v -> exitGame());
 
         btnPlayAudio.setOnClickListener(v -> {

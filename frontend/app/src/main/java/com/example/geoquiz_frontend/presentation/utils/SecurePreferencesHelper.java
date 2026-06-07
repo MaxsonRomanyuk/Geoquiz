@@ -37,46 +37,45 @@ public class SecurePreferencesHelper {
     private static final String KEY_AUTH_TOKEN = "auth_token";
     private static final String KEY_REFRESH_TOKEN = "refresh_token";
     private static final String KEY_TOKEN_EXPIRY = "token_expiry";
-    private static final String KEY_IS_PREMIUM = "is_premium";
 
     private static final long BANNER_COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
     private SharedPreferences regularPrefs;
     private SharedPreferences encryptedPrefs;
 
-//    public SecurePreferencesHelper(Context context) {
-//        this.context = context.getApplicationContext();
-//        try {
-//            regularPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-//            encryptedPrefs = context.getSharedPreferences(ENCRYPTED_PREFS_NAME, Context.MODE_PRIVATE);
-//
-//            String masterKeyAlias = MasterKeys.getOrCreate(
-//                    new KeyGenParameterSpec.Builder(
-//                            MasterKeys.AES256_GCM_SPEC.getKeystoreAlias(),
-//                            KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
-//                            .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-//                            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-//                            .setKeySize(256)
-//                            .build()
-//            );
-//
-//            encryptedPrefs = EncryptedSharedPreferences.create(
-//                    ENCRYPTED_PREFS_NAME,
-//                    masterKeyAlias,
-//                    context,
-//                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-//                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-//            );
-//        } catch (GeneralSecurityException | IOException e) {
-//            e.printStackTrace();
-//            encryptedPrefs = context.getSharedPreferences(ENCRYPTED_PREFS_NAME, Context.MODE_PRIVATE);
-//        }
-//    }
     public SecurePreferencesHelper(Context context) {
         this.context = context.getApplicationContext();
-        regularPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        encryptedPrefs = context.getSharedPreferences(ENCRYPTED_PREFS_NAME, Context.MODE_PRIVATE);
+        try {
+            regularPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+            encryptedPrefs = context.getSharedPreferences(ENCRYPTED_PREFS_NAME, Context.MODE_PRIVATE);
+
+            String masterKeyAlias = MasterKeys.getOrCreate(
+                    new KeyGenParameterSpec.Builder(
+                            MasterKeys.AES256_GCM_SPEC.getKeystoreAlias(),
+                            KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+                            .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                            .setKeySize(256)
+                            .build()
+            );
+
+            encryptedPrefs = EncryptedSharedPreferences.create(
+                    ENCRYPTED_PREFS_NAME,
+                    masterKeyAlias,
+                    context,
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            );
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+            encryptedPrefs = context.getSharedPreferences(ENCRYPTED_PREFS_NAME, Context.MODE_PRIVATE);
+        }
     }
+//    public SecurePreferencesHelper(Context context) {
+//        this.context = context.getApplicationContext();
+//        regularPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+//        encryptedPrefs = context.getSharedPreferences(ENCRYPTED_PREFS_NAME, Context.MODE_PRIVATE);
+//    }
 
 
     public void saveAuthTokens(String accessToken, String refreshToken, long expiresInSeconds) {
@@ -121,7 +120,6 @@ public class SecurePreferencesHelper {
         editor.putString(KEY_CURRENT_USER_ID, user.getId());
         editor.putString(KEY_CURRENT_USER_NAME, user.getName());
         editor.putString(KEY_CURRENT_USER_EMAIL, user.getEmail());
-        editor.putBoolean(KEY_IS_PREMIUM, user.isPremium());
         editor.apply();
     }
 
@@ -130,12 +128,10 @@ public class SecurePreferencesHelper {
         if (name == null) {
             return null;
         }
-
         User user = new User();
         user.setId(encryptedPrefs.getString(KEY_CURRENT_USER_ID, "0"));
         user.setName(name);
         user.setEmail(encryptedPrefs.getString(KEY_CURRENT_USER_EMAIL, ""));
-        user.setPremium(encryptedPrefs.getBoolean(KEY_IS_PREMIUM, false));
 
         return user;
     }
@@ -157,14 +153,6 @@ public class SecurePreferencesHelper {
         return encryptedPrefs.getString(KEY_CURRENT_USER_EMAIL, "");
     }
 
-    public boolean isPremium() {
-        return encryptedPrefs.getBoolean(KEY_IS_PREMIUM, false);
-    }
-
-    public void setPremium(boolean isPremium) {
-        encryptedPrefs.edit().putBoolean(KEY_IS_PREMIUM, isPremium).apply();
-    }
-
     public void clearUserAndTokens() {
         SharedPreferences.Editor editor = encryptedPrefs.edit();
         editor.remove(KEY_CURRENT_USER_ID);
@@ -173,7 +161,7 @@ public class SecurePreferencesHelper {
         editor.remove(KEY_AUTH_TOKEN);
         editor.remove(KEY_REFRESH_TOKEN);
         editor.remove(KEY_TOKEN_EXPIRY);
-        editor.remove(KEY_IS_PREMIUM);
+        editor.remove(KEY_AVATAR);
         editor.apply();
     }
 

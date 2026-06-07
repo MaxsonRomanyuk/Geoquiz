@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
@@ -25,6 +26,7 @@ import com.example.geoquiz_frontend.domain.entities.GameQuestion;
 import com.example.geoquiz_frontend.domain.entities.GameSession;
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
+import com.example.geoquiz_frontend.presentation.ui.pvp.PvPGameActivity;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 
 import java.io.IOException;
@@ -172,6 +174,9 @@ public class SoloGameActivity extends BaseActivity {
 
         if (tvTimer != null) {
             tvTimer.setText(timeText);
+            if (seconds <= 10) {
+                tvTimer.setTextColor(ContextCompat.getColor(SoloGameActivity.this, R.color.colorError));
+            }
         }
     }
 
@@ -187,6 +192,7 @@ public class SoloGameActivity extends BaseActivity {
             String questionText = language.equals("ru") ?
                     "Вопрос " + (currentQuestionIndex + 1) + "/" + TOTAL_QUESTIONS :
                     "Question " + (currentQuestionIndex + 1) + "/" + TOTAL_QUESTIONS;
+            questionText = (currentQuestionIndex + 1) + "/" + TOTAL_QUESTIONS;
             tvQuestionNumber.setText(questionText);
         }
 

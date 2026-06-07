@@ -11,12 +11,8 @@ import com.example.geoquiz_frontend.data.remote.dtos.solo.BootstrapResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.solo.FinishGameRequest;
 import com.example.geoquiz_frontend.data.remote.dtos.solo.SyncGameSessionRequest;
 import com.example.geoquiz_frontend.data.local.DatabaseHelper;
-import com.example.geoquiz_frontend.domain.entities.GameQuestion;
 import com.example.geoquiz_frontend.domain.entities.GameSession;
 import com.example.geoquiz_frontend.domain.entities.PendingGame;
-import com.example.geoquiz_frontend.domain.enums.GameMode;
-import com.example.geoquiz_frontend.domain.enums.LanguageQuestionType;
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -28,24 +24,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -105,8 +94,6 @@ public class GameRepository {
     }
 
     private void loadDataFromServer(BootstrapCallback callback) {
-        Log.d(TAG, "Отправка запроса на сервер...");
-
         apiService.bootstrap().enqueue(new Callback<BootstrapResponse>() {
             @Override
             public void onResponse(Call<BootstrapResponse> call, Response<BootstrapResponse> response) {
@@ -120,7 +107,6 @@ public class GameRepository {
                     loadDataFromAssets(callback);
                 }
             }
-
             @Override
             public void onFailure(Call<BootstrapResponse> call, Throwable t) {
                 Log.e(TAG, "Сетевая ошибка", t);
@@ -131,39 +117,28 @@ public class GameRepository {
     private void loadDataFromAssets(BootstrapCallback callback) {
         executorService.execute(() -> {
             try {
-                Log.d(TAG, "Загрузка данных из assets...");
-
                 if (!hasBootstrapAssets()) {
-                    Log.e(TAG, "Файл bootstrap_data.json не найден в assets");
                     new Handler(Looper.getMainLooper()).post(() ->
                             callback.onError("Нет интернета и нет встроенных данных. Подключитесь к сети.")
                     );
                     return;
                 }
-
                 String json = loadJsonFromAssets(BOOTSTRAP_ASSETS_FILE);
                 if (json == null || json.isEmpty()) {
-                    Log.e(TAG, "Файл bootstrap_data.json пуст или не может быть прочитан");
                     new Handler(Looper.getMainLooper()).post(() ->
                             callback.onError("Ошибка чтения встроенных данных")
                     );
                     return;
                 }
-
                 BootstrapResponse data = gson.fromJson(json, BootstrapResponse.class);
                 if (data == null) {
-                    Log.e(TAG, "Ошибка парсинга bootstrap_data.json");
                     new Handler(Looper.getMainLooper()).post(() ->
                             callback.onError("Ошибка парсинга встроенных данных")
                     );
                     return;
                 }
-
-                Log.d(TAG, "Загружено из assets: " + (data.getCountries() != null ? data.getCountries().size() : 0) + " стран, ");
                 saveBootstrapData(data, callback);
-
             } catch (Exception e) {
-                Log.e(TAG, "Ошибка загрузки из assets", e);
                 new Handler(Looper.getMainLooper()).post(() ->
                         callback.onError("Ошибка загрузки встроенных данных: " + e.getMessage())
                 );
@@ -173,16 +148,13 @@ public class GameRepository {
     private void saveBootstrapData(BootstrapResponse data, BootstrapCallback callback) {
         executorService.execute(() -> {
             try {
-                Log.d(TAG, "Сохранение данных в БД...");
                 dbHelper.saveBootstrapData(data);
                 loadDataFromDatabase();
 
-                Log.d(TAG, "Данные успешно сохранены");
                 new Handler(Looper.getMainLooper()).post(() ->
                         callback.onSuccess(data)
                 );
             } catch (Exception e) {
-                Log.e(TAG, "Ошибка сохранения в БД", e);
                 new Handler(Looper.getMainLooper()).post(() ->
                         callback.onError("Ошибка сохранения: " + e.getMessage())
                 );
@@ -216,26 +188,8 @@ public class GameRepository {
         for (BootstrapResponse.CountryDto country : countries) {
             countriesCache.put(country.getId(), country);
         }
-
-
-        Log.d(TAG, String.format(Locale.US, "Загружено %d стран", countriesCache.size()));
     }
 
-//    private List<BootstrapResponse.CountryDto> getRandomCountries(int count, String excludeId) {
-//        List<BootstrapResponse.CountryDto> allCountries = new ArrayList<>(countriesCache.values());
-//        List<BootstrapResponse.CountryDto> result = new ArrayList<>();
-//
-//        allCountries.removeIf(c -> c.getId().equals(excludeId));
-//
-//        Collections.shuffle(allCountries);
-//
-//        int limit = Math.min(count, allCountries.size());
-//        for (int i = 0; i < limit; i++) {
-//            result.add(allCountries.get(i));
-//        }
-//
-//        return result;
-//    }
 
     public void saveGameSession(GameSession session) {
         PendingGame pendingGame = new PendingGame(session);

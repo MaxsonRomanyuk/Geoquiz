@@ -2,7 +2,6 @@ package com.example.geoquiz_frontend.data.remote;
 
 import androidx.annotation.NonNull;
 
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 
 import java.io.IOException;

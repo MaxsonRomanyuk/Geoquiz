@@ -15,7 +15,6 @@ import com.example.geoquiz_frontend.domain.entities.Achievement;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
 import com.example.geoquiz_frontend.domain.enums.LocalizedText;
 import com.example.geoquiz_frontend.presentation.utils.AuthManager;
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 
 import org.json.JSONArray;

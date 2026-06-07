@@ -35,7 +35,6 @@ namespace GeoQuiz_backend.Application.Services
                 Email = request.Email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
                 RegisteredAt = DateTime.UtcNow,
-                IsPremium = false,
                 Stats = request.Stats == null
                     ? new UserStats
                     {

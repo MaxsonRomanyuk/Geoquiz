@@ -17,16 +17,6 @@
         android:gravity="center_vertical"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/ivClose"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_back"
-            android:padding="6dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:tint="?attr/colorTertiaryFixed" />
-
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"

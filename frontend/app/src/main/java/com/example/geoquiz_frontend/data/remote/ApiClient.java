@@ -1,7 +1,6 @@
 package com.example.geoquiz_frontend.data.remote;
 import android.content.Context;
 
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

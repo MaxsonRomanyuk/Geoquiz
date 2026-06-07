@@ -8,46 +8,87 @@
     android:background="@drawable/background_gradient"
     tools:context=".presentation.ui.soloGame.SoloGameActivity">
     <include layout="@layout/include_connection_banner"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingHorizontal="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="20dp">
+        android:paddingHorizontal="20dp"
+        android:paddingTop="26dp"
+        android:paddingBottom="12dp"
+        android:layout_marginBottom="20dp">
 
-        <TextView
-            android:id="@+id/tv_question_number"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/question"
-            android:textSize="16sp"
-            android:textColor="?attr/colorTertiary"
-            android:textStyle="bold"/>
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_score"
+            <TextView
+                android:id="@+id/tv_question_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1/10"
+                android:textColor="?attr/colorTertiary"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/question"
+                android:textColor="?attr/colorTertiaryFixed"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="16sp"
-            android:textColor="?attr/colorPrimary"
-            android:textStyle="bold"
-            android:layout_marginEnd="16dp"
-            android:padding="8dp"/>
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
-        <TextView
-            android:id="@+id/tv_timer"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tv_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="24sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time"
+                android:textColor="?attr/colorTertiaryFixed"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="01:00"
-            android:textSize="20sp"
-            android:textColor="?attr/colorTertiary"
-            android:textStyle="bold"
-            android:background="@drawable/timer_bg"
-            android:padding="8dp" />
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="end">
+
+            <TextView
+                android:id="@+id/tv_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5sp"
+                android:text="0"
+                android:textColor="?attr/colorTertiary"
+                android:textSize="22sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/score"
+                android:textColor="?attr/colorTertiaryFixed"
+                android:textSize="16sp"/>
+        </LinearLayout>
 
     </LinearLayout>
 

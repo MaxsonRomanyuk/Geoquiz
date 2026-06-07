@@ -28,8 +28,8 @@ public class SettingsActivity extends BaseActivity {
     private AuthManager authManager;
     private User currentUser;
     private GameManager gameManager;
-    private TextView tvCurrentLanguage, tvCurrentTheme, tvUpdateStatus, tvSubscriptionStatus;
-    private MaterialCardView btnLanguage, btnTheme, btnData, btnAbout, btnPrivacy, btnTerms, btnSubscription, btnTransfer, btnLogout, btnBack;
+    private TextView tvCurrentLanguage, tvCurrentTheme, tvUpdateStatus;
+    private MaterialCardView btnLanguage, btnTheme, btnData, btnAbout, btnPrivacy, btnTerms, btnTransfer, btnLogout, btnBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +49,6 @@ public class SettingsActivity extends BaseActivity {
     private void initViews() {
         tvCurrentLanguage = findViewById(R.id.tv_current_language);
         tvCurrentTheme = findViewById(R.id.tv_current_theme);
-        tvSubscriptionStatus = findViewById(R.id.tv_subscription_status);
         tvUpdateStatus = findViewById(R.id.tv_update_status);
 
         btnLanguage = findViewById(R.id.btn_language);
@@ -58,7 +57,6 @@ public class SettingsActivity extends BaseActivity {
         btnAbout = findViewById(R.id.btn_about);
         btnPrivacy = findViewById(R.id.btn_privacy);
         btnTerms = findViewById(R.id.btn_terms);
-        btnSubscription = findViewById(R.id.btn_subscription);
         btnTransfer = findViewById(R.id.btn_transfer);
         btnLogout = findViewById(R.id.btn_logout);
         btnBack = findViewById(R.id.btn_back);
@@ -76,8 +74,6 @@ public class SettingsActivity extends BaseActivity {
 
         btnTerms.setOnClickListener(v -> showTermsDialog());
 
-        btnSubscription.setOnClickListener(v -> openSubscriptionScreen());
-
         btnTransfer.setOnClickListener(v-> showTransferConfirmation());
 
         btnLogout.setOnClickListener(v -> showLogoutConfirmation());
@@ -92,13 +88,6 @@ public class SettingsActivity extends BaseActivity {
 
         String currentTheme = preferencesHelper.getTheme();
         tvCurrentTheme.setText("dark".equals(currentTheme) ? ("ru".equals(currentLanguage) ? "Тёмная" : "Dark") : ("ru".equals(currentLanguage) ? "Светлая" : "Light"));
-
-
-        boolean isPremium = currentUser.isPremium();
-        String subscriptionText = isPremium ?
-                ("ru".equals(currentLanguage) ? "Премиум" : "Premium") :
-                ("ru".equals(currentLanguage) ? "Не активирована" : "Not Subscribed");
-        tvSubscriptionStatus.setText(subscriptionText);
     }
     private void showLanguageDialog() {
         String currentLanguage = preferencesHelper.getLanguage();
@@ -1095,11 +1084,6 @@ public class SettingsActivity extends BaseActivity {
                 .setPositiveButton("OK", null)
                 .setIcon(R.drawable.ic_terms)
                 .show();
-    }
-    private void openSubscriptionScreen() {
-        Toast.makeText(this, "Экран подписки", Toast.LENGTH_SHORT).show();
-//        Intent intent = new Intent(this, SubscriptionActivity.class);
-//        startActivity(intent);
     }
     private void showTransferConfirmation() {
         String currentLanguage = preferencesHelper.getLanguage();

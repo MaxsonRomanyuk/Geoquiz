@@ -31,7 +31,6 @@ public class ProfileActivity extends BaseActivity {
 
     private TextView tvAfricaCorrect, tvAsiaCorrect, tvEuropeCorrect, tvAmericaCorrect, tvOceaniaCorrect;
     private MaterialCardView btnMatchHistory, btnEditAvatar;
-    private MaterialButton btnGetPlus;
     private BottomNavigationView bottomNavigationView;
     private UserRepository userRepository;
     @Override
@@ -68,7 +67,6 @@ public class ProfileActivity extends BaseActivity {
         tvOceaniaCorrect = findViewById(R.id.tvOceaniaCorrect);
 
         btnMatchHistory = findViewById(R.id.btnMatchHistory);
-        btnGetPlus = findViewById(R.id.btnGetPlus);
         btnEditAvatar = findViewById(R.id.cardEditAvatar);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -85,11 +83,6 @@ public class ProfileActivity extends BaseActivity {
         btnEditAvatar.setOnClickListener(v -> {
             openAvatarChooser();
         });
-
-        btnGetPlus.setOnClickListener(v -> {
-            // startActivity(new Intent(this, PremiumActivity.class));
-        });
-
     }
     private void setupBottomNavigation() {
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {

@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.domain.entities.Achievement;
-import com.example.geoquiz_frontend.presentation.utils.PreferencesHelper;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
 import com.google.android.material.card.MaterialCardView;
 

@@ -14,9 +14,6 @@ namespace GeoQuiz_backend.Application.DTOs.PvP
         public string OpponentName { get; set; }
         public int OpponentLevel { get; set; }
         public int OpponentScore { get; set; }
-        public bool OpponentIsPremium { get; set; }
-
-
         public List<GameMode> AvailableModes { get; set; }
         public List<GameMode> BannedModes { get; set; } 
         public Guid CurrentTurnUserId { get; set; } 

@@ -8,7 +8,6 @@ public class MatchFoundData {
     private String opponentName;
     private int opponentLevel;
     private int opponentScore;
-    private boolean opponentIsPremium;
     private List<String> availableModes;
     private List<String> bannedModes;
     private String currentTurnUserId;
@@ -22,7 +21,6 @@ public class MatchFoundData {
     public String getOpponentName() { return opponentName; }
     public int getOpponentLevel() { return opponentLevel; }
     public int getOpponentScore() { return opponentScore; }
-    public boolean isOpponentIsPremium() { return opponentIsPremium; }
     public List<String> getAvailableModes() { return availableModes; }
     public List<String> getBannedModes() { return bannedModes; }
     public String getCurrentTurnUserId() { return currentTurnUserId; }

@@ -113,6 +113,7 @@
     <string name="question">Question</string>
     <string name="of">of</string>
     <string name="time_left">Time left: %1$ds</string>
+    <string name="time">Time</string>
     <string name="time_up">Time\'s up!</string>
     <string name="play_audio">Play audio</string>
     <string name="capital_question">Capital of: %1$s</string>
