@@ -116,6 +116,15 @@ namespace GeoQuiz_backend.Application.Services.PvP
                     ? (int)p2Answers.Average(a => a.TimeSpentMs)
                     : 0
             };
+            var s1 = CreateSession(match.Player1, match, p1Answers, p1Score, gameMode);
+            var s2 = CreateSession(match.Player2, match, p2Answers, p2Score, gameMode);
+
+            _db.GameSessions.AddRange(s1, s2);
+            await _db.SaveChangesAsync();
+
+            await UpdateUserStats(match, match.Player1, s1, s2, match.Player2, winnerId);
+            await UpdateUserStats(match, match.Player2, s2, s1, match.Player1, winnerId);
+
             await _notificationService.NotifyGameFinished(match.Player1Id, new GameFinishedData
             {
                 MatchId = matchId,
@@ -135,15 +144,6 @@ namespace GeoQuiz_backend.Application.Services.PvP
                 OpponentStats = p1Stats,
                 ExperienceGained = winnerId == match.Player2Id ? p2Score : 0,
             });
-
-            var s1 = CreateSession(match.Player1, match, p1Answers, p1Score, gameMode);
-            var s2 = CreateSession(match.Player2, match, p2Answers, p2Score, gameMode);
-
-            _db.GameSessions.AddRange(s1, s2);
-            await _db.SaveChangesAsync();
-
-            await UpdateUserStats(match, match.Player1, s1, s2, match.Player2, winnerId);
-            await UpdateUserStats(match, match.Player2, s2, s1, match.Player1, winnerId);
 
             return;
         }

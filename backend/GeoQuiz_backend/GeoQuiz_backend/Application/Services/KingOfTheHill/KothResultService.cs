@@ -93,7 +93,7 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
                 var place = gameState.PlayerPlaces.GetValueOrDefault(userId, gameState.ActivePlayerIds.Count +1);
                 if (gameState.ActivePlayerIds.Count == 1)
                 {
-                    place = 1;
+                    if (gameState.ActivePlayerIds[0].Equals(userId)) place = 1;
                 }
 
                 var roundsSurvived = gameState.Players[userId].EliminatedAtRound;

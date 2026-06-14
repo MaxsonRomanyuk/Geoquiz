@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
@@ -187,11 +188,6 @@ public class KingResultActivity extends BaseActivity {
         if (signalRManager!= null && signalRManager.isConnected()) {
             signalRManager.stop();
         }
-    }
-    private int getColorFromAttr(int attrResId) {
-        android.util.TypedValue typedValue = new android.util.TypedValue();
-        getTheme().resolveAttribute(attrResId, typedValue, true);
-        return typedValue.data;
     }
     private void hideSystemBars() {
         View decorView = getWindow().getDecorView();

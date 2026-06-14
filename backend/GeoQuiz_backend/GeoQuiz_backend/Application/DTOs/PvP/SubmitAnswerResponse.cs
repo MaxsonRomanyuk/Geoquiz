@@ -2,6 +2,7 @@
 {
     public class SubmitAnswerResponse
     {
+        public string UserId { get; set; }
         public bool IsCorrect { get; set; }
         public int CorrectOptionIndex { get; set; }
         public int QuestionNumber { get; set; }

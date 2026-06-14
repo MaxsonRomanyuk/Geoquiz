@@ -116,6 +116,7 @@
     <string name="time">Time</string>
     <string name="time_up">Time\'s up!</string>
     <string name="play_audio">Play audio</string>
+    <string name="stop_audio">Stop audio</string>
     <string name="capital_question">Capital of: %1$s</string>
     <string name="flag_question">Which country does this flag belong to?</string>
     <string name="outline_question">Which country does this outline belong to?</string>

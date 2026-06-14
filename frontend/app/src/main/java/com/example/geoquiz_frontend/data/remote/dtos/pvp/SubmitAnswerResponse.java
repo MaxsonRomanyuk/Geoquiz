@@ -1,6 +1,7 @@
 package com.example.geoquiz_frontend.data.remote.dtos.pvp;
 
 public class SubmitAnswerResponse {
+    private String userId;
     private boolean isCorrect;
     private int correctOptionIndex;
     private int questionNumber;
@@ -22,7 +23,7 @@ public class SubmitAnswerResponse {
         this.yourAnswered = yourAnswered;
         this.opponentAnswered = opponentAnswered;
     }
-
+    public String getUserId() { return userId; }
     public boolean isCorrect() {
         return isCorrect;
     }

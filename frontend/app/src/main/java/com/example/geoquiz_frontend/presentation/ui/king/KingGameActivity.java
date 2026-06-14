@@ -1,12 +1,17 @@
 package com.example.geoquiz_frontend.presentation.ui.king;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -43,11 +48,11 @@ public class KingGameActivity extends BaseActivity {
     private static final String TAG = "KingGameActivity";
 
     private TextView tvPlayersRemaining, tvTotalPlayers;
-    private TextView tvQuestionNumber, tvRoundTypeIcon, tvRoundType, tvTimer, tvScore, tvQuestionTitle;
+    private TextView tvQuestionNumber, tvRoundTypeIcon, tvRoundType, tvTimer, tvScore, tvQuestionTitle, tvAudioHint;
     private LinearLayout layoutQuestionInfo;
     private FrameLayout imageContainer;
-    private ImageView ivQuestionImage;
-    private Button btnPlayAudio;
+    private LinearLayout audioContainer, layoutWave;
+    private ImageView ivQuestionImage, btnPlayAudio;
     private Button[] optionButtons = new Button[4];
     private Button btnEndGame;
 
@@ -76,11 +81,15 @@ public class KingGameActivity extends BaseActivity {
     private boolean isSpectator = false;
     private boolean isManualDisconnect = false;
     private long questionStartTime;
+    private MediaPlayer mediaPlayer;
 
 
     private Handler timerHandler = new Handler();
     private Runnable timerRunnable;
     private int timeLeft = 10;
+    private boolean isPlaying = false;
+    private View wave1, wave2, wave3, wave4;
+    private Animator waveAnimator1, waveAnimator2, waveAnimator3, waveAnimator4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,13 +120,16 @@ public class KingGameActivity extends BaseActivity {
         tvRoundType = findViewById(R.id.tvRoundType);
         tvTimer = findViewById(R.id.tv_timer);
         tvScore = findViewById(R.id.tv_score);
+        tvAudioHint = findViewById(R.id.tv_audio_hint);
 
         layoutQuestionInfo = findViewById(R.id.layoutQuestionInfo);
         tvQuestionTitle = findViewById(R.id.tv_question_title);
         imageContainer = findViewById(R.id.image_container);
+        audioContainer = findViewById(R.id.audio_container);
         ivQuestionImage = findViewById(R.id.iv_question_image);
         btnPlayAudio = findViewById(R.id.btn_play_audio);
         btnEndGame = findViewById(R.id.btn_end_game);
+        layoutWave = findViewById(R.id.layout_wave);
 
         optionButtons[0] = findViewById(R.id.btn_option1);
         optionButtons[1] = findViewById(R.id.btn_option2);
@@ -127,13 +139,21 @@ public class KingGameActivity extends BaseActivity {
 
         vSpectatorOverlay = findViewById(R.id.vSpectatorOverlay);
         layoutSpectatorLabel = findViewById(R.id.layoutSpectatorLabel);
+        wave1 = findViewById(R.id.wave1);
+        wave2 = findViewById(R.id.wave2);
+        wave3 = findViewById(R.id.wave3);
+        wave4 = findViewById(R.id.wave4);
     }
 
     private void setupClickListeners() {
         btnEndGame.setOnClickListener(v -> exitGame());
 
         btnPlayAudio.setOnClickListener(v -> {
-            Toast.makeText(this, "Audio playback not added", Toast.LENGTH_SHORT).show();
+            if (isPlaying) {
+                stopAudio();
+            } else {
+                playAudio();
+            }
         });
 
         for (int i = 0; i < optionButtons.length; i++) {
@@ -286,10 +306,11 @@ public class KingGameActivity extends BaseActivity {
         }
 
         if (currentQuestion.getAudioUrl() != null && !currentQuestion.getAudioUrl().isEmpty()) {
-            btnPlayAudio.setVisibility(View.VISIBLE);
+            audioContainer.setVisibility(View.VISIBLE);
         } else {
-            btnPlayAudio.setVisibility(View.GONE);
+            audioContainer.setVisibility(View.GONE);
         }
+        stopAudio();
 
         List<OptionData> options = currentQuestion.getOptions();
         for (int i = 0; i < optionButtons.length; i++) {
@@ -569,7 +590,118 @@ public class KingGameActivity extends BaseActivity {
             Log.e(TAG, "Error loading image from assets: " + imagePath, e);
         }
     }
+    private void stopAudio()
+    {
+        isPlaying = false;
 
+        btnPlayAudio.setImageResource(R.drawable.ic_play_audio);
+        tvAudioHint.setText(R.string.play_audio);
+        layoutWave.setVisibility(View.GONE);
+        stopWaveAnimation();
+
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+    private void playAudio() {
+        String audioPath = currentQuestion != null ? currentQuestion.getAudioUrl() : null;
+
+        audioPath = "sounds/languages/afghanistan_pashto.mp3";
+
+        if (audioPath == null || audioPath.isEmpty()) {
+            Toast.makeText(this,
+                    language.equals("ru") ? "Аудио недоступно" : "Audio not available",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            stopAudio();
+
+            isPlaying = true;
+            btnPlayAudio.setImageResource(R.drawable.ic_stop_audio);
+            tvAudioHint.setText(R.string.stop_audio);
+            layoutWave.setVisibility(View.VISIBLE);
+            startWaveAnimation();
+
+            mediaPlayer = new MediaPlayer();
+            AssetFileDescriptor afd = getAssets().openFd(audioPath);
+            mediaPlayer.setDataSource(afd.getFileDescriptor(),
+                    afd.getStartOffset(),
+                    afd.getLength());
+            afd.close();
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+
+            Log.d(TAG, "Playing audio: " + audioPath);
+
+        } catch (IOException e) {
+            Log.e(TAG, "Error playing audio", e);
+            Toast.makeText(this,
+                    language.equals("ru") ? "Ошибка воспроизведения" : "Playback error",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void startWaveAnimation() {
+        waveAnimator1 = createWaveAnimator(wave1, 12, 30);
+        waveAnimator2 = createWaveAnimator(wave2, 14, 48);
+        waveAnimator3 = createWaveAnimator(wave3, 10, 36);
+        waveAnimator4 = createWaveAnimator(wave4, 16, 44);
+
+        waveAnimator1.start();
+        waveAnimator2.start();
+        waveAnimator3.start();
+        waveAnimator4.start();
+    }
+
+    private Animator createWaveAnimator(View view, int minHeight, int maxHeight) {
+        ValueAnimator animator = ValueAnimator.ofInt(minHeight, maxHeight);
+        animator.setDuration(400);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setRepeatMode(ValueAnimator.REVERSE);
+        animator.addUpdateListener(animation -> {
+            int height = (int) animation.getAnimatedValue();
+            ViewGroup.LayoutParams params = view.getLayoutParams();
+            params.height = height;
+            view.setLayoutParams(params);
+        });
+        return animator;
+    }
+
+    private void stopWaveAnimation() {
+        if (waveAnimator1 != null && waveAnimator1.isRunning()) {
+            waveAnimator1.cancel();
+            waveAnimator1.end();
+        }
+        if (waveAnimator2 != null && waveAnimator2.isRunning()) {
+            waveAnimator2.cancel();
+            waveAnimator2.end();
+        }
+        if (waveAnimator3 != null && waveAnimator3.isRunning()) {
+            waveAnimator3.cancel();
+            waveAnimator3.end();
+        }
+        if (waveAnimator4 != null && waveAnimator4.isRunning()) {
+            waveAnimator4.cancel();
+            waveAnimator4.end();
+        }
+
+        resetWaveHeights();
+    }
+    private void resetWaveHeights() {
+        setWaveHeight(wave1, 12);
+        setWaveHeight(wave2, 20);
+        setWaveHeight(wave3, 16);
+        setWaveHeight(wave4, 24);
+    }
+    private void setWaveHeight(View wave, int height) {
+        if (wave != null) {
+            ViewGroup.LayoutParams params = wave.getLayoutParams();
+            params.height = height;
+            wave.setLayoutParams(params);
+        }
+    }
     private void exitGame() {
         String currentLanguage = preferencesHelper.getLanguage();
 
@@ -616,6 +748,7 @@ public class KingGameActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         stopTimer();
+        stopAudio();
         if (signalRManager != null) {
             signalRManager.removeListener(activityId);
         }

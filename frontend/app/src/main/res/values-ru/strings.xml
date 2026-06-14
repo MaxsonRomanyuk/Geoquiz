@@ -116,6 +116,7 @@
     <string name="time">Время</string>
     <string name="time_up">Время вышло!</string>
     <string name="play_audio">Возпроизвести аудио</string>
+    <string name="stop_audio">Остановить аудио</string>
     <string name="capital_question">Столица страны: %1$s</string>
     <string name="flag_question">Какой стране принадлежит этот флаг?</string>
     <string name="outline_question">Какой стране принадлежит этот контур?</string>

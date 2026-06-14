@@ -14,6 +14,8 @@ using MongoDB.Driver.Core.Connections;
 using System.Collections.Concurrent;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace GeoQuiz_backend.API.Hubs
@@ -306,13 +308,23 @@ namespace GeoQuiz_backend.API.Hubs
             try
             {
                 var answerResult = await _gameSessionService.SubmitAnswerAsync(request.MatchId, userId, request);
-
-                await _notificationService.NotifyQuestionResult(userId, answerResult);
+                answerResult.UserId = HashUserId(userId.ToString());
+                await _notificationService.NotifyQuestionResult(request.MatchId, answerResult);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in SubmitAnswer");
                 throw new HubException(ex.Message);
+            }
+        }
+        public static string HashUserId(string userId)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] inputBytes = Encoding.UTF8.GetBytes(userId);
+                byte[] hashBytes = sha256.ComputeHash(inputBytes);
+
+                return Convert.ToHexString(hashBytes).ToLowerInvariant();
             }
         }
         private Guid GetUserId()

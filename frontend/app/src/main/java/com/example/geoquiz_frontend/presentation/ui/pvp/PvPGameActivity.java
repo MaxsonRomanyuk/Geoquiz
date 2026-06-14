@@ -1,14 +1,20 @@
 package com.example.geoquiz_frontend.presentation.ui.pvp;
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +41,9 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Locale;
 public class PvPGameActivity extends BaseActivity {
@@ -46,10 +55,10 @@ public class PvPGameActivity extends BaseActivity {
     private TextView tvPlayer2Name, tvPlayer2TotalScore, tvPlayer2Score;
     private TextView tvCrownPlayer1, tvCrownPlayer2;
 
-    private TextView tvQuestionNumber, tvTimer, tvQuestionTitle;
+    private TextView tvQuestionNumber, tvTimer, tvQuestionTitle, tvAudioHint;
     private FrameLayout imageContainer;
-    private ImageView ivQuestionImage;
-    private Button btnPlayAudio;
+    private LinearLayout audioContainer, layoutWave;
+    private ImageView ivQuestionImage, btnPlayAudio;
     private Button[] optionButtons = new Button[4];
 
     private PvPSignalRClientManager signalRManager;
@@ -71,7 +80,7 @@ public class PvPGameActivity extends BaseActivity {
     private boolean isQuestionActive = true;
     private boolean hasAnswered = false;
     private boolean allAnswered = false;
-
+    private MediaPlayer mediaPlayer;
     private Handler timerHandler = new Handler();
     private Runnable timerRunnable;
     private long serverTime = 0;
@@ -83,6 +92,10 @@ public class PvPGameActivity extends BaseActivity {
     private int opponentCurrentScore = 0;
     private boolean isResumedGame = false;
     private boolean isManualDisconnect = false;
+    private String language;
+    private boolean isPlaying = false;
+    private View wave1, wave2, wave3, wave4;
+    private Animator waveAnimator1, waveAnimator2, waveAnimator3, waveAnimator4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +103,7 @@ public class PvPGameActivity extends BaseActivity {
         setContentView(R.layout.activity_pvp_game);
 
         preferencesHelper = new SecurePreferencesHelper(this);
+        language = preferencesHelper.getLanguage();
         activityId = "game_" + System.currentTimeMillis();
 
         initViews();
@@ -136,11 +150,14 @@ public class PvPGameActivity extends BaseActivity {
 
         tvQuestionNumber = findViewById(R.id.tv_question_number);
         tvTimer = findViewById(R.id.tv_timer);
+        tvAudioHint = findViewById(R.id.tv_audio_hint);
 
         tvQuestionTitle = findViewById(R.id.tv_question_title);
         imageContainer = findViewById(R.id.image_container);
+        audioContainer = findViewById(R.id.audio_container);
         ivQuestionImage = findViewById(R.id.iv_question_image);
         btnPlayAudio = findViewById(R.id.btn_play_audio);
+        layoutWave = findViewById(R.id.layout_wave);
 
         optionButtons[0] = findViewById(R.id.btn_option1);
         optionButtons[1] = findViewById(R.id.btn_option2);
@@ -149,6 +166,11 @@ public class PvPGameActivity extends BaseActivity {
 
         tvCrownPlayer1.setVisibility(View.GONE);
         tvCrownPlayer2.setVisibility(View.GONE);
+
+        wave1 = findViewById(R.id.wave1);
+        wave2 = findViewById(R.id.wave2);
+        wave3 = findViewById(R.id.wave3);
+        wave4 = findViewById(R.id.wave4);
     }
 
     private void setupClickListeners() {
@@ -161,9 +183,12 @@ public class PvPGameActivity extends BaseActivity {
         });
 
         btnPlayAudio.setOnClickListener(v -> {
-            //
+            if (isPlaying) {
+                stopAudio();
+            } else {
+                playAudio();
+            }
         });
-
     }
 
     private void getIntentData() {
@@ -305,12 +330,12 @@ public class PvPGameActivity extends BaseActivity {
             imageContainer.setVisibility(View.GONE);
         }
 
-
         if (question.getAudioUrl() != null && !question.getAudioUrl().isEmpty()) {
-            btnPlayAudio.setVisibility(View.VISIBLE);
+            audioContainer.setVisibility(View.VISIBLE);
         } else {
-            btnPlayAudio.setVisibility(View.GONE);
+            audioContainer.setVisibility(View.GONE);
         }
+        stopAudio();
 
         String lang = preferencesHelper.getLanguage();
         List<OptionData> options = question.getOptions();
@@ -349,6 +374,59 @@ public class PvPGameActivity extends BaseActivity {
             Log.e(TAG, "Error loading image from assets: " + imagePath, e);
         }
     }
+    private void stopAudio()
+    {
+        isPlaying = false;
+
+        btnPlayAudio.setImageResource(R.drawable.ic_play_audio);
+        tvAudioHint.setText(R.string.play_audio);
+        layoutWave.setVisibility(View.GONE);
+        stopWaveAnimation();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+    private void playAudio() {
+        QuestionData currentQuestion = questions.get(currentQuestionIndex);
+        String audioPath = currentQuestion != null ? currentQuestion.getAudioUrl() : null;
+
+        audioPath = "sounds/languages/afghanistan_pashto.mp3";
+
+        if (audioPath == null || audioPath.isEmpty()) {
+            Toast.makeText(this,
+                    language.equals("ru") ? "Аудио недоступно" : "Audio not available",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            stopAudio();
+            isPlaying = true;
+            btnPlayAudio.setImageResource(R.drawable.ic_stop_audio);
+            tvAudioHint.setText(R.string.stop_audio);
+            layoutWave.setVisibility(View.VISIBLE);
+            startWaveAnimation();
+
+            mediaPlayer = new MediaPlayer();
+            AssetFileDescriptor afd = getAssets().openFd(audioPath);
+            mediaPlayer.setDataSource(afd.getFileDescriptor(),
+                    afd.getStartOffset(),
+                    afd.getLength());
+            afd.close();
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+
+            Log.d(TAG, "Playing audio: " + audioPath);
+
+        } catch (IOException e) {
+            Log.e(TAG, "Error playing audio", e);
+            Toast.makeText(this,
+                    language.equals("ru") ? "Ошибка воспроизведения" : "Playback error",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void submitAnswer(int slcIndex) {
         if (!isQuestionActive || hasAnswered) return;
 
@@ -378,7 +456,10 @@ public class PvPGameActivity extends BaseActivity {
         optionButtons[selectedIndex].setAlpha(0.5f);
     }
     private void handleQuestionResult(SubmitAnswerResponse result) {
-        if (hasAnswered && !isQuestionActive && !allAnswered) {
+        String userId = preferencesHelper.getUserId();
+
+        var isYourAnswer = result.getUserId().equals(hashUserId(userId));
+        if (hasAnswered && !isQuestionActive && !allAnswered && isYourAnswer) {
             isQuestionActive = true;
             hasAnswered = false;
 
@@ -404,7 +485,24 @@ public class PvPGameActivity extends BaseActivity {
         tvPlayer2Score.setText(String.valueOf(opponentCurrentScore));
         updateCrown();
     }
+    public static String hashUserId(String userId) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] inputBytes = userId.getBytes(StandardCharsets.UTF_8);
+            byte[] hashBytes = digest.digest(inputBytes);
 
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     private void highlightAnswers(int correctIndex) {
         optionButtons[selectedIndex].setAlpha(1f);
         for (int i = 0; i < optionButtons.length; i++) {
@@ -517,7 +615,6 @@ public class PvPGameActivity extends BaseActivity {
         startActivity(intent);
         finish();
     }
-
     private void handleOpponentDisconnected(DisconnectData data) {
         Toast.makeText(this, getString(R.string.opponent_disconnected), Toast.LENGTH_LONG).show();
         handleDisconnect();
@@ -550,12 +647,71 @@ public class PvPGameActivity extends BaseActivity {
             }
         });
     }
+    private void startWaveAnimation() {
+        waveAnimator1 = createWaveAnimator(wave1, 12, 30);
+        waveAnimator2 = createWaveAnimator(wave2, 14, 48);
+        waveAnimator3 = createWaveAnimator(wave3, 10, 36);
+        waveAnimator4 = createWaveAnimator(wave4, 16, 44);
 
+        waveAnimator1.start();
+        waveAnimator2.start();
+        waveAnimator3.start();
+        waveAnimator4.start();
+    }
+
+    private Animator createWaveAnimator(View view, int minHeight, int maxHeight) {
+        ValueAnimator animator = ValueAnimator.ofInt(minHeight, maxHeight);
+        animator.setDuration(400);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setRepeatMode(ValueAnimator.REVERSE);
+        animator.addUpdateListener(animation -> {
+            int height = (int) animation.getAnimatedValue();
+            ViewGroup.LayoutParams params = view.getLayoutParams();
+            params.height = height;
+            view.setLayoutParams(params);
+        });
+        return animator;
+    }
+
+    private void stopWaveAnimation() {
+        if (waveAnimator1 != null && waveAnimator1.isRunning()) {
+            waveAnimator1.cancel();
+            waveAnimator1.end();
+        }
+        if (waveAnimator2 != null && waveAnimator2.isRunning()) {
+            waveAnimator2.cancel();
+            waveAnimator2.end();
+        }
+        if (waveAnimator3 != null && waveAnimator3.isRunning()) {
+            waveAnimator3.cancel();
+            waveAnimator3.end();
+        }
+        if (waveAnimator4 != null && waveAnimator4.isRunning()) {
+            waveAnimator4.cancel();
+            waveAnimator4.end();
+        }
+
+        resetWaveHeights();
+    }
+    private void resetWaveHeights() {
+        setWaveHeight(wave1, 12);
+        setWaveHeight(wave2, 20);
+        setWaveHeight(wave3, 16);
+        setWaveHeight(wave4, 24);
+    }
+    private void setWaveHeight(View wave, int height) {
+        if (wave != null) {
+            ViewGroup.LayoutParams params = wave.getLayoutParams();
+            params.height = height;
+            wave.setLayoutParams(params);
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
         timerHandler.removeCallbacksAndMessages(null);
         if (signalRManager!=null)signalRManager.removeListener(activityId);
+        stopAudio();
     }
     private void hideSystemBars() {
         View decorView = getWindow().getDecorView();

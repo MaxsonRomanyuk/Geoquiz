@@ -1,6 +1,10 @@
 package com.example.geoquiz_frontend.presentation.ui.soloGame;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -9,9 +13,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +36,7 @@ import com.example.geoquiz_frontend.R;
 import com.example.geoquiz_frontend.presentation.ui.base.BaseActivity;
 import com.example.geoquiz_frontend.presentation.ui.pvp.PvPGameActivity;
 import com.example.geoquiz_frontend.presentation.utils.SecurePreferencesHelper;
+import com.google.android.material.card.MaterialCardView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,12 +50,12 @@ public class SoloGameActivity extends BaseActivity {
     private static final int TOTAL_QUESTIONS = 10;
     private static final int TOTAL_TIME_MS = 60000;
 
-
-    private TextView tvQuestionNumber, tvTimer, tvScore, tvQuestionTitle;
+    private TextView tvQuestionNumber, tvTimer, tvScore, tvQuestionTitle, tvAudioHint;
     private Button[] optionButtons = new Button[4];
     private FrameLayout imageContainer;
-    private ImageView ivQuestionImage;
-    private Button btnPlayAudio, btnEndGame;
+    private LinearLayout audioContainer, layoutWave;
+    private ImageView ivQuestionImage, btnPlayAudio;
+    private Button btnEndGame;
 
 
     private GameManager gameManager;
@@ -76,6 +85,9 @@ public class SoloGameActivity extends BaseActivity {
     private int correctAmerica = 0;
     private int correctOceania = 0;
     private boolean isGameFinished = false;
+    private boolean isPlaying = false;
+    private View wave1, wave2, wave3, wave4;
+    private Animator waveAnimator1, waveAnimator2, waveAnimator3, waveAnimator4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +115,7 @@ public class SoloGameActivity extends BaseActivity {
         tvTimer = findViewById(R.id.tv_timer);
         tvScore = findViewById(R.id.tv_score);
         tvQuestionTitle = findViewById(R.id.tv_question_title);
+        tvAudioHint = findViewById(R.id.tv_audio_hint);
 
         optionButtons[0] = findViewById(R.id.btn_option1);
         optionButtons[1] = findViewById(R.id.btn_option2);
@@ -110,20 +123,31 @@ public class SoloGameActivity extends BaseActivity {
         optionButtons[3] = findViewById(R.id.btn_option4);
 
         imageContainer = findViewById(R.id.image_container);
+        audioContainer = findViewById(R.id.audio_container);
         ivQuestionImage = findViewById(R.id.iv_question_image);
+        layoutWave = findViewById(R.id.layout_wave);
 
         btnPlayAudio = findViewById(R.id.btn_play_audio);
 
         btnEndGame = findViewById(R.id.btn_end_game);
+
+        wave1 = findViewById(R.id.wave1);
+        wave2 = findViewById(R.id.wave2);
+        wave3 = findViewById(R.id.wave3);
+        wave4 = findViewById(R.id.wave4);
     }
     private void setupClickListeners() {
         if (btnEndGame != null) {
             btnEndGame.setOnClickListener(v -> showExitConfirmation());
         }
 
-        if (btnPlayAudio != null) {
-            btnPlayAudio.setOnClickListener(v -> playAudio());
-        }
+        btnPlayAudio.setOnClickListener(v -> {
+            if (isPlaying) {
+                stopAudio();
+            } else {
+                playAudio();
+            }
+        });
     }
 
     private void loadQuestions() {
@@ -223,9 +247,9 @@ public class SoloGameActivity extends BaseActivity {
 
     private void handleMedia(GameQuestion question) {
         String mediaUrl = question.getMediaUrl();
-
         if (imageContainer != null) imageContainer.setVisibility(View.GONE);
-        if (btnPlayAudio != null) btnPlayAudio.setVisibility(View.GONE);
+        if (audioContainer != null) audioContainer.setVisibility(View.GONE);
+        stopAudio();
 
         switch (gameMode) {
             case 2:
@@ -239,9 +263,10 @@ public class SoloGameActivity extends BaseActivity {
                 break;
 
             case 4:
-                if (btnPlayAudio != null && mediaUrl != null) {
-                    btnPlayAudio.setVisibility(View.VISIBLE);
-                }
+//                if (audioContainer != null && mediaUrl != null) {
+//                    audioContainer.setVisibility(View.VISIBLE);
+//                }
+                audioContainer.setVisibility(View.VISIBLE);
                 break;
 
             default:
@@ -267,10 +292,25 @@ public class SoloGameActivity extends BaseActivity {
             //imageView.setImageResource(R.drawable.ic_placeholder);
         }
     }
+    private void stopAudio()
+    {
+        isPlaying = false;
 
+        btnPlayAudio.setImageResource(R.drawable.ic_play_audio);
+        tvAudioHint.setText(R.string.play_audio);
+        layoutWave.setVisibility(View.GONE);
+        stopWaveAnimation();
+
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
     private void playAudio() {
         GameQuestion question = questions.get(currentQuestionIndex);
         String audioPath = question != null ? question.getMediaUrl() : null;
+
+        audioPath = "sounds/languages/afghanistan_pashto.mp3";
 
         if (audioPath == null || audioPath.isEmpty()) {
             Toast.makeText(this,
@@ -280,12 +320,19 @@ public class SoloGameActivity extends BaseActivity {
         }
 
         try {
-            if (mediaPlayer != null) {
-                mediaPlayer.release();
-            }
+            stopAudio();
+            isPlaying = true;
+            btnPlayAudio.setImageResource(R.drawable.ic_stop_audio);
+            tvAudioHint.setText(R.string.stop_audio);
+            layoutWave.setVisibility(View.VISIBLE);
+            startWaveAnimation();
 
             mediaPlayer = new MediaPlayer();
-            mediaPlayer.setDataSource(getAssets().openFd(audioPath).getFileDescriptor());
+            AssetFileDescriptor afd = getAssets().openFd(audioPath);
+            mediaPlayer.setDataSource(afd.getFileDescriptor(),
+                    afd.getStartOffset(),
+                    afd.getLength());
+            afd.close();
             mediaPlayer.prepare();
             mediaPlayer.start();
 
@@ -298,7 +345,65 @@ public class SoloGameActivity extends BaseActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
+    private void startWaveAnimation() {
+        waveAnimator1 = createWaveAnimator(wave1, 12, 30);
+        waveAnimator2 = createWaveAnimator(wave2, 14, 48);
+        waveAnimator3 = createWaveAnimator(wave3, 10, 36);
+        waveAnimator4 = createWaveAnimator(wave4, 16, 44);
 
+        waveAnimator1.start();
+        waveAnimator2.start();
+        waveAnimator3.start();
+        waveAnimator4.start();
+    }
+
+    private Animator createWaveAnimator(View view, int minHeight, int maxHeight) {
+        ValueAnimator animator = ValueAnimator.ofInt(minHeight, maxHeight);
+        animator.setDuration(400);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setRepeatMode(ValueAnimator.REVERSE);
+        animator.addUpdateListener(animation -> {
+            int height = (int) animation.getAnimatedValue();
+            ViewGroup.LayoutParams params = view.getLayoutParams();
+            params.height = height;
+            view.setLayoutParams(params);
+        });
+        return animator;
+    }
+
+    private void stopWaveAnimation() {
+        if (waveAnimator1 != null && waveAnimator1.isRunning()) {
+            waveAnimator1.cancel();
+            waveAnimator1.end();
+        }
+        if (waveAnimator2 != null && waveAnimator2.isRunning()) {
+            waveAnimator2.cancel();
+            waveAnimator2.end();
+        }
+        if (waveAnimator3 != null && waveAnimator3.isRunning()) {
+            waveAnimator3.cancel();
+            waveAnimator3.end();
+        }
+        if (waveAnimator4 != null && waveAnimator4.isRunning()) {
+            waveAnimator4.cancel();
+            waveAnimator4.end();
+        }
+
+        resetWaveHeights();
+    }
+    private void resetWaveHeights() {
+        setWaveHeight(wave1, 12);
+        setWaveHeight(wave2, 20);
+        setWaveHeight(wave3, 16);
+        setWaveHeight(wave4, 24);
+    }
+    private void setWaveHeight(View wave, int height) {
+        if (wave != null) {
+            ViewGroup.LayoutParams params = wave.getLayoutParams();
+            params.height = height;
+            wave.setLayoutParams(params);
+        }
+    }
     private void checkAnswer(int selectedIndex) {
         GameQuestion question = questions.get(currentQuestionIndex);
         currentQuestionIndex++;
@@ -433,8 +538,6 @@ public class SoloGameActivity extends BaseActivity {
     protected void handleAchievementUnlocked(List<ProfileResponse.AchievementDto> achievements) {
         runOnUiThread(() -> {
             Log.d("NotificationManager", "AchievementUnlocked in solo game received! Count: " + achievements.size());
-            userRepository = UserRepository.getInstance(this);
-
             for (ProfileResponse.AchievementDto achievement : achievements) {
                 userRepository.savePendingAchievements(achievement);
             }
@@ -474,10 +577,7 @@ public class SoloGameActivity extends BaseActivity {
         if (timer != null) {
             timer.cancel();
         }
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
+        stopAudio();
     }
 
 }

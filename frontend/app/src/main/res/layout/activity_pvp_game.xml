@@ -296,32 +296,104 @@
 
             <FrameLayout
                 android:id="@+id/image_container"
-                android:layout_width="200dp"
-                android:layout_height="120dp"
-                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="?attr/colorSurfaceVariant"
-                android:visibility="gone"
-                app:cornerRadius="12dp">
+                android:layout_marginHorizontal="48dp"
+                android:background="@drawable/border"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/iv_question_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
-                    android:padding="8dp"/>
+                    android:padding="2dp"/>
             </FrameLayout>
 
-            <Button
-                android:id="@+id/btn_play_audio"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/audio_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/play_audio"
-                android:textColor="?attr/colorOutline"
+                android:orientation="vertical"
+                android:gravity="center"
                 android:layout_marginBottom="16dp"
-                android:visibility="gone"
-                style="@style/QuizOptionButton"/>
+                android:visibility="gone">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_audio"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="?attr/colorPrimary"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/btn_play_audio"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_play_audio"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:tint="?attr/colorOnPrimary" />
+
+                </com.google.android.material.card.MaterialCardView>
+                <LinearLayout
+                    android:id="@+id/layout_wave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:visibility="visible"
+                    android:layout_marginTop="4dp">
+
+                    <View
+                        android:id="@+id/wave1"
+                        android:layout_width="4dp"
+                        android:layout_height="12dp"
+                        android:background="?attr/colorAccent"
+                        android:layout_marginEnd="3dp"
+                        app:cornerRadius="2dp"/>
+
+                    <View
+                        android:id="@+id/wave2"
+                        android:layout_width="4dp"
+                        android:layout_height="20dp"
+                        android:background="?attr/colorAccent"
+                        android:layout_marginEnd="3dp"
+                        app:cornerRadius="2dp"/>
+
+                    <View
+                        android:id="@+id/wave3"
+                        android:layout_width="4dp"
+                        android:layout_height="16dp"
+                        android:background="?attr/colorAccent"
+                        android:layout_marginEnd="3dp"
+                        app:cornerRadius="2dp"/>
+
+                    <View
+                        android:id="@+id/wave4"
+                        android:layout_width="4dp"
+                        android:layout_height="24dp"
+                        android:background="?attr/colorAccent"
+                        app:cornerRadius="2dp"/>
+
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_audio_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/play_audio"
+                    android:textColor="?attr/colorTertiaryFixed"
+                    android:textSize="12sp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_horizontal"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/options_container"
