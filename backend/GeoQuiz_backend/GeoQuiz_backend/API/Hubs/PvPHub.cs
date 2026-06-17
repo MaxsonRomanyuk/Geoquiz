@@ -1,7 +1,6 @@
 ﻿using GeoQuiz_backend.API.HubClients;
 using GeoQuiz_backend.Application.DTOs.PvP;
 using GeoQuiz_backend.Application.Interfaces;
-using GeoQuiz_backend.Application.Payloads.Koth;
 using GeoQuiz_backend.Application.Services.PvP;
 using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Domain.Enums;
@@ -10,13 +9,11 @@ using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using MongoDB.Driver.Core.Connections;
 using System.Collections.Concurrent;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace GeoQuiz_backend.API.Hubs
 {
@@ -26,7 +23,7 @@ namespace GeoQuiz_backend.API.Hubs
         private readonly ISignalRNotificationService _notificationService;
         private readonly IMatchmakingService _matchmaking;
         private readonly IDraftService _draftService;
-        private readonly IPvPGameSessionService _gameSessionService;   
+        private readonly IPvPGameSessionService _gameSessionService;
         private readonly ILogger<PvPHub> _logger;
         private readonly AppDbContext _db;
 
@@ -299,7 +296,7 @@ namespace GeoQuiz_backend.API.Hubs
             }
         }
 
-        public async Task SubmitAnswer(SubmitAnswerRequest request) 
+        public async Task SubmitAnswer(SubmitAnswerRequest request)
         {
             var userId = GetUserId();
             _logger.LogError("User {UserId} submitting answer for question {QuestionNumber} in match {MatchId}",
@@ -361,7 +358,7 @@ namespace GeoQuiz_backend.API.Hubs
 
                 _logger.LogInformation("User {UserId} was in draft {MatchId}", userId, matchId);
                 await Groups.RemoveFromGroupAsync(existingSession.ConnectionId, $"match_{matchId}");
-                
+
             }
             else if (existingSession.IsInMatch && existingSession.CurrentMatchId.HasValue)
             {
@@ -477,24 +474,6 @@ namespace GeoQuiz_backend.API.Hubs
                 ServerTime = DateTimeOffset.UtcNow.AddSeconds(1).ToUnixTimeMilliseconds(),
                 GameData = gameData
             };
-
-            //_logger.LogInformation("=== Sending GameResumeData ===");
-            //_logger.LogInformation("OpponentName: {OpponentName}", resumeData.OpponentName);
-            //_logger.LogInformation("OpponentTotalScore: {OpponentTotalScore}", resumeData.OpponentTotalScore);
-            //_logger.LogInformation("YourTotalScore: {YourTotalScore}", resumeData.YourTotalScore);
-            //_logger.LogInformation("OpponentCurrentScore: {OpponentCurrentScore}", resumeData.OpponentCurrentScore);
-            //_logger.LogInformation("YourCurrentScore: {YourCurrentScore}", resumeData.YourCurrentScore);
-            //_logger.LogInformation("CurrentQuestion: {CurrentQuestion}", resumeData.CurrentQuestion);
-            //_logger.LogInformation("TimerEndAt: {TimerEndAt} ({TimerEndAtDateTime})",
-            //    resumeData.TimerEndAt,
-            //    DateTimeOffset.FromUnixTimeMilliseconds(resumeData.TimerEndAt).LocalDateTime);
-            //_logger.LogInformation("ServerTime: {ServerTime} ({ServerTimeDateTime})",
-            //    resumeData.ServerTime,
-            //    DateTimeOffset.FromUnixTimeMilliseconds(resumeData.ServerTime).LocalDateTime);
-            //_logger.LogInformation("MatchId: {MatchId}", resumeData.GameData?.MatchId);
-            //_logger.LogInformation("TotalQuestions: {TotalQuestions}", resumeData.GameData?.TotalQuestions);
-            //_logger.LogInformation("Questions count: {QuestionsCount}", resumeData.GameData?.Questions?.Count);
-            //_logger.LogInformation("=============================");
 
             await _notificationService.NotifyGameResume(userId, resumeData);
         }

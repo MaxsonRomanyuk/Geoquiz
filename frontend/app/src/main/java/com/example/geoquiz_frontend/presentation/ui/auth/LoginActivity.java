@@ -48,8 +48,8 @@ import java.util.List;
 public class LoginActivity extends BaseActivity {
     private MaterialButtonToggleGroup toggleGroup;
     private MaterialButton btnAuth;
-    private TextInputLayout emailLayout, passwordLayout, nameLayout;
-    private TextInputEditText etEmail, etPassword, etName;
+    private TextInputLayout emailLayout, passwordLayout, confirmPasswordLayout, nameLayout;
+    private TextInputEditText etEmail, etPassword, etConfirmPassword, etName;
     private TextView tvForgotPassword;
     private MaterialCardView btnGuest;
 
@@ -135,10 +135,12 @@ public class LoginActivity extends BaseActivity {
 
         emailLayout = findViewById(R.id.emailLayout);
         passwordLayout = findViewById(R.id.passwordLayout);
+        confirmPasswordLayout = findViewById(R.id.confirmPasswordLayout);
         nameLayout = findViewById(R.id.nameLayout);
 
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
+        etConfirmPassword = findViewById(R.id.etConfirmPassword);
         etName = findViewById(R.id.etName);
 
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
@@ -202,19 +204,22 @@ public class LoginActivity extends BaseActivity {
             btnAuth.setText(getString(R.string.login));
             tvForgotPassword.setVisibility(View.VISIBLE);
             nameLayout.setVisibility(View.GONE);
+            confirmPasswordLayout.setVisibility(View.GONE);
         } else {
             btnAuth.setText(getString(R.string.register));
             tvForgotPassword.setVisibility(View.GONE);
             nameLayout.setVisibility(View.VISIBLE);
+            confirmPasswordLayout.setVisibility(View.VISIBLE);
         }
     }
 
     private void performAuth() {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
+        String confirmPassword = isLoginMode ? "" : etConfirmPassword.getText().toString().trim();
         String name = isLoginMode ? "" : etName.getText().toString().trim();
 
-        if (!validateInputs(email, password, name)) {
+        if (!validateInputs(email, password, name, confirmPassword)) {
             return;
         }
 
@@ -227,33 +232,47 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    private boolean validateInputs(String email, String password, String name) {
+    private boolean validateInputs(String email, String password, String name, String confirmPassword) {
         emailLayout.setError(null);
         passwordLayout.setError(null);
         nameLayout.setError(null);
+
+        String lang = preferencesHelper.getLanguage();
+
         if (!isLoginMode && TextUtils.isEmpty(name)) {
-            nameLayout.setError("Введите имя");
+            String error = lang.equals("ru")? "Введите имя" : "Enter name";
+            nameLayout.setError(error);
             return false;
         }
 
         if (TextUtils.isEmpty(email)) {
-            emailLayout.setError("Введите email");
+            String error = lang.equals("ru")? "Введите email" : "Enter email";
+            emailLayout.setError(error);
             return false;
         }
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailLayout.setError("Введите корректный email");
+            String error = lang.equals("ru")? "Введите корректный email" : "Enter a correct email";
+            emailLayout.setError(error);
             return false;
         }
 
         if (TextUtils.isEmpty(password)) {
-            passwordLayout.setError("Введите пароль");
+            String error = lang.equals("ru")? "Введите пароль" : "Enter password";
+            passwordLayout.setError(error);
             return false;
         }
-        if (password.length() < 6) {
-            passwordLayout.setError("Пароль должен содержать минимум 6 символов");
+        if (password.length() < 8) {
+            String error = lang.equals("ru")? "Пароль должен содержать минимум 8 символов" : "Password must be at least 8 characters long.";
+            passwordLayout.setError(error);
             return false;
         }
 
+        if (!isLoginMode && !password.equals(confirmPassword))
+        {
+            String error = lang.equals("ru")? "Пароли не совпадают" : "The passwords don't match.";
+            confirmPasswordLayout.setError(error);
+            return false;
+        }
         return true;
     }
 

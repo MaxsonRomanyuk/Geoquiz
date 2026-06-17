@@ -510,7 +510,7 @@ public class PvPGameActivity extends BaseActivity {
             if (i == correctIndex) {
                 optionButtons[i].setBackgroundResource(R.drawable.correct_answer_bg);
                 optionButtons[i].setTextColor(getResources().getColor(android.R.color.white, null));
-            } else if (i == selectedIndex && i != correctIndex) {
+            } else if (i == selectedIndex) {
                 optionButtons[i].setBackgroundResource(R.drawable.wrong_answer_bg);
                 optionButtons[i].setTextColor(getResources().getColor(android.R.color.white, null));
             }

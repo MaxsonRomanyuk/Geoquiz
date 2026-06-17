@@ -19,7 +19,7 @@
           "Ru": "Пушту",
           "En": "Pashto"
         },
-        "AudioUrl": "sounds/languages/afghanistan_pashto.mp3"
+        "AudioUrl": "sounds/languages/pashto.mp3"
       },
       {
         "Id": "dari",
@@ -27,7 +27,7 @@
           "Ru": "Дари",
           "En": "Dari"
         },
-        "AudioUrl": "sounds/languages/afghanistan_dari.mp3"
+        "AudioUrl": "sounds/languages/dari.mp3"
       }
     ]
   },
@@ -51,7 +51,7 @@
           "Ru": "Албанский",
           "En": "Albanian"
         },
-        "AudioUrl": "sounds/languages/albania_albanian.mp3"
+        "AudioUrl": "sounds/languages/albanian.mp3"
       }
     ]
   },
@@ -75,7 +75,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/algeria_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -99,7 +99,7 @@
           "Ru": "Каталанский",
           "En": "Catalan"
         },
-        "AudioUrl": "sounds/languages/andorra_catalan.mp3"
+        "AudioUrl": "sounds/languages/catalan.mp3"
       }
     ]
   },
@@ -123,7 +123,7 @@
           "Ru": "Португальский",
           "En": "Portuguese"
         },
-        "AudioUrl": "sounds/languages/angola_portuguese.mp3"
+        "AudioUrl": "sounds/languages/portuguese.mp3"
       }
     ]
   },
@@ -147,7 +147,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/argentina_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       }
     ]
   },
@@ -171,7 +171,7 @@
           "Ru": "Армянский",
           "En": "Armenian"
         },
-        "AudioUrl": "sounds/languages/armenia_armenian.mp3"
+        "AudioUrl": "sounds/languages/armenian.mp3"
       }
     ]
   },
@@ -195,7 +195,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/australia_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -219,7 +219,7 @@
           "Ru": "Немецкий",
           "En": "German"
         },
-        "AudioUrl": "sounds/languages/austria_german.mp3"
+        "AudioUrl": "sounds/languages/german.mp3"
       }
     ]
   },
@@ -243,7 +243,7 @@
           "Ru": "Азербайджанский",
           "En": "Azerbaijani"
         },
-        "AudioUrl": "sounds/languages/azerbaijan_azerbaijani.mp3"
+        "AudioUrl": "sounds/languages/azerbaijani.mp3"
       }
     ]
   },
@@ -267,7 +267,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/antigua_and_barbuda_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -292,7 +292,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/bahamas_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -316,7 +316,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/bahrain_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -340,7 +340,7 @@
           "Ru": "Бенгальский",
           "En": "Bengali"
         },
-        "AudioUrl": "sounds/languages/bangladesh_bengali.mp3"
+        "AudioUrl": "sounds/languages/bengali.mp3"
       }
     ]
   },
@@ -364,7 +364,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/barbados_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -388,7 +388,7 @@
           "Ru": "Русский",
           "En": "Russian"
         },
-        "AudioUrl": "sounds/languages/belarus_russian.mp3"
+        "AudioUrl": "sounds/languages/russian.mp3"
       },
       {
         "Id": "belarusian",
@@ -396,7 +396,7 @@
           "Ru": "Белорусский",
           "En": "Belarusian"
         },
-        "AudioUrl": "sounds/languages/belarus_belarusian.mp3"
+        "AudioUrl": "sounds/languages/belarusian.mp3"
       }
     ]
   },
@@ -420,7 +420,7 @@
           "Ru": "Нидерландский",
           "En": "Dutch"
         },
-        "AudioUrl": "sounds/languages/belgium_dutch.mp3"
+        "AudioUrl": "sounds/languages/dutch.mp3"
       },
       {
         "Id": "french",
@@ -428,7 +428,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/belgium_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       },
       {
         "Id": "german",
@@ -436,7 +436,7 @@
           "Ru": "Немецкий",
           "En": "German"
         },
-        "AudioUrl": "sounds/languages/belgium_german.mp3"
+        "AudioUrl": "sounds/languages/german.mp3"
       }
     ]
   },
@@ -460,7 +460,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/belize_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -484,7 +484,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/benin_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -508,7 +508,7 @@
           "Ru": "Болгарский",
           "En": "Bulgarian"
         },
-        "AudioUrl": "sounds/languages/bulgaria_bulgarian.mp3"
+        "AudioUrl": "sounds/languages/bulgarian.mp3"
       }
     ]
   },
@@ -532,7 +532,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/bolivia_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       },
       {
         "Id": "quechua",
@@ -540,7 +540,7 @@
           "Ru": "Кечуа",
           "En": "Quechua"
         },
-        "AudioUrl": "sounds/languages/bolivia_quechua.mp3"
+        "AudioUrl": "sounds/languages/quechua.mp3"
       },
       {
         "Id": "aymara",
@@ -548,7 +548,7 @@
           "Ru": "Аймара",
           "En": "Aymara"
         },
-        "AudioUrl": "sounds/languages/bolivia_aymara.mp3"
+        "AudioUrl": "sounds/languages/aymara.mp3"
       }
     ]
   },
@@ -572,7 +572,7 @@
           "Ru": "Боснийский",
           "En": "Bosnian"
         },
-        "AudioUrl": "sounds/languages/bosnia_and_herzegovina_bosnian.mp3"
+        "AudioUrl": "sounds/languages/bosnian.mp3"
       },
       {
         "Id": "serbian",
@@ -580,7 +580,7 @@
           "Ru": "Сербский",
           "En": "Serbian"
         },
-        "AudioUrl": "sounds/languages/bosnia_and_herzegovina_serbian.mp3"
+        "AudioUrl": "sounds/languages/serbian.mp3"
       },
       {
         "Id": "croatian",
@@ -588,7 +588,7 @@
           "Ru": "Хорватский",
           "En": "Croatian"
         },
-        "AudioUrl": "sounds/languages/bosnia_and_herzegovina_croatian.mp3"
+        "AudioUrl": "sounds/languages/croatian.mp3"
       }
     ]
   },
@@ -612,7 +612,7 @@
           "Ru": "Тсвана",
           "En": "Tswana"
         },
-        "AudioUrl": "sounds/languages/botswana_tswana.mp3"
+        "AudioUrl": "sounds/languages/tswana.mp3"
       },
       {
         "Id": "english",
@@ -620,7 +620,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/botswana_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -644,7 +644,7 @@
           "Ru": "Португальский",
           "En": "Portuguese"
         },
-        "AudioUrl": "sounds/languages/brazil_portuguese.mp3"
+        "AudioUrl": "sounds/languages/portuguese.mp3"
       }
     ]
   },
@@ -668,7 +668,7 @@
           "Ru": "Малайский",
           "En": "Malay"
         },
-        "AudioUrl": "sounds/languages/brunei_malay.mp3"
+        "AudioUrl": "sounds/languages/malay.mp3"
       }
     ]
   },
@@ -692,7 +692,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/burkina_faso_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -716,7 +716,7 @@
           "Ru": "Кирунди",
           "En": "Kirundi"
         },
-        "AudioUrl": "sounds/languages/burundi_kirundi.mp3"
+        "AudioUrl": "sounds/languages/kirundi.mp3"
       },
       {
         "Id": "french",
@@ -724,7 +724,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/burundi_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -748,7 +748,7 @@
           "Ru": "Дзонг-кэ",
           "En": "Dzongkha"
         },
-        "AudioUrl": "sounds/languages/bhutan_dzongkha.mp3"
+        "AudioUrl": "sounds/languages/dzongkha.mp3"
       }
     ]
   },
@@ -772,7 +772,7 @@
           "Ru": "Бислама",
           "En": "Bislama"
         },
-        "AudioUrl": "sounds/languages/vanuatu_bislama.mp3"
+        "AudioUrl": "sounds/languages/bislama.mp3"
       },
       {
         "Id": "english",
@@ -780,7 +780,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/vanuatu_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       },
       {
         "Id": "french",
@@ -788,7 +788,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/vanuatu_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -812,7 +812,7 @@
           "Ru": "Итальянский",
           "En": "Italian"
         },
-        "AudioUrl": "sounds/languages/vatican_city_italian.mp3"
+        "AudioUrl": "sounds/languages/italian.mp3"
       },
       {
         "Id": "latin",
@@ -820,7 +820,7 @@
           "Ru": "Латынь",
           "En": "Latin"
         },
-        "AudioUrl": "sounds/languages/vatican_city_latin.mp3"
+        "AudioUrl": "sounds/languages/latin.mp3"
       }
     ]
   },
@@ -844,7 +844,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/united_kingdom_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -868,7 +868,7 @@
           "Ru": "Венгерский",
           "En": "Hungarian"
         },
-        "AudioUrl": "sounds/languages/hungary_hungarian.mp3"
+        "AudioUrl": "sounds/languages/hungarian.mp3"
       }
     ]
   },
@@ -892,7 +892,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/venezuela_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       }
     ]
   },
@@ -916,7 +916,7 @@
           "Ru": "Тетум",
           "En": "Tetum"
         },
-        "AudioUrl": "sounds/languages/timor_leste_tetum.mp3"
+        "AudioUrl": "sounds/languages/tetum.mp3"
       },
       {
         "Id": "portuguese",
@@ -924,7 +924,7 @@
           "Ru": "Португальский",
           "En": "Portuguese"
         },
-        "AudioUrl": "sounds/languages/timor_leste_portuguese.mp3"
+        "AudioUrl": "sounds/languages/portuguese.mp3"
       }
     ]
   },
@@ -948,7 +948,7 @@
           "Ru": "Вьетнамский",
           "En": "Vietnamese"
         },
-        "AudioUrl": "sounds/languages/vietnam_vietnamese.mp3"
+        "AudioUrl": "sounds/languages/vietnamese.mp3"
       }
     ]
   },
@@ -973,7 +973,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/gabon_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -997,7 +997,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/haiti_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       },
       {
         "Id": "haitian_creole",
@@ -1005,7 +1005,7 @@
           "Ru": "Гаитянский креольский",
           "En": "Haitian Creole"
         },
-        "AudioUrl": "sounds/languages/haiti_creole.mp3"
+        "AudioUrl": "sounds/languages/creole.mp3"
       }
     ]
   },
@@ -1029,7 +1029,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/guyana_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -1053,7 +1053,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/gambia_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -1077,7 +1077,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/ghana_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -1101,7 +1101,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/guatemala_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       }
     ]
   },
@@ -1125,7 +1125,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/guinea_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -1149,7 +1149,7 @@
           "Ru": "Португальский",
           "En": "Portuguese"
         },
-        "AudioUrl": "sounds/languages/guinea_bissau_portuguese.mp3"
+        "AudioUrl": "sounds/languages/portuguese.mp3"
       }
     ]
   },
@@ -1173,7 +1173,7 @@
           "Ru": "Немецкий",
           "En": "German"
         },
-        "AudioUrl": "sounds/languages/germany_german.mp3"
+        "AudioUrl": "sounds/languages/german.mp3"
       }
     ]
   },
@@ -1197,7 +1197,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/honduras_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       }
     ]
   },
@@ -1221,7 +1221,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/grenada_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -1245,7 +1245,7 @@
           "Ru": "Греческий",
           "En": "Greek"
         },
-        "AudioUrl": "sounds/languages/greece_greek.mp3"
+        "AudioUrl": "sounds/languages/greek.mp3"
       }
     ]
   },
@@ -1269,7 +1269,7 @@
           "Ru": "Грузинский",
           "En": "Georgian"
         },
-        "AudioUrl": "sounds/languages/georgia_georgian.mp3"
+        "AudioUrl": "sounds/languages/georgian.mp3"
       }
     ]
   },
@@ -1293,7 +1293,7 @@
           "Ru": "Датский",
           "En": "Danish"
         },
-        "AudioUrl": "sounds/languages/denmark_danish.mp3"
+        "AudioUrl": "sounds/languages/danish.mp3"
       }
     ]
   },
@@ -1317,7 +1317,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/djibouti_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       },
       {
         "Id": "french",
@@ -1325,7 +1325,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/djibouti_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -1349,7 +1349,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/dominica_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -1373,7 +1373,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/dominican_republic_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       }
     ]
   },
@@ -1398,7 +1398,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/egypt_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -1423,7 +1423,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/zambia_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -1447,7 +1447,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/zimbabwe_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -1472,7 +1472,7 @@
           "Ru": "Иврит",
           "En": "Hebrew"
         },
-        "AudioUrl": "sounds/languages/israel_hebrew.mp3"
+        "AudioUrl": "sounds/languages/hebrew.mp3"
       },
       {
         "Id": "arabic",
@@ -1480,7 +1480,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/israel_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -1504,7 +1504,7 @@
           "Ru": "Хинди",
           "En": "Hindi"
         },
-        "AudioUrl": "sounds/languages/india_hindi.mp3"
+        "AudioUrl": "sounds/languages/hindi.mp3"
       },
       {
         "Id": "english",
@@ -1512,7 +1512,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/india_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -1536,7 +1536,7 @@
           "Ru": "Индонезийский",
           "En": "Indonesian"
         },
-        "AudioUrl": "sounds/languages/indonesia_indonesian.mp3"
+        "AudioUrl": "sounds/languages/indonesian.mp3"
       }
     ]
   },
@@ -1560,7 +1560,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/jordan_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -1584,7 +1584,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/iraq_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       },
       {
         "Id": "kurdish",
@@ -1592,7 +1592,7 @@
           "Ru": "Курдский",
           "En": "Kurdish"
         },
-        "AudioUrl": "sounds/languages/iraq_kurdish.mp3"
+        "AudioUrl": "sounds/languages/kurdish.mp3"
       }
     ]
   },
@@ -1616,7 +1616,7 @@
           "Ru": "Персидский",
           "En": "Persian"
         },
-        "AudioUrl": "sounds/languages/iran_persian.mp3"
+        "AudioUrl": "sounds/languages/persian.mp3"
       }
     ]
   },
@@ -1640,7 +1640,7 @@
           "Ru": "Ирландский",
           "En": "Irish"
         },
-        "AudioUrl": "sounds/languages/ireland_irish.mp3"
+        "AudioUrl": "sounds/languages/irish.mp3"
       },
       {
         "Id": "english",
@@ -1648,7 +1648,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/ireland_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -1672,7 +1672,7 @@
           "Ru": "Исландский",
           "En": "Icelandic"
         },
-        "AudioUrl": "sounds/languages/iceland_icelandic.mp3"
+        "AudioUrl": "sounds/languages/icelandic.mp3"
       }
     ]
   },
@@ -1696,7 +1696,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/spain_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       }
     ]
   },
@@ -1720,7 +1720,7 @@
           "Ru": "Итальянский",
           "En": "Italian"
         },
-        "AudioUrl": "sounds/languages/italy_italian.mp3"
+        "AudioUrl": "sounds/languages/italian.mp3"
       }
     ]
   },
@@ -1744,7 +1744,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/yemen_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -1769,7 +1769,7 @@
           "Ru": "Португальский",
           "En": "Portuguese"
         },
-        "AudioUrl": "sounds/languages/cape_verde_portuguese.mp3"
+        "AudioUrl": "sounds/languages/portuguese.mp3"
       }
     ]
   },
@@ -1793,7 +1793,7 @@
           "Ru": "Казахский",
           "En": "Kazakh"
         },
-        "AudioUrl": "sounds/languages/kazakhstan_kazakh.mp3"
+        "AudioUrl": "sounds/languages/kazakh.mp3"
       },
       {
         "Id": "russian",
@@ -1801,7 +1801,7 @@
           "Ru": "Русский",
           "En": "Russian"
         },
-        "AudioUrl": "sounds/languages/kazakhstan_russian.mp3"
+        "AudioUrl": "sounds/languages/russian.mp3"
       }
     ]
   },
@@ -1825,7 +1825,7 @@
           "Ru": "Кхмерский",
           "En": "Khmer"
         },
-        "AudioUrl": "sounds/languages/cambodia_khmer.mp3"
+        "AudioUrl": "sounds/languages/khmer.mp3"
       }
     ]
   },
@@ -1849,7 +1849,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/cameroon_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       },
       {
         "Id": "english",
@@ -1857,7 +1857,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/cameroon_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -1881,7 +1881,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/canada_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       },
       {
         "Id": "french",
@@ -1889,7 +1889,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/canada_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -1913,7 +1913,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/qatar_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -1937,7 +1937,7 @@
           "Ru": "Суахили",
           "En": "Swahili"
         },
-        "AudioUrl": "sounds/languages/kenya_swahili.mp3"
+        "AudioUrl": "sounds/languages/swahili.mp3"
       },
       {
         "Id": "english",
@@ -1945,7 +1945,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/kenya_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -1969,7 +1969,7 @@
           "Ru": "Греческий",
           "En": "Greek"
         },
-        "AudioUrl": "sounds/languages/cyprus_greek.mp3"
+        "AudioUrl": "sounds/languages/greek.mp3"
       },
       {
         "Id": "turkish",
@@ -1977,7 +1977,7 @@
           "Ru": "Турецкий",
           "En": "Turkish"
         },
-        "AudioUrl": "sounds/languages/cyprus_turkish.mp3"
+        "AudioUrl": "sounds/languages/turkish.mp3"
       }
     ]
   },
@@ -2001,7 +2001,7 @@
           "Ru": "Киргизский",
           "En": "Kyrgyz"
         },
-        "AudioUrl": "sounds/languages/kyrgyzstan_kyrgyz.mp3"
+        "AudioUrl": "sounds/languages/kyrgyz.mp3"
       },
       {
         "Id": "russian",
@@ -2009,7 +2009,7 @@
           "Ru": "Русский",
           "En": "Russian"
         },
-        "AudioUrl": "sounds/languages/kyrgyzstan_russian.mp3"
+        "AudioUrl": "sounds/languages/russian.mp3"
       }
     ]
   },
@@ -2033,7 +2033,7 @@
           "Ru": "Гилбертский",
           "En": "Gilbertese"
         },
-        "AudioUrl": "sounds/languages/kiribati_gilbertese.mp3"
+        "AudioUrl": "sounds/languages/gilbertese.mp3"
       },
       {
         "Id": "english",
@@ -2041,7 +2041,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/kiribati_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -2065,7 +2065,7 @@
           "Ru": "Китайский (путунхуа)",
           "En": "Mandarin Chinese"
         },
-        "AudioUrl": "sounds/languages/china_mandarin.mp3"
+        "AudioUrl": "sounds/languages/mandarin.mp3"
       }
     ]
   },
@@ -2089,7 +2089,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/colombia_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       }
     ]
   },
@@ -2113,7 +2113,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/comoros_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       },
       {
         "Id": "french",
@@ -2121,7 +2121,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/comoros_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -2145,7 +2145,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/congo_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -2169,7 +2169,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/dr_congo_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -2193,7 +2193,7 @@
           "Ru": "Корейский",
           "En": "Korean"
         },
-        "AudioUrl": "sounds/languages/north_korea_korean.mp3"
+        "AudioUrl": "sounds/languages/korean.mp3"
       }
     ]
   },
@@ -2217,7 +2217,7 @@
           "Ru": "Корейский",
           "En": "Korean"
         },
-        "AudioUrl": "sounds/languages/south_korea_korean.mp3"
+        "AudioUrl": "sounds/languages/korean.mp3"
       }
     ]
   },
@@ -2241,7 +2241,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/costa_rica_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       }
     ]
   },
@@ -2265,7 +2265,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/cote_divoire_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -2289,7 +2289,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/cuba_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       }
     ]
   },
@@ -2313,7 +2313,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/kuwait_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -2339,7 +2339,7 @@
           "Ru": "Лаосский",
           "En": "Lao"
         },
-        "AudioUrl": "sounds/languages/laos_lao.mp3"
+        "AudioUrl": "sounds/languages/lao.mp3"
       }
     ]
   },
@@ -2363,7 +2363,7 @@
           "Ru": "Латышский",
           "En": "Latvian"
         },
-        "AudioUrl": "sounds/languages/latvia_latvian.mp3"
+        "AudioUrl": "sounds/languages/latvian.mp3"
       }
     ]
   },
@@ -2387,7 +2387,7 @@
           "Ru": "Сесото",
           "En": "Sesotho"
         },
-        "AudioUrl": "sounds/languages/lesotho_sesotho.mp3"
+        "AudioUrl": "sounds/languages/sesotho.mp3"
       },
       {
         "Id": "english",
@@ -2395,7 +2395,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/lesotho_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -2419,7 +2419,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/lebanon_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -2443,7 +2443,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/libya_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -2467,7 +2467,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/liberia_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -2491,7 +2491,7 @@
           "Ru": "Немецкий",
           "En": "German"
         },
-        "AudioUrl": "sounds/languages/liechtenstein_german.mp3"
+        "AudioUrl": "sounds/languages/german.mp3"
       }
     ]
   },
@@ -2515,7 +2515,7 @@
           "Ru": "Литовский",
           "En": "Lithuanian"
         },
-        "AudioUrl": "sounds/languages/lithuania_lithuanian.mp3"
+        "AudioUrl": "sounds/languages/lithuanian.mp3"
       }
     ]
   },
@@ -2539,7 +2539,7 @@
           "Ru": "Люксембургский",
           "En": "Luxembourgish"
         },
-        "AudioUrl": "sounds/languages/luxembourg_luxembourgish.mp3"
+        "AudioUrl": "sounds/languages/luxembourgish.mp3"
       },
       {
         "Id": "french",
@@ -2547,7 +2547,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/luxembourg_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       },
       {
         "Id": "german",
@@ -2555,7 +2555,7 @@
           "Ru": "Немецкий",
           "En": "German"
         },
-        "AudioUrl": "sounds/languages/luxembourg_german.mp3"
+        "AudioUrl": "sounds/languages/german.mp3"
       }
     ]
   },
@@ -2580,7 +2580,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/mauritius_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       },
       {
         "Id": "french",
@@ -2588,7 +2588,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/mauritius_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -2612,7 +2612,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/mauritania_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -2636,7 +2636,7 @@
           "Ru": "Малагасийский",
           "En": "Malagasy"
         },
-        "AudioUrl": "sounds/languages/madagascar_malagasy.mp3"
+        "AudioUrl": "sounds/languages/malagasy.mp3"
       },
       {
         "Id": "french",
@@ -2644,7 +2644,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/madagascar_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -2668,7 +2668,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/malawi_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -2692,7 +2692,7 @@
           "Ru": "Малайский",
           "En": "Malay"
         },
-        "AudioUrl": "sounds/languages/malaysia_malay.mp3"
+        "AudioUrl": "sounds/languages/malay.mp3"
       }
     ]
   },
@@ -2716,7 +2716,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/mali_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -2740,7 +2740,7 @@
           "Ru": "Дивехи",
           "En": "Dhivehi"
         },
-        "AudioUrl": "sounds/languages/maldives_dhivehi.mp3"
+        "AudioUrl": "sounds/languages/dhivehi.mp3"
       }
     ]
   },
@@ -2764,7 +2764,7 @@
           "Ru": "Мальтийский",
           "En": "Maltese"
         },
-        "AudioUrl": "sounds/languages/malta_maltese.mp3"
+        "AudioUrl": "sounds/languages/maltese.mp3"
       },
       {
         "Id": "english",
@@ -2772,7 +2772,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/malta_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -2796,7 +2796,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/morocco_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       },
       {
         "Id": "berber",
@@ -2804,7 +2804,7 @@
           "Ru": "Берберский",
           "En": "Berber"
         },
-        "AudioUrl": "sounds/languages/morocco_berber.mp3"
+        "AudioUrl": "sounds/languages/berber.mp3"
       }
     ]
   },
@@ -2828,7 +2828,7 @@
           "Ru": "Маршалльский",
           "En": "Marshallese"
         },
-        "AudioUrl": "sounds/languages/marshall_islands_marshallese.mp3"
+        "AudioUrl": "sounds/languages/marshallese.mp3"
       }
     ]
   },
@@ -2852,7 +2852,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/mexico_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       }
     ]
   },
@@ -2876,7 +2876,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/micronesia_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -2900,7 +2900,7 @@
           "Ru": "Португальский",
           "En": "Portuguese"
         },
-        "AudioUrl": "sounds/languages/mozambique_portuguese.mp3"
+        "AudioUrl": "sounds/languages/portuguese.mp3"
       }
     ]
   },
@@ -2924,7 +2924,7 @@
           "Ru": "Румынский",
           "En": "Romanian"
         },
-        "AudioUrl": "sounds/languages/moldova_romanian.mp3"
+        "AudioUrl": "sounds/languages/romanian.mp3"
       }
     ]
   },
@@ -2948,7 +2948,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/monaco_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -2972,7 +2972,7 @@
           "Ru": "Монгольский",
           "En": "Mongolian"
         },
-        "AudioUrl": "sounds/languages/mongolia_mongolian.mp3"
+        "AudioUrl": "sounds/languages/mongolian.mp3"
       }
     ]
   },
@@ -2996,7 +2996,7 @@
           "Ru": "Бирманский",
           "En": "Burmese"
         },
-        "AudioUrl": "sounds/languages/myanmar_burmese.mp3"
+        "AudioUrl": "sounds/languages/burmese.mp3"
       }
     ]
   },
@@ -3022,7 +3022,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/namibia_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -3046,7 +3046,7 @@
           "Ru": "Науруанский",
           "En": "Nauruan"
         },
-        "AudioUrl": "sounds/languages/nauru_nauruan.mp3"
+        "AudioUrl": "sounds/languages/nauruan.mp3"
       }
     ]
   },
@@ -3070,7 +3070,7 @@
           "Ru": "Непальский",
           "En": "Nepali"
         },
-        "AudioUrl": "sounds/languages/nepal_nepali.mp3"
+        "AudioUrl": "sounds/languages/nepali.mp3"
       }
     ]
   },
@@ -3094,7 +3094,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/niger_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -3118,7 +3118,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/nigeria_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -3142,7 +3142,7 @@
           "Ru": "Нидерландский",
           "En": "Dutch"
         },
-        "AudioUrl": "sounds/languages/netherlands_dutch.mp3"
+        "AudioUrl": "sounds/languages/dutch.mp3"
       }
     ]
   },
@@ -3166,7 +3166,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/nicaragua_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       }
     ]
   },
@@ -3190,7 +3190,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/new_zealand_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       },
       {
         "Id": "maori",
@@ -3198,7 +3198,7 @@
           "Ru": "Маори",
           "En": "Maori"
         },
-        "AudioUrl": "sounds/languages/new_zealand_maori.mp3"
+        "AudioUrl": "sounds/languages/maori.mp3"
       }
     ]
   },
@@ -3222,7 +3222,7 @@
           "Ru": "Норвежский",
           "En": "Norwegian"
         },
-        "AudioUrl": "sounds/languages/norway_norwegian.mp3"
+        "AudioUrl": "sounds/languages/norwegian.mp3"
       }
     ]
   },
@@ -3247,7 +3247,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/uae_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -3271,7 +3271,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/oman_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -3296,7 +3296,7 @@
           "Ru": "Урду",
           "En": "Urdu"
         },
-        "AudioUrl": "sounds/languages/pakistan_urdu.mp3"
+        "AudioUrl": "sounds/languages/urdu.mp3"
       },
       {
         "Id": "english",
@@ -3304,7 +3304,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/pakistan_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -3328,7 +3328,7 @@
           "Ru": "Палауанский",
           "En": "Palauan"
         },
-        "AudioUrl": "sounds/languages/palau_palauan.mp3"
+        "AudioUrl": "sounds/languages/palauan.mp3"
       },
       {
         "Id": "english",
@@ -3336,7 +3336,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/palau_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -3360,7 +3360,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/panama_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       }
     ]
   },
@@ -3384,7 +3384,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/papua_new_guinea_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -3408,7 +3408,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/palestine_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -3432,7 +3432,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/paraguay_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       },
       {
         "Id": "guarani",
@@ -3440,7 +3440,7 @@
           "Ru": "Гуарани",
           "En": "Guarani"
         },
-        "AudioUrl": "sounds/languages/paraguay_guarani.mp3"
+        "AudioUrl": "sounds/languages/guarani.mp3"
       }
     ]
   },
@@ -3464,7 +3464,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/peru_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       },
       {
         "Id": "quechua",
@@ -3472,7 +3472,7 @@
           "Ru": "Кечуа",
           "En": "Quechua"
         },
-        "AudioUrl": "sounds/languages/peru_quechua.mp3"
+        "AudioUrl": "sounds/languages/quechua.mp3"
       }
     ]
   },
@@ -3496,7 +3496,7 @@
           "Ru": "Польский",
           "En": "Polish"
         },
-        "AudioUrl": "sounds/languages/poland_polish.mp3"
+        "AudioUrl": "sounds/languages/polish.mp3"
       }
     ]
   },
@@ -3520,7 +3520,7 @@
           "Ru": "Португальский",
           "En": "Portuguese"
         },
-        "AudioUrl": "sounds/languages/portugal_portuguese.mp3"
+        "AudioUrl": "sounds/languages/portuguese.mp3"
       }
     ]
   },
@@ -3545,7 +3545,7 @@
           "Ru": "Русский",
           "En": "Russian"
         },
-        "AudioUrl": "sounds/languages/russia_russian.mp3"
+        "AudioUrl": "sounds/languages/russian.mp3"
       }
     ]
   },
@@ -3569,7 +3569,7 @@
           "Ru": "Киньяруанда",
           "En": "Kinyarwanda"
         },
-        "AudioUrl": "sounds/languages/rwanda_kinyarwanda.mp3"
+        "AudioUrl": "sounds/languages/kinyarwanda.mp3"
       },
       {
         "Id": "english",
@@ -3577,7 +3577,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/rwanda_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       },
       {
         "Id": "french",
@@ -3585,7 +3585,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/rwanda_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -3609,7 +3609,7 @@
           "Ru": "Румынский",
           "En": "Romanian"
         },
-        "AudioUrl": "sounds/languages/romania_romanian.mp3"
+        "AudioUrl": "sounds/languages/romanian.mp3"
       }
     ]
   },
@@ -3635,7 +3635,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/el_salvador_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       }
     ]
   },
@@ -3659,7 +3659,7 @@
           "Ru": "Самоанский",
           "En": "Samoan"
         },
-        "AudioUrl": "sounds/languages/samoa_samoan.mp3"
+        "AudioUrl": "sounds/languages/samoan.mp3"
       },
       {
         "Id": "english",
@@ -3667,7 +3667,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/samoa_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -3691,7 +3691,7 @@
           "Ru": "Итальянский",
           "En": "Italian"
         },
-        "AudioUrl": "sounds/languages/san_marino_italian.mp3"
+        "AudioUrl": "sounds/languages/italian.mp3"
       }
     ]
   },
@@ -3715,7 +3715,7 @@
           "Ru": "Португальский",
           "En": "Portuguese"
         },
-        "AudioUrl": "sounds/languages/sao_tome_and_principe_portuguese.mp3"
+        "AudioUrl": "sounds/languages/portuguese.mp3"
       }
     ]
   },
@@ -3739,7 +3739,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/saudi_arabia_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -3763,7 +3763,7 @@
           "Ru": "Македонский",
           "En": "Macedonian"
         },
-        "AudioUrl": "sounds/languages/north_macedonia_macedonian.mp3"
+        "AudioUrl": "sounds/languages/macedonian.mp3"
       }
     ]
   },
@@ -3787,7 +3787,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/seychelles_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       },
       {
         "Id": "english",
@@ -3795,7 +3795,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/seychelles_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -3819,7 +3819,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/senegal_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -3843,7 +3843,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/saint_vincent_and_the_grenadines_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -3867,7 +3867,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/saint_kitts_and_nevis_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -3891,7 +3891,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/saint_lucia_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -3915,7 +3915,7 @@
           "Ru": "Сербский",
           "En": "Serbian"
         },
-        "AudioUrl": "sounds/languages/serbia_serbian.mp3"
+        "AudioUrl": "sounds/languages/serbian.mp3"
       }
     ]
   },
@@ -3939,7 +3939,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/singapore_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       },
       {
         "Id": "mandarin",
@@ -3947,7 +3947,7 @@
           "Ru": "Китайский",
           "En": "Mandarin"
         },
-        "AudioUrl": "sounds/languages/singapore_mandarin.mp3"
+        "AudioUrl": "sounds/languages/mandarin.mp3"
       }
     ]
   },
@@ -3971,7 +3971,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/syria_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -3995,7 +3995,7 @@
           "Ru": "Словацкий",
           "En": "Slovak"
         },
-        "AudioUrl": "sounds/languages/slovakia_slovak.mp3"
+        "AudioUrl": "sounds/languages/slovak.mp3"
       }
     ]
   },
@@ -4019,7 +4019,7 @@
           "Ru": "Словенский",
           "En": "Slovene"
         },
-        "AudioUrl": "sounds/languages/slovenia_slovene.mp3"
+        "AudioUrl": "sounds/languages/slovene.mp3"
       }
     ]
   },
@@ -4043,7 +4043,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/usa_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -4067,7 +4067,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/solomon_islands_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -4091,7 +4091,7 @@
           "Ru": "Сомалийский",
           "En": "Somali"
         },
-        "AudioUrl": "sounds/languages/somalia_somali.mp3"
+        "AudioUrl": "sounds/languages/somali.mp3"
       },
       {
         "Id": "arabic",
@@ -4099,7 +4099,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/somalia_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -4123,7 +4123,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/sudan_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -4147,7 +4147,7 @@
           "Ru": "Нидерландский",
           "En": "Dutch"
         },
-        "AudioUrl": "sounds/languages/suriname_dutch.mp3"
+        "AudioUrl": "sounds/languages/dutch.mp3"
       }
     ]
   },
@@ -4171,7 +4171,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/sierra_leone_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -4196,7 +4196,7 @@
           "Ru": "Таджикский",
           "En": "Tajik"
         },
-        "AudioUrl": "sounds/languages/tajikistan_tajik.mp3"
+        "AudioUrl": "sounds/languages/tajik.mp3"
       }
     ]
   },
@@ -4220,7 +4220,7 @@
           "Ru": "Тайский",
           "En": "Thai"
         },
-        "AudioUrl": "sounds/languages/thailand_thai.mp3"
+        "AudioUrl": "sounds/languages/thai.mp3"
       }
     ]
   },
@@ -4244,7 +4244,7 @@
           "Ru": "Суахили",
           "En": "Swahili"
         },
-        "AudioUrl": "sounds/languages/tanzania_swahili.mp3"
+        "AudioUrl": "sounds/languages/swahili.mp3"
       },
       {
         "Id": "english",
@@ -4252,7 +4252,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/tanzania_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -4276,7 +4276,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/togo_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -4300,7 +4300,7 @@
           "Ru": "Тонганский",
           "En": "Tongan"
         },
-        "AudioUrl": "sounds/languages/tonga_tongan.mp3"
+        "AudioUrl": "sounds/languages/tongan.mp3"
       }
     ]
   },
@@ -4324,7 +4324,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/trinidad_and_tobago_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -4348,7 +4348,7 @@
           "Ru": "Тувалуанский",
           "En": "Tuvaluan"
         },
-        "AudioUrl": "sounds/languages/tuvalu_tuvaluan.mp3"
+        "AudioUrl": "sounds/languages/tuvaluan.mp3"
       },
       {
         "Id": "english",
@@ -4356,7 +4356,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/tuvalu_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -4380,7 +4380,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/tunisia_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -4404,7 +4404,7 @@
           "Ru": "Туркменский",
           "En": "Turkmen"
         },
-        "AudioUrl": "sounds/languages/turkmenistan_turkmen.mp3"
+        "AudioUrl": "sounds/languages/turkmen.mp3"
       }
     ]
   },
@@ -4428,7 +4428,7 @@
           "Ru": "Турецкий",
           "En": "Turkish"
         },
-        "AudioUrl": "sounds/languages/turkey_turkish.mp3"
+        "AudioUrl": "sounds/languages/turkish.mp3"
       }
     ]
   },
@@ -4453,7 +4453,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/uganda_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       },
       {
         "Id": "swahili",
@@ -4461,7 +4461,7 @@
           "Ru": "Суахили",
           "En": "Swahili"
         },
-        "AudioUrl": "sounds/languages/uganda_swahili.mp3"
+        "AudioUrl": "sounds/languages/swahili.mp3"
       }
     ]
   },
@@ -4485,7 +4485,7 @@
           "Ru": "Узбекский",
           "En": "Uzbek"
         },
-        "AudioUrl": "sounds/languages/uzbekistan_uzbek.mp3"
+        "AudioUrl": "sounds/languages/uzbek.mp3"
       }
     ]
   },
@@ -4509,7 +4509,7 @@
           "Ru": "Украинский",
           "En": "Ukrainian"
         },
-        "AudioUrl": "sounds/languages/ukraine_ukrainian.mp3"
+        "AudioUrl": "sounds/languages/ukrainian.mp3"
       }
     ]
   },
@@ -4533,7 +4533,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/uruguay_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       }
     ]
   },
@@ -4558,7 +4558,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/fiji_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -4582,7 +4582,7 @@
           "Ru": "Филиппинский",
           "En": "Filipino"
         },
-        "AudioUrl": "sounds/languages/philippines_filipino.mp3"
+        "AudioUrl": "sounds/languages/filipino.mp3"
       },
       {
         "Id": "english",
@@ -4590,7 +4590,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/philippines_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -4614,7 +4614,7 @@
           "Ru": "Финский",
           "En": "Finnish"
         },
-        "AudioUrl": "sounds/languages/finland_finnish.mp3"
+        "AudioUrl": "sounds/languages/finnish.mp3"
       }
     ]
   },
@@ -4638,7 +4638,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/france_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -4663,7 +4663,7 @@
           "Ru": "Хорватский",
           "En": "Croatian"
         },
-        "AudioUrl": "sounds/languages/croatia_croatian.mp3"
+        "AudioUrl": "sounds/languages/croatian.mp3"
       }
     ]
   },
@@ -4687,7 +4687,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/central_african_republic_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -4713,7 +4713,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/chad_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       },
       {
         "Id": "arabic",
@@ -4721,7 +4721,7 @@
           "Ru": "Арабский",
           "En": "Arabic"
         },
-        "AudioUrl": "sounds/languages/chad_arabic.mp3"
+        "AudioUrl": "sounds/languages/arabic.mp3"
       }
     ]
   },
@@ -4745,7 +4745,7 @@
           "Ru": "Черногорский",
           "En": "Montenegrin"
         },
-        "AudioUrl": "sounds/languages/montenegro_montenegrin.mp3"
+        "AudioUrl": "sounds/languages/montenegrin.mp3"
       }
     ]
   },
@@ -4769,7 +4769,7 @@
           "Ru": "Чешский",
           "En": "Czech"
         },
-        "AudioUrl": "sounds/languages/czechia_czech.mp3"
+        "AudioUrl": "sounds/languages/czech.mp3"
       }
     ]
   },
@@ -4793,7 +4793,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/chile_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       }
     ]
   },
@@ -4818,7 +4818,7 @@
           "Ru": "Немецкий",
           "En": "German"
         },
-        "AudioUrl": "sounds/languages/switzerland_german.mp3"
+        "AudioUrl": "sounds/languages/german.mp3"
       },
       {
         "Id": "french",
@@ -4826,7 +4826,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/switzerland_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       },
       {
         "Id": "italian",
@@ -4834,7 +4834,7 @@
           "Ru": "Итальянский",
           "En": "Italian"
         },
-        "AudioUrl": "sounds/languages/switzerland_italian.mp3"
+        "AudioUrl": "sounds/languages/italian.mp3"
       }
     ]
   },
@@ -4858,7 +4858,7 @@
           "Ru": "Шведский",
           "En": "Swedish"
         },
-        "AudioUrl": "sounds/languages/sweden_swedish.mp3"
+        "AudioUrl": "sounds/languages/swedish.mp3"
       }
     ]
   },
@@ -4882,7 +4882,7 @@
           "Ru": "Сингальский",
           "En": "Sinhala"
         },
-        "AudioUrl": "sounds/languages/sri_lanka_sinhala.mp3"
+        "AudioUrl": "sounds/languages/sinhala.mp3"
       },
       {
         "Id": "tamil",
@@ -4890,7 +4890,7 @@
           "Ru": "Тамильский",
           "En": "Tamil"
         },
-        "AudioUrl": "sounds/languages/sri_lanka_tamil.mp3"
+        "AudioUrl": "sounds/languages/tamil.mp3"
       }
     ]
   },
@@ -4915,7 +4915,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/ecuador_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       }
     ]
   },
@@ -4939,7 +4939,7 @@
           "Ru": "Испанский",
           "En": "Spanish"
         },
-        "AudioUrl": "sounds/languages/equatorial_guinea_spanish.mp3"
+        "AudioUrl": "sounds/languages/spanish.mp3"
       },
       {
         "Id": "french",
@@ -4947,7 +4947,7 @@
           "Ru": "Французский",
           "En": "French"
         },
-        "AudioUrl": "sounds/languages/equatorial_guinea_french.mp3"
+        "AudioUrl": "sounds/languages/french.mp3"
       }
     ]
   },
@@ -4971,7 +4971,7 @@
           "Ru": "Тигринья",
           "En": "Tigrinya"
         },
-        "AudioUrl": "sounds/languages/eritrea_tigrinya.mp3"
+        "AudioUrl": "sounds/languages/tigrinya.mp3"
       }
     ]
   },
@@ -4995,7 +4995,7 @@
           "Ru": "Свати",
           "En": "Swati"
         },
-        "AudioUrl": "sounds/languages/eswatini_swati.mp3"
+        "AudioUrl": "sounds/languages/swati.mp3"
       },
       {
         "Id": "english",
@@ -5003,7 +5003,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/eswatini_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -5027,7 +5027,7 @@
           "Ru": "Эстонский",
           "En": "Estonian"
         },
-        "AudioUrl": "sounds/languages/estonia_estonian.mp3"
+        "AudioUrl": "sounds/languages/estonian.mp3"
       }
     ]
   },
@@ -5051,7 +5051,7 @@
           "Ru": "Амхарский",
           "En": "Amharic"
         },
-        "AudioUrl": "sounds/languages/ethiopia_amharic.mp3"
+        "AudioUrl": "sounds/languages/amharic.mp3"
       }
     ]
   },
@@ -5076,7 +5076,7 @@
           "Ru": "Зулу",
           "En": "Zulu"
         },
-        "AudioUrl": "sounds/languages/south_africa_zulu.mp3"
+        "AudioUrl": "sounds/languages/zulu.mp3"
       },
       {
         "Id": "english",
@@ -5084,7 +5084,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/south_africa_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -5108,7 +5108,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/south_sudan_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -5133,7 +5133,7 @@
           "Ru": "Английский",
           "En": "English"
         },
-        "AudioUrl": "sounds/languages/jamaica_english.mp3"
+        "AudioUrl": "sounds/languages/english.mp3"
       }
     ]
   },
@@ -5157,7 +5157,7 @@
           "Ru": "Японский",
           "En": "Japanese"
         },
-        "AudioUrl": "sounds/languages/japan_japanese.mp3"
+        "AudioUrl": "sounds/languages/japanese.mp3"
       }
     ]
   }

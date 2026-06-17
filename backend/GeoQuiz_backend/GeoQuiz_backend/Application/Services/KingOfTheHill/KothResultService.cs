@@ -36,9 +36,10 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
 
             var gameSessions = await CreateGameSessionsAsync(db, gameState);
             var result = CreateMatchFinishedData(gameState);
+            await UpdateUserStatsAsync(db, gameState, gameSessions);
+
             await _notificationService.NotifyMatchFinished(matchId, result);
 
-            await UpdateUserStatsAsync(db, gameState, gameSessions);
         }
         private async Task UpdateMatchAsync(AppDbContext db, KothGameState gameState)
         {

@@ -220,9 +220,9 @@ public class SettingsActivity extends BaseActivity {
 
         String title = "ru".equals(currentLanguage) ? "О приложении" : "About App";
         String message = "ru".equals(currentLanguage) ?
-                "🌍 GeoQuiz - Географическая викторина\n\n" +
+                "🌍 GeoRush - Географическая викторина\n\n" +
                         "▫️ Версия: 1.0.0\n" +
-                        "▫️ Разработчик: Команда GeoQuiz\n" +
+                        "▫️ Разработчик: Команда GeoRush\n" +
                         "▫️ Дата выпуска: Февраль 2026\n" +
                         "▫️ Платформа: Android 8.0+\n\n" +
 
@@ -275,9 +275,9 @@ public class SettingsActivity extends BaseActivity {
                         "⭐ ОЦЕНИТЕ ПРИЛОЖЕНИЕ:\n" +
                         "Если вам нравится GeoQuiz, поставьте нам 5 звёзд в Google Play!" :
 
-                "🌍 GeoQuiz - Geography Quiz\n\n" +
+                "🌍 GeoRush - Geography Quiz\n\n" +
                         "▫️ Version: 1.0.0\n" +
-                        "▫️ Developer: GeoQuiz Team\n" +
+                        "▫️ Developer: GeoRush Team\n" +
                         "▫️ Release Date: February 2026\n" +
                         "▫️ Platform: Android 8.0+\n\n" +
 

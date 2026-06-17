@@ -50,7 +50,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void applyTheme() {
-        //SecurePreferencesHelper prefs = new SecurePreferencesHelper(this);
         String theme = preferencesHelper.getTheme();
 
         AppCompatDelegate.setDefaultNightMode(

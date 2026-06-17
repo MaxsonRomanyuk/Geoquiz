@@ -101,15 +101,6 @@ public class NotificationManager {
         void execute(ConnectionListener listener);
     }
     private void notifyListeners(ListenerAction action) {
-//        for (ConnectionListener listener : listeners.values()) {
-//            if (listener != null) {
-//                try {
-//                    action.execute(listener);
-//                } catch (Exception e) {
-//                    Log.e(TAG, "Error notifying listener", e);
-//                }
-//            }
-//        }
         if (!listeners.isEmpty()) {
             ConnectionListener firstListener = listeners.values().iterator().next();
             try {

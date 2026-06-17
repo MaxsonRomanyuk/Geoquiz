@@ -367,6 +367,8 @@
         android:textStyle="bold"
         app:cornerRadius="16dp"
         android:backgroundTint="?attr/colorPrimary"
+        app:icon="@drawable/ic_home"
+        app:iconGravity="textStart"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

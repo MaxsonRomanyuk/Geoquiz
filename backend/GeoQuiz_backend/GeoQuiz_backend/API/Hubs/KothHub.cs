@@ -154,18 +154,7 @@ namespace GeoQuiz_backend.API.Hubs
                 (KothLobby? lobby, string userName, int userLevel) = await _matchmaking.JoinLobbyAsync(userId);
 
                 if (lobby == null) return;
-
-                //if (_userSessions.TryGetValue(userId, out var userSession))
-                //{
-                //    userSession.IsInLobby = true;
-                //}
                 
-                //await _notificationService.NotifyCurrentPlayerAboutLobby(userId, new LobbyInitialStateData
-                //{
-                //    LobbyId = lobby.Id,
-                //    Players = lobby.PlayersLobby,
-                //    TotalPlayers = lobby.PlayersLobby.Count
-                //});
                 await Groups.AddToGroupAsync(connectionId, $"lobby_{lobby.Id}");
 
                 await _notificationService.NotifyPlayerJoinedToOthers(lobby.Id, new PlayerJoinedData

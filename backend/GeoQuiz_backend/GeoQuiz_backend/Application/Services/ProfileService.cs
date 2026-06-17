@@ -79,9 +79,6 @@ namespace GeoQuiz_backend.Application.Services
             if (!string.IsNullOrEmpty(request.Username))
                 user.UserName = request.Username;
 
-            //if (!string.IsNullOrEmpty(request.AvatarUrl))
-            //    user.AvatarUrl = request.AvatarUrl;
-
             await _db.SaveChangesAsync();
         }
         private async Task LazyCheckNeeded(Guid userId)

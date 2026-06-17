@@ -62,7 +62,6 @@ public class GameManager {
 
         int limit = Math.min(count, countries.size());
         int difficulty = calculateDifficulty(playerLvl);
-        difficulty = 1;
         if (mode == 4) {
             for (int i = 0; i < limit; i++) {
                 BootstrapResponse.CountryDto country = countries.get(i);

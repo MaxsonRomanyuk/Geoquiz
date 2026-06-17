@@ -124,7 +124,7 @@ public class GameRepository {
                     return;
                 }
                 String json = loadJsonFromAssets(BOOTSTRAP_ASSETS_FILE);
-                if (json == null || json.isEmpty()) {
+                if (json.isEmpty()) {
                     new Handler(Looper.getMainLooper()).post(() ->
                             callback.onError("Ошибка чтения встроенных данных")
                     );
@@ -172,7 +172,7 @@ public class GameRepository {
     private String loadJsonFromAssets(String fileName) throws IOException {
         StringBuilder sb = new StringBuilder();
         try (InputStream is = context.getAssets().open(fileName);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {
 
             String line;
             while ((line = reader.readLine()) != null) {
@@ -300,7 +300,7 @@ public class GameRepository {
                 String json = gson.toJson(pendingGames);
 
                 try (FileOutputStream fos = new FileOutputStream(file);
-                     OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8")) {
+                    OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8")) {
                     osw.write(json);
                 }
 
@@ -315,8 +315,8 @@ public class GameRepository {
         try {
             File file = new File(context.getFilesDir(), PENDING_GAMES_FILE);
             try (FileOutputStream fos = new FileOutputStream(file);
-                 OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8")) {
-                 osw.write(gson.toJson(new ArrayList<>()));
+                OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8")) {
+                osw.write(gson.toJson(new ArrayList<>()));
             }
             Log.d(TAG, "JSON файл очищен");
         } catch (Exception e) {
@@ -332,8 +332,8 @@ public class GameRepository {
 
             StringBuilder json = new StringBuilder();
             try (FileInputStream fis = new FileInputStream(file);
-                 InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
-                 BufferedReader reader = new BufferedReader(isr)) {
+                InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+                BufferedReader reader = new BufferedReader(isr)) {
 
                 String line;
                 while ((line = reader.readLine()) != null) {

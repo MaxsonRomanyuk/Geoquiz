@@ -71,12 +71,6 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             };
 
             await _notificationService.NotifyMatchStarted(lobbyId, matchStartedData);
-
-            //_ = Task.Run(async () =>
-            //{
-            //    await Task.Delay(250);
-            //    await StartNextRoundAsync(matchId);
-            //});
         }
 
         public async Task LeaveMatchAsync(Guid userId, Guid matchId)
@@ -361,9 +355,6 @@ namespace GeoQuiz_backend.Application.Services.KingOfTheHill
             await SavePendingAnswersAsync(gameState);
 
             await _resultService.FinalizeMatchAsync(gameState);
-
-            //await _notificationService.NotifyMatchFinished(matchId, result);
-            //_logger.LogInformation("Match {MatchId} finished. Winner: {WinnerId}", matchId, result.WinnerId);
         }
 
         public Task<KothGameState?> GetGameStateAsync(Guid matchId)
