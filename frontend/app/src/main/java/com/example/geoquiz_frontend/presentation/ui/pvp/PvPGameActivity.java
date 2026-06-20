@@ -391,8 +391,6 @@ public class PvPGameActivity extends BaseActivity {
         QuestionData currentQuestion = questions.get(currentQuestionIndex);
         String audioPath = currentQuestion != null ? currentQuestion.getAudioUrl() : null;
 
-        audioPath = "sounds/languages/afghanistan_pashto.mp3";
-
         if (audioPath == null || audioPath.isEmpty()) {
             Toast.makeText(this,
                     language.equals("ru") ? "Аудио недоступно" : "Audio not available",

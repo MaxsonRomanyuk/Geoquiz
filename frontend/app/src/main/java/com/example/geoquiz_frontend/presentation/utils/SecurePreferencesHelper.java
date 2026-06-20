@@ -3,20 +3,15 @@ package com.example.geoquiz_frontend.presentation.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
-import android.util.Log;
 
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 
 import com.example.geoquiz_frontend.domain.entities.User;
-import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.security.GeneralSecurityException;
 import java.util.Locale;
 
@@ -71,12 +66,6 @@ public class SecurePreferencesHelper {
             encryptedPrefs = context.getSharedPreferences(ENCRYPTED_PREFS_NAME, Context.MODE_PRIVATE);
         }
     }
-//    public SecurePreferencesHelper(Context context) {
-//        this.context = context.getApplicationContext();
-//        regularPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-//        encryptedPrefs = context.getSharedPreferences(ENCRYPTED_PREFS_NAME, Context.MODE_PRIVATE);
-//    }
-
 
     public void saveAuthTokens(String accessToken, String refreshToken, long expiresInSeconds) {
         SharedPreferences.Editor editor = encryptedPrefs.edit();

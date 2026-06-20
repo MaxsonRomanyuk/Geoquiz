@@ -4,8 +4,6 @@ using GeoQuiz_backend.Domain.Enums;
 using GeoQuiz_backend.Application.DTOs.Game;
 using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 using Microsoft.EntityFrameworkCore;
-using static GeoQuiz_backend.Application.Payloads.AchievementsPayloads;
-using GeoQuiz_backend.Application.Services.Achievement;
 
 namespace GeoQuiz_backend.Application.Services
 {

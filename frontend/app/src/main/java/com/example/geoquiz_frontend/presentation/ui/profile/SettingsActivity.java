@@ -227,7 +227,7 @@ public class SettingsActivity extends BaseActivity {
                         "▫️ Платформа: Android 8.0+\n\n" +
 
                         "🎯 О ПРИЛОЖЕНИИ:\n" +
-                        "GeoQuiz - это интерактивная географическая викторина, которая сочетает одиночный режим, соревновательный PvP-режим и захватывающий режим «Царь горы». Проверьте свои знания о мире в увлекательной игровой форме!\n\n" +
+                        "ГеоРаш - это интерактивная географическая викторина, которая сочетает одиночный режим, соревновательный PvP-режим и захватывающий режим «Царь горы». Проверьте свои знания о мире в увлекательной игровой форме!\n\n" +
 
                         "🚀 ИГРОВЫЕ РЕЖИМЫ:\n" +
                         "🧭 Соло-режим: Путешествуйте по миру в одиночку, изучая страны, столицы и флаги. Доступен офлайн!\n" +
@@ -270,10 +270,10 @@ public class SettingsActivity extends BaseActivity {
                         "• Время ответа: до 24 часов в будние дни\n\n" +
 
                         "💝 БЛАГОДАРНОСТИ:\n" +
-                        "Спасибо, что выбрали GeoQuiz! Мы постоянно работаем над улучшением приложения. Если у вас есть идеи или предложения, пишите нам в поддержку.\n\n" +
+                        "Спасибо, что выбрали ГеоРаш! Мы постоянно работаем над улучшением приложения. Если у вас есть идеи или предложения, пишите нам в поддержку.\n\n" +
 
                         "⭐ ОЦЕНИТЕ ПРИЛОЖЕНИЕ:\n" +
-                        "Если вам нравится GeoQuiz, поставьте нам 5 звёзд в Google Play!" :
+                        "Если вам нравится ГеоРаш, поставьте нам 5 звёзд в Google Play!" :
 
                 "🌍 GeoRush - Geography Quiz\n\n" +
                         "▫️ Version: 1.0.0\n" +
@@ -282,7 +282,7 @@ public class SettingsActivity extends BaseActivity {
                         "▫️ Platform: Android 8.0+\n\n" +
 
                         "🎯 ABOUT THE APP:\n" +
-                        "GeoQuiz is an interactive geography quiz that combines solo mode, competitive PvP mode, and an exciting King of the Hill mode. Test your knowledge of the world in a fun gaming format!\n\n" +
+                        "GeoRush is an interactive geography quiz that combines solo mode, competitive PvP mode, and an exciting King of the Hill mode. Test your knowledge of the world in a fun gaming format!\n\n" +
 
                         "🚀 GAME MODES:\n" +
                         "🧭 Solo Mode: Travel the world alone, learning countries, capitals, and flags. Available offline!\n" +
@@ -328,7 +328,7 @@ public class SettingsActivity extends BaseActivity {
                         "Thank you for choosing GeoQuiz! We're constantly working to improve the app. If you have ideas or suggestions, write to us in support.\n\n" +
 
                         "⭐ RATE THE APP:\n" +
-                        "If you like GeoQuiz, give us 5 stars on Google Play!";
+                        "If you like GeoRush, give us 5 stars on Google Play!";
 
         new AlertDialog.Builder(this)
                 .setTitle(title)
@@ -342,14 +342,14 @@ public class SettingsActivity extends BaseActivity {
 
         String title = "ru".equals(currentLanguage) ? "Политика конфиденциальности" : "Privacy Policy";
         String message = "ru".equals(currentLanguage) ?
-                "🔒 ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ GEOQUIZ\n\n" +
+                "ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ ГЕОРАШ\n\n" +
 
-                        "📅 Дата вступления в силу: 15 февраля 2026 г.\n" +
-                        "📅 Последнее обновление: 15 февраля 2026 г.\n" +
-                        "🌐 Версия: 2.0\n\n" +
+                        "📅 Дата вступления в силу: 20 июня 2026 г.\n" +
+                        "📅 Последнее обновление: 20 июня 2026 г.\n" +
+                        "🌐 Версия: 3.0\n\n" +
 
                         "1. ВВЕДЕНИЕ\n" +
-                        "1.1. Настоящая Политика конфиденциальности (далее — «Политика») описывает, как компания GeoQuiz собирает, использует и раскрывает вашу информацию при использовании мобильного приложения GeoQuiz (далее — «Приложение»).\n\n" +
+                        "1.1. Настоящая Политика конфиденциальности (далее — «Политика») описывает, как компания ГеоРаш собирает, использует и раскрывает вашу информацию при использовании мобильного приложения ГеоРаш (далее — «Приложение»).\n\n" +
 
                         "2. ОПРЕДЕЛЕНИЯ\n" +
                         "2.1. «Персональные данные» — любая информация, относящаяся к идентифицированному или идентифицируемому физическому лицу.\n" +
@@ -451,86 +451,65 @@ public class SettingsActivity extends BaseActivity {
                         "   • Не подвергаться автоматизированному решению\n" +
                         "   • Отозвать согласие в любое время\n\n" +
 
-                        "10. УДАЛЕНИЕ АККАУНТА\n" +
-                        "10.1. Вы можете удалить аккаунт:\n" +
-                        "   • В настройках Приложения (Настройки → Аккаунт → Удалить)\n" +
-                        "   • Отправив запрос на privacy@geoquiz.app\n" +
-                        "   • Через Google Play Games\n\n" +
+                        "10. ИЗМЕНЕНИЯ В ПОЛИТИКЕ\n" +
+                        "10.1. Мы можем обновлять Политику.\n" +
+                        "10.2. Уведомляем за 30 дней до значительных изменений.\n" +
+                        "10.3. Продолжение использования означает согласие с новой версией.\n\n" +
 
-                        "10.2. При удалении удаляются:\n" +
-                        "   • Все персональные данные\n" +
-                        "   • Игровая статистика\n" +
-                        "   • История матчей\n" +
-                        "   • Достижения\n" +
-                        "   • Подписки\n\n" +
-
-                        "11. COOKIES И АНАЛИТИКА\n" +
-                        "11.1. Используем:\n" +
-                        "   • Firebase Analytics\n" +
-                        "   • Crashlytics\n" +
-                        "   • Собственную аналитику матчей\n" +
-                        "11.2. НЕ используем для ретаргетинга\n" +
-                        "11.3. Вы можете отключить аналитику в настройках\n\n" +
-
-                        "12. ИЗМЕНЕНИЯ В ПОЛИТИКЕ\n" +
-                        "12.1. Мы можем обновлять Политику.\n" +
-                        "12.2. Уведомляем за 30 дней до значительных изменений.\n" +
-                        "12.3. Продолжение использования означает согласие с новой версией.\n\n" +
-
-                        "13. КОНТАКТНАЯ ИНФОРМАЦИЯ\n" +
-                        "13.1. По вопросам конфиденциальности:\n" +
+                        "11. КОНТАКТНАЯ ИНФОРМАЦИЯ\n" +
+                        "11.1. По вопросам конфиденциальности:\n" +
                         "   • Email: privacy@geoquiz.app\n" +
                         "   • Адрес: Беларусь, г.Гродно\n" +
                         "   • Время ответа: до 14 рабочих дней\n\n" +
 
-                        "14.2. Надзорный орган:\n" +
+                        "12. Надзорный орган:\n" +
                         "   • Вы имеете право подать жалобу в местный орган по защите данных\n" +
                         "   • Контакты предоставляются по запросу\n\n" +
 
-                        "15. СПЕЦИАЛЬНЫЕ ПОЛОЖЕНИЯ\n\n" +
+                        "13. СПЕЦИАЛЬНЫЕ ПОЛОЖЕНИЯ\n\n" +
 
-                        "15.1. ДЛЯ РЕЗИДЕНТОВ ЕС (GDPR):\n" +
+                        "13.1. ДЛЯ РЕЗИДЕНТОВ ЕС (GDPR):\n" +
                         "   • Контролер данных: GeoQuiz [регистрационные данные]\n" +
                         "   • Представитель в ЕС: [контакты]\n" +
                         "   • Правовое основание: Art. 6 GDPR\n\n" +
 
-                        "16. ТЕХНИЧЕСКИЕ ДЕТАЛИ\n" +
-                        "16.1. Обработка осуществляется:\n" +
+                        "14. ТЕХНИЧЕСКИЕ ДЕТАЛИ\n" +
+                        "14.1. Обработка осуществляется:\n" +
                         "   • Локально на устройстве (Room database)\n" +
                         "   • На серверах (MySQL, MongoDB)\n" +
                         "   • С использованием шифрования AES-256\n" +
                         "   • С регулярным резервным копированием\n\n" +
 
-                        "17. PvP И СОРЕВНОВАТЕЛЬНЫЕ РЕЖИМЫ\n" +
-                        "17.1. В PvP-режимах обрабатываются:\n" +
+                        "15. PvP И СОРЕВНОВАТЕЛЬНЫЕ РЕЖИМЫ\n" +
+                        "15.1. В PvP-режимах обрабатываются:\n" +
                         "   • Временные данные матчей\n" +
                         "   • Результаты и статистика\n" +
                         "   • История взаимодействий\n" +
                         "   • IP-адреса для матчмейкинга\n\n" +
 
-                        "17.2. Эти данные необходимы для:\n" +
+                        "15.2. Эти данные необходимы для:\n" +
                         "   • Обеспечения честной игры\n" +
                         "   • Предотвращения читерства\n" +
                         "   • Расчета рейтингов\n\n" +
 
-                        "18. МАРКЕТИНГОВЫЕ КОММУНИКАЦИИ\n" +
-                        "18.1. Только с вашего согласия\n" +
-                        "18.2. Вы можете отписаться в любое время\n" +
-                        "18.3. Мы не передаем данные для маркетинга третьим лицам\n\n" +
+                        "16. МАРКЕТИНГОВЫЕ КОММУНИКАЦИИ\n" +
+                        "16.1. Только с вашего согласия\n" +
+                        "16.2. Вы можете отписаться в любое время\n" +
+                        "16.3. Мы не передаем данные для маркетинга третьим лицам\n\n" +
 
                         "⚠️ ВАЖНО: Используя Приложение, вы подтверждаете, что прочитали и поняли настоящую Политику конфиденциальности.\n\n" +
 
-                        "📱 GeoQuiz — проверь свои знания географии!\n" +
-                        "Последнее обновление: 15 февраля 2026 г." :
+                        "📱 ГеоРаш — проверь свои знания географии!\n" +
+                        "Последнее обновление: 20 июня 2026 г." :
 
                 "🔒 GEOQUIZ PRIVACY POLICY\n\n" +
 
-                        "📅 Effective Date: February 15, 2026\n" +
-                        "📅 Last Updated: February 15, 2026\n" +
-                        "🌐 Version: 2.0\n\n" +
+                        "📅 Effective Date: June 20, 2026\n" +
+                        "📅 Last Updated: June 20, 2026\n" +
+                        "🌐 Version: 3.0\n\n" +
 
                         "1. INTRODUCTION\n" +
-                        "1.1. This Privacy Policy describes how GeoQuiz («we», «us», or «our») collects, uses, and discloses your information when you use the GeoQuiz mobile application (the «App»).\n\n" +
+                        "1.1. This Privacy Policy describes how GeoQuiz («we», «us», or «our») collects, uses, and discloses your information when you use the GeoRush mobile application (the «App»).\n\n" +
 
                         "2. DEFINITIONS\n" +
                         "2.1. «Personal Data» means any information relating to an identified or identifiable individual.\n" +
@@ -632,77 +611,56 @@ public class SettingsActivity extends BaseActivity {
                         "   • Not be subject to automated decisions\n" +
                         "   • Withdraw consent at any time\n\n" +
 
-                        "10. ACCOUNT DELETION\n" +
-                        "10.1. You can delete your account:\n" +
-                        "   • In App Settings (Settings → Account → Delete)\n" +
-                        "   • By emailing privacy@geoquiz.app\n" +
-                        "   • Through Google Play Games\n\n" +
+                        "10. POLICY CHANGES\n" +
+                        "10.1. We may update this Policy.\n" +
+                        "10.2. We will notify you 30 days before material changes.\n" +
+                        "10.3. Continued use constitutes acceptance of new terms.\n\n" +
 
-                        "10.2. Upon deletion, we remove:\n" +
-                        "   • All personal data\n" +
-                        "   • Game statistics\n" +
-                        "   • Match history\n" +
-                        "   • Achievements\n" +
-                        "   • Subscriptions\n\n" +
-
-                        "11. COOKIES AND ANALYTICS\n" +
-                        "11.1. We use:\n" +
-                        "   • Firebase Analytics\n" +
-                        "   • Crashlytics\n" +
-                        "   • Custom match analytics\n" +
-                        "11.2. NOT used for retargeting\n" +
-                        "11.3. You can disable analytics in settings\n\n" +
-
-                        "12. POLICY CHANGES\n" +
-                        "12.1. We may update this Policy.\n" +
-                        "12.2. We will notify you 30 days before material changes.\n" +
-                        "12.3. Continued use constitutes acceptance of new terms.\n\n" +
-
-                        "13. CONTACT INFORMATION\n" +
-                        "13.1. For privacy inquiries:\n" +
+                        "11. CONTACT INFORMATION\n" +
+                        "11.1. For privacy inquiries:\n" +
                         "   • Email: privacy@geoquiz.app\n" +
                         "   • Address: Belarus, Grodno\n" +
                         "   • Response time: up to 14 business days\n\n" +
 
-                        "14.2. Supervisory Authority:\n" +
+                        "12. Supervisory Authority:\n" +
                         "   • You have the right to lodge a complaint with your local data protection authority\n" +
                         "   • Contact details available upon request\n\n" +
 
-                        "15. SPECIAL PROVISIONS\n\n" +
+                        "13. SPECIAL PROVISIONS\n\n" +
 
-                        "15.1. FOR EU RESIDENTS (GDPR):\n" +
+                        "13.1. FOR EU RESIDENTS (GDPR):\n" +
                         "   • Data Controller: GeoQuiz [registration details]\n" +
                         "   • EU Representative: [contact details]\n" +
                         "   • Legal basis: Art. 6 GDPR\n\n" +
 
-                        "16. TECHNICAL DETAILS\n" +
-                        "16.1. Processing occurs:\n" +
+                        "14. TECHNICAL DETAILS\n" +
+                        "14.1. Processing occurs:\n" +
                         "   • Locally on device (Room database)\n" +
                         "   • On servers (MySQL, MongoDB)\n" +
                         "   • Using AES-256 encryption\n" +
                         "   • With regular backups\n\n" +
 
-                        "17. PvP AND COMPETITIVE MODES\n" +
-                        "17.1. In PvP modes we process:\n" +
+                        "15. PvP AND COMPETITIVE MODES\n" +
+                        "15.1. In PvP modes we process:\n" +
                         "   • Temporary match data\n" +
                         "   • Results and statistics\n" +
                         "   • Interaction history\n" +
                         "   • IP addresses for matchmaking\n\n" +
 
-                        "17.2. This data is necessary for:\n" +
+                        "16. This data is necessary for:\n" +
                         "   • Ensuring fair play\n" +
                         "   • Preventing cheating\n" +
                         "   • Ranking calculations\n\n" +
 
-                        "18. MARKETING COMMUNICATIONS\n" +
-                        "18.1. Only with your consent\n" +
-                        "18.2. You can unsubscribe at any time\n" +
-                        "18.3. No data sharing for marketing with third parties\n\n" +
+                        "17. MARKETING COMMUNICATIONS\n" +
+                        "17.1. Only with your consent\n" +
+                        "17.2. You can unsubscribe at any time\n" +
+                        "17.3. No data sharing for marketing with third parties\n\n" +
 
                         "⚠️ IMPORTANT: By using the App, you acknowledge that you have read and understood this Privacy Policy.\n\n" +
 
-                        "📱 GeoQuiz — test your geography knowledge!\n" +
-                        "Last updated: February 15, 2026";
+                        "📱 GeoRush — test your geography knowledge!\n" +
+                        "Last updated: June 20, 2026";
 
         new AlertDialog.Builder(this)
                 .setTitle(title)
@@ -716,15 +674,15 @@ public class SettingsActivity extends BaseActivity {
 
         String title = "ru".equals(currentLanguage) ? "Пользовательское соглашение" : "Terms of Use";
         String message = "ru".equals(currentLanguage) ?
-                "📝 ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ GEOQUIZ\n\n" +
+                "📝 ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ ГЕОРАШ\n\n" +
 
-                        "📅 Дата вступления в силу: 15 февраля 2026 г.\n" +
-                        "📅 Последнее обновление: 15 февраля 2026 г.\n" +
-                        "🌐 Версия: 2.0\n\n" +
+                        "📅 Дата вступления в силу: 20 июня 2026 г.\n" +
+                        "📅 Последнее обновление: 20 июня 2026 г.\n" +
+                        "🌐 Версия: 3.0\n\n" +
 
                         "1. ОПРЕДЕЛЕНИЯ\n" +
-                        "1.1. GeoQuiz — мобильное приложение для географических викторин.\n" +
-                        "1.2. Правообладатель — компания GeoQuiz (далее — «Мы», «Нас», «Наш»).\n" +
+                        "1.1. ГеоРаш — мобильное приложение для географических викторин.\n" +
+                        "1.2. Правообладатель — компания ГеоРаш (далее — «Мы», «Нас», «Наш»).\n" +
                         "1.3. Пользователь — любое лицо, использующее Приложение (далее — «Вы», «Ваш»).\n" +
                         "1.4. Сервис — функциональность Приложения, включая игровые режимы.\n\n" +
 
@@ -809,7 +767,7 @@ public class SettingsActivity extends BaseActivity {
                 "   • Дизайн и графику\n" +
                 "   • Базу вопросов и ответов\n" +
                 "   • Алгоритмы матчмейкинга\n" +
-                "   • Бренд GeoQuiz (логотип, название)\n\n" +
+                "   • Бренд ГеоРаш (логотип, название)\n\n" +
 
                 "8.2. Вы сохраняете права на:\n" +
                 "   • Ваш игровой прогресс\n" +
@@ -889,22 +847,22 @@ public class SettingsActivity extends BaseActivity {
                 "17.4. Вы не можете передавать права без нашего согласия.\n\n" +
 
                 "18. ПОЛНОТА СОГЛАШЕНИЯ\n" +
-                "18.1. Настоящее Соглашение вместе с Политикой конфиденциальности составляют полное соглашение между Вами и GeoQuiz относительно использования Приложения.\n\n" +
+                "18.1. Настоящее Соглашение вместе с Политикой конфиденциальности составляют полное соглашение между Вами и ГеоРаш относительно использования Приложения.\n\n" +
 
                 "⚠️ ВАЖНО: Используя Приложение, Вы подтверждаете, что прочитали, поняли и согласны соблюдать условия настоящего Пользовательского соглашения.\n\n" +
 
-                "📱 GeoQuiz — играй и познавай мир!\n" +
+                "📱 ГеоРаш — играй и познавай мир!\n" +
                 "Последнее обновление: 15 февраля 2026 г." :
 
         "📝 GEOQUIZ TERMS OF USE\n\n" +
 
-                "📅 Effective Date: February 15, 2026\n" +
-                "📅 Last Updated: February 15, 2026\n" +
-                "🌐 Version: 1.0\n\n" +
+                "📅 Effective Date: June 20, 2026\n" +
+                "📅 Last Updated: June 20, 2026\n" +
+                "🌐 Version: 3.0\n\n" +
 
                 "1. DEFINITIONS\n" +
-                "1.1. GeoQuiz — a mobile application for geography quizzes.\n" +
-                "1.2. Rights Holder — GeoQuiz company (hereinafter — «We», «Us», «Our»).\n" +
+                "1.1. GeoRush — a mobile application for geography quizzes.\n" +
+                "1.2. Rights Holder — GeoRush company (hereinafter — «We», «Us», «Our»).\n" +
                 "1.3. User — any person using the Application (hereinafter — «You», «Your»).\n" +
                 "1.4. Service — Application functionality, including game modes.\n\n" +
 
@@ -990,7 +948,7 @@ public class SettingsActivity extends BaseActivity {
                 "   • Design and graphics\n" +
                 "   • Questions and answers database\n" +
                 "   • Matchmaking algorithms\n" +
-                "   • GeoQuiz brand (logo, name)\n\n" +
+                "   • GeoRush brand (logo, name)\n\n" +
 
                 "8.2. You retain rights to:\n" +
                 "   • Your game progress\n" +
@@ -1071,11 +1029,11 @@ public class SettingsActivity extends BaseActivity {
                 "17.4. You may not assign rights without consent.\n\n" +
 
                 "18. ENTIRE AGREEMENT\n" +
-                "18.1. These Terms together with Privacy Policy constitute the entire agreement between You and GeoQuiz regarding Application use.\n\n" +
+                "18.1. These Terms together with Privacy Policy constitute the entire agreement between You and GeoRush regarding Application use.\n\n" +
 
                 "⚠️ IMPORTANT: By using the Application, You confirm that You have read, understood, and agree to comply with these Terms of Use.\n\n" +
 
-                "📱 GeoQuiz — play and discover the world!\n" +
+                "📱 GeoRush — play and discover the world!\n" +
                 "Last updated: February 15, 2026";
 
         new AlertDialog.Builder(this)

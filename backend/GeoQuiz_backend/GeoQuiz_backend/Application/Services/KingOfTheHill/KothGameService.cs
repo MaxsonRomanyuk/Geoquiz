@@ -1,10 +1,8 @@
 ﻿using GeoQuiz_backend.Application.DTOs.KingOfTheHill;
 using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Application.Payloads.Koth;
-using GeoQuiz_backend.Application.Services.Bots;
 using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Domain.Enums;
-using GeoQuiz_backend.Domain.Mongo;
 using GeoQuiz_backend.Infrastructure.Factories;
 using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 using System.Collections.Concurrent;

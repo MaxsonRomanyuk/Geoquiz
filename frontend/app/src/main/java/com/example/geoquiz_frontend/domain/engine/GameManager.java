@@ -2,7 +2,6 @@ package com.example.geoquiz_frontend.domain.engine;
 
 import android.content.Context;
 
-import com.example.geoquiz_frontend.data.local.DatabaseHelper;
 import com.example.geoquiz_frontend.data.remote.dtos.solo.BootstrapResponse;
 import com.example.geoquiz_frontend.data.repositories.GameRepository;
 import com.example.geoquiz_frontend.domain.entities.CountryGrouping;
@@ -17,8 +16,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
 public class GameManager {
     private static GameManager instance;
     private GameRepository repository;

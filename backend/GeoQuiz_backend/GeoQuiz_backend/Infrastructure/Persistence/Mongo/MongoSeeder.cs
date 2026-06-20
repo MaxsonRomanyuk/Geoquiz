@@ -1,8 +1,5 @@
-﻿using GeoQuiz_backend.Domain.Enums;
-using GeoQuiz_backend.Domain.Mongo;
+﻿using GeoQuiz_backend.Domain.Mongo;
 using MongoDB.Driver;
-using System.Globalization;
-using System.Text;
 using System.Text.Json;
 
 namespace GeoQuiz_backend.Infrastructure.Persistence.Mongo

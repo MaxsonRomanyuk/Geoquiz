@@ -9,7 +9,6 @@ import android.util.Log;
 
 import com.example.geoquiz_frontend.data.remote.dtos.profile.ProfileResponse;
 import com.example.geoquiz_frontend.data.remote.dtos.solo.BootstrapResponse;
-import com.example.geoquiz_frontend.domain.entities.Achievement;
 import com.example.geoquiz_frontend.domain.entities.UserStats;
 import com.google.gson.Gson;
 
@@ -29,7 +28,7 @@ import java.util.TimeZone;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "GameDatabaseHelper";
     private static final String DATABASE_NAME = "geoquiz.db";
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
 
 
     private static final String TABLE_COUNTRIES = "countries";

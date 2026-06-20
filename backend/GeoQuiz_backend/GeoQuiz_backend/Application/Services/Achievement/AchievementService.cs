@@ -1,6 +1,5 @@
 ﻿using GeoQuiz_backend.Application.DTOs.User;
 using GeoQuiz_backend.Application.Interfaces;
-using GeoQuiz_backend.Application.Services.Achievement;
 using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 using Microsoft.EntityFrameworkCore;

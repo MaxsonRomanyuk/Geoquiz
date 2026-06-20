@@ -1,5 +1,4 @@
 ﻿using GeoQuiz_backend.Application.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GeoQuiz_backend.API.Controllers.SoloGame

@@ -263,10 +263,9 @@ public class SoloGameActivity extends BaseActivity {
                 break;
 
             case 4:
-//                if (audioContainer != null && mediaUrl != null) {
-//                    audioContainer.setVisibility(View.VISIBLE);
-//                }
-                audioContainer.setVisibility(View.VISIBLE);
+                if (audioContainer != null && mediaUrl != null) {
+                    audioContainer.setVisibility(View.VISIBLE);
+                }
                 break;
 
             default:
@@ -309,8 +308,6 @@ public class SoloGameActivity extends BaseActivity {
     private void playAudio() {
         GameQuestion question = questions.get(currentQuestionIndex);
         String audioPath = question != null ? question.getMediaUrl() : null;
-
-        audioPath = "sounds/languages/afghanistan_pashto.mp3";
 
         if (audioPath == null || audioPath.isEmpty()) {
             Toast.makeText(this,

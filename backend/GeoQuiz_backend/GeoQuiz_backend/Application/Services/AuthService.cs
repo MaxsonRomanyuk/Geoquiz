@@ -1,10 +1,6 @@
 ﻿using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Domain.Entities;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
 using GeoQuiz_backend.Application.DTOs.Auth;
 using GeoQuiz_backend.Infrastructure.Persistence.MySQL;
 

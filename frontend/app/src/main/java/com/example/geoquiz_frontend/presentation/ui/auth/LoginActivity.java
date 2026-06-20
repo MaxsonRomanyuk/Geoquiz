@@ -50,7 +50,6 @@ public class LoginActivity extends BaseActivity {
     private MaterialButton btnAuth;
     private TextInputLayout emailLayout, passwordLayout, confirmPasswordLayout, nameLayout;
     private TextInputEditText etEmail, etPassword, etConfirmPassword, etName;
-    private TextView tvForgotPassword;
     private MaterialCardView btnGuest;
 
     private boolean isLoginMode = true;
@@ -143,7 +142,6 @@ public class LoginActivity extends BaseActivity {
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
         etName = findViewById(R.id.etName);
 
-        tvForgotPassword = findViewById(R.id.tvForgotPassword);
 
         btnGuest = findViewById(R.id.btn_guest);
 
@@ -159,7 +157,6 @@ public class LoginActivity extends BaseActivity {
         });
 
         btnAuth.setOnClickListener(v -> performAuth());
-        tvForgotPassword.setOnClickListener(v -> showForgotPasswordDialog());
         btnGuest.setOnClickListener(v -> loginAsGuest());
     }
     private void connectToNotificationManager(String accessToken, String uid)
@@ -202,12 +199,10 @@ public class LoginActivity extends BaseActivity {
     private void updateAuthMode() {
         if (isLoginMode) {
             btnAuth.setText(getString(R.string.login));
-            tvForgotPassword.setVisibility(View.VISIBLE);
             nameLayout.setVisibility(View.GONE);
             confirmPasswordLayout.setVisibility(View.GONE);
         } else {
             btnAuth.setText(getString(R.string.register));
-            tvForgotPassword.setVisibility(View.GONE);
             nameLayout.setVisibility(View.VISIBLE);
             confirmPasswordLayout.setVisibility(View.VISIBLE);
         }
@@ -369,10 +364,6 @@ public class LoginActivity extends BaseActivity {
     private void showTempMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
-    private void showForgotPasswordDialog() {
-        Toast.makeText(this, "Функция восстановления пароля будет доступна в следующем обновлении", Toast.LENGTH_LONG).show();
-    }
-
     private void startMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

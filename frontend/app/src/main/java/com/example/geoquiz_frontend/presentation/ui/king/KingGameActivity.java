@@ -494,8 +494,6 @@ public class KingGameActivity extends BaseActivity {
         finish();
     }
 
-
-
     private void startTimer(long serverTime, long endAt) {
         stopTimer();
 
@@ -606,8 +604,6 @@ public class KingGameActivity extends BaseActivity {
     }
     private void playAudio() {
         String audioPath = currentQuestion != null ? currentQuestion.getAudioUrl() : null;
-
-        audioPath = "sounds/languages/afghanistan_pashto.mp3";
 
         if (audioPath == null || audioPath.isEmpty()) {
             Toast.makeText(this,

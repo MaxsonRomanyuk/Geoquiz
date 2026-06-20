@@ -1,10 +1,8 @@
 ﻿using GeoQuiz_backend.API.HubClients;
 using GeoQuiz_backend.Application.DTOs.KingOfTheHill;
-using GeoQuiz_backend.Application.DTOs.PvP;
 using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Application.Payloads.Koth;
 using GeoQuiz_backend.Application.Payloads.Questions;
-using GeoQuiz_backend.Application.Services.PvP;
 using GeoQuiz_backend.Domain.Entities;
 using GeoQuiz_backend.Domain.Mongo;
 using Microsoft.AspNetCore.Authorization;

@@ -1,7 +1,6 @@
 ﻿using GeoQuiz_backend.Application.Interfaces;
 using GeoQuiz_backend.Domain.Enums;
 using GeoQuiz_backend.Domain.Mongo;
-using GeoQuiz_backend.Infrastructure.Persistence.Mongo;
 using MongoDB.Driver;
 
 namespace GeoQuiz_backend.Infrastructure.Persistence.Mongo.Repositories
